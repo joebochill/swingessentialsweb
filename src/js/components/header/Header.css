@@ -1,49 +1,180 @@
 .se_header{
-    height: 48px;
-    width: 100%;
-    max-width: 1024px;
-    position: fixed;
-    top: 0px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255,255,255,.85);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem;
+
+    position: fixed;
     z-index: 1000;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    height: 48px;
+    width: 100%;
+    max-width: 1024px;
+    padding: 1rem;
+
+    background: rgba(255,255,255,.95);
     box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.25);
 }
+/* Horizontal Menu List */
+    .se_menu_list{
+        display: flex;
+        flex: 1 1 0px;
+        justify-content: flex-end;
+        
+        padding: 0px;
+    }
+    .se_menu_list > li{
+        flex: 0 0 auto;
 
-.se_menu{
-    float: right;
-    display: flex;
-    align-items: flex-end;
-    padding: 0px;
-    /* overflow: scroll;   */
+        margin-left: 1.1rem;
+
+        list-style: none;
+        cursor: pointer;
+
+        font-size: 0.9rem;
+    }
+    .se_menu_list li>a{
+        color: #606060;
+        text-decoration: none;
+    }
+    .se_menu_list li>a:hover{
+        font-weight: 600;
+    }
+    .se_menu_list li>a.active{
+        color: #231f61;
+        font-weight: 600;
+        position: relative;
+    }
+    .se_menu_list li>a.active::before{
+        content: '';
+        position: absolute;
+        left: -.7rem;
+        top: calc(50% - .25rem);
+        
+        height: 0.5rem;
+        width: 0.5rem;
+
+        border-radius: 50%;
+        background: #231f61;
+    }
+/* End Horizontal Menu List */
+
+/* Menu Drawer */
+    .se_menu_overlay{
+        display: block;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+
+        height: 100vh;
+        width: 100vw;
+
+        opacity: 1;
+        background: rgba(0,0,0,.45);
+
+        transition: right 300ms ease-in-out;
+    }
+    .se_menu_overlay.hidden{
+        right: -100vw;
+        opacity: 0;
+    }
+    .se_menu_panel{
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        
+        width: 90%;
+        max-width: 300px;
+        height: 100vh;
+
+        opacity: 1;
+        background: #f2f2f2;
+        box-shadow: -2px 0px 5px rgba(0,0,0,.15);
+        transition: all 300ms ease-in-out;
+    }
+    .se_menu_panel.closed{
+        right: -100vw;
+        opacity: 0;
+    }
+    .se_menu_bar{
+        height: 48px;
+        padding: 1rem;
+
+        border-bottom: 1px solid rgba(0,0,0,0.15);
+        text-align: right;
+    }
+    .se_menu_panel_links{
+        flex: 1 1 0px;
+        overflow-y: auto;
+    }
+    .se_menu_panel_links > a{
+        display: block;
+
+        height: 48px;
+        padding: 0px 1rem;
+        
+        border-bottom: 1px solid rgba(0,0,0,0.15);
+        
+        color: #606060;
+        font-size: 1.1rem;
+        line-height: 48px;
+        text-decoration: none;
+    }
+    .se_menu_panel_links > a:hover{
+        background: rgba(0,0,0,.05);
+        
+        color: #231f61;
+        font-weight: 600;
+    }
+    .se_menu_panel_links > a.active{
+        position: relative;
+
+        padding: 0px 2rem;
+        
+        color: #231f61;
+        font-weight: 600;
+    }
+    .se_menu_panel_links > a.active::before {
+        content: '';
+        position: absolute;
+        left: 1rem;
+        top: calc(50% - .25rem);
+        
+        height: .5rem;
+        width: .5rem;
+
+        border-radius: 50%;
+        background: #231f61;
+    }
+/* End Menu Drawer */
+
+/* Menu/Close Button */
+.se_menu_button{
+    display: none;
 }
-.se_menu li{
-    list-style: none;
-    flex: 0 0 auto;
+.se_menu_button_icon{
     cursor: pointer;
-    margin-left: 1.5rem;
-    font-size: 1rem;
+    fill: #606060;
+    transform: rotate(0deg);
+    transition: transform 300ms ease-in-out;
 }
-/* .se_menu li:not(:first-child):before{
-    content: '';
-    height: 1rem;
-    width: 2px;
-    background: red;
-} */
-.se_menu li>a{
-    color: #606060;
-    text-decoration: none;
+.se_menu_button_icon:hover{
+    fill: #231f61;
+    transform: rotate(-180deg);
 }
-.se_menu li>a:hover{
-    text-decoration: underline;
-}
-.se_menu li>a.active{
-    text-decoration: underline;
-    color: #231f61;
-    font-weight: 600;
+/* End Menu/Close Button */
+
+
+@media only screen and (max-width: 800px){
+    .se_menu_list{
+        display: none;
+    }
+    .se_menu_button{
+        display: block;
+    }
 }

@@ -10,12 +10,12 @@ class HomePage extends Component {
         <section className="landing_image large image1">
           <div className="pga_overlay"/>
           <main className="page_title">
-            <h1>Swing Essentials</h1>
+            <h1>Swing<span className="hidden_space"> </span><br className="hidden_break"/>Essentials</h1>
             <h3>a PGA Pro in your pocket at home and on the links</h3>
           </main>
-          <div style={{marginTop:"3rem"}}>
-            <div className="apple_store"/>
-            <div className="google_store"/>
+          <div style={{marginTop:"2rem"}}>
+            <div className="button apple_store"/>
+            <div className="button google_store"/>
           </div>
         </section>
         <section>
@@ -63,11 +63,11 @@ class HomePage extends Component {
         <section>
           <h1>Try It Today</h1>
           <p>Still not convinced? Download our app and give it a try. Your first lesson is on us.</p>
-          <div style={{display:'flex',flexDirection:'row',alignItems:'center',marginTop:'2rem'}}>
-            <div className="apple_store"/>
-            <div className="google_store"/>
+          <div className="multi_col">
+            <div className="button apple_store"/>
+            <div className="button google_store"/>
           </div>
-          <div className="se_button" style={{marginTop:'1rem'}}><span>Sign In</span></div>
+          <div className="button se_button"><span>Sign In</span></div>
         </section>
         <Footer/>
       </div>
