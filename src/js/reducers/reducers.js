@@ -1,12 +1,12 @@
 import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux'
-import {LOGIN_SUCCESS, LOGIN_ERROR} from '../actions/actions.js';
+import {LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT_SUCCESS, LOGOUT_ERROR} from '../actions/actions.js';
 
 const userReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN_SUCCESS:
 			return{...state, 
-				username: action.data.personal.username
+				username: action.data.user_data.personal.username
 			};
 		default:
 			return state;
@@ -28,7 +28,7 @@ const loginReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN_SUCCESS:
 			return{...state,
-				token: null,
+				token: action.data.token,
 				failCount: 0
 			}
 		case LOGIN_ERROR:
@@ -36,6 +36,13 @@ const loginReducer = (state=[], action) => {
 				token: null,
 				failCount: state.failCount + 1
 			}
+		case LOGOUT_SUCCESS:
+			return{...state,
+				token: null,
+				failCount: 0
+			}
+		case LOGOUT_ERROR:
+			return state;
 		default:
 			return state;
 	}

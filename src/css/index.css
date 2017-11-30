@@ -69,43 +69,65 @@ body {
   overflow: hidden;
 }
 
+.landing_image{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  
+  height: 17rem;
+  width: 100%;
+  padding-top: 6.5rem;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url('../images/main_bg_1.jpg');
+}
+.landing_image.large{
+  height: 30rem;
+}
+.landing_image.image1{
+  background-image: url('../images/main_bg_1.jpg');
+}
+.landing_image.image2{
+  background-image: url('../images/main_bg_2.jpg');
+}
+
 /* Section Dividers */
   section{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     
     width: 100%;
     max-width: 1024px;
     margin: auto;
     padding: 2rem;
-    padding: var(--majorSpacing);
     border: 0px solid rgba(0,0,0,0.15);
     border-width: 0px 1px 0px 1px;
     background-color: #ffffff;
     
     text-align: center;
     color: #231f61;
-    color: var(--sePurple);
+  }
+  section.center{
+    align-items: center;
   }
   section:nth-child(even){
     background-color: #f2f2f2;
   }
   section > h1{
     font-size: 1.5rem;
-    font-size: var(--sectionTitleSize);
     font-weight: 700;
   }
   section p {
     width: 100%;
     max-width: 615px;
     margin-top: 2rem;
-    margin-top: var(--majorSpacing);
     
     font-size: 1.1rem;
-    font-size: var(--bodyFontSize);
     line-height: 1.6rem;
-    line-height: var(--bodyFontLineHeight);
   }
   /* Multi Column Layout*/
     .multi_col {
@@ -119,18 +141,15 @@ body {
     .multi_col > div{
       flex: 1 1 0px;
       margin-top: 2rem;
-      margin-top: var(--majorSpacing);
     }
     .multi_col > div.button{
       flex: 0 0 auto;
     }
     .multi_col>div:not(:first-child){
       margin-left: 1rem;
-      margin-left: var(--minorSpacing);
     }
     .multi_col > div > p{
       margin-top: .5rem;
-      margin-top: var(--microSpacing);
     }
     .number_icon{
       display: inline-block;
@@ -139,60 +158,54 @@ body {
       width: 2rem;
 
       background: #231f61;
-      background: var(--sePurple);
       border-radius: 50%;
       
       color: #ffffff;
       font-size: 1.1rem;
-      font-size: var(--bodyFontSize);
       line-height: 2rem;
       font-weight: 700;
     }
     .multi_col > div > h3{
       font-weight: 700;
       font-size: 1.1rem;
-      font-size: var(--bodyFontSize);
       text-transform: uppercase;
     }
   /* End Multi Column Layout */
 /* End Section Dividers */
 
-.landing_image{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  
-  height: 30rem;
-  width: 100%;
-  padding-top: 8.5rem;
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-image: url('../images/main_bg_1.jpg');
-}
-
 /* Page Title */
+
   .page_title{
     display: flex;
     flex-direction: column;
     align-items: center;
     z-index: 100;
+
+    width: 100%;
     
     color: #ffffff;
     text-align: center;
     text-shadow: 2px 2px 2px rgba(0,0,0,.75);
   }
+  .landing_image.large .page_title{
+    width: auto;
+  }
   .page_title > h1{
     font-size: 3rem;
-    font-size: var(--pageTitleSize);
     font-family: 'Bell MT', serif;
+    white-space: nowrap;
   }
   .page_title > h3{
+    margin-top: 1rem;
     font-size: 1.1rem;
-    font-size: var(--bodyFontSize);
+    white-space: nowrap;
+  }
+  .landing_image.large .page_title > h1{
+    white-space: normal;
+  }
+  .landing_image.large .page_title > h3{
     width: 60%;
+    white-space: normal;
   }
   .page_title .hidden_break{
     display:none;
@@ -218,20 +231,27 @@ body {
 
 /* Buttons */
   .button{
-    width: 135px;
-    height: 40px;
+    width: 100%;
+    height: 45px;
     margin-top: 1rem;
-    margin-top: var(--minorSpacing);
 
     cursor: pointer;
   }
+  .button.small{
+    width: 135px;
+    height: 40px;
+  }
   .apple_store{
+    width: 135px;
+    height: 40px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-image: url('../images/apple_store.svg');
   }
   .google_store{
+    width: 135px;
+    height: 40px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -244,33 +264,82 @@ body {
     justify-content: center;
 
     margin-top: 1rem;
-    margin-top: var(--minorSpacing);
     
     border: 2px solid #231f61;
-    border: 2px solid var(--sePurple);
     border-radius: 5px;
     background-color: rgba(35,31,97,0.8);
-    background-color: var(--sePurple80);
     color: #ffffff;
     text-transform: uppercase;
     
     font-size: 1.1rem;
-    font-size: var(--bodyFontSize);
     font-weight: 400;
   }
   .se_button:hover{
-    background-color: rgba(35,31,97,.9);
-    background-color: var(--sePurple70);
+    background-color: rgba(35,31,97,.7);
+  }
+  .button[disabled]{
+    opacity: .55;
+    pointer-events: none;
   }
 /* End Buttons */
-
+.se_footer{
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+}
 .se_footer p{
   margin-top: 0px;
   font-size: 0.9rem;
-  font-size: var(--miniFontSize);
 }
 
-@media only screen and (max-width: 800px){
+/* Form Elements */
+label{
+  display: block;
+
+  margin-bottom: 0.5rem;
+  
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #231f61;
+  text-align: left;
+  
+}
+input {
+  width: 100%;
+  height: 45px;
+  padding: 0px 1rem;
+  
+  background: white;
+  border: 1px solid #231f61;
+  box-shadow: 0px 2px 2px rgba(0,0,0,.15);
+  
+  color: #231f61;
+  font-size: 1.1rem;
+  outline: 0;
+}
+.validation_error{
+  display: block;
+
+  margin-top: 2rem;
+  
+  color: #ff3333;
+  font-size: .9rem;
+  font-weight: 600;
+}
+.login_form{
+  width: 100%;
+  max-width: 450px;
+}
+
+/* End Form Elements */
+
+
+
+
+
+
+
+
+
+@media only screen and (max-width: 850px){
   .multi_col {
     display: block;
     width: auto;
@@ -280,7 +349,6 @@ body {
   }
   .multi_col > div.button{
     margin-top: 1rem;
-    margin-top: var(--minorSpacing);
   }
 }
 @media only screen and (max-width: 600px){

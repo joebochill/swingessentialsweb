@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
 
-import LoginPage from './pages/Login.js';
+import SigninPage from './pages/Signin.js';
+import OurProPage from './pages/OurPro.js';
 import HomePage from './pages/Home.js';
 
 import {store} from '../store/store.js';
+import {history} from '../store/store.js';
 import {Provider} from 'react-redux';
 import {ConnectedRouter} from 'react-router-redux/es';
-import createHistory from 'history/createBrowserHistory';
 import {Switch, Redirect, Route} from 'react-router';
-
-const history = createHistory({basename: '/swingessentials'});
 
 class SwingEssentialsApp extends Component {
   render() {
@@ -18,7 +17,8 @@ class SwingEssentialsApp extends Component {
         <ConnectedRouter history={history}>
           <Switch>
             <Route exact path="/" component={HomePage}/>
-            <Route path="/login" component={LoginPage}/>
+            <Route path="/signin" component={SigninPage}/>
+            <Route path="/our-pro" component={OurProPage}/>
             <Route path="*">
               <Redirect to="/"/>
             </Route>  

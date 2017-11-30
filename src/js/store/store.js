@@ -2,6 +2,8 @@ import { createStore, applyMiddleware} from 'redux'
 import AppReducer from '../reducers/reducers.js'
 import thunk from 'redux-thunk';
 import {routerMiddleware} from 'react-router-redux'
+import createHistory from 'history/createBrowserHistory';
+export const history = createHistory({basename: '/swingessentials'});
 // The initial state of the store
 export const initialStore = {
     
@@ -53,5 +55,5 @@ export const initialStore = {
 export const store = createStore(
     AppReducer,
     initialStore,
-    applyMiddleware(thunk, routerMiddleware)
+    applyMiddleware(thunk, routerMiddleware(history))
 );

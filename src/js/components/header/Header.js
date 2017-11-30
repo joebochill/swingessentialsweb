@@ -8,15 +8,18 @@ import Menu from './Menu.js';
 //import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 //import * as Actions from '../../actions/actions.js';
+import {requestLogout} from '../../actions/actions.js';
 
 function mapStateToProps(state){
     return {
-        username: state.userData.username
+        username: state.userData.username,
+        token: state.login.token
     };
 }
 function mapDispatchToProps(dispatch){
   return{
-      push: (val) => {dispatch(push(val));}
+      push: (val) => {dispatch(push(val));},
+      requestLogout: (un,pw) => {dispatch(requestLogout({username:un,token:pw}))}
   }
 }
 
@@ -26,9 +29,9 @@ class Header extends Component {
     this.state={
       menuOpen: false
     };
-    this._toggleMenu = this._toggleMenu.bind(this);
   }
   _toggleMenu(newState=false){
+    if(!this.ref){return;}
     if(newState){
       this.setState({menuOpen:true});
       document.body.classList.add('noScroll');
@@ -39,6 +42,7 @@ class Header extends Component {
     }
   }
   componentDidMount(){
+    this._toggleMenu(false);
     window.addEventListener('resize',this._handleResize.bind(this));
   }
   componentWillUnmount(){
@@ -49,17 +53,21 @@ class Header extends Component {
   }
   render() {
     return (
-      <header className="se_header">
+      <header className="se_header" ref={(ref)=>this.ref=ref}>
         <img src={se_logo} height="48" alt="se_logo"/>
         <ul className="se_menu_list">
-          <li><NavLink to='/' activeClassName='active'>Home</NavLink></li>
-          <li><NavLink to='/our-pro' activeClassName='active'>Meet Our Pro</NavLink></li>
-          <li><NavLink to='/19th-hole' activeClassName='active'>The 19th Hole</NavLink></li>
-          <li><NavLink to='/tip-of-the-month' activeClassName='active'>Tip of the Month</NavLink></li>
-          {(this.props.username) ? (
-            <li><NavLink to='/account' activeClassName='active'>My Account</NavLink></li>
-          ):(
-            <li><NavLink to='/login' activeClassName='active'>Sign In</NavLink></li>
+          <li><NavLink to='/' exact>Home</NavLink></li>
+          <li><NavLink to='/our-pro/'>Meet Our Pro</NavLink></li>
+          <li><NavLink to='/19th-hole/'>The 19th Hole</NavLink></li>
+          <li><NavLink to='/tip-of-the-month/'>Tip of the Month</NavLink></li>
+          {(this.props.token) && (
+            <li><NavLink to='/account/'>My Account</NavLink></li>
+          )}
+          {(this.props.token) && (
+            <li><a onClick={()=>this.props.requestLogout(this.props.username,this.props.token)}>Sign Out</a></li>
+          )}
+          {(!this.props.token) && (
+            <li><NavLink to='/signin/'>Sign In</NavLink></li>
           )}
         </ul>
         <div className="se_menu_button">

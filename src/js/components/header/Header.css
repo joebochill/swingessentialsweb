@@ -28,7 +28,7 @@
     .se_menu_list > li{
         flex: 0 0 auto;
 
-        margin-left: 1.1rem;
+        margin-left: 1.2rem;
 
         list-style: none;
         cursor: pointer;
@@ -124,6 +124,8 @@
         font-size: 1.1rem;
         line-height: 48px;
         text-decoration: none;
+
+        cursor: pointer;
     }
     .se_menu_panel_links > a:hover{
         background: rgba(0,0,0,.05);
@@ -170,7 +172,7 @@
 /* End Menu/Close Button */
 
 
-@media only screen and (max-width: 800px){
+@media only screen and (max-width: 850px){
     .se_menu_list{
         display: none;
     }

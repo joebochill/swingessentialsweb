@@ -7,22 +7,22 @@ class HomePage extends Component {
     return (
       <div>
         <Header/>
-        <section className="landing_image large image1">
+        <section className="landing_image large image1 center">
           <div className="pga_overlay"/>
           <main className="page_title">
             <h1>Swing<span className="hidden_space"> </span><br className="hidden_break"/>Essentials</h1>
             <h3>a PGA Pro in your pocket at home and on the links</h3>
           </main>
-          <div style={{marginTop:"2rem"}}>
+          <div style={{marginTop:"3rem"}}>
             <div className="button apple_store"/>
             <div className="button google_store"/>
           </div>
         </section>
-        <section>
+        <section className="center">
           <h1>Lessons On Your Schedule</h1>
           <p>Swing Essentials provides you with affordable, individualized one-on-one lessons from a PGA-certified golf pro from the comfort and convenience of your home.</p>
         </section>
-        <section>
+        <section className="center">
           <h1>How It Works</h1>
           <div className="multi_col">
             <div>
@@ -39,11 +39,11 @@ class HomePage extends Component {
             </div>
           </div>
         </section>
-        <section>
+        <section className="center">
           <h1>Why Swing Essentials?</h1>
           <p>Swing Essenials offers a true one-on-one experience. Our PGA-certified professional puts a personal touch on each and every lesson, giving you the confidence to know that your lesson is just for you. But don’t take our word for it - hear what our customers have to say.</p>
         </section>
-        <section>
+        <section className="center">
           <h1>Testimonials</h1>
           <div className="multi_col">
             <div>
@@ -60,14 +60,14 @@ class HomePage extends Component {
             </div>
           </div>
         </section>
-        <section>
+        <section className="center">
           <h1>Try It Today</h1>
           <p>Still not convinced? Download our app and give it a try. Your first lesson is on us.</p>
           <div className="multi_col">
             <div className="button apple_store"/>
             <div className="button google_store"/>
           </div>
-          <div className="button se_button"><span>Sign In</span></div>
+          <div className="button small se_button"><span>Sign In</span></div>
         </section>
         <Footer/>
       </div>
