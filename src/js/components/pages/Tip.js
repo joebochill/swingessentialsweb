@@ -17,7 +17,7 @@ var mapDispatchToProps = function(dispatch){
   }
 };
 
-class OurProPage extends Component {
+class TipPage extends Component {
   componentWillMount(){
     // if(!this.props.username){
     //   this.props.goToLogin();
@@ -29,8 +29,8 @@ class OurProPage extends Component {
       <Header/>
       <section className="landing_image image2 center">
         <main className="page_title">
-          <h1>Meet Our Pro</h1>
-          <h3>Alan J. Nelson</h3>
+          <h1>Tip of the Month</h1>
+          <h3>Small Adjustments, Big Difference</h3>
         </main>
       </section>
       <Footer/>
@@ -39,4 +39,4 @@ class OurProPage extends Component {
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(OurProPage);
+export default connect(mapStateToProps,mapDispatchToProps)(TipPage);

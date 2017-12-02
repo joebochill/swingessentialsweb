@@ -8,18 +8,20 @@ import Menu from './Menu.js';
 //import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 //import * as Actions from '../../actions/actions.js';
-import {requestLogout} from '../../actions/actions.js';
+//import {requestLogout} from '../../actions/actions.js';
 
 function mapStateToProps(state){
     return {
         username: state.userData.username,
+        fname: state.userData.firstName,
+        lname: state.userData.lastName,
         token: state.login.token
     };
 }
 function mapDispatchToProps(dispatch){
   return{
-      push: (val) => {dispatch(push(val));},
-      requestLogout: (un,pw) => {dispatch(requestLogout({username:un,token:pw}))}
+      push: (val) => {dispatch(push(val));}//,
+      //requestLogout: (un,pw) => {dispatch(requestLogout({username:un,token:pw}))}
   }
 }
 
@@ -61,10 +63,10 @@ class Header extends Component {
           <li><NavLink to='/19th-hole/'>The 19th Hole</NavLink></li>
           <li><NavLink to='/tip-of-the-month/'>Tip of the Month</NavLink></li>
           {(this.props.token) && (
-            <li><NavLink to='/account/'>My Account</NavLink></li>
-          )}
-          {(this.props.token) && (
-            <li><a onClick={()=>this.props.requestLogout(this.props.username,this.props.token)}>Sign Out</a></li>
+            <li className="se_drop_menu">
+              <NavLink to='/account/'>{`${this.props.fname} ${this.props.lname.charAt(0)}.`}</NavLink>
+
+            </li>
           )}
           {(!this.props.token) && (
             <li><NavLink to='/signin/'>Sign In</NavLink></li>

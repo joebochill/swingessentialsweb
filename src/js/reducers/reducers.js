@@ -6,7 +6,15 @@ const userReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN_SUCCESS:
 			return{...state, 
-				username: action.data.user_data.personal.username
+				username: action.data.user_data.personal.username,
+				firstName: action.data.user_data.personal.first_name,
+				lastName: action.data.user_data.personal.last_name
+			};
+		case LOGOUT_SUCCESS:
+			return{...state, 
+				username: '',
+				firstName: '',
+				lastName: ''
 			};
 		default:
 			return state;

@@ -9,6 +9,8 @@ import {requestLogout} from '../../actions/actions.js';
 function mapStateToProps(state){
     return {
         username: state.userData.username,
+        fname: state.userData.firstName,
+        lname: state.userData.lastName,
         token: state.login.token
     };
 }
@@ -24,6 +26,7 @@ class Menu extends Component {
     return (
         <div className={this.props.closed ? "se_menu_panel closed" : "se_menu_panel"}>
           <div className="se_menu_bar">
+            {this.props.username && <span className="se_welcome">{`Welcome, ${this.props.fname} ${this.props.lname.charAt(0)}!`}</span>}
             <svg onClick={this.props.close} className="se_menu_button_icon" height="20px" width="20px"><polygon points="17.9,3.7 16.3,2.1 10,8.4 3.7,2.1 2.1,3.7 8.4,10 2.1,16.3 3.7,17.9 10,11.6 16.3,17.9 17.9,16.3 11.6,10 "/></svg>
           </div>
           <div className="se_menu_panel_links">
@@ -32,10 +35,13 @@ class Menu extends Component {
             <NavLink to='/19th-hole/'>The 19th Hole</NavLink>
             <NavLink to='/tip-of-the-month/'>Tip of the Month</NavLink>
             {(this.props.token) && (
-              <NavLink to='/account/'>My Account</NavLink>
+              <NavLink to='/account/'>Lessons</NavLink>
             )}
             {(this.props.token) && (
-              <a onClick={()=>this.props.requestLogout(this.props.username,this.props.token)}>Sign Out</a>
+              <NavLink to='/account/'>Profile</NavLink>
+            )}
+            {(this.props.token) && (
+              <a onClick={()=>{this.props.requestLogout(this.props.username,this.props.token); this.props.close()}}>Sign Out</a>
             )}
             {(!this.props.token) && (
               <NavLink to='/signin/'>Sign In</NavLink>

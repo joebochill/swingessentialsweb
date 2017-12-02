@@ -51,7 +51,6 @@
 }
 body {
   font-family: 'Open Sans', sans-serif;
-  font-size: 14px;
   background: #f8f8f8;
   --majorSpacing: 2rem;
   --minorSpacing: 1rem;
@@ -104,6 +103,7 @@ body {
     max-width: 1024px;
     margin: auto;
     padding: 2rem;
+    
     border: 0px solid rgba(0,0,0,0.15);
     border-width: 0px 1px 0px 1px;
     background-color: #ffffff;
@@ -283,6 +283,7 @@ body {
   }
 /* End Buttons */
 .se_footer{
+  align-items: center;
   border-bottom: 1px solid rgba(0,0,0,0.15);
 }
 .se_footer p{

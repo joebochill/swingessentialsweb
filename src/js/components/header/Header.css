@@ -14,7 +14,7 @@
     max-width: 1024px;
     padding: 1rem;
 
-    background: rgba(255,255,255,.95);
+    background: rgba(255,255,255,.97);
     box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.25);
 }
 /* Horizontal Menu List */
@@ -27,6 +27,7 @@
     }
     .se_menu_list > li{
         flex: 0 0 auto;
+        position: relative;
 
         margin-left: 1.2rem;
 
@@ -38,27 +39,57 @@
     .se_menu_list li>a{
         color: #606060;
         text-decoration: none;
+        position: relative;
     }
-    .se_menu_list li>a:hover{
-        font-weight: 600;
+    .se_menu_list li:hover > a{
+        color: #231f61;
     }
     .se_menu_list li>a.active{
         color: #231f61;
         font-weight: 600;
-        position: relative;
     }
-    .se_menu_list li>a.active::before{
+    .se_menu_list li.se_drop_menu>a.active::after{
+        border-color: #231f61;
+        border-width: 2px 2px 0px 0px;
+    }
+    .se_menu_list li:not(.se_drop_menu):hover > a::before,
+    .se_menu_list li:not(.se_drop_menu) > a.active::before{
+        content: '';
+        position: absolute;
+        left: -.5rem;
+        top: -.25rem;
+        height: 1.9rem;
+        width: calc(100% + 1rem);
+        
+        border-radius: .5rem;
+        background: #231f61;
+        opacity: 0.2;
+    }
+    .se_menu_list li:hover > a:not(.active)::before{
+        opacity: .05;
+    }
+    .se_drop_menu{
+        padding-left: 0.7rem;
+    }
+    .se_menu_list li.se_drop_menu > a::after{
         content: '';
         position: absolute;
         left: -.7rem;
         top: calc(50% - .25rem);
+        height: 0.3rem;
+        width: 0.3rem;
         
-        height: 0.5rem;
-        width: 0.5rem;
-
-        border-radius: 50%;
-        background: #231f61;
+        border-width: 1px 1px 0px 0px;
+        border-style: solid;
+        border-color: #606060;
+        
+        transform: rotate(135deg);
     }
+    .se_menu_list li.se_drop_menu:hover > a::after{
+        border-width: 2px 2px 0px 0px;
+        border-color: #231f61;
+    }
+
 /* End Horizontal Menu List */
 
 /* Menu Drawer */
@@ -84,10 +115,10 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
+        
         position: absolute;
         top: 0px;
         right: 0px;
-        
         width: 90%;
         max-width: 300px;
         height: 100vh;
@@ -102,17 +133,31 @@
         opacity: 0;
     }
     .se_menu_bar{
-        height: 48px;
-        padding: 1rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
 
+        height: 48px;
+        padding: 0px 1rem 0px 0px;
+
+        background-color: rgba(35, 31, 97, .8);
         border-bottom: 1px solid rgba(0,0,0,0.15);
-        text-align: right;
     }
+    .se_menu_bar .se_welcome{
+        flex: 1 1 0px;
+        
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    
     .se_menu_panel_links{
         flex: 1 1 0px;
         overflow-y: auto;
     }
-    .se_menu_panel_links > a{
+    .se_menu_panel_links > a,
+    .se_welcome{
         display: block;
 
         height: 48px;
@@ -127,31 +172,20 @@
 
         cursor: pointer;
     }
+    .se_welcome{
+        color: white;
+    }
     .se_menu_panel_links > a:hover{
-        background: rgba(0,0,0,.05);
-        
+        background: rgba(35, 31, 97, .05);
         color: #231f61;
-        font-weight: 600;
     }
     .se_menu_panel_links > a.active{
         position: relative;
 
-        padding: 0px 2rem;
+        background: rgba(35, 31, 97, .2);
         
         color: #231f61;
         font-weight: 600;
-    }
-    .se_menu_panel_links > a.active::before {
-        content: '';
-        position: absolute;
-        left: 1rem;
-        top: calc(50% - .25rem);
-        
-        height: .5rem;
-        width: .5rem;
-
-        border-radius: 50%;
-        background: #231f61;
     }
 /* End Menu Drawer */
 
@@ -160,14 +194,21 @@
     display: none;
 }
 .se_menu_button_icon{
+    flex: 0 0 auto;
     cursor: pointer;
     fill: #606060;
     transform: rotate(0deg);
     transition: transform 300ms ease-in-out;
 }
+.se_menu_bar .se_menu_button_icon{
+    fill: white;
+}
 .se_menu_button_icon:hover{
     fill: #231f61;
     transform: rotate(-180deg);
+}
+.se_menu_bar .se_menu_button_icon:hover{
+    fill: white;
 }
 /* End Menu/Close Button */
 
