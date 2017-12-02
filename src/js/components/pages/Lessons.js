@@ -21,7 +21,7 @@ var mapDispatchToProps = function(dispatch){
   }
 };
 
-class AccountPage extends Component {
+class LessonsPage extends Component {
   componentWillMount(){
     if(!this.props.username){
       this.props.goToSignIn();
@@ -36,13 +36,13 @@ class AccountPage extends Component {
     return (
       <div>
       <Header/>
-      <section className="landing_image image2 center">
+      <section className="landing_image image2">
         <main className="page_title">
-          <h1>Your Account</h1>
-          <h3>A Land of Magic and Adventure</h3>
+          <h1>Your Lessons</h1>
+          <h3>See How Far You've Come</h3>
         </main>
       </section>
-      <section className="center">
+      <section>
         <div className="button se_button" onClick={()=>this.props.requestLogout(this.props.username,this.props.token)}>
           <span>Sign Out</span>
         </div>
@@ -53,4 +53,4 @@ class AccountPage extends Component {
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(AccountPage);
+export default connect(mapStateToProps,mapDispatchToProps)(LessonsPage);

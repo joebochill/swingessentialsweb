@@ -27,7 +27,7 @@ class TipPage extends Component {
     return (
       <div>
       <Header/>
-      <section className="landing_image image2 center">
+      <section className="landing_image image2">
         <main className="page_title">
           <h1>Tip of the Month</h1>
           <h3>Small Adjustments, Big Difference</h3>

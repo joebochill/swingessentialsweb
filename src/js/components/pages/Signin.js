@@ -33,7 +33,7 @@ class SigninPage extends Component {
 
   componentWillReceiveProps(nextProps){
     if(nextProps.token){
-        this.props.replace('/account');
+        this.props.replace('/lessons');
     }
     else{
         this.setState({password: ''});
@@ -58,7 +58,7 @@ class SigninPage extends Component {
             <h3>Access Your Account</h3>
           </main>
         </section>
-        <section className="center">
+        <section>
           <div className="login_form">
             <label>Username or Email</label>
             <input 

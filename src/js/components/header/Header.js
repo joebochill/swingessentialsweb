@@ -8,7 +8,7 @@ import Menu from './Menu.js';
 //import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 //import * as Actions from '../../actions/actions.js';
-//import {requestLogout} from '../../actions/actions.js';
+import {requestLogout} from '../../actions/actions.js';
 
 function mapStateToProps(state){
     return {
@@ -16,12 +16,16 @@ function mapStateToProps(state){
         fname: state.userData.firstName,
         lname: state.userData.lastName,
         token: state.login.token
+        // username: 'Joe',
+        // fname: 'Joe',
+        // lname: 'B.',
+        // token: 'token'
     };
 }
 function mapDispatchToProps(dispatch){
   return{
-      push: (val) => {dispatch(push(val));}//,
-      //requestLogout: (un,pw) => {dispatch(requestLogout({username:un,token:pw}))}
+      push: (val) => {dispatch(push(val));},
+      requestLogout: (un,tk) => {dispatch(requestLogout({username:un,token:tk}))}
   }
 }
 
@@ -29,29 +33,53 @@ class Header extends Component {
   constructor(props){
     super(props);
     this.state={
-      menuOpen: false
+      drawerOpen: false,
+      accountMenuOpen: false
     };
+    this.handleResize = this._handleResize.bind(this);
+    this.handleBodyClick = this._handleBodyClick.bind(this);
   }
-  _toggleMenu(newState=false){
+  _toggleDrawer(newState=false){
     if(!this.ref){return;}
     if(newState){
-      this.setState({menuOpen:true});
+      this.setState({drawerOpen:true});
       document.body.classList.add('noScroll');
     }
     else{
-      this.setState({menuOpen:false});
+      this.setState({drawerOpen:false});
       document.body.classList.remove('noScroll');
     }
   }
+  _toggleMenu(newState=!this.state.accountMenuOpen,menu="account"){
+    if(!this.ref){return;}
+    this.setState({accountMenuOpen:newState});
+  }
   componentDidMount(){
-    this._toggleMenu(false);
-    window.addEventListener('resize',this._handleResize.bind(this));
+    this._toggleDrawer(false);
+    this._removeEventListeners();
+    this._addEventListeners();
   }
   componentWillUnmount(){
-    window.removeEventListener('resize',this._handleResize.bind(this));
+    this._removeEventListeners();
+  }
+  _addEventListeners(){
+    window.addEventListener('resize',this.handleResize);
+    window.addEventListener('click', this.handleBodyClick);
+    window.addEventListener('scroll', this.handleResize);
+  }
+  _removeEventListeners(){
+    window.removeEventListener('resize',this.handleResize);
+    window.removeEventListener('click', this.handleBodyClick);
+    window.removeEventListener('scroll', this.handleResize);
   }
   _handleResize(){
-    if(this.state.menuOpen){this._toggleMenu(false)}
+    if(this.state.drawerOpen){this._toggleDrawer(false);}
+    if(this.state.accountMenuOpen){this._toggleMenu(false);}
+  }
+  _handleBodyClick(evt){
+    if(!evt.target.closest('.se_drop_menu')) {
+      this._toggleMenu(false);
+    }        
   }
   render() {
     return (
@@ -63,9 +91,15 @@ class Header extends Component {
           <li><NavLink to='/19th-hole/'>The 19th Hole</NavLink></li>
           <li><NavLink to='/tip-of-the-month/'>Tip of the Month</NavLink></li>
           {(this.props.token) && (
-            <li className="se_drop_menu">
-              <NavLink to='/account/'>{`${this.props.fname} ${this.props.lname.charAt(0)}.`}</NavLink>
-
+            <li className={this.state.accountMenuOpen ? "se_drop_menu open" : "se_drop_menu"}>
+              <a onClick={()=>this._toggleMenu()}>{`${this.props.fname} ${this.props.lname.charAt(0)}.`}</a>
+              <div className={this.state.accountMenuOpen ? "se_account_menu" : "se_account_menu closed"}>
+                <div className="se_menu_panel_links">
+                  <NavLink to='/lessons' exact>Lessons</NavLink>
+                  <NavLink to='/profile/'>Profile</NavLink>
+                  <a onClick={()=>{this.props.requestLogout(this.props.username,this.props.token); this._toggleMenu();}}>Sign Out</a>
+                </div>
+              </div>
             </li>
           )}
           {(!this.props.token) && (
@@ -73,9 +107,9 @@ class Header extends Component {
           )}
         </ul>
         <div className="se_menu_button">
-          <svg onClick={()=>this._toggleMenu(true)} className="se_menu_button_icon" height="20px" width="20px"><path d="M0,16.7h20v-2.2H0V16.7z M0,11.1h20V8.9H0V11.1z M0,3.3v2.2h20V3.3H0z"/></svg>
-          <div onClick={()=>this._toggleMenu(false)} className={this.state.menuOpen ? "se_menu_overlay" : "se_menu_overlay hidden"}/>
-          <Menu closed={!this.state.menuOpen} close={()=>this._toggleMenu(false)}/>
+          <svg onClick={()=>this._toggleDrawer(true)} className="se_menu_button_icon" height="20px" width="20px"><path d="M0,16.7h20v-2.2H0V16.7z M0,11.1h20V8.9H0V11.1z M0,3.3v2.2h20V3.3H0z"/></svg>
+          <div onClick={()=>this._toggleDrawer(false)} className={this.state.drawerOpen ? "se_menu_overlay" : "se_menu_overlay hidden"}/>
+          <Menu closed={!this.state.drawerOpen} close={()=>this._toggleDrawer(false)}/>
         </div>
       </header>
     );

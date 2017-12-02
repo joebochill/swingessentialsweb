@@ -93,11 +93,11 @@ body {
   background-image: url('../images/main_bg_2.jpg');
 }
 
-/* Section Dividers */
+/* Section Dividers And Contents */
   section{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     
     width: 100%;
     max-width: 1024px;
@@ -110,9 +110,6 @@ body {
     
     text-align: center;
     color: #231f61;
-  }
-  section.center{
-    align-items: center;
   }
   section:nth-child(even){
     background-color: #f2f2f2;
@@ -127,8 +124,81 @@ body {
     margin-top: 2rem;
     
     font-size: 1.1rem;
-    line-height: 1.6rem;
+    line-height: 1.8rem;
   }
+  section.left > p{
+    /* align-items: flex-start; */
+    text-align: left;
+  }
+  section a {
+    font-weight: 700;
+    color: inherit;
+  }
+
+  /* Graphics */
+  .headshot{
+    height: 12rem;
+    width: 12rem;
+    margin-bottom: 2rem;
+
+    border-radius: 50%;
+    background-image: url(/static/media/headshot.00baf177.jpg);
+    background-position: -11px -30px;
+    background-repeat: no-repeat;
+  }
+
+  /* Date Stamps */
+  .datestamp_wrapper{
+    position: relative;
+
+    height: 4rem;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+  .datestamp {
+    position: relative;
+    display: inline-block;
+
+    width: 4rem;
+    padding: 0.5rem;
+
+    background: #231f61;
+    color: #FFFFFF;
+  }
+  .datestamp > .month,
+  .datestamp > .day{
+    display: block;
+    max-width: 3rem;
+
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .datestamp > .day{
+    font-size: 1.8rem;
+    line-height: 1.8rem;
+    font-weight: 700;
+  }
+  .datestamp_divider{
+    position: absolute;
+    left: 0px;
+    top: 50%;
+
+    width: 100%;
+    
+    border-bottom: 1px solid rgba(35, 31, 97, .20);
+}
+
+  /* Lists */
+  section > p > ol {
+    list-style-type: decimal;
+    list-style-position: inside;
+  }
+  section > p > ol > li:not(:last-child){
+    margin-bottom: 2rem;
+  }
+
   /* Multi Column Layout*/
     .multi_col {
       display: flex;
@@ -164,6 +234,7 @@ body {
       font-size: 1.1rem;
       line-height: 2rem;
       font-weight: 700;
+      user-select: none;
     }
     .multi_col > div > h3{
       font-weight: 700;
@@ -171,7 +242,9 @@ body {
       text-transform: uppercase;
     }
   /* End Multi Column Layout */
-/* End Section Dividers */
+
+
+/* End Section Dividers And Contents*/
 
 /* Page Title */
 
@@ -186,6 +259,7 @@ body {
     color: #ffffff;
     text-align: center;
     text-shadow: 2px 2px 2px rgba(0,0,0,.75);
+    user-select: none;
   }
   .landing_image.large .page_title{
     width: auto;
@@ -268,11 +342,12 @@ body {
     border: 2px solid #231f61;
     border-radius: 5px;
     background-color: rgba(35,31,97,0.8);
+    
     color: #ffffff;
     text-transform: uppercase;
-    
     font-size: 1.1rem;
     font-weight: 400;
+    user-select: none;
   }
   .se_button:hover{
     background-color: rgba(35,31,97,.7);
@@ -289,6 +364,7 @@ body {
 .se_footer p{
   margin-top: 0px;
   font-size: 0.9rem;
+  user-select: none;
 }
 
 /* Form Elements */
@@ -332,14 +408,7 @@ input {
 
 /* End Form Elements */
 
-
-
-
-
-
-
-
-
+/* Media Queries */
 @media only screen and (max-width: 850px){
   .multi_col {
     display: block;

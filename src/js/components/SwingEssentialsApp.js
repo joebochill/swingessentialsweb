@@ -3,7 +3,8 @@ import React, {Component} from 'react';
 import SigninPage from './pages/Signin.js';
 import OurProPage from './pages/OurPro.js';
 import HomePage from './pages/Home.js';
-import AccountPage from './pages/Account.js';
+import LessonsPage from './pages/Lessons.js';
+import ProfilePage from './pages/Profile.js';
 import NineteenPage from './pages/19Hole.js';
 import TipPage from './pages/Tip.js';
 
@@ -24,7 +25,8 @@ class SwingEssentialsApp extends Component {
             <Route path="/our-pro" component={OurProPage}/>
             <Route path="/19th-hole" component={NineteenPage}/>
             <Route path="/tip-of-the-month" component={TipPage}/>
-            <Route path="/account" component={AccountPage}/>
+            <Route path="/lessons" component={LessonsPage}/>
+            <Route path="/profile" component={ProfilePage}/>
             <Route path="*">
               <Redirect to="/"/>
             </Route>  

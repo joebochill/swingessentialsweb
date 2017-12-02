@@ -35,10 +35,10 @@ class Menu extends Component {
             <NavLink to='/19th-hole/'>The 19th Hole</NavLink>
             <NavLink to='/tip-of-the-month/'>Tip of the Month</NavLink>
             {(this.props.token) && (
-              <NavLink to='/account/'>Lessons</NavLink>
+              <NavLink to='/lessons/'>Lessons</NavLink>
             )}
             {(this.props.token) && (
-              <NavLink to='/account/'>Profile</NavLink>
+              <NavLink to='/profile/'>Profile</NavLink>
             )}
             {(this.props.token) && (
               <a onClick={()=>{this.props.requestLogout(this.props.username,this.props.token); this.props.close()}}>Sign Out</a>
