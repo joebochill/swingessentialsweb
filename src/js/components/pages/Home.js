@@ -3,6 +3,9 @@ import Header from '../header/Header';
 import Footer from '../footer/Footer';
 
 class HomePage extends Component {
+  componentWillMount(){
+    window.scrollTo(0,0);
+  }
   render() {
     return (
       <div>

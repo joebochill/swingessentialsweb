@@ -26,6 +26,9 @@ class ProfilePage extends Component {
     if(!this.props.username){
       this.props.goToSignIn();
     }
+    else{
+      window.scrollTo(0,0);
+    }
   }
   componentWillReceiveProps(nextProps){
     if(!nextProps.token){

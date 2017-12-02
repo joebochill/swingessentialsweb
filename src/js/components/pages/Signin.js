@@ -30,7 +30,9 @@ class SigninPage extends Component {
       password:''
     };
   }
-
+  componentWillMount(){
+    window.scrollTo(0,0);
+  }
   componentWillReceiveProps(nextProps){
     if(nextProps.token){
         this.props.replace('/lessons');

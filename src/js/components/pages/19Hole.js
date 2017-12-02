@@ -20,9 +20,7 @@ var mapDispatchToProps = function(dispatch){
 
 class NineteenPage extends Component {
   componentWillMount(){
-    // if(!this.props.username){
-    //   this.props.goToLogin();
-    // }
+    window.scrollTo(0,0);
   }
   render() {
     return (
@@ -49,8 +47,7 @@ class NineteenPage extends Component {
         flex, and grip.</p>
         <p>Therefore, here’s a quick rundown of what you’ll need to know once you “graduate”
         from your starter set:</p>
-        <p>
-          <ol><li>Get the right shaft flex. The right shaft won’t be too heavy. It may be steel or graphite, but
+        <ol><li>Get the right shaft flex. The right shaft won’t be too heavy. It may be steel or graphite, but
         you certainly don’t want to swing something
         that’s too heavy or too light. Common flexes
         are Light, Senior, Regular, Stiff, and Extra
@@ -74,7 +71,7 @@ class NineteenPage extends Component {
         of your hand? If so, you’ve got the right grip!
         If it digs into the pad in your hand, it’s too
         small. If it doesn’t touch at all, you need a
-        smaller grip.</li></ol></p>
+        smaller grip.</li></ol>
         <p>Now doesn’t that seem easy? If you have any
         questions, please visit our website, or your
         local PGA member!</p>

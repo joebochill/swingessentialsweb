@@ -19,9 +19,7 @@ var mapDispatchToProps = function(dispatch){
 
 class TipPage extends Component {
   componentWillMount(){
-    // if(!this.props.username){
-    //   this.props.goToLogin();
-    // }
+    window.scrollTo(0,0);
   }
   render() {
     return (

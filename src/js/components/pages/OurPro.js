@@ -5,6 +5,9 @@ import Footer from '../footer/Footer.js';
 import {replace} from 'react-router-redux';
 
 class OurProPage extends Component {
+  componentWillMount(){
+    window.scrollTo(0,0);
+  }
   render() {
     return (
       <div>
