@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux'
-import {LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL} from '../actions/actions.js';
+import {LOCATION_CHANGE, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL, OPEN_MENU, CLOSE_MENU, OPEN_DRAWER, CLOSE_DRAWER} from '../actions/actions.js';
 
 const userReducer = (state=[], action) => {
 	switch(action.type){
@@ -55,6 +55,36 @@ const loginReducer = (state=[], action) => {
 			return state;
 	}
 }
+const headerReducer = (state=[], action) => {
+	switch(action.type){
+		case LOCATION_CHANGE:{
+			return{
+				activeRoute: action.payload.pathname,
+				menuOpen: false,
+				drawerOpen:false
+			}
+		}
+		case OPEN_MENU:
+			return{...state,
+				menuOpen: true
+			}
+		case CLOSE_MENU:
+			return{...state,
+				menuOpen: false
+			}
+		case OPEN_DRAWER:
+			return{...state,
+				drawerOpen: true
+			}
+		case CLOSE_DRAWER:
+			return {...state,
+				drawerOpen: false
+			}
+		default:
+			return state;
+	}
+}
+
 
 const AppReducer = combineReducers({
     userData: userReducer,
@@ -62,7 +92,8 @@ const AppReducer = combineReducers({
     credits: creditsReducer,
     lessons: lessonsReducer,
     packages: packagesReducer,
-    login: loginReducer,
+	login: loginReducer,
+	header: headerReducer,
     router: routerReducer
 });
 

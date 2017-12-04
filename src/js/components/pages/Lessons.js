@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import Header from '../header/Header.js';
-import Footer from '../footer/Footer.js';
 import LessonRow from '../lessons/LessonRow.js';
 import {replace} from 'react-router-redux';
 import {requestLogout} from '../../actions/actions.js';
@@ -39,41 +37,39 @@ class LessonsPage extends Component {
   render() {
     return (
       <div>
-      <Header/>
-      <section className="landing_image image2">
-        <main className="page_title">
-          <h1>Your Lessons</h1>
-          <h3>See How Far You've Come</h3>
-        </main>
-      </section>
-      <section className="left">
-        <div className="structured_panel">
-          <div className="lesson_group">
-            <h1>Redeem A Lesson</h1>
-            <LessonRow title="Individual" extra="2 Left" id="123" disabled/>
-            <LessonRow title="Unlimited" extra="12 Days Left" id="124"/>
+        <section className="landing_image image2">
+          <main className="page_title">
+            <h1>Your Lessons</h1>
+            <h3>See How Far You've Come</h3>
+          </main>
+        </section>
+        <section className="left">
+          <div className="structured_panel">
+            <div className="lesson_group">
+              <h1>Redeem A Lesson</h1>
+              <LessonRow title="Individual" extra="2 Left" id="123" disabled/>
+              <LessonRow title="Unlimited" extra="12 Days Left" id="124"/>
+            </div>
+            <div className="lesson_group">
+              <h1>In Progress</h1>
+              <LessonRow title="17-Nov-2017" id="123"/>
+              <LessonRow title="10-Nov-2017" id="124"/>
+            </div>
+            <div className="lesson_group">
+              <h1>Completed</h1>
+              <LessonRow title="17-Nov-2017" new extra="NEW!" id="123"/>
+              <LessonRow title="10-Nov-2017" new extra="NEW!" id="124"/>
+              <LessonRow title="10-Nov-2017" id="124"/>
+              <LessonRow title="10-Nov-2017" id="124"/>
+              <LessonRow title="10-Nov-2017" id="124"/>
+              <LessonRow title="10-Nov-2017" id="124"/>
+              <LessonRow title="10-Nov-2017" id="124"/>
+              <LessonRow title="10-Nov-2017" id="124"/>
+              <LessonRow title="10-Nov-2017" id="124"/>
+            </div>
           </div>
-          <div className="lesson_group">
-            <h1>In Progress</h1>
-            <LessonRow title="17-Nov-2017" id="123"/>
-            <LessonRow title="10-Nov-2017" id="124"/>
-          </div>
-          <div className="lesson_group">
-            <h1>Completed</h1>
-            <LessonRow title="17-Nov-2017" new extra="NEW!" id="123"/>
-            <LessonRow title="10-Nov-2017" new extra="NEW!" id="124"/>
-            <LessonRow title="10-Nov-2017" id="124"/>
-            <LessonRow title="10-Nov-2017" id="124"/>
-            <LessonRow title="10-Nov-2017" id="124"/>
-            <LessonRow title="10-Nov-2017" id="124"/>
-            <LessonRow title="10-Nov-2017" id="124"/>
-            <LessonRow title="10-Nov-2017" id="124"/>
-            <LessonRow title="10-Nov-2017" id="124"/>
-          </div>
-        </div>
-      </section>
-      <Footer/>
-    </div>
+        </section>
+      </div>
     );
   }
 }

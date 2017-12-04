@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Header from '../header/Header';
-import Footer from '../footer/Footer';
 import {replace} from 'react-router-redux';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -53,7 +51,6 @@ class SigninPage extends Component {
   render() {
     return (
       <div>
-        <Header/>
         <section className="landing_image image2">
           <main className="page_title">
             <h1>Sign In</h1>
@@ -86,7 +83,6 @@ class SigninPage extends Component {
             </div>
           </div>
         </section>
-        <Footer/>
       </div>
     );
   }

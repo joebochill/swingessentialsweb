@@ -1,4 +1,5 @@
 import 'whatwg-fetch';
+export const LOCATION_CHANGE = '@@router/LOCATION_CHANGE';
 export const LOGIN_SUCCESS =        'LOGIN_SUCCESS';
 export const LOGIN_FAIL =           'LOGIN_FAIL';
 export const LOGOUT_SUCCESS =       'LOGOUT_SUCCESS';
@@ -11,8 +12,33 @@ export const GET_SETTINGS_SUCCESS =  'GET_SETTINGS_SUCCESS';
 export const GET_SETTINGS_FAIL =     'GET_SETTINGS_FAIL';
 export const GET_PACKAGES_SUCCESS =  'GET_PACKAGES_SUCCESS';
 export const GET_PACKAGES_FAIL =     'GET_PACKAGES_FAIL';
+export const OPEN_MENU =     'OPEN_MENU'; 
+export const CLOSE_MENU =     'CLOSE_MENU'; 
+export const OPEN_DRAWER =     'OPEN_DRAWER'; 
+export const CLOSE_DRAWER =     'CLOSE_DRAWER'; 
 
 const baseUrl = 'http://www.josephpboyle.com/api/myapi.php/';
+
+export function openNavMenu(){
+    return{
+        type: OPEN_MENU
+    }
+}
+export function openNavDrawer(){
+    return{
+        type: OPEN_DRAWER
+    }
+}
+export function closeNavMenu(){
+    return{
+        type: CLOSE_MENU
+    }
+}
+export function closeNavDrawer(){
+    return{
+        type: CLOSE_DRAWER
+    }
+}
 
 export function requestLogin(userCredentials){
     return (dispatch) => {

@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Header from '../header/Header';
-import Footer from '../footer/Footer';
 
 class HomePage extends Component {
   componentWillMount(){
@@ -9,7 +7,6 @@ class HomePage extends Component {
   render() {
     return (
       <div>
-        <Header/>
         <section className="landing_image large image1">
           <div className="pga_overlay"/>
           <main className="page_title">
@@ -72,7 +69,6 @@ class HomePage extends Component {
           </div>
           <div className="button small se_button"><span>Sign In</span></div>
         </section>
-        <Footer/>
       </div>
     );
   }

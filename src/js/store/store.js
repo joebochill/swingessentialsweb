@@ -48,6 +48,12 @@ export const initialStore = {
         failCount: 0
     },
 
+    header:{
+        activeRoute: '',
+        menuOpen: false,
+        drawerOpen: false
+    },
+
     router: null
 };
 

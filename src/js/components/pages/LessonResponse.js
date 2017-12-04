@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import Header from '../header/Header.js';
-import Footer from '../footer/Footer.js';
 import {replace} from 'react-router-redux';
 import {requestLogout} from '../../actions/actions.js';
 import YoutubeVideo from '../youtube/YoutubeVideo.js';
@@ -37,40 +35,37 @@ class LessonResponsePage extends Component {
     }
   }
   render() {
-    //console.log(this.props.match.params.lesson_id);
     return (
       <div>
-      <Header/>
-      <section className="landing_image image2">
-        <main className="page_title">
-          <h1>10-Nov-2017</h1>
-          <h3>Swing Analysis</h3>
-        </main>
-      </section>
-      <section className="left">
-        <div className="structured_panel">
-          <h1>Video Response</h1>
-          <YoutubeVideo vid="PXsqucHINWY"/>
-          <h1>Comments</h1>
-          <p>You’re doing a great job with your backswing, but your front- and mid-swing need a little adjustment. Try holding the club tighter so it doesn’t fly out of your hands. Happy Swinging.</p>
-          <p>-AJ</p>
-        </div>
-      </section>
-      <section className="left">
-        <div className="structured_panel">
-          <h1>Your Swing Videos</h1>
-          <div className="se_multi_video">
-            <div className="se_video_flex">
-              <YoutubeVideo vid="PXsqucHINWY"/>
-            </div>
-            <div className="se_video_flex">
-              <YoutubeVideo vid="PXsqucHINWY"/>
+        <section className="landing_image image2">
+          <main className="page_title">
+            <h1>10-Nov-2017</h1>
+            <h3>Swing Analysis</h3>
+          </main>
+        </section>
+        <section className="left">
+          <div className="structured_panel">
+            <h1>Video Response</h1>
+            <YoutubeVideo vid="PXsqucHINWY"/>
+            <h1>Comments</h1>
+            <p>You’re doing a great job with your backswing, but your front- and mid-swing need a little adjustment. Try holding the club tighter so it doesn’t fly out of your hands. Happy Swinging.</p>
+            <p>-AJ</p>
+          </div>
+        </section>
+        <section className="left">
+          <div className="structured_panel">
+            <h1>Your Swing Videos</h1>
+            <div className="se_multi_video">
+              <div className="se_video_flex">
+                <YoutubeVideo vid="PXsqucHINWY"/>
+              </div>
+              <div className="se_video_flex">
+                <YoutubeVideo vid="PXsqucHINWY"/>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-      <Footer/>
-    </div>
+        </section>
+      </div>
     );
   }
 }
