@@ -118,8 +118,7 @@ body {
     font-size: 1.5rem;
     font-weight: 700;
   }
-  section p,
-  section ol {
+  section p{
     width: 100%;
     max-width: 615px;
     margin-top: 2rem;
@@ -127,8 +126,7 @@ body {
     font-size: 1.1rem;
     line-height: 1.8rem;
   }
-  section.left > p,
-  section.left > ol{
+  section.left p{
     text-align: left;
   }
   section a {
@@ -146,58 +144,6 @@ body {
     background-image: url('../images/headshot.jpg');
     background-position: -11px -30px;
     background-repeat: no-repeat;
-  }
-
-  /* Date Stamps */
-  .datestamp_wrapper{
-    position: relative;
-
-    height: 4rem;
-    width: 100%;
-    margin-bottom: 2rem;
-  }
-  .datestamp {
-    position: relative;
-    display: inline-block;
-
-    width: 4rem;
-    padding: 0.5rem;
-
-    background: #231f61;
-    color: #FFFFFF;
-  }
-  .datestamp > .month,
-  .datestamp > .day{
-    display: block;
-    max-width: 3rem;
-
-    font-size: 1.2rem;
-    line-height: 1.2rem;
-    font-weight: 600;
-    text-transform: uppercase;
-  }
-  .datestamp > .day{
-    font-size: 1.8rem;
-    line-height: 1.8rem;
-    font-weight: 700;
-  }
-  .datestamp_divider{
-    position: absolute;
-    left: 0px;
-    top: 50%;
-
-    width: 100%;
-    
-    border-bottom: 1px solid rgba(35, 31, 97, .20);
-}
-
-  /* Lists */
-  section > ol {
-    list-style-type: decimal;
-    list-style-position: inside;
-  }
-  section > ol > li:not(:last-child){
-    margin-bottom: 2rem;
   }
 
   /* Multi Column Layout*/
@@ -250,10 +196,10 @@ body {
 /* Page Title */
 
   .page_title{
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 100;
 
     width: 100%;
     
@@ -402,7 +348,7 @@ input {
   font-size: .9rem;
   font-weight: 600;
 }
-.login_form{
+.structured_panel{
   width: 100%;
   max-width: 450px;
 }

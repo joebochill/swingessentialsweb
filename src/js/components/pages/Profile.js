@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import Header from '../header/Header.js';
 import Footer from '../footer/Footer.js';
-import {push, replace} from 'react-router-redux';
+import {replace} from 'react-router-redux';
 import {requestLogout} from '../../actions/actions.js';
 //import * as Actions from '../../actions/actions.js';
 

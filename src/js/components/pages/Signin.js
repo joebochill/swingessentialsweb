@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
-import {push, replace} from 'react-router-redux';
+import {replace} from 'react-router-redux';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as Actions from '../../actions/actions.js';
@@ -61,7 +61,7 @@ class SigninPage extends Component {
           </main>
         </section>
         <section>
-          <div className="login_form">
+          <div className="structured_panel">
             <label>Username or Email</label>
             <input 
               ref={(ref)=>this.un=ref} 

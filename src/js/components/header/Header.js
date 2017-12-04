@@ -36,8 +36,35 @@ class Header extends Component {
       drawerOpen: false,
       accountMenuOpen: false
     };
-    this.handleResize = this._handleResize.bind(this);
-    this.handleBodyClick = this._handleBodyClick.bind(this);
+    this.closeMenus = this._closeMenus.bind(this);
+    this.bodyAction = this._bodyAction.bind(this);
+  }
+  componentDidMount(){
+    this._toggleDrawer(false);
+    this._removeEventListeners();
+    this._addEventListeners();
+  }
+  componentWillUnmount(){
+    this._removeEventListeners();
+  }
+  _addEventListeners(){
+    window.addEventListener('resize',this.closeMenus);
+    window.addEventListener('click', this.bodyAction);
+    //window.addEventListener('scroll', this.bodyAction);
+  }
+  _removeEventListeners(){
+    window.removeEventListener('resize',this.closeMenus);
+    window.removeEventListener('click', this.bodyAction);
+    //window.removeEventListener('scroll', this.bodyAction);
+  }
+  _closeMenus(){
+    if(this.state.drawerOpen){this._toggleDrawer(false);}
+    if(this.state.accountMenuOpen){this._toggleMenu(false);}
+  }
+  _bodyAction(evt){
+    if(!evt.target.closest('.se_drop_menu') && !evt.target.closest('.se_menu_button')) {
+        this._closeMenus();
+    }       
   }
   _toggleDrawer(newState=false){
     if(!this.ref){return;}
@@ -54,33 +81,7 @@ class Header extends Component {
     if(!this.ref){return;}
     this.setState({accountMenuOpen:newState});
   }
-  componentDidMount(){
-    this._toggleDrawer(false);
-    this._removeEventListeners();
-    this._addEventListeners();
-  }
-  componentWillUnmount(){
-    this._removeEventListeners();
-  }
-  _addEventListeners(){
-    window.addEventListener('resize',this.handleResize);
-    window.addEventListener('click', this.handleBodyClick);
-    window.addEventListener('scroll', this.handleResize);
-  }
-  _removeEventListeners(){
-    window.removeEventListener('resize',this.handleResize);
-    window.removeEventListener('click', this.handleBodyClick);
-    window.removeEventListener('scroll', this.handleResize);
-  }
-  _handleResize(){
-    if(this.state.drawerOpen){this._toggleDrawer(false);}
-    if(this.state.accountMenuOpen){this._toggleMenu(false);}
-  }
-  _handleBodyClick(evt){
-    if(!evt.target.closest('.se_drop_menu')) {
-      this._toggleMenu(false);
-    }        
-  }
+
   render() {
     return (
       <header className="se_header" ref={(ref)=>this.ref=ref}>

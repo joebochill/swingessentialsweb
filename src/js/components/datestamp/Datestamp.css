@@ -1,0 +1,78 @@
+
+  /* Date Stamps */
+  .datestamp_wrapper{
+    position: relative;
+
+    height: 4rem;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+  .datestamp {
+    position: relative;
+    display: inline-block;
+
+    width: 4rem;
+    height: 4rem;
+
+    color: #FFFFFF;
+    user-select: none;
+
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transform: rotateZ(0);
+    transition: transform 400ms ease-in-out;
+  }
+  .datestamp > .card-face{
+    position: absolute;
+    top:0px;
+    left:0px;
+
+    height: 100%;
+    width: 100%;
+    padding: 0.5rem;
+
+    backface-visibility: hidden;
+    background: #231f61;
+  }
+
+  .datestamp > .card-face.front{
+    transform: rotateY(0deg);
+  }
+  .datestamp > .card-face.back{
+    transform: rotateY(180deg);
+  }
+ 
+  .datestamp.flipped{
+    transform: rotateY(180deg);
+  }
+  .datestamp .month,
+  .datestamp .day{
+    display: block;
+    max-width: 3rem;
+
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .datestamp .day{
+    font-size: 1.8rem;
+    line-height: 1.8rem;
+    font-weight: 700;
+  }
+  .datestamp .year{
+    display: block;
+
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 3rem;
+  }
+  .datestamp_divider{
+    position: absolute;
+    left: 0px;
+    top: 50%;
+
+    width: 100%;
+    
+    border-bottom: 1px solid rgba(35, 31, 97, .20);
+}

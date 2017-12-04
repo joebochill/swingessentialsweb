@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
+//import {connect} from 'react-redux';
 import Header from '../header/Header.js';
 import Footer from '../footer/Footer.js';
-import {replace} from 'react-router-redux';
+//import {replace} from 'react-router-redux';
 
 class OurProPage extends Component {
   componentWillMount(){
