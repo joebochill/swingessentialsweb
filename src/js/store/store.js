@@ -35,6 +35,7 @@ export const initialStore = {
 
     // user's lesson history
     lessons:{
+        loading: false,
         pending:[],
         closed:[]
     },
@@ -52,6 +53,10 @@ export const initialStore = {
         activeRoute: '',
         menuOpen: false,
         drawerOpen: false
+    },
+
+    communication:{
+
     },
 
     router: null

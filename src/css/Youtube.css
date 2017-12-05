@@ -2,7 +2,7 @@
   position: relative;
   
   width: 100%;
-  padding-top: 75.4%;
+  padding-top: 56.25%;/*75.4%;*/
 
   background: #000000;
 }
@@ -30,7 +30,7 @@
 }
 
 /* Lazy Loading Videos */
-.placeholder_img {
+/* .placeholder_img {
   position: absolute;
   left: 0px;
   top: 50%;
@@ -76,4 +76,4 @@
   transition: fill .1s cubic-bezier(0.0,0.0,0.2,1), fill-opacity .1s cubic-bezier(0.0,0.0,0.2,1);
   fill: #f00;
   fill-opacity: 1;
-}
+} */

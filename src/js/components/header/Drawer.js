@@ -18,7 +18,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return{
       push: (val) => {dispatch(push(val));},
-      requestLogout: (un,pw) => {dispatch(requestLogout({username:un,token:pw}))},
+      requestLogout: (token) => {dispatch(requestLogout(token))},
       closeDrawer: () => {dispatch(closeNavDrawer())}
   }
 }
@@ -50,7 +50,7 @@ class Drawer extends Component {
               <NavLink to='/profile/'>Profile</NavLink>
             )}
             {(this.props.token) && (
-              <a onClick={()=>{this.props.requestLogout(this.props.username,this.props.token); this.props.closeDrawer()}}>Sign Out</a>
+              <a onClick={()=>{this.props.requestLogout(this.props.token); this.props.closeDrawer()}}>Sign Out</a>
             )}
             {(!this.props.token) && (
               <NavLink to='/signin/'>Sign In</NavLink>

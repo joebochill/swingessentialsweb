@@ -1,6 +1,12 @@
 import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux'
-import {LOCATION_CHANGE, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, LOGOUT_FAIL, OPEN_MENU, CLOSE_MENU, OPEN_DRAWER, CLOSE_DRAWER} from '../actions/actions.js';
+import {LOCATION_CHANGE,
+		LOGIN_SUCCESS, LOGIN_FAIL, 
+		LOGOUT_SUCCESS, LOGOUT_FAIL, 
+		OPEN_MENU, CLOSE_MENU, 
+		OPEN_DRAWER, CLOSE_DRAWER, 
+		GET_LESSONS, GET_LESSONS_SUCCESS, GET_LESSONS_FAIL
+} from '../actions/actions.js';
 
 const userReducer = (state=[], action) => {
 	switch(action.type){
@@ -27,7 +33,24 @@ const creditsReducer = (state=[], action) => {
 	return state;
 }
 const lessonsReducer = (state=[], action) => {
-	return state;
+	switch(action.type){
+		case GET_LESSONS:
+			return{...state,
+				loading: true
+			}
+		case GET_LESSONS_SUCCESS:
+			return {
+				loading: false,
+				pending: action.data.pending,
+				closed: action.data.closed
+			}
+		case GET_LESSONS_FAIL:
+			return {...state,
+				loading: false
+			}
+		default:
+			return state;
+	}
 }
 const packagesReducer = (state=[], action) => {
 	return state;
@@ -35,22 +58,21 @@ const packagesReducer = (state=[], action) => {
 const loginReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN_SUCCESS:
-			return{...state,
+			return{
 				token: action.data.token,
 				failCount: 0
 			}
 		case LOGIN_FAIL:
-			return{...state,
+			return{
 				token: null,
 				failCount: state.failCount + 1
 			}
 		case LOGOUT_SUCCESS:
-			return{...state,
+			return{
 				token: null,
 				failCount: 0
 			}
 		case LOGOUT_FAIL:
-			return state;
 		default:
 			return state;
 	}
@@ -85,6 +107,11 @@ const headerReducer = (state=[], action) => {
 	}
 }
 
+/* This reducer will be responsible for updating the messages shown to the user
+for various success/error conditions */
+const communicationReducer = (state=[], action) => {
+	return state;
+}
 
 const AppReducer = combineReducers({
     userData: userReducer,
@@ -94,6 +121,7 @@ const AppReducer = combineReducers({
     packages: packagesReducer,
 	login: loginReducer,
 	header: headerReducer,
+	communication: communicationReducer,
     router: routerReducer
 });
 

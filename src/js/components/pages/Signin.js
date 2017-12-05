@@ -57,32 +57,34 @@ class SigninPage extends Component {
             <h3>Access Your Account</h3>
           </main>
         </section>
-        <section>
-          <div className="structured_panel">
-            <label>Username or Email</label>
-            <input 
-              ref={(ref)=>this.un=ref} 
-              value={this.state.username} 
-              onChange={(evt)=>this.setState({username:evt.target.value})} 
-            />
-            <label style={{marginTop:'1rem'}}>Password</label>
-            <input 
-              ref={(ref)=>this.pw=ref} 
-              value={this.state.password} 
-              onChange={(evt)=>this.setState({password:evt.target.value})} 
-              onKeyPress={this._keyPress.bind(this)}
-              type="password"
-            />
-            {this.props.loginFails > 0 && (<span className="validation_error">Your username / password was not correct, please try again.</span>)}
-            <div className="button se_button" 
-                  style={{marginTop:'2rem'}} 
-                  disabled={!this.state.username || !this.state.password}
-                  onClick={()=>this.props.requestLogin({username:this.state.username,password:this.state.password})}
-            >
-              <span>Sign In</span>
+        <div>
+          <section>
+            <div className="structured_panel">
+              <label>Username or Email</label>
+              <input 
+                ref={(ref)=>this.un=ref} 
+                value={this.state.username} 
+                onChange={(evt)=>this.setState({username:evt.target.value})} 
+              />
+              <label style={{marginTop:'1rem'}}>Password</label>
+              <input 
+                ref={(ref)=>this.pw=ref} 
+                value={this.state.password} 
+                onChange={(evt)=>this.setState({password:evt.target.value})} 
+                onKeyPress={this._keyPress.bind(this)}
+                type="password"
+              />
+              {this.props.loginFails > 0 && (<span className="validation_error">Your username / password was not correct, please try again.</span>)}
+              <div className="button se_button" 
+                    style={{marginTop:'2rem'}} 
+                    disabled={!this.state.username || !this.state.password}
+                    onClick={()=>this.props.requestLogin({username:this.state.username,password:this.state.password})}
+              >
+                <span>Sign In</span>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     );
   }

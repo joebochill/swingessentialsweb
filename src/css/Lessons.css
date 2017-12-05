@@ -12,6 +12,9 @@
 .lesson_group:not(:first-child){
   margin-top: 2rem;
 }
+.lesson_group{
+  position:relative;
+}
 .lesson_row {
   display: flex;
   flex-direction: row;
@@ -65,4 +68,15 @@
 }
 .lesson_go:hover{
   opacity: 0.7;
+}
+.refresh_icon{
+  position: absolute;
+  top: -1px;
+  right: 1px;
+  height: 24px;
+  width: 24px;
+  margin-right: 0.6rem;
+
+  fill: #231f61;
+  cursor: pointer;
 }

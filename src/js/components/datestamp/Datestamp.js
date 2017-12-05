@@ -14,8 +14,8 @@ class Datestamp extends Component {
         <div className="datestamp_divider"/>
         <div className={"datestamp " + (this.state.flipped?"flipped":"")} onClick={()=>this.setState({flipped:!this.state.flipped})}>
           <div className="card-face front">
-            <span className="month">{this.props.month}</span>
-            <span className="day">{this.props.day}</span>
+            <span className={"month " + (this.props.monthstamp ? "large":"")}>{this.props.month}</span>
+            {!this.props.monthstamp && <span className="day">{this.props.day}</span>}
           </div>
           <div className="card-face back">
             <span className="year">{this.props.year}</span>

@@ -4,6 +4,7 @@ export const LOGIN_SUCCESS =        'LOGIN_SUCCESS';
 export const LOGIN_FAIL =           'LOGIN_FAIL';
 export const LOGOUT_SUCCESS =       'LOGOUT_SUCCESS';
 export const LOGOUT_FAIL =          'LOGOUT_FAIL';
+export const GET_LESSONS =          'GET_LESSONS';
 export const GET_LESSONS_SUCCESS =  'GET_LESSONS_SUCCESS';
 export const GET_LESSONS_FAIL =     'GET_LESSONS_FAIL';
 export const GET_CREDITS_SUCCESS =  'GET_CREDITS_SUCCESS';
@@ -66,11 +67,11 @@ export function requestLogin(userCredentials){
         .catch((error) => console.error(error));
     }
 }
-export function requestLogout(userCredentials){
+export function requestLogout(token){
     return (dispatch) => {
         return fetch(baseUrl+'logout', { 
             headers: {
-                'Authorization': 'Bearer ' + userCredentials.token
+                'Authorization': 'Bearer ' + token
             }
         })
         .then((response) => {
@@ -88,6 +89,7 @@ export function requestLogout(userCredentials){
 }
 export function getLessons(token){
     return (dispatch) => {
+        dispatch({type: GET_LESSONS});
         return fetch(baseUrl+'lessons', { 
             headers: {
                 'Authorization': 'Bearer ' + token

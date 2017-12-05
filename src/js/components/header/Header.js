@@ -24,7 +24,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return{
       push: (val) => {dispatch(push(val));},
-      requestLogout: (un,tk) => {dispatch(requestLogout({username:un,token:tk}))},
+      requestLogout: (token) => {dispatch(requestLogout(token))},
       openMenu: () => {dispatch(openNavMenu())},
       closeMenu: () => {dispatch(closeNavMenu())},
       openDrawer: () => {dispatch(openNavDrawer())},
@@ -102,7 +102,7 @@ class Header extends Component {
                 <div className="se_menu_panel_links">
                   <NavLink to='/lessons' exact>Lessons</NavLink>
                   <NavLink to='/profile/'>Profile</NavLink>
-                  <a onClick={()=>{this.props.requestLogout(this.props.username,this.props.token); this.props.closeMenu();}}>Sign Out</a>
+                  <a onClick={()=>{this.props.requestLogout(this.props.token); this.props.closeMenu();}}>Sign Out</a>
                 </div>
               </div>
             </li>

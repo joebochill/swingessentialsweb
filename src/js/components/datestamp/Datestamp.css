@@ -55,6 +55,9 @@
     font-weight: 600;
     text-transform: uppercase;
   }
+  .datestamp .month.large{
+    line-height: 3rem;
+  }
   .datestamp .day{
     font-size: 1.8rem;
     line-height: 1.8rem;

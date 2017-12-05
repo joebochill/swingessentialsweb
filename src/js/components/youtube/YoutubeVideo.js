@@ -3,6 +3,7 @@ import '../../../css/Lessons.css';
 //import {push} from 'react-router-redux';
 //import {connect} from 'react-redux';
 import '../../../css/Youtube.css';
+import YouTube from 'react-youtube';
 
 // const mapStateToProps = (state)=>{
 //     return {
@@ -20,7 +21,7 @@ class LessonRow extends Component {
     constructor(props){
         super(props);
         this.state={
-            active: false
+            //active: false
         }
     }
 
@@ -28,13 +29,14 @@ class LessonRow extends Component {
         return (
             <div className={"se_video_wrapper "+(this.state.active?"":"placeholder")} 
                 onClick={!this.state.active ? ()=>this.setState({active:true}) : null}> 
-                {!this.state.active && (
+                {false && (
                     <img 
-                        src={`https://i.ytimg.com/vi/${this.props.vid}/maxresdefault.jpg`} 
+                        /*src={`https://i.ytimg.com/vi/${this.props.vid}/maxresdefault.jpg`} */
+                        src={`https://i.ytimg.com/vi/${this.props.vid}/hqdefault.jpg`}
                         className="placeholder_img" 
                         alt="Your Swing Analysis Video"/>
                 )}
-                {!this.state.active && (
+                {false && (
                     <div 
                         className="se_video_start_button">
                         <svg height="100%" version="1.1" viewBox="0 0 68 48" width="100%">
@@ -43,13 +45,37 @@ class LessonRow extends Component {
                         </svg>
                     </div>
                 )}
-                {this.state.active && (
+                {false && (
                     <iframe title="Your Swing Analysis" className="se_video_player"
                         src={`https://www.youtube-nocookie.com/embed/${this.props.vid}?rel=0&amp;showinfo=0;autoplay=1`}
                         frameBorder="0" 
                         allowFullScreen>
                     </iframe> 
                 )}
+                <YouTube
+                    videoId={this.props.vid}
+                    id={"se_response_video"}
+                    className={"se_video_player"}
+                    opts={{
+                    //     height: 'auto',
+                    //     width: '100%',
+                    //     playerVars: {autoplay: 0}  
+                        playerVars:{
+                            "showinfo":0,
+                            "origin":"www.josephpboyle.com",
+                            "playsinline":1,
+                            "rel":0
+                        }
+                    }}
+                    //onReady={null}
+                    //onPlay={null}
+                    //onPause={null}
+                    //onEnd={null}
+                    //onError={null}
+                    //onStateChange={null}
+                    //onPlaybackRateChange={null}
+                    //onPlaybackQualityChange={null}
+                />
             </div>
         );
     }

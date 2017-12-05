@@ -129,6 +129,9 @@ body {
   section.left p{
     text-align: left;
   }
+  section p:first-child{
+    margin-top: 0px;
+  }
   section a {
     font-weight: 700;
     color: inherit;
@@ -352,6 +355,9 @@ input {
   width: 100%;
   max-width: 450px;
 }
+/* .structured_panel.space{
+  margin-top: 2rem;
+} */
 
 /* End Form Elements */
 

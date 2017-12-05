@@ -41,11 +41,13 @@ class ProfilePage extends Component {
             <h3>Manage Your Account</h3>
           </main>
         </section>
-        <section>
-          <div className="button se_button" onClick={()=>this.props.requestLogout(this.props.username,this.props.token)}>
-            <span>Sign Out</span>
-          </div>
-        </section>
+        <div>
+          <section>
+            <div className="button se_button" onClick={()=>this.props.requestLogout(this.props.username,this.props.token)}>
+              <span>Sign Out</span>
+            </div>
+          </section>
+        </div>
       </div>
     );
   }
