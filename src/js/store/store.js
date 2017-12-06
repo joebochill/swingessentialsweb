@@ -52,7 +52,8 @@ export const initialStore = {
     header:{
         activeRoute: '',
         menuOpen: false,
-        drawerOpen: false
+        drawerOpen: false,
+        targetRoute: ''
     },
 
     communication:{

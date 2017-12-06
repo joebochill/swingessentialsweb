@@ -1,22 +1,26 @@
 import React, { Component } from 'react';
-import {replace} from 'react-router-redux';
+import {replace, goBack} from 'react-router-redux';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import * as Actions from '../../actions/actions.js';
+import {setTargetRoute, requestLogin} from '../../actions/actions.js';
+import Footer from '../footer/Footer.js';
 
 
 const mapStateToProps = (state)=>{
     return {
       username: state.userData.username,
       loginFails: state.login.failCount,
-      token: state.login.token
+      token: state.login.token,
+      target: state.header.targetRoute
     };
 }
 
 const mapDispatchToProps = (dispatch)=>{
   return {
-    ...bindActionCreators(Actions, dispatch),
-    replace: (val) => {dispatch(replace(val))}
+    // ...bindActionCreators(Actions, dispatch),
+    goBack: () => {dispatch(goBack())},
+    replace: (val) => {dispatch(replace(val))},
+    resetTargetRoute: () => {dispatch(setTargetRoute(''))},
+    requestLogin: (cred) => {dispatch(requestLogin(cred))}
   }
 }
 
@@ -29,11 +33,28 @@ class SigninPage extends Component {
     };
   }
   componentWillMount(){
-    window.scrollTo(0,0);
+    if(this.props.token){
+        this.props.goBack();
+    }
+    else{
+      localStorage.removeItem('token');
+      localStorage.removeItem('lessons');
+      window.scrollTo(0,0);
+    }
   }
   componentWillReceiveProps(nextProps){
     if(nextProps.token){
+      localStorage.setItem('token',nextProps.token);
+
+      // if the user was trying to a restricted area, take them there after successful login
+      const newRoute = nextProps.target;
+      if(newRoute){
+        this.props.resetTargetRoute();
+        this.props.replace(newRoute);
+      }
+      else{
         this.props.replace('/lessons');
+      }
     }
     else{
         this.setState({password: ''});
@@ -84,6 +105,7 @@ class SigninPage extends Component {
               </div>
             </div>
           </section>
+          <Footer/>
         </div>
       </div>
     );

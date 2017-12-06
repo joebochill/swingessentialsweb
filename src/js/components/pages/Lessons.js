@@ -4,7 +4,8 @@ import LessonRow from '../lessons/LessonRow.js';
 import {replace} from 'react-router-redux';
 import Loader from '../loader/Loader.js';
 import Placeholder from '../lessons/Placeholder.js';
-import {getLessons} from '../../actions/actions.js';
+import Footer from '../footer/Footer.js';
+import {getLessons, setTargetRoute} from '../../actions/actions.js';
 
 import '../../../css/Lessons.css';
 
@@ -17,13 +18,15 @@ const mapStateToProps = (state)=>{
 var mapDispatchToProps = function(dispatch){
   return {
     goToSignIn: () => {dispatch(replace('/signin'));},
-    getLessons: (token) => {dispatch(getLessons(token))}
+    getLessons: (token) => {dispatch(getLessons(token))},
+    setTargetRoute: (route) => {dispatch(setTargetRoute(route))}
   }
 };
 
 class LessonsPage extends Component {
   componentWillMount(){
     if(!this.props.token){
+      this.props.setTargetRoute('/lessons');
       this.props.goToSignIn();
     }
     else{
@@ -37,6 +40,7 @@ class LessonsPage extends Component {
   }
   componentWillReceiveProps(nextProps){
     if(!nextProps.token){
+      //this.props.setTargetRoute('/lessons');
       this.props.goToSignIn();
     }
   }
@@ -102,6 +106,7 @@ class LessonsPage extends Component {
               </div>
             </div>
           </section>
+          <Footer/>
         </div>
       </div>
     );

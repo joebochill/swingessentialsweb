@@ -7,7 +7,7 @@ import {LOCATION_CHANGE,
 		OPEN_MENU, CLOSE_MENU, 
 		OPEN_DRAWER, CLOSE_DRAWER,
 		GET_USER_DATA_SUCCESS, GET_USER_DATA_FAIL, 
-		GET_LESSONS, GET_LESSONS_SUCCESS, GET_LESSONS_FAIL
+		GET_LESSONS, GET_LESSONS_SUCCESS, GET_LESSONS_FAIL, SET_TARGET_ROUTE
 } from '../actions/actions.js';
 
 const userReducer = (state=[], action) => {
@@ -59,6 +59,12 @@ const lessonsReducer = (state=[], action) => {
 			return {...state,
 				loading: false
 			}
+		case LOGOUT_SUCCESS:
+			return{
+				loading: false,
+				pending: [],
+				closed: []
+			}
 		default:
 			return state;
 	}
@@ -69,7 +75,6 @@ const packagesReducer = (state=[], action) => {
 const loginReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN_SUCCESS:
-			localStorage.setItem('token',action.data.token);
 			return{
 				token: action.data.token,
 				failCount: 0
@@ -80,7 +85,6 @@ const loginReducer = (state=[], action) => {
 				failCount: state.failCount + 1
 			}
 		case LOGOUT_SUCCESS:
-			localStorage.removeItem('token');
 			return{
 				token: null,
 				failCount: 0
@@ -98,7 +102,7 @@ const loginReducer = (state=[], action) => {
 const headerReducer = (state=[], action) => {
 	switch(action.type){
 		case LOCATION_CHANGE:{
-			return{
+			return{...state,
 				activeRoute: action.payload.pathname,
 				menuOpen: false,
 				drawerOpen:false
@@ -119,6 +123,14 @@ const headerReducer = (state=[], action) => {
 		case CLOSE_DRAWER:
 			return {...state,
 				drawerOpen: false
+			}
+		case SET_TARGET_ROUTE:
+			return {...state,
+				targetRoute: action.route
+			}
+		case LOGOUT_SUCCESS:
+			return {...state,
+				targetRoute: ''
 			}
 		default:
 			return state;

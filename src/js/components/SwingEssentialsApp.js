@@ -9,7 +9,6 @@ import ProfilePage from './pages/Profile.js';
 import NineteenPage from './pages/19Hole.js';
 import TipPage from './pages/Tip.js';
 import Header from './header/Header.js';
-import Footer from './footer/Footer.js';
 
 import {store} from '../store/store.js';
 import {history} from '../store/store.js';
@@ -45,7 +44,6 @@ class SwingEssentialsApp extends Component {
                 <Redirect to="/"/>
               </Route>  
             </Switch>
-            <Footer/>
           </div>
         </ConnectedRouter>
       </Provider>

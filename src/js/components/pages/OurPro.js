@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Footer from '../footer/Footer.js';
 
 class OurProPage extends Component {
   componentWillMount(){
@@ -21,6 +22,7 @@ class OurProPage extends Component {
             <p>I have been working in the golf industry for fifteen years and have given over 800 lessons.  I currently hold a Masters Degree from the University of Maryland, College Park and have graduated from the PGA sponsored Professional Golf Management Program.</p>
             <p>My strengths lie in teaching, club fitting, and player development. I look forward to bringing you my expertise in golf and feel extremely privileged to have the opportunity to work with you.</p>
           </section>
+          <Footer/>
         </div>
       </div>
     );

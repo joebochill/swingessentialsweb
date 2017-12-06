@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {replace} from 'react-router-redux';
-import {requestLogout} from '../../actions/actions.js';
+import {requestLogout, setTargetRoute} from '../../actions/actions.js';
+import Footer from '../footer/Footer.js';
 
 
 const mapStateToProps = (state)=>{
@@ -14,13 +15,15 @@ var mapDispatchToProps = function(dispatch){
   return {
     goToSignIn: () => {dispatch(replace('/signin'));},
     replace: (val) => {dispatch(replace(val));},
-    requestLogout: (un,tok) => {dispatch(requestLogout({username:un,token:tok}))}
+    requestLogout: (tok) => {dispatch(requestLogout(tok))},
+    setTargetRoute: (route) => {dispatch(setTargetRoute(route))}
   }
 };
 
 class ProfilePage extends Component {
   componentWillMount(){
-    if(!this.props.username){
+    if(!this.props.token){
+      this.props.setTargetRoute('/profile');
       this.props.goToSignIn();
     }
     else{
@@ -29,7 +32,8 @@ class ProfilePage extends Component {
   }
   componentWillReceiveProps(nextProps){
     if(!nextProps.token){
-        this.props.replace('/signin');
+      //this.props.setTargetRoute('/profile');
+      this.props.goToSignIn();
     }
   }
   render() {
@@ -43,10 +47,11 @@ class ProfilePage extends Component {
         </section>
         <div>
           <section>
-            <div className="button se_button" onClick={()=>this.props.requestLogout(this.props.username,this.props.token)}>
+            <div className="button se_button" onClick={()=>this.props.requestLogout(this.props.token)}>
               <span>Sign Out</span>
             </div>
           </section>
+          <Footer/>
         </div>
       </div>
     );

@@ -20,6 +20,7 @@ export const OPEN_MENU =     'OPEN_MENU';
 export const CLOSE_MENU =     'CLOSE_MENU'; 
 export const OPEN_DRAWER =     'OPEN_DRAWER'; 
 export const CLOSE_DRAWER =     'CLOSE_DRAWER'; 
+export const SET_TARGET_ROUTE = 'SET_TARGET_ROUTE';
 
 const baseUrl = 'http://www.josephpboyle.com/api/myapi.php/';
 
@@ -41,6 +42,12 @@ export function closeNavMenu(){
 export function closeNavDrawer(){
     return{
         type: CLOSE_DRAWER
+    }
+}
+export function setTargetRoute(route){
+    return{
+        type: SET_TARGET_ROUTE,
+        route: route
     }
 }
 export function requestDataFromToken(token){
@@ -132,7 +139,8 @@ export function getLessons(token){
             switch(response.status) {
                 case 200:
                     response.json()
-                    .then((json) => dispatch(getLessonsSuccess(json)));
+                    .then((json) => dispatch(getLessonsSuccess(json)))
+                    .then((response) => localStorage.setItem('lessons',JSON.stringify(response.data)));
                     break;
                 default:
                     dispatch(getLessonsFailure(response));

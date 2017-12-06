@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 // import {connect} from 'react-redux';
+import Footer from '../footer/Footer.js';
 import Datestamp from '../datestamp/Datestamp.js';
 import YoutubeVideo from '../youtube/YoutubeVideo.js';
 //import {replace} from 'react-router-redux';
@@ -63,6 +64,7 @@ class TipPage extends Component {
               <p>Mulligan. If you can't take a mulligan, see if your friends will let you throw the ball by hand for a one-stroke penalty.</p>
             </div>
           </section>
+          <Footer/>
         </div>
       </div>
     );

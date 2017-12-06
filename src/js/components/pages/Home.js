@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Footer from '../footer/Footer.js';
 
 class HomePage extends Component {
   componentWillMount(){
@@ -70,6 +71,7 @@ class HomePage extends Component {
             </div>
             <div className="button small se_button"><span>Sign In</span></div>
           </section>
+          <Footer/>
         </div>
       </div>
     );

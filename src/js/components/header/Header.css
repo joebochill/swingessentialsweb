@@ -82,13 +82,13 @@
     /* End Hover and Active States */
     
     /* Dropdown Header Menu */
-        .se_menu_list > .se_drop_menu{
+        .se_menu_list li.se_drop_menu > a{
             padding-left: 0.7rem;
         }
         .se_menu_list li.se_drop_menu > a::after{
             content: '';
             position: absolute;
-            left: -.7rem;
+            left: 0px;
             top: calc(50% - .25rem);
             
             height: 0.3rem;

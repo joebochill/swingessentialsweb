@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 //import {connect} from 'react-redux';
+import Footer from '../footer/Footer.js';
 import Datestamp from '../datestamp/Datestamp.js';
 //import {replace} from 'react-router-redux';
 //import * as Actions from '../../actions/actions.js';
@@ -116,6 +117,7 @@ class NineteenPage extends Component {
             <p>Wow, what a difference in play! I didn’t realize how fun golf could be. I don’t really need those Pings now. What an excellent golfer I have become, no more hacker comments from me. I consistently hit the fairway and was on in regulation the majority of the time; hand me my putter! I did hit a few bunkers because of the long drives but only lost one ball install of the usual ten. My attitude towards golf has been renewed. Now, if I can convince Mortie and Hugo to give it a try. If they see me drive the green it won’t be hard. One final note before you give it a try, your score will likely stay the same. Note to self: Work on that putting game. You still need to get the ball in the hole. Happy Golfing.</p>
             <p>The Big Toe (TBT)</p>
           </section>
+          <Footer/>
         </div>
       </div>
     );
