@@ -1,9 +1,12 @@
 import 'whatwg-fetch';
 export const LOCATION_CHANGE = '@@router/LOCATION_CHANGE';
+export const TOKEN_FROM_STORAGE = "TOKEN_FROM_STORAGE";
 export const LOGIN_SUCCESS =        'LOGIN_SUCCESS';
 export const LOGIN_FAIL =           'LOGIN_FAIL';
 export const LOGOUT_SUCCESS =       'LOGOUT_SUCCESS';
 export const LOGOUT_FAIL =          'LOGOUT_FAIL';
+export const GET_USER_DATA_SUCCESS =  'GET_USER_DATA_SUCCESS';
+export const GET_USER_DATA_FAIL =     'GET_USER_DATA_FAIL';
 export const GET_LESSONS =          'GET_LESSONS';
 export const GET_LESSONS_SUCCESS =  'GET_LESSONS_SUCCESS';
 export const GET_LESSONS_FAIL =     'GET_LESSONS_FAIL';
@@ -40,7 +43,16 @@ export function closeNavDrawer(){
         type: CLOSE_DRAWER
     }
 }
-
+export function requestDataFromToken(token){
+    return (dispatch) => {
+        dispatch({type:TOKEN_FROM_STORAGE, token:token});
+        dispatch(getUserData(token))
+        .then(() => dispatch(getLessons(token)));
+        //.then(() => dispatch(getCredits(token)))
+        //.then(() => dispatch(getSettings(token)))
+        //.then(() => dispatch(getPackages(token)));
+    }
+}
 export function requestLogin(userCredentials){
     return (dispatch) => {
         return fetch(baseUrl+'login', { 
@@ -54,10 +66,10 @@ export function requestLogin(userCredentials){
                     const token = response.headers.get('Token');
                     response.json()
                     .then((json) => dispatch(loginSuccess({...json,token:token})))
-                    .then(() => dispatch(getLessons(token)))
-                    .then(() => dispatch(getCredits(token)))
-                    .then(() => dispatch(getSettings(token)))
-                    .then(() => dispatch(getPackages(token)));
+                    .then(() => dispatch(getLessons(token)));
+                    //.then(() => dispatch(getCredits(token)))
+                    //.then(() => dispatch(getSettings(token)))
+                    //.then(() => dispatch(getPackages(token)));
                     break;
                 default:
                     dispatch(loginFailure(response));
@@ -81,6 +93,27 @@ export function requestLogout(token){
                     break;
                 default:
                     dispatch(logoutFailure(response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+export function getUserData(token){
+    return (dispatch) => {
+        return fetch(baseUrl+'user', { 
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    response.json()
+                    .then((json) => dispatch(getUserDataSuccess(json)));
+                    break;
+                default:
+                    dispatch(getUserDataFailure(response));
                     break;
             }
         })
@@ -207,6 +240,19 @@ function getLessonsSuccess(data){
 function getLessonsFailure(response){
     return{
         type: GET_LESSONS_FAIL,
+        response: response.status,
+        error: response.headers.get('Error')
+    }
+}
+function getUserDataSuccess(data){
+    return{
+        type: GET_USER_DATA_SUCCESS,
+        data: data
+    }
+}
+function getUserDataFailure(response){
+    return{
+        type: GET_USER_DATA_FAIL,
         response: response.status,
         error: response.headers.get('Error')
     }

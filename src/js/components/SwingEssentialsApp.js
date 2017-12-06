@@ -17,7 +17,15 @@ import {Provider} from 'react-redux';
 import {ConnectedRouter} from 'react-router-redux/es';
 import {Switch, Redirect, Route} from 'react-router';
 
+import {requestDataFromToken} from '../actions/actions.js';
+
 class SwingEssentialsApp extends Component {
+  componentWillMount(){
+    const token = localStorage.getItem('token');
+    if(token){
+      store.dispatch(requestDataFromToken(token));
+    }
+  }
   render() {
     return (
       <Provider store={store}>

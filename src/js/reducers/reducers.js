@@ -1,16 +1,19 @@
 import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux'
 import {LOCATION_CHANGE,
+		TOKEN_FROM_STORAGE,
 		LOGIN_SUCCESS, LOGIN_FAIL, 
 		LOGOUT_SUCCESS, LOGOUT_FAIL, 
 		OPEN_MENU, CLOSE_MENU, 
-		OPEN_DRAWER, CLOSE_DRAWER, 
+		OPEN_DRAWER, CLOSE_DRAWER,
+		GET_USER_DATA_SUCCESS, GET_USER_DATA_FAIL, 
 		GET_LESSONS, GET_LESSONS_SUCCESS, GET_LESSONS_FAIL
 } from '../actions/actions.js';
 
 const userReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN_SUCCESS:
+		case GET_USER_DATA_SUCCESS:
 			return{...state, 
 				username: action.data.personal.username,
 				firstName: action.data.personal.first_name,
@@ -22,6 +25,14 @@ const userReducer = (state=[], action) => {
 				firstName: '',
 				lastName: ''
 			};
+		case TOKEN_FROM_STORAGE:
+		case GET_USER_DATA_FAIL:
+			return{
+				username: 'User',
+				firstName: '',
+				lastName: '',
+				email: ''
+			}
 		default:
 			return state;
 	}
@@ -58,6 +69,7 @@ const packagesReducer = (state=[], action) => {
 const loginReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN_SUCCESS:
+			localStorage.setItem('token',action.data.token);
 			return{
 				token: action.data.token,
 				failCount: 0
@@ -68,11 +80,17 @@ const loginReducer = (state=[], action) => {
 				failCount: state.failCount + 1
 			}
 		case LOGOUT_SUCCESS:
+			localStorage.removeItem('token');
 			return{
 				token: null,
 				failCount: 0
 			}
 		case LOGOUT_FAIL:
+			return state;
+		case TOKEN_FROM_STORAGE:
+			return{...state,
+				token: action.token
+			}
 		default:
 			return state;
 	}
