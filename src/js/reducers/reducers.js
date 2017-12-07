@@ -7,7 +7,9 @@ import {LOCATION_CHANGE,
 		OPEN_MENU, CLOSE_MENU, 
 		OPEN_DRAWER, CLOSE_DRAWER,
 		GET_USER_DATA_SUCCESS, GET_USER_DATA_FAIL, 
-		GET_LESSONS, GET_LESSONS_SUCCESS, GET_LESSONS_FAIL, SET_TARGET_ROUTE
+		GET_LESSONS, GET_LESSONS_SUCCESS, GET_LESSONS_FAIL, 
+		GET_TIPS, GET_TIPS_SUCCESS, GET_TIPS_FAIL, 
+		SET_TARGET_ROUTE
 } from '../actions/actions.js';
 
 const userReducer = (state=[], action) => {
@@ -69,6 +71,28 @@ const lessonsReducer = (state=[], action) => {
 			return state;
 	}
 }
+
+const tipsReducer = (state=[], action) => {
+	switch(action.type){
+		case GET_TIPS:
+			return{...state,
+				loading: true
+			}
+		case GET_TIPS_SUCCESS:
+			return{
+				loading: false,
+				tipList: action.data
+			}
+		case GET_TIPS_FAIL:
+			return{
+				loading: false,
+				tipList: []
+			}
+		default:
+			return state;
+	}
+}
+
 const packagesReducer = (state=[], action) => {
 	return state;
 }
@@ -147,7 +171,8 @@ const AppReducer = combineReducers({
     userData: userReducer,
     settings: settingsReducer,
     credits: creditsReducer,
-    lessons: lessonsReducer,
+	lessons: lessonsReducer,
+	tips: tipsReducer,
     packages: packagesReducer,
 	login: loginReducer,
 	header: headerReducer,

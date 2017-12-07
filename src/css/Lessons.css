@@ -80,3 +80,10 @@
   fill: #231f61;
   cursor: pointer;
 }
+.refresh_icon.loading{
+  animation:spin 1s linear infinite;
+  cursor: default;
+  pointer-events: none;
+}
+
+@keyframes spin { 100% {transform:rotate(360deg); } }

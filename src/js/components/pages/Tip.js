@@ -1,28 +1,89 @@
 import React, { Component } from 'react';
-// import {connect} from 'react-redux';
+import {connect} from 'react-redux';
+import {replace} from 'react-router-redux';
 import Footer from '../footer/Footer.js';
 import Datestamp from '../datestamp/Datestamp.js';
 import YoutubeVideo from '../youtube/YoutubeVideo.js';
 //import {replace} from 'react-router-redux';
-//import * as Actions from '../../actions/actions.js';
+import {getTips} from '../../actions/actions.js';
+import Loader from '../loader/Loader.js';
 
 
-// const mapStateToProps = (state)=>{
-//   return {
-//     //username: state.userData.username
-//   };
-// }
-// var mapDispatchToProps = function(dispatch){
-//   return {
-//     //goToLogin: () => {dispatch(replace('/signin'));},
-//   }
-// };
+const mapStateToProps = (state)=>{
+  return {
+    //username: state.userData.username
+    tips: state.tips.tipList,
+    loading: state.tips.loading
+  };
+}
+var mapDispatchToProps = function(dispatch){
+  return {
+    requestTips: () => {dispatch(getTips());},
+    goToTips: () => {dispatch(replace('/tip-of-the-month'));}
+  }
+};
 
 class TipPage extends Component {
+  constructor(props){
+    super(props);
+    this.localtips = [];
+    this.start = 0;
+    this.perPage = 1;
+    this.localtips = [];
+  }
   componentWillMount(){
     window.scrollTo(0,0);
+
+    // make a request for updated tips and use localstorage in the meantime if we have it
+    if(!this.props.tips || !this.props.tips.length){
+      this.props.requestTips();
+      let localtips = JSON.parse(localStorage.getItem('tips'));
+      if(localtips){
+        this.localtips = localtips;
+        this._checkPageRange(localtips, this.props.match.params.page);
+        return;
+      }
+    }
   }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.tips.length){
+      this._checkPageRange(nextProps.tips, nextProps.match.params.page);
+    }
+  }
+
+  // converts a DB stored string into paragraphs (we do not store html in the database, just text)
+  _convertTextToP(string){
+    if(!string.length){return null;}
+    
+    let array = string.split(":::");
+    return array.map((val, index)=><p key={index}>{val}</p>);
+  }
+
+  _getDatePieces(datestamp){
+    let parts = datestamp.split('-');
+    const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+    return {month:months[parseInt(parts[1],10)-1], day:parts[2], year:parts[0]};
+  }
+
+  // checks if the page number we have requested is valid based on the
+  // number of tips available and the tips per page setting above
+  _checkPageRange(list, pagenum){
+    const page = parseInt(pagenum,10);
+    
+    // check if the page we are requesting is valid
+    if(pagenum !== undefined){
+      if(!page || page < 1 || ((page-1)*this.perPage >= list.length)){
+        this.props.goToTips();;
+      }
+      else{
+        this.start = (page-1)*this.perPage;
+      }
+    }
+  }
+
   render() {
+    // determine which dataset to render from
+    const tips = (!this.props.tips.length ? this.localtips : this.props.tips);
     return (
       <div>
         <section className="landing_image image2">
@@ -32,38 +93,24 @@ class TipPage extends Component {
           </main>
         </section>
         <div>
-          <section className="left">
-            <Datestamp month="Dec" day="10" year="2017" monthstamp/>
-            <div className="structured_panel">
-              <h1>Correct Hip Movement</h1>
-              <YoutubeVideo vid="PXsqucHINWY"/>
-              <p>Here is a brief description of what this video is about. Don't let your hips move with you when you go back during your backswing. Make sure they rotate properly so you can whack the crap out of the ball.</p>
-            </div>
-          </section>
-          <section className="left">
-            <Datestamp month="Nov" day="10" year="2017" monthstamp/>
-            <div className="structured_panel">
-              <h1>The Golf Grip</h1>
-              <YoutubeVideo vid="Luq7YRXTotQ"/>
-              <p>Make sure that you always use two hands to grab the club. Grab it with one hand first and then the other. Don't let go while you are swinging.</p>
-            </div>
-          </section>
-          <section className="left">
-            <Datestamp month="Oct" day="10" year="2017" monthstamp/>
-            <div className="structured_panel">
-              <h1>Fix the Slice</h1>
-              <YoutubeVideo vid="LEMfkErTccw"/>
-              <p>Always remember to reward yourself for a great day of golf by going out for a slice of pizza. Mmmm, pepperoni and sausage - what could be better?</p>
-            </div>
-          </section>
-          <section className="left">
-            <Datestamp month="Sep" day="10" year="2017" monthstamp/>
-            <div className="structured_panel">
-              <h1>Chipping in from a Tough Lie</h1>
-              <YoutubeVideo vid="ZOiXNwqj8uc"/>
-              <p>Mulligan. If you can't take a mulligan, see if your friends will let you throw the ball by hand for a one-stroke penalty.</p>
-            </div>
-          </section>
+          {this.props.loading &&
+            <section className="left">
+              <div style={{marginTop:'48px'}}>
+                  <p>Loading Tips...</p>
+                  <Loader/>
+              </div>
+            </section>
+          }
+          {tips.length > 0 && this.props.tips.slice(this.start,this.start+this.perPage).map((tip)=>
+            <section key={tip.id} className="left">
+              <Datestamp month={this._getDatePieces(tip.date).month} day={this._getDatePieces(tip.date).day} year={this._getDatePieces(tip.date).year} monthstamp/>
+              <div className="structured_panel">
+                <h1>{tip.title}</h1>
+                <YoutubeVideo vid={tip.video}/>
+                {this._convertTextToP(tip.comments)}
+              </div>
+            </section>
+          )}
           <Footer/>
         </div>
       </div>
@@ -71,4 +118,4 @@ class TipPage extends Component {
   }
 }
 
-export default /*connect(mapStateToProps,mapDispatchToProps)*/(TipPage);
+export default connect(mapStateToProps, mapDispatchToProps)(TipPage);

@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {replace} from 'react-router-redux';
 import YoutubeVideo from '../youtube/YoutubeVideo.js';
 import Footer from '../footer/Footer.js';
+import Loader from '../loader/Loader.js';
 //import YouTube from 'react-youtube';
 
 import '../../../css/Lessons.css';
@@ -27,53 +28,88 @@ var mapDispatchToProps = function(dispatch){
 class LessonResponsePage extends Component {
   componentWillMount(){
     if(!this.props.token){
+      // user is not logged in. store the request and send to signin screen
       this.props.setTargetRoute('/lessons/'+this.props.match.params.lesson_id);
       this.props.goToSignIn();
     }
     else{
+      // user is logged in, verify the requested lesson against their list
       window.scrollTo(0,0);
       this._verifyLesson();
     }
   }
   componentWillReceiveProps(nextProps){
     if(!nextProps.token){
-      //this.props.setTargetRoute('/lessons/'+this.props.match.params.lesson_id);
+      // if user has logged out, send them to signin
       this.props.goToSignIn();
     }
     else{
-      this._verifyLesson(nextProps.lessons);
+      if(!nextProps.lessons.loading){
+        // if we've received props and have finished loading, verify the lesson request
+        // if we haven't finished loading, we will get another receiveProps when we have
+        this._verifyLesson(nextProps.lessons);
+      }
     }
   }
 
+  // converts a DB stored string into paragraphs (we do not store html in the database, just text)
   _convertTextToP(string){
     let array = string.split(":::");
     return array.map((val, index)=><p key={index}>{val}</p>);
   }
+
+  // checks if the requested lessons is in the user's list
   _verifyLesson(less=null){
     const lid = this.props.match.params.lesson_id;
     let lessons;
-    if(less){lessons = less;}
+
+    // list of lessons is being passed in (from a nextProps object)
+    if(less){
+      lessons = less.closed.concat(less.pending);
+    }
+    // check if there are lessons in localstorage
     else if(!this.props.lessons.closed.length && !this.props.lessons.pending.length){
       const ls = JSON.parse(localStorage.getItem('lessons'));
-      lessons = (ls) ? ls.closed.concat(ls.pending) : [];
+      if(ls === null){
+       // nothing in localstorage or current props, wait for another cycle
+       return;
+      }
+      else{
+        // lessons are available from localstorage
+        lessons = (ls) ? ls.closed.concat(ls.pending) : [];
+      }
     }
     else{
+      // lessons are available in current props
       lessons = this.props.lessons.closed.concat(this.props.lessons.pending);
     }
 
+    // loop through the lessons and look for the current request (lid)
     for(let i = 0; i < lessons.length; i++){
       if(lessons[i].request_id === lid){
         this.lesson=lessons[i];
         break;
       }
     }
+
+    // if the user is not permitted to see this lesson (or it is not a valid lesson), send them to lessons page
     if(!this.lesson){
       this.props.goToLessons();
+      return;
     }  
   }
 
   render() {
-    if(!this.lesson){return null;}
+    if(!this.lesson){
+      return (
+        <section className="left">
+          <div style={{marginTop:'48px'}}>
+              <p>Loading Lessons...</p>
+              <Loader/>
+          </div>
+        </section>
+      )
+    }
     return (
       <div>
         <section className="landing_image image2">

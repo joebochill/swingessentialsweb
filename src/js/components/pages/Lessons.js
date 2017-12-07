@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import LessonRow from '../lessons/LessonRow.js';
 import {replace} from 'react-router-redux';
-import Loader from '../loader/Loader.js';
+//import Loader from '../loader/Loader.js';
 import Placeholder from '../lessons/Placeholder.js';
 import Footer from '../footer/Footer.js';
 import {getLessons, setTargetRoute} from '../../actions/actions.js';
@@ -55,16 +55,6 @@ class LessonsPage extends Component {
           </main>
         </section>
         <div>
-          {(!loading && !this.props.lessons.closed.length && !this.props.lessons.pending.length) && 
-            <section>
-              <h1>You Don't Have Any Lessons!</h1>
-              <div className="structured_panel">
-                <p>Shake off the cobwebs - sign up for a lesson now:</p>
-                <div className="button se_button"><span>ORDER A LESSON</span></div>
-                <div className="button se_button"><span>REDEEM A LESSON</span></div>
-              </div>
-            </section>
-          }
           <section className="left">
             {/* {loading && 
               <div>
@@ -81,31 +71,41 @@ class LessonsPage extends Component {
               }
               <div className="lesson_group">
                 <h1>In Progress</h1>
+                {(!this.props.lessons.pending.length || loading) &&
+                  <Placeholder message={loading?"Loading...":"No Lessons In Progress"} loading={loading}/>
+                }
                 {this.props.lessons.pending.length > 0 && this.props.lessons.pending.map((lesson)=>
                   <LessonRow key={lesson.request_id} title={lesson.request_date} id={lesson.request_id}/>
                 )}
-                {!this.props.lessons.pending.length &&
-                  <Placeholder message={loading?"Loading...":"No Lessons In Progress"} loading={loading}/>
-                }
-                {!loading && 
-                  <svg className="refresh_icon" viewBox="0 0 24 24" onClick={()=>this.props.getLessons(this.props.token)}>
-                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                {/* {//!loading && 
+                  <svg className={"refresh_icon " + (loading?"loading":"")} viewBox="0 0 24 24" onClick={()=>this.props.getLessons(this.props.token)}>
+                    <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/>
                     <path d="M0 0h24v24H0z" fill="none"/>
                   </svg>
-                }
-                {loading && <Loader float top=".3rem" right="1rem" size="0.5rem"/>}
+                } */}
+                {/* {loading && <Loader float top=".3rem" right="1rem" size="0.5rem"/>} */}
               </div>
               <div className="lesson_group">
                 <h1>Completed</h1>
+                {(!this.props.lessons.closed.length || loading) &&
+                  <Placeholder message={loading?"Loading...":"No Completed Lessons"} loading={loading}/>
+                }
                 {this.props.lessons.closed.length > 0 && this.props.lessons.closed.map((lesson)=>
                   <LessonRow key={lesson.request_id} title={lesson.request_date} new={parseInt(lesson.viewed,10)===0} extra={parseInt(lesson.viewed,10)===0 ? "NEW!" : ""} id={lesson.request_id}/>
                 )}
-                {!this.props.lessons.closed.length &&
-                  <Placeholder message={loading?"Loading...":"No Completed Lessons"} loading={loading}/>
-                }
               </div>
             </div>
           </section>
+          {(!loading && !this.props.lessons.closed.length && !this.props.lessons.pending.length) && 
+            <section>
+              <h1>You don't have any lessons!</h1>
+              <p>Download our app today. Your first lesson is free!</p>
+              <div className="multi_col">
+                <div className="button apple_store"/>
+                <div className="button google_store"/>
+              </div>
+            </section>
+          }
           <Footer/>
         </div>
       </div>

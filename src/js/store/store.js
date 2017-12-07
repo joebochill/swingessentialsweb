@@ -40,6 +40,12 @@ export const initialStore = {
         closed:[]
     },
 
+    // tips of the month
+    tips:{
+        loading: false,
+        tipList: []
+    },
+
     // swingessentials available lesson packages
     packages:[],
 

@@ -36,7 +36,8 @@ class SwingEssentialsApp extends Component {
               <Route exact path="/signin" component={SigninPage}/>
               <Route exact path="/our-pro" component={OurProPage}/>
               <Route path="/19th-hole" component={NineteenPage}/>
-              <Route path="/tip-of-the-month" component={TipPage}/>
+              <Route path="/tip-of-the-month/:page" component={TipPage}/>
+              <Route path="/tip-of-the-month/" component={TipPage}/>
               <Route exact path="/lessons" component={LessonsPage}/>
               <Route exact path="/lessons/:lesson_id" component={LessonResponsePage}/>
               <Route exact path="/profile" component={ProfilePage}/>
