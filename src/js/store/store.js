@@ -46,6 +46,11 @@ export const initialStore = {
         tipList: []
     },
 
+    blogs:{
+        loading: false,
+        blogList: []
+    },
+
     // swingessentials available lesson packages
     packages:[],
 

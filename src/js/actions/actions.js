@@ -13,6 +13,9 @@ export const GET_LESSONS_FAIL =     'GET_LESSONS_FAIL';
 export const GET_TIPS =          'GET_TIPS';
 export const GET_TIPS_SUCCESS =  'GET_TIPS_SUCCESS';
 export const GET_TIPS_FAIL =     'GET_TIPS_FAIL';
+export const GET_BLOGS =          'GET_BLOGS';
+export const GET_BLOGS_SUCCESS =  'GET_BLOGS_SUCCESS';
+export const GET_BLOGS_FAIL =     'GET_BLOGS_FAIL';
 export const GET_CREDITS_SUCCESS =  'GET_CREDITS_SUCCESS';
 export const GET_CREDITS_FAIL =     'GET_CREDITS_FAIL';
 export const GET_SETTINGS_SUCCESS =  'GET_SETTINGS_SUCCESS';
@@ -172,6 +175,25 @@ export function getTips(){
         .catch((error) => console.error(error));
     }
 }
+export function getBlogs(){
+    return (dispatch) => {
+        dispatch({type: GET_BLOGS});
+        return fetch(baseUrl+'blogs')
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    response.json()
+                    .then((json) => dispatch(getBlogsSuccess(json)))
+                    .then((response) => localStorage.setItem('blogs',JSON.stringify(response.data)));
+                    break;
+                default:
+                    dispatch(getBlogsFailure(response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
 export function getCredits(token){
     return (dispatch) => {
         return fetch(baseUrl+'credits', { 
@@ -283,6 +305,19 @@ function getTipsSuccess(data){
 function getTipsFailure(response){
     return{
         type: GET_TIPS_FAIL,
+        response: response.status,
+        error: response.headers.get('Error')
+    }
+}
+function getBlogsSuccess(data){
+    return{
+        type: GET_BLOGS_SUCCESS,
+        data: data
+    }
+}
+function getBlogsFailure(response){
+    return{
+        type: GET_BLOGS_FAIL,
         response: response.status,
         error: response.headers.get('Error')
     }

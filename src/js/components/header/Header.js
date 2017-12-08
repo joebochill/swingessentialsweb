@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import './Header.css';
+import '../../../css/Header.css';
 import se_logo from '../../../images/se_logo.png';
 import {push} from 'react-router-redux';
 import {NavLink} from 'react-router-dom';
 import Drawer from './Drawer.js';
-
-//import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-//import * as Actions from '../../actions/actions.js';
 import {requestLogout, openNavDrawer, closeNavDrawer, openNavMenu, closeNavMenu} from '../../actions/actions.js';
 
 function mapStateToProps(state){
@@ -39,18 +36,16 @@ class Header extends Component {
     this.closeMenus = this._closeMenus.bind(this);
     this.bodyAction = this._bodyAction.bind(this);
   }
+
   componentDidMount(){
-    //this._toggleDrawer(false);
     this._removeEventListeners();
     this._addEventListeners();
   }
+
   componentWillUnmount(){
     this._removeEventListeners();
   }
-  // componentWillReceiveProps(nextProps){
-  //   console.log('getting props');
-  //   this.forceUpdate();
-  // }
+
   _addEventListeners(){
     window.addEventListener('resize',this.closeMenus);
     window.addEventListener('click', this.bodyAction);
@@ -70,21 +65,6 @@ class Header extends Component {
         this._closeMenus();
     }       
   }
-  // _toggleDrawer(newState=false){
-  //   if(!this.ref){return;}
-  //   if(newState){
-  //     this.setState({drawerOpen:true});
-  //     document.body.classList.add('noScroll');
-  //   }
-  //   else{
-  //     this.setState({drawerOpen:false});
-  //     document.body.classList.remove('noScroll');
-  //   }
-  // }
-  // _toggleMenu(newState=!this.state.accountMenuOpen,menu="account"){
-  //   if(!this.ref){return;}
-  //   this.setState({accountMenuOpen:newState});
-  // }
 
   render() {
     return (

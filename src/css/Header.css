@@ -60,7 +60,7 @@
             border-color: #231f61;
             border-width: 2px 2px 0px 0px;
         }
-        .se_menu_list li:not(.se_drop_menu):hover > a::before,
+        .se_menu_list li:not(.se_drop_menu) > a::before,
         .se_menu_list li:not(.se_drop_menu) > a.active::before{
             content: '';
             position: absolute;
@@ -75,6 +75,10 @@
             border-radius: .5rem;
             background: #231f61;
             opacity: 0.2;
+        }
+        .se_menu_list li:not(.se_drop_menu) > a::before,
+        .se_menu_list li > a:not(.active)::before{
+            opacity: 0;
         }
         .se_menu_list li:hover > a:not(.active)::before{
             opacity: .05;

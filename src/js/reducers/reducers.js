@@ -9,6 +9,7 @@ import {LOCATION_CHANGE,
 		GET_USER_DATA_SUCCESS, GET_USER_DATA_FAIL, 
 		GET_LESSONS, GET_LESSONS_SUCCESS, GET_LESSONS_FAIL, 
 		GET_TIPS, GET_TIPS_SUCCESS, GET_TIPS_FAIL, 
+		GET_BLOGS, GET_BLOGS_SUCCESS, GET_BLOGS_FAIL, 
 		SET_TARGET_ROUTE
 } from '../actions/actions.js';
 
@@ -87,6 +88,27 @@ const tipsReducer = (state=[], action) => {
 			return{
 				loading: false,
 				tipList: []
+			}
+		default:
+			return state;
+	}
+}
+
+const blogsReducer = (state=[], action) => {
+	switch(action.type){
+		case GET_BLOGS:
+			return{...state,
+				loading: true
+			}
+		case GET_BLOGS_SUCCESS:
+			return{
+				loading: false,
+				blogList: action.data
+			}
+		case GET_BLOGS_FAIL:
+			return{
+				loading: false,
+				blogList: []
 			}
 		default:
 			return state;
@@ -173,6 +195,7 @@ const AppReducer = combineReducers({
     credits: creditsReducer,
 	lessons: lessonsReducer,
 	tips: tipsReducer,
+	blogs: blogsReducer,
     packages: packagesReducer,
 	login: loginReducer,
 	header: headerReducer,
