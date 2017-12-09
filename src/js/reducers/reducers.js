@@ -10,9 +10,11 @@ import {LOCATION_CHANGE,
 		GET_LESSONS, GET_LESSONS_SUCCESS, GET_LESSONS_FAIL, 
 		GET_TIPS, GET_TIPS_SUCCESS, GET_TIPS_FAIL, 
 		GET_BLOGS, GET_BLOGS_SUCCESS, GET_BLOGS_FAIL, 
-		SET_TARGET_ROUTE
+		SET_TARGET_ROUTE,
+		GET_SETTINGS_SUCCESS, GET_SETTINGS_FAIL
 } from '../actions/actions.js';
 
+/* Updates the basic info for the logged in user */
 const userReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN_SUCCESS:
@@ -20,32 +22,58 @@ const userReducer = (state=[], action) => {
 			return{...state, 
 				username: action.data.personal.username,
 				firstName: action.data.personal.first_name,
-				lastName: action.data.personal.last_name
+				lastName: action.data.personal.last_name,
+				email: action.data.personal.email,
+				phone: action.data.personal.phone
 			};
 		case LOGOUT_SUCCESS:
 			return{...state, 
 				username: '',
 				firstName: '',
-				lastName: ''
+				lastName: '',
+				email: '',
+				phone: ''
 			};
 		case TOKEN_FROM_STORAGE:
 		case GET_USER_DATA_FAIL:
 			return{
-				username: 'User',
+				username: '',
 				firstName: '',
 				lastName: '',
-				email: ''
+				email: '',
+				phone: ''
 			}
 		default:
 			return state;
 	}
 }
+
+/* Updates the settings for the logged in user */
 const settingsReducer = (state=[], action) => {
-	return state;
+	switch(action.type){
+		case GET_SETTINGS_SUCCESS:
+			return action.data;
+		case GET_SETTINGS_FAIL:
+			return{
+				avatar: '',
+				handedness: 'right',
+				camera:{
+					delay: 5,
+					duration: 8,
+					overlay: false
+				}
+			}
+		default:
+			return state;
+	}
 }
+
+/* Updates the available credits for the logged in user */
 const creditsReducer = (state=[], action) => {
 	return state;
 }
+
+/* Updates the list of lessons for the logged in user */
 const lessonsReducer = (state=[], action) => {
 	switch(action.type){
 		case GET_LESSONS:
@@ -73,6 +101,7 @@ const lessonsReducer = (state=[], action) => {
 	}
 }
 
+/* Updates the posts on the tip of the month page */
 const tipsReducer = (state=[], action) => {
 	switch(action.type){
 		case GET_TIPS:
@@ -94,6 +123,7 @@ const tipsReducer = (state=[], action) => {
 	}
 }
 
+/* Updates the list of blogs on the 19th hole page */
 const blogsReducer = (state=[], action) => {
 	switch(action.type){
 		case GET_BLOGS:
@@ -115,9 +145,12 @@ const blogsReducer = (state=[], action) => {
 	}
 }
 
+/* Updates the list of available lesson packages */
 const packagesReducer = (state=[], action) => {
 	return state;
 }
+
+/* Updates the current authentication tokens and login failures */
 const loginReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN_SUCCESS:
@@ -145,6 +178,8 @@ const loginReducer = (state=[], action) => {
 			return state;
 	}
 }
+
+/* Updates the state of the navigation bar and drawer */
 const headerReducer = (state=[], action) => {
 	switch(action.type){
 		case LOCATION_CHANGE:{
@@ -183,8 +218,7 @@ const headerReducer = (state=[], action) => {
 	}
 }
 
-/* This reducer will be responsible for updating the messages shown to the user
-for various success/error conditions */
+/* Updates the messages shown to the user for various success/error conditions */
 const communicationReducer = (state=[], action) => {
 	return state;
 }

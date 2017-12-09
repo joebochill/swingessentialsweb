@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import LessonRow from '../lessons/LessonRow.js';
+import LessonRow from '../rows/LessonRow.js';
 import {replace} from 'react-router-redux';
 //import Loader from '../loader/Loader.js';
-import Placeholder from '../lessons/Placeholder.js';
+import Placeholder from '../rows/Placeholder.js';
 import Footer from '../footer/Footer.js';
 import {getLessons, setTargetRoute} from '../../actions/actions.js';
 
-import '../../../css/Lessons.css';
+import '../../../css/Cards.css';
 
 const mapStateToProps = (state)=>{
   return {
@@ -55,44 +55,35 @@ class LessonsPage extends Component {
           </main>
         </section>
         <div>
-          <section className="left">
-            {/* {loading && 
-              <div>
-                  <p>{(!this.props.lessons.closed.length && !this.props.lessons.pending.length) ? "Loading Lessons" : "Refreshing Lessons"}</p>
-                  <Loader/>
-              </div>
-            } */}
+          <section>
             <div className="structured_panel">
-              {false && <div className="lesson_group">
-                <h1>Redeem A Lesson</h1>
-                <LessonRow title="Individual" extra="2 Left" id="123" disabled/>
-                <LessonRow title="Unlimited" extra="12 Days Left" id="124"/>
+              <div className="card">
+                <div className="card_header">
+                  <span>IN PROGRESS</span>
+                  <span onClick={() => this.props.getLessons(this.props.token)}>REFRESH</span>
+                </div>
+                <div className="card_body">
+                  {(!this.props.lessons.pending.length || loading) &&
+                    <Placeholder message={loading?"Loading...":"No Lessons In Progress"} loading={loading}/>
+                  }
+                  {this.props.lessons.pending.length > 0 && this.props.lessons.pending.map((lesson)=>
+                    <LessonRow key={lesson.request_id} title={lesson.request_date} id={lesson.request_id}/>
+                  )}
+                </div>
               </div>
-              }
-              <div className="lesson_group">
-                <h1>In Progress</h1>
-                {(!this.props.lessons.pending.length || loading) &&
-                  <Placeholder message={loading?"Loading...":"No Lessons In Progress"} loading={loading}/>
-                }
-                {this.props.lessons.pending.length > 0 && this.props.lessons.pending.map((lesson)=>
-                  <LessonRow key={lesson.request_id} title={lesson.request_date} id={lesson.request_id}/>
-                )}
-                {/* {//!loading && 
-                  <svg className={"refresh_icon " + (loading?"loading":"")} viewBox="0 0 24 24" onClick={()=>this.props.getLessons(this.props.token)}>
-                    <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/>
-                    <path d="M0 0h24v24H0z" fill="none"/>
-                  </svg>
-                } */}
-                {/* {loading && <Loader float top=".3rem" right="1rem" size="0.5rem"/>} */}
-              </div>
-              <div className="lesson_group">
-                <h1>Completed</h1>
-                {(!this.props.lessons.closed.length || loading) &&
-                  <Placeholder message={loading?"Loading...":"No Completed Lessons"} loading={loading}/>
-                }
-                {this.props.lessons.closed.length > 0 && this.props.lessons.closed.map((lesson)=>
-                  <LessonRow key={lesson.request_id} title={lesson.request_date} new={parseInt(lesson.viewed,10)===0} extra={parseInt(lesson.viewed,10)===0 ? "NEW!" : ""} id={lesson.request_id}/>
-                )}
+              <div className="card">
+                <div className="card_header">
+                  <span>COMPLETED</span>
+                  <span onClick={() => this.props.getLessons(this.props.token)}>REFRESH</span>
+                </div>
+                <div className="card_body">
+                  {(!this.props.lessons.closed.length || loading) &&
+                    <Placeholder message={loading?"Loading...":"No Completed Lessons"} loading={loading}/>
+                  }
+                  {this.props.lessons.closed.length > 0 && this.props.lessons.closed.map((lesson)=>
+                    <LessonRow key={lesson.request_id} title={lesson.request_date} new={parseInt(lesson.viewed,10)===0} extra={parseInt(lesson.viewed,10)===0 ? "NEW!" : ""} id={lesson.request_id}/>
+                  )}
+                </div>
               </div>
             </div>
           </section>

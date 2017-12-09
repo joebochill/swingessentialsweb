@@ -7,7 +7,6 @@ class Paginator extends Component {
     for(let i = 0; i < this.props.pages; i++){
       pages.push({page: i+1});
     }
-    const start = Math.max(0, this.props.current-4);
 
     return (
         <div className="paginator">
@@ -18,12 +17,11 @@ class Paginator extends Component {
             Prev
           </span>
           <div className="pages">
-            {pages.slice(start, start+9).map((page,index) =>
+            {this.props.pages <= 9 && pages.map((page,index) =>
               <div 
                 key={page.page} 
                 onClick={() => this.props.navigate(page.page)}
-                className={(this.props.current === start + index+1) ? "page_icon current":"page_icon"}>
-                {/*page.page*/}
+                className={(this.props.current === index+1) ? "page_icon current":"page_icon"}>
               </div>
             )}
             {this.props.pages > 9 && <span className="extra">{`${this.props.current} of ${this.props.pages}`}</span>}

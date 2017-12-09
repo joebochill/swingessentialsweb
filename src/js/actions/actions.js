@@ -1,4 +1,3 @@
-import 'whatwg-fetch';
 export const LOCATION_CHANGE = '@@router/LOCATION_CHANGE';
 export const TOKEN_FROM_STORAGE = "TOKEN_FROM_STORAGE";
 export const LOGIN_SUCCESS =        'LOGIN_SUCCESS';
@@ -60,9 +59,9 @@ export function requestDataFromToken(token){
     return (dispatch) => {
         dispatch({type:TOKEN_FROM_STORAGE, token:token});
         dispatch(getUserData(token))
-        .then(() => dispatch(getLessons(token)));
+        .then(() => dispatch(getLessons(token)))
         //.then(() => dispatch(getCredits(token)))
-        //.then(() => dispatch(getSettings(token)))
+        .then(() => dispatch(getSettings(token)));
         //.then(() => dispatch(getPackages(token)));
     }
 }
@@ -79,9 +78,9 @@ export function requestLogin(userCredentials){
                     const token = response.headers.get('Token');
                     response.json()
                     .then((json) => dispatch(loginSuccess({...json,token:token})))
-                    .then(() => dispatch(getLessons(token)));
+                    .then(() => dispatch(getLessons(token)))
                     //.then(() => dispatch(getCredits(token)))
-                    //.then(() => dispatch(getSettings(token)))
+                    .then(() => dispatch(getSettings(token)));
                     //.then(() => dispatch(getPackages(token)));
                     break;
                 default:
@@ -257,6 +256,9 @@ export function getPackages(token){
         .catch((error) => console.error(error));
     }
 }
+
+
+/* Success/Failure Actions for the above Request types */
 
 function loginSuccess(data){
     return{

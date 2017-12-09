@@ -1,23 +1,8 @@
 import React, { Component } from 'react';
-import '../../../css/Lessons.css';
-//import {push} from 'react-router-redux';
-//import {connect} from 'react-redux';
 import '../../../css/Youtube.css';
 import YouTube from 'react-youtube';
 
-// const mapStateToProps = (state)=>{
-//     return {
-
-//     };
-// }
-
-// const mapDispatchToProps = (dispatch)=>{
-//   return {
-//     push: (val) => {dispatch(push(val))}
-//   }
-// }
-
-class LessonRow extends Component {
+class YoutubeVideo extends Component {
     constructor(props){
         super(props);
         this.state={
@@ -81,4 +66,4 @@ class LessonRow extends Component {
     }
 }
 
-export default /*connect(mapStateToProps,mapDispatchToProps)*/(LessonRow);
+export default /*connect(mapStateToProps,mapDispatchToProps)*/(YoutubeVideo);

@@ -6,7 +6,6 @@ import Footer from '../footer/Footer.js';
 import Loader from '../loader/Loader.js';
 //import YouTube from 'react-youtube';
 
-import '../../../css/Lessons.css';
 import { setTargetRoute, getLessons } from '../../actions/actions';
 
 const mapStateToProps = (state)=>{

@@ -157,7 +157,7 @@
         transition: right 300ms ease-in-out;
     }
     .se_menu_overlay.hidden{
-        right: -100vw;
+        right: -100%;/*-100vw;*/
         opacity: 0;
     }
     .se_menu_panel{
@@ -178,7 +178,7 @@
         transition: all 300ms ease-in-out;
     }
     .se_menu_panel.closed{
-        right: -100vw;
+        right: -100%;/*-100vw;*/
         opacity: 0;
     }
     .se_menu_bar{

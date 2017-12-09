@@ -31,7 +31,7 @@
   pointer-events: none;
 }
 .paginator > .pages{
-  position: relative;
+  /* position: relative; */
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -55,12 +55,7 @@
   background: #231f61;
 }
 .paginator > .pages > .extra{
-  position: absolute;
-  top: 100%;
-  width: 100%;
-
-  font-size: .7rem;
+  font-size: .9rem;
   color: #231f61;
-
   opacity: .5;
 }

@@ -14,61 +14,27 @@
     width: 4rem;
     height: 4rem;
 
-    color: #FFFFFF;
-    user-select: none;
-
-    cursor: pointer;
-    transform-style: preserve-3d;
-    transform: rotateZ(0);
-    transition: transform 400ms ease-in-out;
-  }
-  .datestamp > .card-face{
-    position: absolute;
-    top:0px;
-    left:0px;
-
-    height: 100%;
-    width: 100%;
+    background: #231f61;
     padding: 0.5rem;
 
-    backface-visibility: hidden;
-    background: #231f61;
+    color: #FFFFFF;
+    user-select: none;
   }
-
-  .datestamp > .card-face.front{
-    transform: rotateY(0deg);
-  }
-  .datestamp > .card-face.back{
-    transform: rotateY(180deg);
-  }
- 
-  .datestamp.flipped{
-    transform: rotateY(180deg);
-  }
-  .datestamp .month,
-  .datestamp .day{
+  .datestamp > .month,
+  .datestamp > .day,
+  .datestamp > .year{
     display: block;
     max-width: 3rem;
 
-    font-size: 1.2rem;
-    line-height: 1.2rem;
+    font-size: .9rem;
+    line-height: .9rem;
     font-weight: 600;
     text-transform: uppercase;
   }
-  .datestamp .month.large{
-    line-height: 3rem;
-  }
   .datestamp .day{
-    font-size: 1.8rem;
-    line-height: 1.8rem;
-    font-weight: 700;
-  }
-  .datestamp .year{
-    display: block;
-
     font-size: 1.2rem;
-    font-weight: 600;
-    line-height: 3rem;
+    line-height: 1.2rem;
+    font-weight: 700;
   }
   .datestamp_divider{
     position: absolute;

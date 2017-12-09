@@ -8,7 +8,7 @@
   small, strike, strong, sub, sup, tt, var,
   b, u, i, center,
   dl, dt, dd, ol, ul, li,
-  fieldset, form, label, legend,
+  fieldset, form, input, label, legend,
   table, caption, tbody, tfoot, thead, tr, th, td,
   article, aside, canvas, details, embed, 
   figure, figcaption, footer, header, hgroup, 
@@ -102,7 +102,7 @@ body {
     width: 100%;
     max-width: 1024px;
     margin: auto;
-    padding: 2rem;
+    padding: 2rem 1rem;
     
     border: 0px solid rgba(0,0,0,0.15);
     border-width: 0px 1px 0px 1px;
@@ -125,6 +125,7 @@ body {
     
     font-size: 1.1rem;
     line-height: 1.8rem;
+    word-wrap: break-word;
   }
   section.left p{
     text-align: left;
@@ -355,10 +356,17 @@ input {
   width: 100%;
   max-width: 450px;
 }
-/* .structured_panel.space{
+.structured_panel h1 {
+  margin-bottom: 2rem;
+  
+  color: #231f61;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: left;
+}
+.structured_panel h1:not(:first-of-type) {
   margin-top: 2rem;
-} */
-
+}
 /* End Form Elements */
 
 /* Media Queries */
