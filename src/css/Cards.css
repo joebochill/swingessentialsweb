@@ -34,6 +34,8 @@
   cursor: pointer;
 }
 .card_body{
+  position: relative;
+
   overflow: hidden;
   border: 1px solid rgba(0,0,0,0.15);
 }
@@ -128,7 +130,6 @@ section:nth-child(even) .card_row:not(.nohover):hover{
 
   background: rgba(35,31,97,.05);
   border: 1px solid rgba(35, 31, 97, .2);
-  border-width: 1px 0px 0px 1px;
 
   text-align: right;
   font-weight: 400;
@@ -136,32 +137,41 @@ section:nth-child(even) .card_row:not(.nohover):hover{
   line-height: 1.1rem;
 }
 
-
-
-/* .refresh_icon{
+.security_check{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  
   position: absolute;
-  top: -1px;
-  right: 1px;
+  top: 0;
+  left: 0;
 
-  height: 24px;
-  width: 24px;
-  margin-right: 0.6rem;
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
 
-  fill: #231f61;
-  cursor: pointer;
+  background: #fefefe;
+  animation: slideDown 400ms linear;
 }
-.refresh_icon.loading{
-  animation:spin 1s linear infinite;
-  cursor: default;
-  pointer-events: none;
-} */
-/* 
-@keyframes spin { 100% {transform:rotate(360deg); } }
-@keyframes slideLeft { 
+.security_check.clear{
+  top: 100%;
+  animation: slideOutBottom 400ms linear;
+}
+
+@keyframes slideDown { 
   0% {
-    margin-left:100%
+    top:-100%;
   }
   100% {
-    margin-left: 0px
+    top: 0px;
   }
-} */
+}
+@keyframes slideOutBottom { 
+  0% {
+    top:0px;
+  }
+  100% {
+    top: 100%;
+  }
+}

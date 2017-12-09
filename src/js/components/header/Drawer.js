@@ -29,7 +29,7 @@ class Drawer extends Component {
     return (
         <div className={!this.props.drawerOpen ? "se_menu_panel closed" : "se_menu_panel"}>
           <div className="se_menu_bar">
-            {this.props.username && <span className="se_welcome">{`Welcome, ${this.props.fname} ${this.props.lname.charAt(0)}!`}</span>}
+            {this.props.username && <span className="se_welcome">{"Welcome"+(this.props.fname?", "+this.props.fname+(this.props.lname?" " + this.props.lname.charAt(0):""):"")+"!"}</span>}
             <svg 
               onClick={()=>this.props.closeDrawer()} 
               className="se_menu_button_icon" 

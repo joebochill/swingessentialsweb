@@ -4,6 +4,8 @@ export const LOGIN_SUCCESS =        'LOGIN_SUCCESS';
 export const LOGIN_FAIL =           'LOGIN_FAIL';
 export const LOGOUT_SUCCESS =       'LOGOUT_SUCCESS';
 export const LOGOUT_FAIL =          'LOGOUT_FAIL';
+export const PUT_USER_DATA_SUCCESS =  'PUT_USER_DATA_SUCCESS';
+export const PUT_USER_DATA_FAIL =     'PUT_USER_DATA_FAIL';
 export const GET_USER_DATA_SUCCESS =  'GET_USER_DATA_SUCCESS';
 export const GET_USER_DATA_FAIL =     'GET_USER_DATA_FAIL';
 export const GET_LESSONS =          'GET_LESSONS';
@@ -126,6 +128,36 @@ export function getUserData(token){
                     break;
                 default:
                     dispatch(getUserDataFailure(response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+export function putUserData(data, token){
+    return (dispatch) => {
+        return fetch(baseUrl+'details', { 
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(data)
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    dispatch(putUserDataSuccess());
+                    dispatch(getUserData(token));
+                    // return (dispatch) => {
+                    //     return dispatch(putUserDataSuccess(response))
+                    //         .then(()=> dispatch(getUserData(token)))
+                    // };
+                    break;
+                default:
+                    console.log('failure');
+                    console.log(response.headers.get('Error'));
+                    dispatch(putUserDataFailure(response))
+                    .then( ()=> dispatch(getUserData(token)));
                     break;
             }
         })
@@ -333,6 +365,19 @@ function getUserDataSuccess(data){
 function getUserDataFailure(response){
     return{
         type: GET_USER_DATA_FAIL,
+        response: response.status,
+        error: response.headers.get('Error')
+    }
+}
+function putUserDataSuccess(response){
+    return{
+        type: PUT_USER_DATA_SUCCESS,
+        response: response
+    }
+}
+function putUserDataFailure(response){
+    return{
+        type: PUT_USER_DATA_FAIL,
         response: response.status,
         error: response.headers.get('Error')
     }

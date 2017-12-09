@@ -76,9 +76,14 @@ class Header extends Component {
           <li><NavLink to='/our-pro/'>Meet Our Pro</NavLink></li>
           <li><NavLink to='/19th-hole/'>The 19th Hole</NavLink></li>
           <li><NavLink to='/tip-of-the-month/'>Tip of the Month</NavLink></li>
-          {(this.props.token && this.props.fname) && (
+          {(this.props.token) && (
             <li className={this.props.menuOpen ? "se_drop_menu open" : "se_drop_menu"}>
-              <a onClick={this.props.menuOpen ? ()=>this.props.closeMenu() : () => this.props.openMenu()}>{`${this.props.fname} ${this.props.lname.charAt(0)}.`}</a>
+              <a onClick={this.props.menuOpen ? ()=>this.props.closeMenu() : () => this.props.openMenu()}>
+                {this.props.fname ? 
+                    (this.props.fname + (this.props.lname ? " " + this.props.lname.charAt(0) + "." : "" )) :
+                    "Account"
+                }
+              </a>
               <div className={this.props.menuOpen ? "se_account_menu" : "se_account_menu closed"}>
                 <div className="se_menu_panel_links">
                   <NavLink to='/lessons' exact>Lessons</NavLink>
@@ -88,7 +93,7 @@ class Header extends Component {
               </div>
             </li>
           )}
-          {(!this.props.token || !this.props.fname) && (
+          {(!this.props.token) && (
             <li><NavLink to='/signin/'>Sign In</NavLink></li>
           )}
         </ul>
