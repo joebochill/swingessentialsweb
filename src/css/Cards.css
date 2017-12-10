@@ -120,6 +120,9 @@ section:nth-child(even) .card_row:not(.nohover):hover{
 .card_row.alternate .card_extra{
   font-weight: 400;
 }
+.card_row.full .card_extra{
+  display: none;
+}
 .card_go{
   flex: 0 0 auto;
   margin-left: 1rem;

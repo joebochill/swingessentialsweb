@@ -194,10 +194,16 @@ const loginReducer = (state=[], action) => {
 				settingsAuthenticated: false
 			}
 		case UPDATE_CREDENTIALS.REQUEST:
-		case UPDATE_CREDENTIALS.SUCCESS:
 		case UPDATE_CREDENTIALS.FAIL:
 			return{...state,
+				test: true,
 				settingsAuthenticated: false
+			}
+		case UPDATE_CREDENTIALS.SUCCESS:
+			return{...state,
+				test: false,
+				settingsAuthenticated: false,
+				token: action.data.token
 			}
 		default:
 			return state;

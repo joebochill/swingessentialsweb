@@ -8,6 +8,7 @@ class Placeholder extends Component {
         disabled={true}
         title={this.props.message}
         loading={this.props.loading}
+        className={"full"}
       />
     );
   }

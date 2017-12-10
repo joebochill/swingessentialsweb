@@ -67,6 +67,9 @@ export function requestLogin(userCredentials){
 }
 
 export function requestLogout(token){
+
+    localStorage.removeItem('token');
+
     return (dispatch) => {
         return fetch(baseUrl+'logout', { 
             headers: {
@@ -161,7 +164,9 @@ export function putUserData(data, token){
 export function updateUserCredentials(data, token){
     return (dispatch) => {
         dispatch({type: UPDATE_CREDENTIALS.REQUEST});
+        
         if(Object.keys(data).length < 1){return;}
+        
         return fetch(baseUrl+'credentials', { 
             method: 'PUT',
             headers: {
@@ -172,9 +177,8 @@ export function updateUserCredentials(data, token){
         .then((response) => {
             switch(response.status) {
                 case 200:
-                    dispatch(success(UPDATE_CREDENTIALS.SUCCESS));
-                    dispatch(getUserData(token));
-                    //TODO: we will get a new token here
+                    dispatch(success(UPDATE_CREDENTIALS.SUCCESS,{token: response.headers.get('Token')}));
+                    dispatch(getUserData(response.headers.get('Token')));
                     break;
                 default:
                     dispatch(failure(UPDATE_CREDENTIALS.FAIL, response));

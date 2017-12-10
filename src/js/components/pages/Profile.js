@@ -16,7 +16,8 @@ const mapStateToProps = (state)=>{
     userSettings: state.settings,
     token: state.login.token,
     securityAuthorized: state.login.settingsAuthenticated,
-    authorizing: state.login.pendingAuthentication
+    authorizing: state.login.pendingAuthentication,
+    test: state.login.test
   };
 }
 var mapDispatchToProps = function(dispatch){
@@ -60,16 +61,27 @@ class ProfilePage extends Component {
       this.props.goToSignIn();
     }
     else{
-      this.setState({
-        username: nextProps.userData.username,
-        firstName: nextProps.userData.firstName,
-        lastName: nextProps.userData.lastName,
-        phone: nextProps.userData.phone,
-        email: nextProps.userData.email,
+      if(nextProps.token !== this.props.token){
+        localStorage.setItem('token',nextProps.token);
+      }
+
+      // when we get new props, update the display
+      let newState = {
         newPassword: '',
         newPasswordConfirm: '',
         oldPassword: ''
-      })
+      };
+      // don't update these properties if we are currently editing them
+      if(!this.state.editPersonal){
+        newState = {...newState,
+          username: nextProps.userData.username,
+          firstName: nextProps.userData.firstName,
+          lastName: nextProps.userData.lastName,
+          phone: nextProps.userData.phone,
+          email: nextProps.userData.email
+        }
+      }
+      this.setState(newState);
     }
   }
 
@@ -98,7 +110,7 @@ class ProfilePage extends Component {
           data.email = this.state.email;
         }
         if(this.state.newPassword !== ''){
-          data.password = this.state.newPassword;
+          data.password = window.btoa(this.state.newPassword);
         }
         this.props.updateUserCredentials(data, this.props.token);
       }
@@ -108,7 +120,14 @@ class ProfilePage extends Component {
 
   _keyPress(evt){
     if(evt.key === "Enter" && this.state.oldPassword){
-      this.props.validatePassword(this.props.token,this.state.oldPassword);    }
+      this.props.validatePassword(this.props.token,this.state.oldPassword);    
+    }
+    
+  }
+
+  formattedPhone(){
+    if(this.state.phone.length < 10){return this.state.phone;}
+    return this.state.phone.substr(0,3)+'.'+this.state.phone.substr(3,3)+'.'+this.state.phone.substr(6);
   }
 
   render() {
@@ -138,8 +157,10 @@ class ProfilePage extends Component {
                     (this.state.lastName)
                   }/>
                   <CardRow alternate nohover title={"Phone"} extra={ this.state.editPersonal ? (
-                      <input value={this.state.phone} placeholder={"New Phone"} onChange={(evt) => this.setState({phone: evt.target.value})}/>) :
-                      (this.state.phone)
+                      <input ref={(me) => this.phone = me} value={this.state.phone} placeholder={"New Phone"} 
+                      onChange={(evt) => {let pos = this.phone.selectionStart; this.setState({phone: evt.target.value.replace(/[^0-9]/gi,"").substr(0,10)}); this.phone.selectionStart = pos;}}
+                      /*onKeyDown={this._phoneKey.bind(this)}*//>) :
+                      (this.formattedPhone())
                     }
                   />
                 </div>

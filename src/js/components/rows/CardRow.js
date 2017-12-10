@@ -25,7 +25,8 @@ class CardRow extends Component {
       <div className={"card_row " + 
         (this.props.slide ? "slide " : "") + 
         (this.props.nohover ? "nohover " : "") + 
-        (this.props.alternate ? "alternate " : "")} 
+        (this.props.alternate ? "alternate " : "") +
+        (this.props.className ? this.props.className : "")}
         disabled={this.props.disabled} 
         onClick={this.props.action ? ()=>this.props.action() : null}
         style={this.props.style}
