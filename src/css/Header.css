@@ -262,7 +262,7 @@
 /* End Menu/Close Button */
 
 
-@media only screen and (max-width: 850px){
+@media only screen and (max-width: 800px){
     .se_menu_list{
         display: none;
     }

@@ -1,6 +1,4 @@
 .card{
-  /* width: 100%;
-  max-width: 450px; */
   font-size: 1.1rem;
 }
 .card:not(:first-child){
@@ -55,8 +53,8 @@
 
   color: #231f61;
   fill: #231f61;
-  font-size: 1.1rem;
-  font-weight: 400;
+  /* font-size: 1.1rem; */
+  /* font-weight: 400; */
   user-select: none;
 
   cursor: pointer;
@@ -90,16 +88,22 @@ section:nth-child(even) .card_row:not(.nohover):hover{
   background: rgba(35, 31, 97, .05);
 }
 .card_title{
-  flex: 0 0 auto;
+  /* flex: 0 0 auto; */
+  flex: 2 2 0px;
+  
   margin-right: 1rem;
-
+  overflow: hidden;
+  
+  white-space: nowrap;
   line-height: 3rem;
+  text-align: left;
+  text-overflow: ellipsis;
 }
 .card_row.alternate .card_title{
   font-weight: 600;
 }
 .card_extra{
-  flex: 1 1 0px;
+  flex: 5 5 0px;
   /* display: flex;
   flex-direction: row;
   align-items: center;
@@ -129,13 +133,10 @@ section:nth-child(even) .card_row:not(.nohover):hover{
   max-width: 15rem;
   padding: 0 .5rem;
 
-  background: rgba(35,31,97,.05);
-  border: 1px solid rgba(35, 31, 97, .2);
+  /* background: rgba(35,31,97,.05); */
+  /* border: 1px solid rgba(35, 31, 97, .2); */
 
   text-align: right;
-  font-weight: 400;
-  font-size: 1.1rem;
-  line-height: 1.1rem;
 }
 
 .security_check{
@@ -147,12 +148,14 @@ section:nth-child(even) .card_row:not(.nohover):hover{
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 10;
 
   height: 100%;
   width: 100%;
   padding: 1rem;
 
   background: #fefefe;
+  box-shadow: 0px 1px 2px rgba(0,0,0,.15);
 }
 .security_check.in{
   animation: slideDown 400ms linear;
@@ -184,5 +187,14 @@ section:nth-child(even) .card_row:not(.nohover):hover{
   }
   100%{
     height: 3rem;
+  }
+}
+
+
+@media only screen and (max-width: 800px){
+  .card,
+  .card_extra > input,
+  label{
+    font-size: 0.9rem;
   }
 }

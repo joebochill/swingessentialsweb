@@ -25,7 +25,8 @@ function mapDispatchToProps(dispatch){
       openMenu: () => {dispatch(openNavMenu())},
       closeMenu: () => {dispatch(closeNavMenu())},
       openDrawer: () => {dispatch(openNavDrawer())},
-      closeDrawer: () => {dispatch(closeNavDrawer())}
+      closeDrawer: () => {dispatch(closeNavDrawer())},
+      goToSignIn: () => {dispatch(push('/signin'));}
   }
 }
 
@@ -40,6 +41,12 @@ class Header extends Component {
   componentDidMount(){
     this._removeEventListeners();
     this._addEventListeners();
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(this.props.token && !nextProps.token){
+      this.props.goToSignIn();
+    }
   }
 
   componentWillUnmount(){

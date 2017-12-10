@@ -336,17 +336,25 @@ input {
   padding: 0px 1rem;
   
   background: white;
-  border: 1px solid #231f61;
+  /* border: 1px solid #231f61; */
+  border: 1px solid rgba(35, 31, 97, .2);
   box-shadow: 0px 1px 2px rgba(0,0,0,.15);
   
   color: #231f61;
   font-size: 1.1rem;
+  line-height: 100%;
   outline: 0;
+}
+input:not([type="radio"]):not([type="checkbox"]){
+  appearance: none;
 }
 input::placeholder{
   overflow: visible;
+  /* opacity: .2; */
+
   font-style: italic;
-  opacity: 0.2;
+  color: rgba(0,0,0,.2);
+  line-height: normal;
 }
 .validation_error{
   display: block;
@@ -375,7 +383,7 @@ input::placeholder{
 /* End Form Elements */
 
 /* Media Queries */
-@media only screen and (max-width: 850px){
+@media only screen and (max-width: 800px){
   .multi_col {
     display: block;
     width: auto;
@@ -385,6 +393,9 @@ input::placeholder{
   }
   .multi_col > div.button{
     margin-top: 1rem;
+  }
+  input{
+    font-size: 0.9rem;
   }
 }
 @media only screen and (max-width: 600px){

@@ -188,6 +188,7 @@ const loginReducer = (state=[], action) => {
 				settingsAuthenticated: true
 			}
 		case VALIDATE_PASSWORD.FAIL:
+		case LOCATION_CHANGE:
 			return{...state,
 				pendingAuthentication: false,
 				settingsAuthenticated: false

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {replace} from 'react-router-redux';
-import {requestLogout, setTargetRoute, validatePassword, updateUserCredentials} from '../../actions/actions.js';
+import {/*requestLogout, */setTargetRoute, validatePassword, updateUserCredentials} from '../../actions/actions.js';
 import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
 import {putUserData} from '../../actions/actions.js';
@@ -23,7 +23,7 @@ var mapDispatchToProps = function(dispatch){
   return {
     goToSignIn: () => {dispatch(replace('/signin'));},
     replace: (val) => {dispatch(replace(val));},
-    requestLogout: (tok) => {dispatch(requestLogout(tok))},
+    // requestLogout: (tok) => {dispatch(requestLogout(tok))},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
     putUserData: (data, token) => {dispatch(putUserData(data, token))},
     validatePassword: (token, pass) => {dispatch(validatePassword(token, pass))},
@@ -42,7 +42,8 @@ class ProfilePage extends Component {
       lastName: props.userData.lastName,
       phone: props.userData.phone,
       email: props.userData.email,
-      password: ''
+      oldPassword: '',
+      newPassword: ''
     };
   }
   componentWillMount(){
@@ -129,15 +130,15 @@ class ProfilePage extends Component {
                 </div>
                 <div className="card_body">
                   <CardRow alternate nohover title={"First Name"} extra={this.state.editPersonal ? (
-                    <input value={this.state.firstName} placeholder={"Your First Name"} onChange={(evt) => this.setState({firstName: evt.target.value})}/>) :
+                    <input value={this.state.firstName} placeholder={"New First Name"} onChange={(evt) => this.setState({firstName: evt.target.value})}/>) :
                     (this.state.firstName)
                   }/>
                   <CardRow alternate nohover title={"Last Name"} extra={this.state.editPersonal ? (
-                    <input value={this.state.lastName} placeholder={"Your Last Name"} onChange={(evt) => this.setState({lastName: evt.target.value})}/>) :
+                    <input value={this.state.lastName} placeholder={"New Last Name"} onChange={(evt) => this.setState({lastName: evt.target.value})}/>) :
                     (this.state.lastName)
                   }/>
                   <CardRow alternate nohover title={"Phone"} extra={ this.state.editPersonal ? (
-                      <input value={this.state.phone} placeholder={"Your Phone Number"} onChange={(evt) => this.setState({phone: evt.target.value})}/>) :
+                      <input value={this.state.phone} placeholder={"New Phone"} onChange={(evt) => this.setState({phone: evt.target.value})}/>) :
                       (this.state.phone)
                     }
                   />
@@ -149,25 +150,7 @@ class ProfilePage extends Component {
                   <span onClick={() => this.updateSettings("security")}>{this.state.editSecurity ? "DONE" : "EDIT"}</span>
                 </div>
                 <div className="card_body">
-                  <CardRow alternate nohover title={"Email"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
-                    <input value={this.state.email} placeholder={"Your Email Address"} onChange={(evt) => this.setState({email: evt.target.value})}/>) :
-                    (this.state.email)
-                  }/>
-                  <CardRow alternate nohover title={"Username"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
-                    <input value={this.state.username} placeholder={"Your Username"} onChange={(evt) => this.setState({username: evt.target.value})}/>) :
-                    (this.state.username)
-                  }/>
-                  <CardRow alternate nohover title={"Password"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
-                    <input type="password" value={this.state.newPassword} placeholder={"Your New Password"} onChange={(evt) => this.setState({newPassword: evt.target.value})}/>) :
-                    ("************")
-                  }/>
-                  {this.state.editSecurity && this.props.securityAuthorized &&
-                    <CardRow alternate nohover title={"Confirm Password"} style={{animation:"grow 400ms linear"}} extra={this.props.securityAuthorized ? (
-                      <input type="password" value={this.state.newPasswordConfirm} placeholder={"Your New Password"} onChange={(evt) => this.setState({newPasswordConfirm: evt.target.value})}/>):
-                      ("************")
-                    }/>
-                  }
-                  {this.state.editSecurity && !this.props.authorizing && !this.props.securityAuthorized &&
+                {this.state.editSecurity && !this.props.securityAuthorized &&
                     <div className={"security_check in"}>
                       <div style={{width:"100%"}}>
                         <label>Your password is required to edit these settings</label>
@@ -175,7 +158,14 @@ class ProfilePage extends Component {
                           placeholder={"Password"} 
                           onChange={(evt) => this.setState({oldPassword: evt.target.value})} 
                           onKeyPress={this._keyPress.bind(this)}/>
-                        <div style={{marginTop:'1rem', fontWeight:'600', cursor:'pointer'}} 
+                        <div 
+                          style={{
+                            marginTop:'1rem', 
+                            fontWeight:'600', 
+                            cursor:'pointer', 
+                            opacity:(this.state.oldPassword ? '1' : '0.2'),
+                            pointerEvents: (this.state.oldPassword ? 'auto' : 'none')
+                          }} 
                           disabled={!this.state.oldPassword}
                           onClick={() => this.props.validatePassword(this.props.token, this.state.oldPassword)}>CONTINUE</div>
                       </div>
@@ -186,11 +176,29 @@ class ProfilePage extends Component {
                       {this.props.authorizing && <Loader/>}
                     </div>
                   }
+                  <CardRow alternate nohover title={"Email"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
+                    <input value={this.state.email} placeholder={"New Email Address"} onChange={(evt) => this.setState({email: evt.target.value})}/>) :
+                    (this.state.email)
+                  }/>
+                  <CardRow alternate nohover title={"Username"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
+                    <input value={this.state.username} placeholder={"New Username"} onChange={(evt) => this.setState({username: evt.target.value})}/>) :
+                    (this.state.username)
+                  }/>
+                  <CardRow alternate nohover title={"Password"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
+                    <input type="password" value={this.state.newPassword} placeholder={"New Password"} onChange={(evt) => this.setState({newPassword: evt.target.value})}/>) :
+                    ("************")
+                  }/>
+                  {this.state.editSecurity && this.props.securityAuthorized &&
+                    <CardRow alternate nohover title={"Confirm"} style={{animation:"grow 400ms linear"}} extra={this.props.securityAuthorized ? (
+                      <input type="password" value={this.state.newPasswordConfirm} placeholder={"New Password"} onChange={(evt) => this.setState({newPasswordConfirm: evt.target.value})}/>):
+                      ("************")
+                    }/>
+                  }
                 </div>
               </div>
-              <div className="button se_button" onClick={()=>this.props.requestLogout(this.props.token)} style={{marginTop:'4rem'}}>
+              {/* <div className="button se_button" onClick={()=>this.props.requestLogout(this.props.token)} style={{marginTop:'4rem'}}>
                 <span>Sign Out</span>
-              </div>
+              </div> */}
             </div>
           </section>
           <Footer/>
