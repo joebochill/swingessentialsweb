@@ -16,8 +16,7 @@ const mapStateToProps = (state)=>{
     userSettings: state.settings,
     token: state.login.token,
     securityAuthorized: state.login.settingsAuthenticated,
-    authorizing: state.login.pendingAuthentication,
-    test: state.login.test
+    authorizing: state.login.pendingAuthentication
   };
 }
 var mapDispatchToProps = function(dispatch){
@@ -126,14 +125,15 @@ class ProfilePage extends Component {
   }
 
   formattedPhone(){
-    if(this.state.phone.length < 10){return this.state.phone;}
+    if(!this.state.phone){return '';}
+    else if(this.state.phone.length < 10){return this.state.phone;}
     return this.state.phone.substr(0,3)+'.'+this.state.phone.substr(3,3)+'.'+this.state.phone.substr(6);
   }
 
   render() {
     return (
       <div>
-        <section className="landing_image image2">
+        <section className="landing_image image5">
           <main className="page_title">
             <h1>Your Profile</h1>
             <h3>Manage Your Account</h3>

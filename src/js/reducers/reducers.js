@@ -13,7 +13,8 @@ import {LOCATION_CHANGE,
 		GET_TIPS, 
 		GET_BLOGS, 
 		MENU, 
-		DRAWER
+		DRAWER,
+        CREATE_ACCOUNT
 } from '../actions/actions.js';
 
 /* Updates the basic info for the logged in user */
@@ -156,6 +157,7 @@ const blogsReducer = (state=[], action) => {
 const loginReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN.SUCCESS:
+		case CREATE_ACCOUNT.SUCCESS:
 			return{...state,
 				token: action.data.token,
 				failCount: 0
@@ -196,12 +198,10 @@ const loginReducer = (state=[], action) => {
 		case UPDATE_CREDENTIALS.REQUEST:
 		case UPDATE_CREDENTIALS.FAIL:
 			return{...state,
-				test: true,
 				settingsAuthenticated: false
 			}
 		case UPDATE_CREDENTIALS.SUCCESS:
 			return{...state,
-				test: false,
 				settingsAuthenticated: false,
 				token: action.data.token
 			}

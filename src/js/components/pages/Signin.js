@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {replace, goBack} from 'react-router-redux';
+import {replace, goBack, push} from 'react-router-redux';
 import {connect} from 'react-redux';
 import {setTargetRoute, requestLogin} from '../../actions/actions.js';
 import Footer from '../footer/Footer.js';
@@ -19,6 +19,7 @@ const mapDispatchToProps = (dispatch)=>{
     // ...bindActionCreators(Actions, dispatch),
     goBack: () => {dispatch(goBack())},
     replace: (val) => {dispatch(replace(val))},
+    register: () => {dispatch(push('/register'))},
     resetTargetRoute: () => {dispatch(setTargetRoute(''))},
     requestLogin: (cred) => {dispatch(requestLogin(cred))}
   }
@@ -72,7 +73,7 @@ class SigninPage extends Component {
   render() {
     return (
       <div>
-        <section className="landing_image image2">
+        <section className="landing_image image5">
           <main className="page_title">
             <h1>Sign In</h1>
             <h3>Access Your Account</h3>
@@ -102,6 +103,10 @@ class SigninPage extends Component {
                     onClick={()=>this.props.requestLogin({username:this.state.username,password:this.state.password})}
               >
                 <span>Sign In</span>
+              </div>
+              <div className="account_links">
+                <a onClick={()=>alert('Coming soon')}>Forgot Password?</a>
+                <a onClick={()=>this.props.register()}>Create Account</a>
               </div>
             </div>
           </section>

@@ -6,6 +6,7 @@ import {replace} from 'react-router-redux';
 import Placeholder from '../rows/Placeholder.js';
 import Footer from '../footer/Footer.js';
 import {getLessons, setTargetRoute, redeemCredit} from '../../actions/actions.js';
+import {formatDate} from '../../utils/utils.js';
 
 import '../../../css/Cards.css';
 
@@ -68,7 +69,7 @@ class LessonsPage extends Component {
                     <Placeholder message={loading?"Loading...":"No Lessons In Progress"} loading={loading}/>
                   }
                   {this.props.lessons.pending.length > 0 && this.props.lessons.pending.map((lesson)=>
-                    <LessonRow key={lesson.request_id} title={lesson.request_date} id={lesson.request_url}/>
+                    <LessonRow key={lesson.request_id} title={formatDate(lesson.request_date)} id={lesson.request_url}/>
                   )}
                 </div>
               </div>
@@ -82,7 +83,7 @@ class LessonsPage extends Component {
                     <Placeholder message={loading?"Loading...":"No Completed Lessons"} loading={loading}/>
                   }
                   {this.props.lessons.closed.length > 0 && this.props.lessons.closed.map((lesson)=>
-                    <LessonRow key={lesson.request_id} title={lesson.request_date} new={parseInt(lesson.viewed,10)===0} extra={parseInt(lesson.viewed,10)===0 ? "NEW!" : ""} id={lesson.request_url}/>
+                    <LessonRow key={lesson.request_id} title={formatDate(lesson.request_date)} new={parseInt(lesson.viewed,10)===0} extra={parseInt(lesson.viewed,10)===0 ? "NEW!" : ""} id={lesson.request_url}/>
                   )}
                 </div>
               </div>
@@ -92,7 +93,7 @@ class LessonsPage extends Component {
           <div className="button se_button" 
                 onClick={()=>this.props.redeemCredit('single', null, this.props.token)}
           >
-            <span>REDEEM</span>
+            <span>FAKE REDEEM</span>
           </div>
           </section>
           {(!loading && !this.props.lessons.closed.length && !this.props.lessons.pending.length) && 
@@ -100,8 +101,8 @@ class LessonsPage extends Component {
               <h1>You don't have any lessons!</h1>
               <p>Download our app today. Your first lesson is free!</p>
               <div className="multi_col">
-                <div className="button apple_store"/>
-                <div className="button google_store"/>
+                <div className="button apple_store" onClick={()=>alert('Coming Soon!')}/>
+                <div className="button google_store" onClick={()=>alert('Coming Soon!')}/>
               </div>
             </section>
           }

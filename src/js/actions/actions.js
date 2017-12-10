@@ -10,6 +10,7 @@
     
     export const PUT_USER_DATA = {SUCCESS: 'PUT_USER_DATA_SUCCESS', FAIL: 'PUT_USER_DATA_FAIL'};
     export const GET_USER_DATA = {SUCCESS: 'GET_USER_DATA_SUCCESS', FAIL: 'GET_USER_DATA_FAIL'};
+    export const CREATE_ACCOUNT = {REQUEST: 'CREATE_ACCOUNT', SUCCESS: 'CREATE_ACCOUNT_SUCCESS', FAIL: 'CREATE_ACCOUNT_FAIL'};
     export const GET_SETTINGS = {SUCCESS: 'GET_SETTINGS_SUCCESS', FAIL: 'GET_SETTINGS_FAIL'};
     export const GET_LESSONS = {REQUEST: 'GET_LESSONS', SUCCESS: 'GET_LESSONS_SUCCESS', FAIL: 'GET_LESSONS_FAIL'};
     export const GET_TIPS = {REQUEST: 'GET_TIPS', SUCCESS: 'GET_TIPS_SUCCESS', FAIL: 'GET_TIPS_FAIL'};
@@ -156,6 +157,31 @@ export function putUserData(data, token){
                 default:
                     dispatch(failure(PUT_USER_DATA.FAIL, response));
                     dispatch(getUserData(token));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+export function createAccount(data){
+    return (dispatch) => {
+        dispatch({type: CREATE_ACCOUNT.REQUEST});
+        
+        if(Object.keys(data).length < 1){return;}
+        
+        return fetch(baseUrl+'user', { 
+            method: 'PUT',
+            body: JSON.stringify(data)
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    dispatch(success(CREATE_ACCOUNT.SUCCESS,{token: response.headers.get('Token')}));
+                    dispatch(getUserData(response.headers.get('Token')));
+                    break;
+                default:
+                    dispatch(failure(CREATE_ACCOUNT.FAIL, response));
                     break;
             }
         })
@@ -352,7 +378,6 @@ export function getPackages(token){
 /* Success/Failure Actions for the above Request types */
 
 function failure(type, response){
-    console.log(response.headers.get('Error'));
     return{
         type: type,
         response: response,

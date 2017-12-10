@@ -8,7 +8,7 @@ class OurProPage extends Component {
   render() {
     return (
       <div>
-        <section className="landing_image image2">
+        <section className="landing_image image6">
           <main className="page_title">
             <h1>Meet Our Pro</h1>
             <h3>Alan J. Nelson</h3>

@@ -20,6 +20,7 @@ class LessonRow extends Component {
   render() {
     return (
       <Row 
+        className={"noflex"}
         disabled={this.props.disabled}
         title={this.props.title}
         extra={this.props.extra}

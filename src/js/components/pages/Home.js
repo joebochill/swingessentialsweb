@@ -1,5 +1,19 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
+import {push} from 'react-router-redux';
 import Footer from '../footer/Footer.js';
+
+const mapStateToProps = (state)=>{
+  return {
+    token: state.login.token
+  };
+}
+
+const mapDispatchToProps = (dispatch)=>{
+  return {
+    goToSignin: () => {dispatch(push('/signin'))}
+  }
+}
 
 class HomePage extends Component {
   componentWillMount(){
@@ -14,9 +28,9 @@ class HomePage extends Component {
             <h1>Swing<span className="hidden_space"> </span><br className="hidden_break"/>Essentials</h1>
             <h3>a PGA Pro in your pocket at home and on the links</h3>
           </main>
-          <div style={{marginTop:"3rem"}}>
-            <div className="button apple_store"/>
-            <div className="button google_store"/>
+          <div>
+            <div className="button apple_store" onClick={()=>alert('Coming Soon!')}/>
+            <div className="button google_store" onClick={()=>alert('Coming Soon!')}/>
           </div>
         </section>
         <div>
@@ -66,10 +80,10 @@ class HomePage extends Component {
             <h1>Try It Today</h1>
             <p>Still not convinced? Download our app and give it a try. Your first lesson is on us.</p>
             <div className="multi_col">
-              <div className="button apple_store"/>
-              <div className="button google_store"/>
+              <div className="button apple_store" onClick={()=>alert('Coming Soon!')}/>
+              <div className="button google_store" onClick={()=>alert('Coming Soon!')}/>
             </div>
-            <div className="button small se_button"><span>Sign In</span></div>
+            {!this.props.token && <div className="button small se_button" onClick={()=>this.props.goToSignin()}><span>Sign In</span></div>}
           </section>
           <Footer/>
         </div>
@@ -78,4 +92,4 @@ class HomePage extends Component {
   }
 }
 
-export default HomePage;
+export default connect(mapStateToProps,mapDispatchToProps)(HomePage);

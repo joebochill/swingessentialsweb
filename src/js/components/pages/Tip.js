@@ -62,7 +62,7 @@ class TipPage extends Component {
     const tips = (!this.props.tips.length ? this.localtips : this.props.tips);
     return (
       <div>
-        <section className="landing_image image2">
+        <section className="landing_image image4">
           <main className="page_title">
             <h1>Tip of the Month</h1>
             <h3>Small Adjustments, Big Difference</h3>

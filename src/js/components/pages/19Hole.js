@@ -63,7 +63,7 @@ class NineteenPage extends Component {
 
     return (
       <div>
-        <section className="landing_image image2">
+        <section className="landing_image image3">
           <main className="page_title">
             <h1>The 19th Hole</h1>
             <h3>Golf Stories and Q&amp;A</h3>

@@ -4,6 +4,7 @@ import {replace} from 'react-router-redux';
 import YoutubeVideo from '../youtube/YoutubeVideo.js';
 import Footer from '../footer/Footer.js';
 import Loader from '../loader/Loader.js';
+import {formatDate} from '../../utils/utils.js';
 //import YouTube from 'react-youtube';
 
 import { setTargetRoute, getLessons } from '../../actions/actions';
@@ -113,7 +114,7 @@ class LessonResponsePage extends Component {
       <div>
         <section className="landing_image image2">
           <main className="page_title">
-            <h1>{this.lesson.request_date}</h1>
+            <h1>{formatDate(this.lesson.request_date)}</h1>
             <h3>Swing Analysis</h3>
           </main>
         </section>

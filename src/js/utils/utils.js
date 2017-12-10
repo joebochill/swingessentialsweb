@@ -27,3 +27,12 @@
         return 0;
     }
   }
+
+  // formats a date string from the database to be pretty
+  export function formatDate(date){
+    if(!date){return "NO DATE";}
+    
+    let parts = date.split('-');
+    const months = ['JAN','FEB','MAR','APR','MAY','JUNE','JULY','AUG','SEP','OCT','NOV','DEC'];
+    return `${parts[0]}-${months[parseInt(parts[1],10)-1]}-${parts[2]}`;
+  }

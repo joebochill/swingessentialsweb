@@ -117,6 +117,9 @@ section:nth-child(even) .card_row:not(.nohover):hover{
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.card_row.noflex > .card_extra{
+  flex: 0 0 auto;
+}
 .card_row.alternate .card_extra{
   font-weight: 400;
 }
@@ -194,7 +197,7 @@ section:nth-child(even) .card_row:not(.nohover):hover{
 }
 
 
-@media only screen and (max-width: 50rem){
+@media only screen and (max-width: 25rem){
   .card,
   label{
     font-size: 0.9rem;
