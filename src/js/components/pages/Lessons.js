@@ -67,7 +67,7 @@ class LessonsPage extends Component {
                     <Placeholder message={loading?"Loading...":"No Lessons In Progress"} loading={loading}/>
                   }
                   {this.props.lessons.pending.length > 0 && this.props.lessons.pending.map((lesson)=>
-                    <LessonRow key={lesson.request_id} title={lesson.request_date} id={lesson.request_id}/>
+                    <LessonRow key={lesson.request_id} title={lesson.request_date} id={lesson.request_url}/>
                   )}
                 </div>
               </div>
@@ -81,7 +81,7 @@ class LessonsPage extends Component {
                     <Placeholder message={loading?"Loading...":"No Completed Lessons"} loading={loading}/>
                   }
                   {this.props.lessons.closed.length > 0 && this.props.lessons.closed.map((lesson)=>
-                    <LessonRow key={lesson.request_id} title={lesson.request_date} new={parseInt(lesson.viewed,10)===0} extra={parseInt(lesson.viewed,10)===0 ? "NEW!" : ""} id={lesson.request_id}/>
+                    <LessonRow key={lesson.request_id} title={lesson.request_date} new={parseInt(lesson.viewed,10)===0} extra={parseInt(lesson.viewed,10)===0 ? "NEW!" : ""} id={lesson.request_url}/>
                   )}
                 </div>
               </div>

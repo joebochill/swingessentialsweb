@@ -27,11 +27,11 @@ export const initialStore = {
     },
 
     // user's available credits
-    credits:{
-        count: 0,
-        unlimited: false,
-        unlimitedExpires: 0
-    },
+    // credits:{
+    //     count: 0,
+    //     unlimited: false,
+    //     unlimitedExpires: 0
+    // },
 
     // user's lesson history
     lessons:{
@@ -52,12 +52,14 @@ export const initialStore = {
     },
 
     // swingessentials available lesson packages
-    packages:[],
+    //packages:[],
 
     // api validation token
     login:{
         token: null,
-        failCount: 0
+        failCount: 0,
+        settingsAuthenticated: false,
+        pendingAuthentication: false
     },
 
     header:{

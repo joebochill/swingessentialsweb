@@ -85,7 +85,7 @@ class LessonResponsePage extends Component {
 
     // loop through the lessons and look for the current request (lid)
     for(let i = 0; i < lessons.length; i++){
-      if(lessons[i].request_id === lid){
+      if(lessons[i].request_url === lid){
         this.lesson=lessons[i];
         break;
       }

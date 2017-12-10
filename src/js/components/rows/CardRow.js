@@ -25,7 +25,11 @@ class CardRow extends Component {
       <div className={"card_row " + 
         (this.props.slide ? "slide " : "") + 
         (this.props.nohover ? "nohover " : "") + 
-        (this.props.alternate ? "alternate " : "")} disabled={this.props.disabled} onClick={this.props.action ? ()=>this.props.action() : null}>
+        (this.props.alternate ? "alternate " : "")} 
+        disabled={this.props.disabled} 
+        onClick={this.props.action ? ()=>this.props.action() : null}
+        style={this.props.style}
+        >
         <span className="card_title">{this.props.title}</span>
         <span className={"card_extra"} style={{color: this.props.specialColor}}>
         {this.props.loading ? (<Loader size=".5rem" fill="rgba(35, 31, 97, .3)"/>) : this.props.extra}

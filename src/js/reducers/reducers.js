@@ -2,23 +2,25 @@ import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux'
 import {LOCATION_CHANGE,
 		TOKEN_FROM_STORAGE,
-		LOGIN_SUCCESS, LOGIN_FAIL, 
-		LOGOUT_SUCCESS, LOGOUT_FAIL, 
-		OPEN_MENU, CLOSE_MENU, 
-		OPEN_DRAWER, CLOSE_DRAWER,
-		GET_USER_DATA_SUCCESS, GET_USER_DATA_FAIL, 
-		GET_LESSONS, GET_LESSONS_SUCCESS, GET_LESSONS_FAIL, 
-		GET_TIPS, GET_TIPS_SUCCESS, GET_TIPS_FAIL, 
-		GET_BLOGS, GET_BLOGS_SUCCESS, GET_BLOGS_FAIL, 
 		SET_TARGET_ROUTE,
-		GET_SETTINGS_SUCCESS, GET_SETTINGS_FAIL
+		LOGIN, 
+		LOGOUT, 
+		VALIDATE_PASSWORD,
+		UPDATE_CREDENTIALS,
+		GET_USER_DATA, 
+		GET_SETTINGS,
+		GET_LESSONS, 
+		GET_TIPS, 
+		GET_BLOGS, 
+		MENU, 
+		DRAWER
 } from '../actions/actions.js';
 
 /* Updates the basic info for the logged in user */
 const userReducer = (state=[], action) => {
 	switch(action.type){
-		case LOGIN_SUCCESS:
-		case GET_USER_DATA_SUCCESS:
+		case LOGIN.SUCCESS:
+		case GET_USER_DATA.SUCCESS:
 			return{...state, 
 				username: action.data.personal.username,
 				firstName: action.data.personal.first_name,
@@ -26,7 +28,7 @@ const userReducer = (state=[], action) => {
 				email: action.data.personal.email,
 				phone: action.data.personal.phone
 			};
-		case LOGOUT_SUCCESS:
+		case LOGOUT.SUCCESS:
 			return{...state, 
 				username: '',
 				firstName: '',
@@ -35,7 +37,7 @@ const userReducer = (state=[], action) => {
 				phone: ''
 			};
 		case TOKEN_FROM_STORAGE:
-		case GET_USER_DATA_FAIL:
+		case GET_USER_DATA.FAIL:
 			return{
 				username: '',
 				firstName: '',
@@ -51,9 +53,9 @@ const userReducer = (state=[], action) => {
 /* Updates the settings for the logged in user */
 const settingsReducer = (state=[], action) => {
 	switch(action.type){
-		case GET_SETTINGS_SUCCESS:
+		case GET_SETTINGS.SUCCESS:
 			return action.data;
-		case GET_SETTINGS_FAIL:
+		case GET_SETTINGS.FAIL:
 			return{
 				avatar: '',
 				handedness: 'right',
@@ -69,28 +71,28 @@ const settingsReducer = (state=[], action) => {
 }
 
 /* Updates the available credits for the logged in user */
-const creditsReducer = (state=[], action) => {
-	return state;
-}
+// const creditsReducer = (state=[], action) => {
+// 	return state;
+// }
 
 /* Updates the list of lessons for the logged in user */
 const lessonsReducer = (state=[], action) => {
 	switch(action.type){
-		case GET_LESSONS:
+		case GET_LESSONS.REQUEST:
 			return{...state,
 				loading: true
 			}
-		case GET_LESSONS_SUCCESS:
+		case GET_LESSONS.SUCCESS:
 			return {
 				loading: false,
 				pending: action.data.pending,
 				closed: action.data.closed
 			}
-		case GET_LESSONS_FAIL:
+		case GET_LESSONS.FAIL:
 			return {...state,
 				loading: false
 			}
-		case LOGOUT_SUCCESS:
+		case LOGOUT.SUCCESS:
 			return{
 				loading: false,
 				pending: [],
@@ -104,16 +106,16 @@ const lessonsReducer = (state=[], action) => {
 /* Updates the posts on the tip of the month page */
 const tipsReducer = (state=[], action) => {
 	switch(action.type){
-		case GET_TIPS:
+		case GET_TIPS.REQUEST:
 			return{...state,
 				loading: true
 			}
-		case GET_TIPS_SUCCESS:
+		case GET_TIPS.SUCCESS:
 			return{
 				loading: false,
 				tipList: action.data
 			}
-		case GET_TIPS_FAIL:
+		case GET_TIPS.FAIL:
 			return{
 				loading: false,
 				tipList: []
@@ -126,16 +128,16 @@ const tipsReducer = (state=[], action) => {
 /* Updates the list of blogs on the 19th hole page */
 const blogsReducer = (state=[], action) => {
 	switch(action.type){
-		case GET_BLOGS:
+		case GET_BLOGS.REQUEST:
 			return{...state,
 				loading: true
 			}
-		case GET_BLOGS_SUCCESS:
+		case GET_BLOGS.SUCCESS:
 			return{
 				loading: false,
 				blogList: action.data
 			}
-		case GET_BLOGS_FAIL:
+		case GET_BLOGS.FAIL:
 			return{
 				loading: false,
 				blogList: []
@@ -146,33 +148,55 @@ const blogsReducer = (state=[], action) => {
 }
 
 /* Updates the list of available lesson packages */
-const packagesReducer = (state=[], action) => {
-	return state;
-}
+// const packagesReducer = (state=[], action) => {
+// 	return state;
+// }
 
 /* Updates the current authentication tokens and login failures */
 const loginReducer = (state=[], action) => {
 	switch(action.type){
-		case LOGIN_SUCCESS:
-			return{
+		case LOGIN.SUCCESS:
+			return{...state,
 				token: action.data.token,
 				failCount: 0
 			}
-		case LOGIN_FAIL:
-			return{
+		case LOGIN.FAIL:
+			return{...state,
 				token: null,
 				failCount: state.failCount + 1
 			}
-		case LOGOUT_SUCCESS:
-			return{
+		case LOGOUT.SUCCESS:
+			return{...state,
 				token: null,
-				failCount: 0
+				failCount: 0,
+				settingsAuthenticated: false,
+				pendingAuthentication: false
 			}
-		case LOGOUT_FAIL:
+		case LOGOUT.FAIL:
 			return state;
 		case TOKEN_FROM_STORAGE:
 			return{...state,
 				token: action.token
+			}
+		case VALIDATE_PASSWORD.REQUEST:
+			return{...state,
+				pendingAuthentication: true
+			}
+		case VALIDATE_PASSWORD.SUCCESS:
+			return{...state,
+				pendingAuthentication: false,
+				settingsAuthenticated: true
+			}
+		case VALIDATE_PASSWORD.FAIL:
+			return{...state,
+				pendingAuthentication: false,
+				settingsAuthenticated: false
+			}
+		case UPDATE_CREDENTIALS.REQUEST:
+		case UPDATE_CREDENTIALS.SUCCESS:
+		case UPDATE_CREDENTIALS.FAIL:
+			return{...state,
+				settingsAuthenticated: false
 			}
 		default:
 			return state;
@@ -189,19 +213,19 @@ const headerReducer = (state=[], action) => {
 				drawerOpen:false
 			}
 		}
-		case OPEN_MENU:
+		case MENU.OPEN:
 			return{...state,
 				menuOpen: true
 			}
-		case CLOSE_MENU:
+		case MENU.CLOSE:
 			return{...state,
 				menuOpen: false
 			}
-		case OPEN_DRAWER:
+		case DRAWER.OPEN:
 			return{...state,
 				drawerOpen: true
 			}
-		case CLOSE_DRAWER:
+		case DRAWER.CLOSE:
 			return {...state,
 				drawerOpen: false
 			}
@@ -209,7 +233,7 @@ const headerReducer = (state=[], action) => {
 			return {...state,
 				targetRoute: action.route
 			}
-		case LOGOUT_SUCCESS:
+		case LOGOUT.SUCCESS:
 			return {...state,
 				targetRoute: ''
 			}
@@ -226,11 +250,11 @@ const communicationReducer = (state=[], action) => {
 const AppReducer = combineReducers({
     userData: userReducer,
     settings: settingsReducer,
-    credits: creditsReducer,
+    //credits: creditsReducer,
 	lessons: lessonsReducer,
 	tips: tipsReducer,
 	blogs: blogsReducer,
-    packages: packagesReducer,
+    //packages: packagesReducer,
 	login: loginReducer,
 	header: headerReducer,
 	communication: communicationReducer,

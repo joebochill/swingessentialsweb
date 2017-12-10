@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {replace} from 'react-router-redux';
-import {requestLogout, setTargetRoute} from '../../actions/actions.js';
+import {requestLogout, setTargetRoute, validatePassword, updateUserCredentials} from '../../actions/actions.js';
 import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
 import {putUserData} from '../../actions/actions.js';
+import Loader from '../loader/Loader.js';
 import '../../../css/Cards.css';
+import '../../../css/Buttons.css';
 
 
 const mapStateToProps = (state)=>{
   return {
     userData: state.userData,
     userSettings: state.settings,
-    token: state.login.token
+    token: state.login.token,
+    securityAuthorized: state.login.settingsAuthenticated,
+    authorizing: state.login.pendingAuthentication
   };
 }
 var mapDispatchToProps = function(dispatch){
@@ -21,7 +25,9 @@ var mapDispatchToProps = function(dispatch){
     replace: (val) => {dispatch(replace(val));},
     requestLogout: (tok) => {dispatch(requestLogout(tok))},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
-    putUserData: (data, token) => {dispatch(putUserData(data, token))}
+    putUserData: (data, token) => {dispatch(putUserData(data, token))},
+    validatePassword: (token, pass) => {dispatch(validatePassword(token, pass))},
+    updateUserCredentials: (data, token) => {dispatch(updateUserCredentials(data, token))}
   }
 };
 
@@ -31,7 +37,6 @@ class ProfilePage extends Component {
     this.state={
       editPersonal: false,
       editSecurity: false,
-      securityAuthorized: false,
       username: props.userData.username,
       firstName: props.userData.firstName,
       lastName: props.userData.lastName,
@@ -69,21 +74,40 @@ class ProfilePage extends Component {
 
   updateSettings(type){
     if(type==="personal"){
-      if(this.state.editPersonal){
-        this.props.putUserData({
-          firstName: this.state.firstName,
-          lastName: this.state.lastName,
-          phone: this.state.phone
-        }, this.props.token);
+      if(this.state.editPersonal && (
+        this.state.firstName !== this.props.userData.firstName ||
+        this.state.lastName !== this.props.userData.lastName ||
+        this.state.phone !== this.props.userData.phone)){
+          this.props.putUserData({
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
+            phone: this.state.phone
+          }, this.props.token);
       }
       this.setState({editPersonal: !this.state.editPersonal})
     }
     else if(type==="security"){
       if(this.state.editSecurity){
-        this.setState({editSecurity: false, securityAuthorized: false});
+        // PUSH THE NEW SETTINGS
+        let data = {};
+        if(this.state.username !== this.props.userData.username){
+          data.username = this.state.username;
+        }
+        if(this.state.email !== this.props.userData.email){
+          data.email = this.state.email;
+        }
+        if(this.state.newPassword !== ''){
+          data.password = this.state.newPassword;
+        }
+        this.props.updateUserCredentials(data, this.props.token);
       }
-      else{ this.setState({editSecurity: !this.state.editSecurity})}
+      this.setState({editSecurity: !this.state.editSecurity, password: ''})
     }
+  }
+
+  _keyPress(evt){
+    if(evt.key === "Enter" && this.state.oldPassword){
+      this.props.validatePassword(this.props.token,this.state.oldPassword);    }
   }
 
   render() {
@@ -104,18 +128,19 @@ class ProfilePage extends Component {
                   <span onClick={() => this.updateSettings("personal")}>{this.state.editPersonal ? "DONE" : "EDIT"}</span>
                 </div>
                 <div className="card_body">
-                  <CardRow alternate nohover title={"First Name"} extra={
-                    this.state.editPersonal ? (<input value={this.state.firstName} onChange={(evt) => this.setState({firstName: evt.target.value})}/>) :
+                  <CardRow alternate nohover title={"First Name"} extra={this.state.editPersonal ? (
+                    <input value={this.state.firstName} placeholder={"Your First Name"} onChange={(evt) => this.setState({firstName: evt.target.value})}/>) :
                     (this.state.firstName)
                   }/>
-                  <CardRow alternate nohover title={"Last Name"} extra={
-                    this.state.editPersonal ? (<input value={this.state.lastName} onChange={(evt) => this.setState({lastName: evt.target.value})}/>) :
+                  <CardRow alternate nohover title={"Last Name"} extra={this.state.editPersonal ? (
+                    <input value={this.state.lastName} placeholder={"Your Last Name"} onChange={(evt) => this.setState({lastName: evt.target.value})}/>) :
                     (this.state.lastName)
                   }/>
-                  <CardRow alternate nohover title={"Phone"} extra={
-                    this.state.editPersonal ? (<input value={this.state.phone} onChange={(evt) => this.setState({phone: evt.target.value})}/>) :
-                    (this.state.phone)
-                  }/>
+                  <CardRow alternate nohover title={"Phone"} extra={ this.state.editPersonal ? (
+                      <input value={this.state.phone} placeholder={"Your Phone Number"} onChange={(evt) => this.setState({phone: evt.target.value})}/>) :
+                      (this.state.phone)
+                    }
+                  />
                 </div>
               </div>
               <div className="card">
@@ -124,27 +149,43 @@ class ProfilePage extends Component {
                   <span onClick={() => this.updateSettings("security")}>{this.state.editSecurity ? "DONE" : "EDIT"}</span>
                 </div>
                 <div className="card_body">
-                  {this.state.editSecurity && 
-                    <div className={"security_check " + (this.state.securityAuthorized ? "clear" : "")}>
+                  <CardRow alternate nohover title={"Email"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
+                    <input value={this.state.email} placeholder={"Your Email Address"} onChange={(evt) => this.setState({email: evt.target.value})}/>) :
+                    (this.state.email)
+                  }/>
+                  <CardRow alternate nohover title={"Username"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
+                    <input value={this.state.username} placeholder={"Your Username"} onChange={(evt) => this.setState({username: evt.target.value})}/>) :
+                    (this.state.username)
+                  }/>
+                  <CardRow alternate nohover title={"Password"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
+                    <input type="password" value={this.state.newPassword} placeholder={"Your New Password"} onChange={(evt) => this.setState({newPassword: evt.target.value})}/>) :
+                    ("************")
+                  }/>
+                  {this.state.editSecurity && this.props.securityAuthorized &&
+                    <CardRow alternate nohover title={"Confirm Password"} style={{animation:"grow 400ms linear"}} extra={this.props.securityAuthorized ? (
+                      <input type="password" value={this.state.newPasswordConfirm} placeholder={"Your New Password"} onChange={(evt) => this.setState({newPasswordConfirm: evt.target.value})}/>):
+                      ("************")
+                    }/>
+                  }
+                  {this.state.editSecurity && !this.props.authorizing && !this.props.securityAuthorized &&
+                    <div className={"security_check in"}>
                       <div style={{width:"100%"}}>
                         <label>Your password is required to edit these settings</label>
-                        <input type="password" value={this.state.oldPassword} onChange={(evt) => this.setState({oldPassword: evt.target.value})}/>
-                        <div style={{marginTop:".5rem", cursor:"pointer"}} onClick={() => this.setState({securityAuthorized: true})}>CONTINUE</div>
+                        <input type="password" value={this.state.oldPassword} 
+                          placeholder={"Password"} 
+                          onChange={(evt) => this.setState({oldPassword: evt.target.value})} 
+                          onKeyPress={this._keyPress.bind(this)}/>
+                        <div style={{marginTop:'1rem', fontWeight:'600', cursor:'pointer'}} 
+                          disabled={!this.state.oldPassword}
+                          onClick={() => this.props.validatePassword(this.props.token, this.state.oldPassword)}>CONTINUE</div>
                       </div>
                     </div>
                   }
-                  <CardRow alternate nohover title={"Email"} extra={
-                    this.state.editSecurity && this.state.securityAuthorized ? (<input value={this.state.email} onChange={(evt) => this.setState({email: evt.target.value})}/>) :
-                    (this.state.email)
-                  }/>
-                  <CardRow alternate nohover title={"Username"} extra={
-                    this.state.editSecurity && this.state.securityAuthorized ? (<input value={this.state.username} onChange={(evt) => this.setState({username: evt.target.value})}/>) :
-                    (this.state.username)
-                  }/>
-                  <CardRow alternate nohover title={"Password"} extra={
-                    this.state.editSecurity && this.state.securityAuthorized ? (<input type="password" value={this.state.newPassword} onChange={(evt) => this.setState({newPassword: evt.target.value})}/>) :
-                    ("************")
-                  }/>
+                  {(this.props.authorizing || this.props.securityAuthorized) &&
+                    <div className={"security_check out " + (this.props.securityAuthorized ? "clear" : "")}>
+                      {this.props.authorizing && <Loader/>}
+                    </div>
+                  }
                 </div>
               </div>
               <div className="button se_button" onClick={()=>this.props.requestLogout(this.props.token)} style={{marginTop:'4rem'}}>

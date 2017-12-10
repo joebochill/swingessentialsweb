@@ -343,6 +343,11 @@ input {
   font-size: 1.1rem;
   outline: 0;
 }
+input::placeholder{
+  overflow: visible;
+  font-style: italic;
+  opacity: 0.2;
+}
 .validation_error{
   display: block;
 

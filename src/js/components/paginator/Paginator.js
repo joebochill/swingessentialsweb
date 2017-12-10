@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../../../css/Paginator.css';
+import '../../../css/Buttons.css';
 
 class Paginator extends Component {
   render() {
@@ -11,7 +12,7 @@ class Paginator extends Component {
     return (
         <div className="paginator">
           <span 
-            className="nav" 
+            className="flatButton" 
             onClick={() => this.props.navigate(this.props.current-1)}
             disabled={this.props.current === 1}>
             Prev
@@ -27,7 +28,7 @@ class Paginator extends Component {
             {this.props.pages > 9 && <span className="extra">{`${this.props.current} of ${this.props.pages}`}</span>}
           </div>
           <span 
-            className="nav" 
+            className="flatButton" 
             onClick={() => this.props.navigate(this.props.current+1)}
             disabled={this.props.current === this.props.pages}>
             Next

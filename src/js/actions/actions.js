@@ -1,62 +1,32 @@
-export const LOCATION_CHANGE = '@@router/LOCATION_CHANGE';
-export const TOKEN_FROM_STORAGE = "TOKEN_FROM_STORAGE";
-export const LOGIN_SUCCESS =        'LOGIN_SUCCESS';
-export const LOGIN_FAIL =           'LOGIN_FAIL';
-export const LOGOUT_SUCCESS =       'LOGOUT_SUCCESS';
-export const LOGOUT_FAIL =          'LOGOUT_FAIL';
-export const PUT_USER_DATA_SUCCESS =  'PUT_USER_DATA_SUCCESS';
-export const PUT_USER_DATA_FAIL =     'PUT_USER_DATA_FAIL';
-export const GET_USER_DATA_SUCCESS =  'GET_USER_DATA_SUCCESS';
-export const GET_USER_DATA_FAIL =     'GET_USER_DATA_FAIL';
-export const GET_LESSONS =          'GET_LESSONS';
-export const GET_LESSONS_SUCCESS =  'GET_LESSONS_SUCCESS';
-export const GET_LESSONS_FAIL =     'GET_LESSONS_FAIL';
-export const GET_TIPS =          'GET_TIPS';
-export const GET_TIPS_SUCCESS =  'GET_TIPS_SUCCESS';
-export const GET_TIPS_FAIL =     'GET_TIPS_FAIL';
-export const GET_BLOGS =          'GET_BLOGS';
-export const GET_BLOGS_SUCCESS =  'GET_BLOGS_SUCCESS';
-export const GET_BLOGS_FAIL =     'GET_BLOGS_FAIL';
-export const GET_CREDITS_SUCCESS =  'GET_CREDITS_SUCCESS';
-export const GET_CREDITS_FAIL =     'GET_CREDITS_FAIL';
-export const GET_SETTINGS_SUCCESS =  'GET_SETTINGS_SUCCESS';
-export const GET_SETTINGS_FAIL =     'GET_SETTINGS_FAIL';
-export const GET_PACKAGES_SUCCESS =  'GET_PACKAGES_SUCCESS';
-export const GET_PACKAGES_FAIL =     'GET_PACKAGES_FAIL';
-export const OPEN_MENU =     'OPEN_MENU'; 
-export const CLOSE_MENU =     'CLOSE_MENU'; 
-export const OPEN_DRAWER =     'OPEN_DRAWER'; 
-export const CLOSE_DRAWER =     'CLOSE_DRAWER'; 
-export const SET_TARGET_ROUTE = 'SET_TARGET_ROUTE';
+/* Constants */
+    export const LOCATION_CHANGE = '@@router/LOCATION_CHANGE';
+    export const TOKEN_FROM_STORAGE = "TOKEN_FROM_STORAGE";
+    export const SET_TARGET_ROUTE = 'SET_TARGET_ROUTE';
 
+    export const LOGIN = {SUCCESS: 'LOGIN_SUCCESS', FAIL: 'LOGIN_FAIL'};
+    export const LOGOUT = {SUCCESS: 'LOGOUT_SUCCESS', FAIL: 'LOGOUT_FAIL'};
+    export const VALIDATE_PASSWORD = {REQUEST: 'VALIDATE_PASSWORD', SUCCESS: 'VALIDATE_PASSWORD_SUCCESS', FAIL: 'VALIDATE_PASSWORD_FAIL'};
+    export const UPDATE_CREDENTIALS = {REQUEST: 'UPDATE_CREDENTIALS', SUCCESS: 'UPDATE_CREDENTIALS_SUCCESS', FAIL: 'UPDATE_CREDENTIALS_FAIL'};
+    
+    export const PUT_USER_DATA = {SUCCESS: 'PUT_USER_DATA_SUCCESS', FAIL: 'PUT_USER_DATA_FAIL'};
+    export const GET_USER_DATA = {SUCCESS: 'GET_USER_DATA_SUCCESS', FAIL: 'GET_USER_DATA_FAIL'};
+    export const GET_SETTINGS = {SUCCESS: 'GET_SETTINGS_SUCCESS', FAIL: 'GET_SETTINGS_FAIL'};
+    export const GET_LESSONS = {REQUEST: 'GET_LESSONS', SUCCESS: 'GET_LESSONS_SUCCESS', FAIL: 'GET_LESSONS_FAIL'};
+    export const GET_TIPS = {REQUEST: 'GET_TIPS', SUCCESS: 'GET_TIPS_SUCCESS', FAIL: 'GET_TIPS_FAIL'};
+    export const GET_BLOGS = {REQUEST: 'GET_BLOGS', SUCCESS: 'GET_BLOGS_SUCCESS', FAIL: 'GET_BLOGS_FAIL'};
+    export const GET_CREDITS = {SUCCESS: 'GET_CREDITS_SUCCESS', FAIL: 'GET_CREDITS_FAIL'};
+    export const GET_PACKAGES = {SUCCESS: 'GET_PACKAGES_SUCCESS', FAIL: 'GET_PACKAGES_FAIL'};
+   
+    export const MENU = {OPEN: 'OPEN_MENU', CLOSE: 'CLOSE_MENU'}; 
+    export const DRAWER = {OPEN: 'OPEN_DRAWER', CLOSE: 'CLOSE_DRAWER'}; 
+    
+
+/* Base URL for fetch commands */    
 const baseUrl = 'http://www.josephpboyle.com/api/myapi.php/';
 
-export function openNavMenu(){
-    return{
-        type: OPEN_MENU
-    }
-}
-export function openNavDrawer(){
-    return{
-        type: OPEN_DRAWER
-    }
-}
-export function closeNavMenu(){
-    return{
-        type: CLOSE_MENU
-    }
-}
-export function closeNavDrawer(){
-    return{
-        type: CLOSE_DRAWER
-    }
-}
-export function setTargetRoute(route){
-    return{
-        type: SET_TARGET_ROUTE,
-        route: route
-    }
-}
+
+/* Database fetch actions */
+
 export function requestDataFromToken(token){
     return (dispatch) => {
         dispatch({type:TOKEN_FROM_STORAGE, token:token});
@@ -67,6 +37,7 @@ export function requestDataFromToken(token){
         //.then(() => dispatch(getPackages(token)));
     }
 }
+
 export function requestLogin(userCredentials){
     return (dispatch) => {
         return fetch(baseUrl+'login', { 
@@ -79,20 +50,22 @@ export function requestLogin(userCredentials){
                 case 200:
                     const token = response.headers.get('Token');
                     response.json()
-                    .then((json) => dispatch(loginSuccess({...json,token:token})))
+                    .then((json) => dispatch(success(LOGIN.SUCCESS, {...json,token:token})))
                     .then(() => dispatch(getLessons(token)))
                     //.then(() => dispatch(getCredits(token)))
                     .then(() => dispatch(getSettings(token)));
                     //.then(() => dispatch(getPackages(token)));
                     break;
                 default:
-                    dispatch(loginFailure(response));
+                    //dispatch(loginFailure(response));
+                    dispatch(failure(LOGIN.FAIL, response));
                     break;
             }
         })
         .catch((error) => console.error(error));
     }
 }
+
 export function requestLogout(token){
     return (dispatch) => {
         return fetch(baseUrl+'logout', { 
@@ -103,16 +76,41 @@ export function requestLogout(token){
         .then((response) => {
             switch(response.status) {
                 case 200:
-                    dispatch(logoutSuccess());
+                    dispatch(success(LOGOUT.SUCCESS));
                     break;
                 default:
-                    dispatch(logoutFailure(response));
+                    dispatch(failure(LOGOUT.FAIL, response));
                     break;
             }
         })
         .catch((error) => console.error(error));
     }
 }
+
+export function validatePassword(token, pass){
+    return (dispatch) => {
+        dispatch({type: VALIDATE_PASSWORD.REQUEST});
+
+        return fetch(baseUrl+'verify',{
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({password:window.btoa(pass)})
+        })
+        .then((response) => {
+            switch(response.status){
+                case 200:
+                    dispatch(success(VALIDATE_PASSWORD.SUCCESS));
+                    break;
+                default:
+                    dispatch(failure(VALIDATE_PASSWORD.FAIL, response));
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
 export function getUserData(token){
     return (dispatch) => {
         return fetch(baseUrl+'user', { 
@@ -124,16 +122,17 @@ export function getUserData(token){
             switch(response.status) {
                 case 200:
                     response.json()
-                    .then((json) => dispatch(getUserDataSuccess(json)));
+                    .then((json) => dispatch(success(GET_USER_DATA.SUCCESS, json)));
                     break;
                 default:
-                    dispatch(getUserDataFailure(response));
+                    dispatch(failure(GET_USER_DATA.FAIL, response));
                     break;
             }
         })
         .catch((error) => console.error(error));
     }
 }
+
 export function putUserData(data, token){
     return (dispatch) => {
         return fetch(baseUrl+'details', { 
@@ -146,27 +145,50 @@ export function putUserData(data, token){
         .then((response) => {
             switch(response.status) {
                 case 200:
-                    dispatch(putUserDataSuccess());
+                    dispatch(success(PUT_USER_DATA.SUCCESS));
                     dispatch(getUserData(token));
-                    // return (dispatch) => {
-                    //     return dispatch(putUserDataSuccess(response))
-                    //         .then(()=> dispatch(getUserData(token)))
-                    // };
                     break;
                 default:
-                    console.log('failure');
-                    console.log(response.headers.get('Error'));
-                    dispatch(putUserDataFailure(response))
-                    .then( ()=> dispatch(getUserData(token)));
+                    dispatch(failure(PUT_USER_DATA.FAIL, response));
+                    dispatch(getUserData(token));
                     break;
             }
         })
         .catch((error) => console.error(error));
     }
 }
+
+export function updateUserCredentials(data, token){
+    return (dispatch) => {
+        dispatch({type: UPDATE_CREDENTIALS.REQUEST});
+        if(Object.keys(data).length < 1){return;}
+        return fetch(baseUrl+'credentials', { 
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(data)
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    dispatch(success(UPDATE_CREDENTIALS.SUCCESS));
+                    dispatch(getUserData(token));
+                    //TODO: we will get a new token here
+                    break;
+                default:
+                    dispatch(failure(UPDATE_CREDENTIALS.FAIL, response));
+                    dispatch(getUserData(token));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
 export function getLessons(token){
     return (dispatch) => {
-        dispatch({type: GET_LESSONS});
+        dispatch({type: GET_LESSONS.REQUEST});
         return fetch(baseUrl+'lessons', { 
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -176,55 +198,58 @@ export function getLessons(token){
             switch(response.status) {
                 case 200:
                     response.json()
-                    .then((json) => dispatch(getLessonsSuccess(json)))
+                    .then((json) => dispatch(success(GET_LESSONS.SUCCESS, json)))
                     .then((response) => localStorage.setItem('lessons',JSON.stringify(response.data)));
                     break;
                 default:
-                    dispatch(getLessonsFailure(response));
+                    dispatch(failure(GET_LESSONS.FAIL, response));
                     break;
             }
         })
         .catch((error) => console.error(error));
     }
 }
+
 export function getTips(){
     return (dispatch) => {
-        dispatch({type: GET_TIPS});
+        dispatch({type: GET_TIPS.REQUEST});
         return fetch(baseUrl+'tips')
         .then((response) => {
             switch(response.status) {
                 case 200:
                     response.json()
-                    .then((json) => dispatch(getTipsSuccess(json)))
+                    .then((json) => dispatch(success(GET_TIPS.SUCCESS, json)))
                     .then((response) => localStorage.setItem('tips',JSON.stringify(response.data)));
                     break;
                 default:
-                    dispatch(getTipsFailure(response));
+                    dispatch(failure(GET_TIPS.FAIL, response));
                     break;
             }
         })
         .catch((error) => console.error(error));
     }
 }
+
 export function getBlogs(){
     return (dispatch) => {
-        dispatch({type: GET_BLOGS});
+        dispatch({type: GET_BLOGS.REQUEST});
         return fetch(baseUrl+'blogs')
         .then((response) => {
             switch(response.status) {
                 case 200:
                     response.json()
-                    .then((json) => dispatch(getBlogsSuccess(json)))
+                    .then((json) => dispatch(success(GET_BLOGS.SUCCESS, json)))
                     .then((response) => localStorage.setItem('blogs',JSON.stringify(response.data)));
                     break;
                 default:
-                    dispatch(getBlogsFailure(response));
+                    dispatch(failure(GET_BLOGS.FAIL, response));
                     break;
             }
         })
         .catch((error) => console.error(error));
     }
 }
+
 export function getCredits(token){
     return (dispatch) => {
         return fetch(baseUrl+'credits', { 
@@ -236,16 +261,17 @@ export function getCredits(token){
             switch(response.status) {
                 case 200:
                     response.json()
-                    .then((json) => dispatch(getCreditsSuccess(json)));
+                    .then((json) => dispatch(success(GET_CREDITS.SUCCESS, json)));
                     break;
                 default:
-                    dispatch(getCreditsFailure(response));
+                    dispatch(failure(GET_CREDITS.FAIL, response));
                     break;
             }
         })
         .catch((error) => console.error(error));
     }
 }
+
 export function getSettings(token){
     return (dispatch) => {
         return fetch(baseUrl+'settings', { 
@@ -257,16 +283,17 @@ export function getSettings(token){
             switch(response.status) {
                 case 200:
                     response.json()
-                    .then((json) => dispatch(getSettingsSuccess(json)));
+                    .then((json) => dispatch(success(GET_SETTINGS.SUCCESS, json)));
                     break;
                 default:
-                    dispatch(getSettingsFailure(response));
+                    dispatch(failure(GET_SETTINGS.FAIL, response));
                     break;
             }
         })
         .catch((error) => console.error(error));
     }
 }
+
 export function getPackages(token){
     return (dispatch) => {
         return fetch(baseUrl+'packages', { 
@@ -278,10 +305,10 @@ export function getPackages(token){
             switch(response.status) {
                 case 200:
                     response.json()
-                    .then((json) => dispatch(getPackagesSuccess(json)));
+                    .then((json) => dispatch(success(GET_PACKAGES.SUCCESS, json)));
                     break;
                 default:
-                    dispatch(getPackagesFailure(response));
+                    dispatch(failure(GET_PACKAGES.FAIL, response));
                     break;
             }
         })
@@ -292,132 +319,45 @@ export function getPackages(token){
 
 /* Success/Failure Actions for the above Request types */
 
-function loginSuccess(data){
+function failure(type, response){
     return{
-        type: LOGIN_SUCCESS,
+        type: type,
+        response: response,
+        error: response.headers.get('Error')
+    }
+}
+function success(type, data=null){
+    return{
+        type: type,
         data: data
     }
 }
-function loginFailure(response){
+
+/* Navigation and Menu Actions */
+
+export function openNavMenu(){
     return{
-        type: LOGIN_FAIL,
-        response: response.status,
-        error: response.headers.get('Error')
+        type: MENU.OPEN
     }
 }
-function logoutSuccess(){
+export function openNavDrawer(){
     return{
-        type: LOGOUT_SUCCESS
+        type: DRAWER.OPEN
     }
 }
-function logoutFailure(response){
+export function closeNavMenu(){
     return{
-        type: LOGOUT_FAIL,
-        response: response.status,
-        error: response.headers.get('Error')
+        type: MENU.CLOSE
     }
 }
-function getLessonsSuccess(data){
+export function closeNavDrawer(){
     return{
-        type: GET_LESSONS_SUCCESS,
-        data: data
+        type: DRAWER.CLOSE
     }
 }
-function getLessonsFailure(response){
+export function setTargetRoute(route){
     return{
-        type: GET_LESSONS_FAIL,
-        response: response.status,
-        error: response.headers.get('Error')
-    }
-}
-function getTipsSuccess(data){
-    return{
-        type: GET_TIPS_SUCCESS,
-        data: data
-    }
-}
-function getTipsFailure(response){
-    return{
-        type: GET_TIPS_FAIL,
-        response: response.status,
-        error: response.headers.get('Error')
-    }
-}
-function getBlogsSuccess(data){
-    return{
-        type: GET_BLOGS_SUCCESS,
-        data: data
-    }
-}
-function getBlogsFailure(response){
-    return{
-        type: GET_BLOGS_FAIL,
-        response: response.status,
-        error: response.headers.get('Error')
-    }
-}
-function getUserDataSuccess(data){
-    return{
-        type: GET_USER_DATA_SUCCESS,
-        data: data
-    }
-}
-function getUserDataFailure(response){
-    return{
-        type: GET_USER_DATA_FAIL,
-        response: response.status,
-        error: response.headers.get('Error')
-    }
-}
-function putUserDataSuccess(response){
-    return{
-        type: PUT_USER_DATA_SUCCESS,
-        response: response
-    }
-}
-function putUserDataFailure(response){
-    return{
-        type: PUT_USER_DATA_FAIL,
-        response: response.status,
-        error: response.headers.get('Error')
-    }
-}
-function getCreditsSuccess(data){
-    return{
-        type: GET_CREDITS_SUCCESS,
-        data: data
-    }
-}
-function getCreditsFailure(response){
-    return{
-        type: GET_CREDITS_FAIL,
-        response: response.status,
-        error: response.headers.get('Error')
-    }
-}
-function getSettingsSuccess(data){
-    return{
-        type: GET_SETTINGS_SUCCESS,
-        data: data
-    }
-}
-function getSettingsFailure(response){
-    return{
-        type: GET_SETTINGS_FAIL,
-        response: response.status,
-        error: response.headers.get('Error')
-    }
-}
-function getPackagesSuccess(data){
-    return{
-        type: GET_PACKAGES_SUCCESS,
-        data: data
-    }
-}
-function getPackagesFailure(response){
-    return{
-        type: GET_PACKAGES_FAIL,
-        response: response.status,
-        error: response.headers.get('Error')
+        type: SET_TARGET_ROUTE,
+        route: route
     }
 }

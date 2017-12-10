@@ -11,7 +11,7 @@ class Datestamp extends Component {
 
   _getDatePieces(){
     let parts = this.props.datestamp.split('-');
-    const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+    const months = ['jan','feb','mar','apr','may','june','july','aug','sep','oct','nov','dec'];
     return {month:months[parseInt(parts[1],10)-1], day:parts[2], year:parts[0]};
   }
 
