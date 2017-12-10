@@ -1,11 +1,11 @@
 .spinner {
-    margin: 2rem 0px 2rem 0px;
+    margin: 2rem 0rem 2rem 0rem;
     text-align: inherit;
 }
 .spinner.float{
     position:absolute;
-    right:0px;
-    margin:0px;
+    right: 0rem;
+    margin: 0rem;
 }
 .spinner > div {
     display: inline-block;

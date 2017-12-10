@@ -38,10 +38,10 @@
   }
   .datestamp_divider{
     position: absolute;
-    left: 0px;
+    left: 0rem;
     top: 50%;
 
     width: 100%;
     
-    border-bottom: 1px solid rgba(35, 31, 97, .20);
+    border-bottom: .0625rem solid rgba(35, 31, 97, .20);
 }

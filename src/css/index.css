@@ -17,7 +17,6 @@
     margin: 0;
     padding: 0;
     border: 0;
-    font-size: 100%;
     font: inherit;
     vertical-align: baseline;
   }
@@ -45,7 +44,9 @@
     border-spacing: 0;
   }
 /* END CSS RESET */
-
+html{
+  font-size: 100%;
+}
 *{
   box-sizing: border-box;
 }
@@ -100,12 +101,12 @@ body {
     align-items: center;
     
     width: 100%;
-    max-width: 1024px;
+    max-width: 64rem;
     margin: auto;
     padding: 2rem 1rem;
     
-    border: 0px solid rgba(0,0,0,0.15);
-    border-width: 0px 1px 0px 1px;
+    border: 0rem solid rgba(0,0,0,0.15);
+    border-width: 0rem 0.0625rem 0rem 0.0625rem;
     background-color: #ffffff;
     
     text-align: center;
@@ -120,7 +121,7 @@ body {
   }
   section p{
     width: 100%;
-    max-width: 615px;
+    max-width: 38.5rem;
     margin-top: 2rem;
     
     font-size: 1.1rem;
@@ -131,7 +132,7 @@ body {
     text-align: left;
   }
   section p:first-child{
-    margin-top: 0px;
+    margin-top: 0rem;
   }
   section a {
     font-weight: 700;
@@ -146,8 +147,8 @@ body {
 
     border-radius: 50%;
     background-image: url('../images/headshot.jpg');
-    background-position: -11px -30px;
     background-repeat: no-repeat;
+    background-size: cover;
   }
 
   /* Multi Column Layout*/
@@ -160,7 +161,7 @@ body {
       width: 100%;
     }
     .multi_col > div{
-      flex: 1 1 0px;
+      flex: 1 1 0rem;
       margin-top: 2rem;
     }
     .multi_col > div.button{
@@ -209,7 +210,7 @@ body {
     
     color: #ffffff;
     text-align: center;
-    text-shadow: 2px 2px 2px rgba(0,0,0,.75);
+    text-shadow:0.125rem 0.125rem 0.125rem rgba(0,0,0,.75);
     user-select: none;
   }
   .landing_image.large .page_title{
@@ -257,26 +258,26 @@ body {
 /* Buttons */
   .button{
     width: 100%;
-    height: 45px;
+    height: 2.8125rem;
     margin-top: 1rem;
 
     cursor: pointer;
   }
   .button.small{
-    width: 135px;
-    height: 40px;
+    width: 8.4375rem;
+    height: 2.5rem;
   }
   .apple_store{
-    width: 135px;
-    height: 40px;
+    width: 8.4375rem;
+    height: 2.5rem;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-image: url('../images/apple_store.svg');
   }
   .google_store{
-    width: 135px;
-    height: 40px;
+    width: 8.4375rem;
+    height: 2.5rem;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -290,8 +291,8 @@ body {
 
     margin-top: 1rem;
     
-    border: 2px solid #231f61;
-    border-radius: 5px;
+    border: 0.125rem solid #231f61;
+    border-radius: 0.3125rem;
     background-color: rgba(35,31,97,0.8);
     
     color: #ffffff;
@@ -310,10 +311,10 @@ body {
 /* End Buttons */
 .se_footer{
   align-items: center;
-  border-bottom: 1px solid rgba(0,0,0,0.15);
+  border-bottom: 0.0625rem solid rgba(0,0,0,0.15);
 }
 .se_footer p{
-  margin-top: 0px;
+  margin-top: 0rem;
   font-size: 0.9rem;
   user-select: none;
 }
@@ -332,13 +333,13 @@ label{
 }
 input {
   width: 100%;
-  height: 45px;
-  padding: 0px 1rem;
+  height: 2.8125rem;
+  padding: 0rem 1rem;
   
   background: white;
-  /* border: 1px solid #231f61; */
-  border: 1px solid rgba(35, 31, 97, .2);
-  box-shadow: 0px 1px 2px rgba(0,0,0,.15);
+  /* border: 0.0625rem solid #231f61; */
+  border: 0.0625rem solid rgba(35, 31, 97, .2);
+  box-shadow: 0rem 0.0625rem 0.125rem rgba(0,0,0,.15);
   
   color: #231f61;
   font-size: 1.1rem;
@@ -367,7 +368,7 @@ input::placeholder{
 }
 .structured_panel{
   width: 100%;
-  max-width: 450px;
+  max-width: 28.125rem;
 }
 .structured_panel h1 {
   margin-bottom: 2rem;
@@ -383,22 +384,22 @@ input::placeholder{
 /* End Form Elements */
 
 /* Media Queries */
-@media only screen and (max-width: 800px){
+@media only screen and (max-width: 50rem){
   .multi_col {
     display: block;
     width: auto;
   }
   .multi_col>div:not(:first-child){
-    margin-left: 0px;
+    margin-left: 0rem;
   }
   .multi_col > div.button{
     margin-top: 1rem;
   }
   input{
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 }
-@media only screen and (max-width: 600px){
+@media only screen and (max-width: 37.5rem){
   .page_title .hidden_break{
     display:inherit;
   }

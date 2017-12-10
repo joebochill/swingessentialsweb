@@ -16,6 +16,8 @@
     export const GET_BLOGS = {REQUEST: 'GET_BLOGS', SUCCESS: 'GET_BLOGS_SUCCESS', FAIL: 'GET_BLOGS_FAIL'};
     export const GET_CREDITS = {SUCCESS: 'GET_CREDITS_SUCCESS', FAIL: 'GET_CREDITS_FAIL'};
     export const GET_PACKAGES = {SUCCESS: 'GET_PACKAGES_SUCCESS', FAIL: 'GET_PACKAGES_FAIL'};
+
+    export const REDEEM_CREDIT = {REQUEST: 'REDEEM_CREDIT', SUCCESS: 'REDEEM_CREDIT_SUCCESS', FAIL: 'REDEEM_CREDIT_FAIL'};
    
     export const MENU = {OPEN: 'OPEN_MENU', CLOSE: 'CLOSE_MENU'}; 
     export const DRAWER = {OPEN: 'OPEN_DRAWER', CLOSE: 'CLOSE_DRAWER'}; 
@@ -190,6 +192,32 @@ export function updateUserCredentials(data, token){
     }
 }
 
+export function redeemCredit(type, data, token){
+    return (dispatch) => {
+        dispatch({type: REDEEM_CREDIT.REQUEST});
+        
+        return fetch(baseUrl+'redeem/'+type, { 
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({fo_swing:'test', dtl_swing:'test'})
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    dispatch(success(REDEEM_CREDIT.SUCCESS));
+                    dispatch(getLessons(token));
+                    break;
+                default:
+                    dispatch(failure(REDEEM_CREDIT.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
 export function getLessons(token){
     return (dispatch) => {
         dispatch({type: GET_LESSONS.REQUEST});
@@ -324,6 +352,7 @@ export function getPackages(token){
 /* Success/Failure Actions for the above Request types */
 
 function failure(type, response){
+    console.log(response.headers.get('Error'));
     return{
         type: type,
         response: response,

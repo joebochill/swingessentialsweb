@@ -32,9 +32,7 @@ class Drawer extends Component {
             {this.props.username && <span className="se_welcome">{"Welcome"+(this.props.fname?", "+this.props.fname+(this.props.lname?" " + this.props.lname.charAt(0):""):"")+"!"}</span>}
             <svg 
               onClick={()=>this.props.closeDrawer()} 
-              className="se_menu_button_icon" 
-              height="20px" 
-              width="20px">
+              className="se_menu_button_icon" viewBox="0 0 20 20">
                 <polygon points="17.9,3.7 16.3,2.1 10,8.4 3.7,2.1 2.1,3.7 8.4,10 2.1,16.3 3.7,17.9 10,11.6 16.3,17.9 17.9,16.3 11.6,10 "/>
             </svg>
           </div>

@@ -102,7 +102,7 @@ class LessonResponsePage extends Component {
     if(!this.lesson){
       return (
         <section className="left">
-          <div style={{marginTop:'48px'}}>
+          <div style={{marginTop:'3rem'}}>
               <p>Loading Lessons...</p>
               <Loader/>
           </div>

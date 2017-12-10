@@ -13,8 +13,8 @@
   padding: 0 1rem;
 
   background: rgba(35,31,97,.8);
-  border: 0px solid rgba(0,0,0,0.15);
-  border-width: 1px 1px 0px 1px;
+  border: 0rem solid rgba(0,0,0,0.15);
+  border-width: 0.0625rem 0.0625rem 0rem 0.0625rem;
   overflow: hidden;
   
   color: white;
@@ -23,7 +23,7 @@
   user-select: none;
 }
 .card_header > :first-child{
-  flex: 1 1 0px;
+  flex: 1 1 0rem;
 }
 .card_header > :last-child{
   flex: 0 0 auto;
@@ -36,7 +36,7 @@
   position: relative;
 
   overflow: hidden;
-  border: 1px solid rgba(0,0,0,0.15);
+  border: 0.0625rem solid rgba(0,0,0,0.15);
 }
 
 .card_row {
@@ -49,7 +49,7 @@
   padding: 0 1rem;
 
   background: rgba(242,242,242,.1);/*#f2f2f2;*/
-  border-bottom: 1px solid rgba(0,0,0,0.15);
+  border-bottom: 0.0625rem solid rgba(0,0,0,0.15);
 
   color: #231f61;
   fill: #231f61;
@@ -66,14 +66,14 @@
   border-bottom: none;
 }
 /* .card_row.slide{
-  margin-left: 0px;
+  margin-left: 0rem;
   animation: slideLeft 200ms ease-in-out;
 } */
 section:nth-child(even) .card_row{
   background: white;
 }
 .card_row:first-of-type{
-  border-width: 1px;
+  border-width: 0.0625rem;
 }
 .card_row[disabled]{
   color: rgba(35, 31, 97, .3);
@@ -89,7 +89,7 @@ section:nth-child(even) .card_row:not(.nohover):hover{
 }
 .card_title{
   /* flex: 0 0 auto; */
-  flex: 2 2 0px;
+  flex: 1 1 0rem;
   
   margin-right: 1rem;
   overflow: hidden;
@@ -103,7 +103,7 @@ section:nth-child(even) .card_row:not(.nohover):hover{
   font-weight: 600;
 }
 .card_extra{
-  flex: 5 5 0px;
+  flex: 2 2 0rem;
   /* display: flex;
   flex-direction: row;
   align-items: center;
@@ -137,7 +137,7 @@ section:nth-child(even) .card_row:not(.nohover):hover{
   padding: 0 .5rem;
 
   /* background: rgba(35,31,97,.05); */
-  /* border: 1px solid rgba(35, 31, 97, .2); */
+  /* border: 0.0625rem solid rgba(35, 31, 97, .2); */
 
   text-align: right;
 }
@@ -158,7 +158,7 @@ section:nth-child(even) .card_row:not(.nohover):hover{
   padding: 1rem;
 
   background: #fefefe;
-  box-shadow: 0px 1px 2px rgba(0,0,0,.15);
+  box-shadow: 0rem 0.0625rem 0.125rem rgba(0,0,0,.15);
 }
 .security_check.in{
   animation: slideDown 400ms linear;
@@ -173,12 +173,12 @@ section:nth-child(even) .card_row:not(.nohover):hover{
     top:-100%;
   }
   100% {
-    top: 0px;
+    top: 0rem;
   }
 }
 @keyframes slideOutBottom { 
   0% {
-    top:0px;
+    top: 0rem;
   }
   100% {
     top: 100%;
@@ -194,10 +194,12 @@ section:nth-child(even) .card_row:not(.nohover):hover{
 }
 
 
-@media only screen and (max-width: 800px){
+@media only screen and (max-width: 50rem){
   .card,
-  .card_extra > input,
   label{
     font-size: 0.9rem;
+  }
+  .card_extra > input{
+    font-size: 1rem;
   }
 }

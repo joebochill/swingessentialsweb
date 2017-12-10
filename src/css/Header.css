@@ -5,27 +5,27 @@
 
     position: fixed;
     z-index: 1000;
-    top: 0px;
+    top: 0rem;
     left: 50%;
     transform: translateX(-50%);
 
-    height: 48px;
+    height: 3rem;
     width: 100%;
-    max-width: 1024px;
-    padding: 0px 1rem;
+    max-width: 64rem;
+    padding: 0rem 1rem;
 
     background: rgba(255,255,255,.97);
-    border-bottom: 1px solid rgba(0,0,0,0.15);
-    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.25);
+    border-bottom: 0.0625rem solid rgba(0,0,0,0.15);
+    box-shadow: 0rem 0rem 1.25rem 0rem rgba(0,0,0,0.25);
 }
 /* Horizontal Menu List */
     .se_menu_list{
         display: flex;
-        flex: 1 1 0px;
+        flex: 1 1 0rem;
         justify-content: flex-end;
 
         height: 100%;        
-        padding: 0px;
+        padding: 0rem;
     }
     .se_menu_list > li{
         flex: 0 0 auto;
@@ -42,7 +42,7 @@
         position: relative;
         display: block;
         height: 100%;
-        padding: 1rem 0px;
+        padding: 1rem 0rem;
         
         color: #606060;
         text-decoration: none;
@@ -58,7 +58,7 @@
         }
         .se_menu_list li.se_drop_menu>a.active::after{
             border-color: #231f61;
-            border-width: 2px 2px 0px 0px;
+            border-width: 0.125rem 0.125rem 0rem 0rem;
         }
         .se_menu_list li:not(.se_drop_menu) > a::before,
         .se_menu_list li:not(.se_drop_menu) > a.active::before{
@@ -86,53 +86,61 @@
     /* End Hover and Active States */
     
     /* Dropdown Header Menu */
+        .se_menu_list li.se_drop_menu{
+            max-width: 8rem;
+        }
         .se_menu_list li.se_drop_menu > a{
             padding-left: 0.7rem;
+            
+            overflow: hidden;
+            
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .se_menu_list li.se_drop_menu > a::after{
             content: '';
             position: absolute;
-            left: 0px;
-            top: calc(50% - .25rem);
+            left: 0.125rem;
+            top: 50%;
             
             height: 0.3rem;
             width: 0.3rem;
             
-            border-width: 1px 1px 0px 0px;
+            border-width: 0.0625rem 0.0625rem 0rem 0rem;
             border-style: solid;
             border-color: #606060;
             
-            transform: rotate(135deg);
+            transform: translateY(-100%) rotate(135deg);
             transition: transform 200ms ease-in-out;
         }
         .se_menu_list li.se_drop_menu:hover > a::after{
-            border-width: 2px 2px 0px 0px;
+            border-width: 0.125rem 0.125rem 0rem 0rem;
             border-color: #231f61;
         }
         .se_menu_list li.se_drop_menu.open > a::after{
-            transform: rotate(315deg);
+            transform: translateY(-50%) rotate(315deg);
         }
 
         /* The Dropdown Body */
         .se_account_menu{
             position: absolute;
             right: -1rem;
-            top: calc(100% + 1px);
+            top: calc(100% + 0.0625rem);
             
             width: auto;
-            min-width: 115px;
-            height: 144px;
+            min-width: 7.5rem;
+            height: 9rem;
 
             background: rgba(255,255,255,.95);
-            border: 0px solid rgba(0,0,0,0.15);
-            border-width: 0px 1px 0px 1px;
+            border: 0rem solid rgba(0,0,0,0.15);
+            border-width: 0rem 0.0625rem 0rem 0.0625rem;
             overflow: hidden;
             
             text-align: right;
             transition: height 200ms ease-in-out;
         }
         .se_account_menu.closed{
-            height: 0px;
+            height: 0rem;
         }
         .se_account_menu > .se_menu_panel_links > a{
             font-size: 0.9rem;
@@ -145,8 +153,8 @@
     .se_menu_overlay{
         display: block;
         position: absolute;
-        top: 0px;
-        right: 0px;
+        top: 0rem;
+        right: 0rem;
 
         height: 100vh;
         width: 100vw;
@@ -166,15 +174,15 @@
         align-items: stretch;
         
         position: absolute;
-        top: 0px;
-        right: 0px;
+        top: 0rem;
+        right: 0rem;
         width: 90%;
-        max-width: 300px;
+        max-width: 19rem;
         height: 100vh;
 
         opacity: 1;
         background: #f2f2f2;
-        box-shadow: -2px 0px 5px rgba(0,0,0,.15);
+        box-shadow: -0.125rem 0rem 0.3125rem rgba(0,0,0,.15);
         transition: all 300ms ease-in-out;
     }
     .se_menu_panel.closed{
@@ -187,14 +195,14 @@
         align-items: center;
         justify-content: flex-end;
 
-        height: 48px;
-        padding: 0px 1rem 0px 0px;
+        height: 3rem;
+        padding: 0rem 1rem 0rem 0rem;
 
         background-color: rgba(35, 31, 97, .8);
-        border-bottom: 1px solid rgba(0,0,0,0.15);
+        border-bottom: 0.0625rem solid rgba(0,0,0,0.15);
     }
     .se_menu_bar .se_welcome{
-        flex: 1 1 0px;
+        flex: 1 1 0rem;
         
         overflow: hidden;
         white-space: nowrap;
@@ -202,21 +210,21 @@
     }
     
     .se_menu_panel_links{
-        flex: 1 1 0px;
+        flex: 1 1 0rem;
         overflow-y: auto;
     }
     .se_menu_panel_links > a,
     .se_welcome{
         display: block;
 
-        height: 48px;
-        padding: 0px 1rem;
+        height: 3rem;
+        padding: 0rem 1rem;
         
-        border-bottom: 1px solid rgba(0,0,0,0.15);
+        border-bottom: 0.0625rem solid rgba(0,0,0,0.15);
         
         color: #606060;
         font-size: 1.1rem;
-        line-height: 48px;
+        line-height: 3rem;
         text-decoration: none;
 
         cursor: pointer;
@@ -244,6 +252,11 @@
 }
 .se_menu_button_icon{
     flex: 0 0 auto;
+    display: block;
+
+    height: 1.25rem;
+    width: 1.25rem;
+    
     cursor: pointer;
     fill: #606060;
     transform: rotate(0deg);
@@ -262,7 +275,7 @@
 /* End Menu/Close Button */
 
 
-@media only screen and (max-width: 800px){
+@media only screen and (max-width: 50rem){
     .se_menu_list{
         display: none;
     }

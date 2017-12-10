@@ -77,7 +77,7 @@ class Header extends Component {
   render() {
     return (
       <header className="se_header" ref={(ref)=>this.ref=ref}>
-        <img src={se_logo} height="48" alt="se_logo"/>
+        <img src={se_logo} alt="se_logo" style={{height:'3rem'}}/>
         <ul className="se_menu_list">
           <li><NavLink to='/' exact>Home</NavLink></li>
           <li><NavLink to='/our-pro/'>Meet Our Pro</NavLink></li>
@@ -107,9 +107,7 @@ class Header extends Component {
         <div className="se_menu_button">
           <svg 
             onClick={this.props.drawerOpen ? ()=>this.props.closeDrawer() : ()=>this.props.openDrawer()} 
-            className="se_menu_button_icon" 
-            height="20px" 
-            width="20px">
+            className="se_menu_button_icon" viewBox="0 0 20 20">
             <path d="M0,16.7h20v-2.2H0V16.7z M0,11.1h20V8.9H0V11.1z M0,3.3v2.2h20V3.3H0z"/>
           </svg>
           <div 

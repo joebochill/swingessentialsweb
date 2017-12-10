@@ -42,7 +42,7 @@ class CardRow extends Component {
         }
         {!this.props.icon && this.props.go && 
           <div className="card_go">
-            <svg height="20px" width="9.98px">
+            <svg viewBox="0 0 20 20" style={{height:'1.25rem',width:'.62375rem'}}>
               <path d="M9.89,9.7,4.07,0H0L6,10,0,20H4.07l5.82-9.7A.59.59,0,0,0,9.89,9.7Z"/>
             </svg>
           </div>

@@ -5,7 +5,7 @@ import {replace} from 'react-router-redux';
 //import Loader from '../loader/Loader.js';
 import Placeholder from '../rows/Placeholder.js';
 import Footer from '../footer/Footer.js';
-import {getLessons, setTargetRoute} from '../../actions/actions.js';
+import {getLessons, setTargetRoute, redeemCredit} from '../../actions/actions.js';
 
 import '../../../css/Cards.css';
 
@@ -19,7 +19,8 @@ var mapDispatchToProps = function(dispatch){
   return {
     goToSignIn: () => {dispatch(replace('/signin'));},
     getLessons: (token) => {dispatch(getLessons(token))},
-    setTargetRoute: (route) => {dispatch(setTargetRoute(route))}
+    setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
+    redeemCredit: (type, data, token) => {dispatch(redeemCredit(type, data, token))}
   }
 };
 
@@ -86,6 +87,13 @@ class LessonsPage extends Component {
                 </div>
               </div>
             </div>
+          </section>
+          <section>
+          <div className="button se_button" 
+                onClick={()=>this.props.redeemCredit('single', null, this.props.token)}
+          >
+            <span>REDEEM</span>
+          </div>
           </section>
           {(!loading && !this.props.lessons.closed.length && !this.props.lessons.pending.length) && 
             <section>

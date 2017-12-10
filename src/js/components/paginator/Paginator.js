@@ -14,7 +14,7 @@ class Paginator extends Component {
           <span 
             className="flatButton" 
             onClick={() => this.props.navigate(this.props.current-1)}
-            disabled={this.props.current === 1}>
+            disabled={!this.props.current || this.props.current === 1}>
             Prev
           </span>
           <div className="pages">
@@ -30,7 +30,7 @@ class Paginator extends Component {
           <span 
             className="flatButton" 
             onClick={() => this.props.navigate(this.props.current+1)}
-            disabled={this.props.current === this.props.pages}>
+            disabled={!this.props.current || !this.props.pages || this.props.current === this.props.pages}>
             Next
           </span>
         </div>
