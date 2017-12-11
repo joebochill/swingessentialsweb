@@ -52,8 +52,9 @@ class NineteenPage extends Component {
       this.start = validatePageNumber(nextProps.blogs, this.perPage, nextProps.match.params.page, this.props.goToBlogs);
     }
     if(nextProps.match.params.page !== this.props.match.params.page){
-      const top = 17*parseFloat(getComputedStyle(document.documentElement).fontSize);
-      window.scrollTo(0,top-48);
+      const header = 3*parseFloat(getComputedStyle(document.documentElement).fontSize);
+      const landing = document.getElementsByClassName("landing_image")[0].offsetHeight || 0;
+      window.scrollTo(0,landing - header);
     }
   }
 

@@ -40,7 +40,12 @@ class RegisterPage extends Component {
     };
   }
   componentWillMount(){
-    window.scrollTo(0,0);
+    if(this.props.token){
+      this.props.replace('/profile');
+    }
+    else{
+      window.scrollTo(0,0);
+    }
   }
   componentWillReceiveProps(nextProps){
     if(nextProps.token){
@@ -99,7 +104,14 @@ class RegisterPage extends Component {
     }
     else{
       this.setState({validationError: false});
-      this.props.createAccount({test:'test'});
+      this.props.createAccount({
+        username: this.state.username,
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        email: this.state.email,
+        phone: this.state.phone,
+        password: this.state.password
+      });
     }
   }
 
@@ -122,11 +134,11 @@ class RegisterPage extends Component {
                 <div className="card_body">
                   <CardRow alternate nohover title={"First Name"} extra={
                     <input value={this.state.firstName} placeholder={"First Name"} 
-                      onChange={(evt) => this.setState({firstName: evt.target.value.replace(/[^A-Z-]/gi,"")})}/>
+                      onChange={(evt) => this.setState({firstName: evt.target.value.replace(/[^A-Z- .]/gi,"")})}/>
                   }/>
                   <CardRow alternate nohover title={"Last Name"} extra={
                     <input value={this.state.lastName} placeholder={"Last Name"} 
-                      onChange={(evt) => this.setState({lastName: evt.target.value.replace(/[^A-Z-]/gi,"")})}/>
+                      onChange={(evt) => this.setState({lastName: evt.target.value.replace(/[^A-Z- .]/gi,"")})}/>
                   }/>
                   <CardRow alternate nohover title={"Phone"} extra={ 
                     <input value={this.state.phone} placeholder={"Optional"} className={(this.state.validPhone ? "" : "error")}
