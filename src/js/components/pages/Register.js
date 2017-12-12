@@ -7,7 +7,7 @@ import Footer from '../footer/Footer.js';
 import {createAccount} from '../../actions/actions.js';
 // import Loader from '../loader/Loader.js';
 import '../../../css/Cards.css';
-import '../../../css/Buttons.css';
+// import '../../../css/Buttons.css';
 
 
 const mapStateToProps = (state)=>{

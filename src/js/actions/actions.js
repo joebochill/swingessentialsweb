@@ -10,13 +10,16 @@
     
     export const PUT_USER_DATA = {SUCCESS: 'PUT_USER_DATA_SUCCESS', FAIL: 'PUT_USER_DATA_FAIL'};
     export const GET_USER_DATA = {SUCCESS: 'GET_USER_DATA_SUCCESS', FAIL: 'GET_USER_DATA_FAIL'};
-    export const CREATE_ACCOUNT = {REQUEST: 'CREATE_ACCOUNT', SUCCESS: 'CREATE_ACCOUNT_SUCCESS', FAIL: 'CREATE_ACCOUNT_FAIL'};
+    
     export const GET_SETTINGS = {SUCCESS: 'GET_SETTINGS_SUCCESS', FAIL: 'GET_SETTINGS_FAIL'};
     export const GET_LESSONS = {REQUEST: 'GET_LESSONS', SUCCESS: 'GET_LESSONS_SUCCESS', FAIL: 'GET_LESSONS_FAIL'};
     export const GET_TIPS = {REQUEST: 'GET_TIPS', SUCCESS: 'GET_TIPS_SUCCESS', FAIL: 'GET_TIPS_FAIL'};
     export const GET_BLOGS = {REQUEST: 'GET_BLOGS', SUCCESS: 'GET_BLOGS_SUCCESS', FAIL: 'GET_BLOGS_FAIL'};
     export const GET_CREDITS = {SUCCESS: 'GET_CREDITS_SUCCESS', FAIL: 'GET_CREDITS_FAIL'};
     export const GET_PACKAGES = {SUCCESS: 'GET_PACKAGES_SUCCESS', FAIL: 'GET_PACKAGES_FAIL'};
+
+    export const CREATE_ACCOUNT = {REQUEST: 'CREATE_ACCOUNT', SUCCESS: 'CREATE_ACCOUNT_SUCCESS', FAIL: 'CREATE_ACCOUNT_FAIL'};
+    export const VERIFY_EMAIL = {REQUEST: 'VERIFY_EMAIL', SUCCESS: 'VERIFY_EMAIL_SUCCESS', FAIL: 'VERIFY_EMAIL_FAIL'};
 
     export const REDEEM_CREDIT = {REQUEST: 'REDEEM_CREDIT', SUCCESS: 'REDEEM_CREDIT_SUCCESS', FAIL: 'REDEEM_CREDIT_FAIL'};
    
@@ -189,6 +192,32 @@ export function createAccount(data){
     }
 }
 
+export function verifyEmail(code){   
+    return (dispatch) => {
+        
+        dispatch({type: VERIFY_EMAIL.REQUEST});
+
+        return fetch(baseUrl+'validate', { 
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({code: code})
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    dispatch(success(VERIFY_EMAIL.SUCCESS));
+                    break;
+                default:
+                    dispatch(failure(VERIFY_EMAIL.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
 export function updateUserCredentials(data, token){
     return (dispatch) => {
         dispatch({type: UPDATE_CREDENTIALS.REQUEST});
@@ -198,7 +227,8 @@ export function updateUserCredentials(data, token){
         return fetch(baseUrl+'credentials', { 
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         })
@@ -378,6 +408,8 @@ export function getPackages(token){
 /* Success/Failure Actions for the above Request types */
 
 function failure(type, response){
+    console.log(response.headers.get('Error'));
+    console.log(response.headers.get('Message'));
     return{
         type: type,
         response: response,

@@ -59,7 +59,10 @@ export const initialStore = {
         token: null,
         failCount: 0,
         settingsAuthenticated: false,
-        pendingAuthentication: false
+        pendingAuthentication: false,
+        pendingRegistration: false,
+        registrationActivated: false,
+        registrationError: ''
     },
 
     header:{

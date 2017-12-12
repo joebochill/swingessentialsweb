@@ -14,7 +14,8 @@ import {LOCATION_CHANGE,
 		GET_BLOGS, 
 		MENU, 
 		DRAWER,
-        CREATE_ACCOUNT
+		CREATE_ACCOUNT,
+		VERIFY_EMAIL
 } from '../actions/actions.js';
 
 /* Updates the basic info for the logged in user */
@@ -160,22 +161,32 @@ const loginReducer = (state=[], action) => {
 		case CREATE_ACCOUNT.SUCCESS:
 			return{...state,
 				token: action.data.token,
-				failCount: 0
+				failCount: 0,
+				pendingRegistration: false,
+				registrationActivated: false
 			}
 		case LOGIN.FAIL:
 			return{...state,
 				token: null,
-				failCount: state.failCount + 1
+				failCount: state.failCount + 1,
+				pendingRegistration: false,
+				registrationActivated: false
 			}
 		case LOGOUT.SUCCESS:
 			return{...state,
 				token: null,
 				failCount: 0,
 				settingsAuthenticated: false,
-				pendingAuthentication: false
+				pendingAuthentication: false,
+				pendingRegistration: false,
+				registrationActivated: false
 			}
 		case LOGOUT.FAIL:
-			return state;
+			return {...state,
+				token: null,
+				pendingRegistration: false,
+				registrationActivated: false
+			}
 		case TOKEN_FROM_STORAGE:
 			return{...state,
 				token: action.token
@@ -193,7 +204,9 @@ const loginReducer = (state=[], action) => {
 		case LOCATION_CHANGE:
 			return{...state,
 				pendingAuthentication: false,
-				settingsAuthenticated: false
+				settingsAuthenticated: false,
+				pendingRegistration: false,
+				registrationActivated: false
 			}
 		case UPDATE_CREDENTIALS.REQUEST:
 		case UPDATE_CREDENTIALS.FAIL:
@@ -204,6 +217,24 @@ const loginReducer = (state=[], action) => {
 			return{...state,
 				settingsAuthenticated: false,
 				token: action.data.token
+			}
+		case VERIFY_EMAIL.REQUEST:
+			return{...state,
+				pendingRegistration: true,
+				registrationActivated: false,
+				registrationError: ''
+			}
+		case VERIFY_EMAIL.SUCCESS:
+			return{...state,
+				pendingRegistration: false,
+				registrationActivated: true,
+				registrationError: ''
+			}
+		case VERIFY_EMAIL.FAIL:
+			return{...state,
+				pendingRegistration: false,
+				registrationActivated: false,
+				registrationError: isNaN(parseInt(action.error,10)) ? '' : parseInt(action.error,10)
 			}
 		default:
 			return state;

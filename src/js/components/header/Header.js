@@ -15,7 +15,8 @@ function mapStateToProps(state){
         token: state.login.token,
         drawerOpen: state.header.drawerOpen,
         menuOpen: state.header.menuOpen,
-        activeRoute: state.header.activeRoute
+        activeRoute: state.header.activeRoute,
+        registrationActivated: state.login.registrationActivated
     };
 }
 function mapDispatchToProps(dispatch){
@@ -44,6 +45,7 @@ class Header extends Component {
   }
 
   componentWillReceiveProps(nextProps){
+    // Logout should redirect to the signin screen
     if(this.props.token && !nextProps.token){
       this.props.goToSignIn();
     }

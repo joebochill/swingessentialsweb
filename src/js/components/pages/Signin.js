@@ -35,7 +35,7 @@ class SigninPage extends Component {
   }
   componentWillMount(){
     if(this.props.token){
-        this.props.goBack();
+        this.props.replace('/profile');
     }
     else{
       localStorage.removeItem('token');
