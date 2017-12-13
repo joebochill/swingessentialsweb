@@ -20,6 +20,9 @@
 
     export const CREATE_ACCOUNT = {REQUEST: 'CREATE_ACCOUNT', SUCCESS: 'CREATE_ACCOUNT_SUCCESS', FAIL: 'CREATE_ACCOUNT_FAIL'};
     export const VERIFY_EMAIL = {REQUEST: 'VERIFY_EMAIL', SUCCESS: 'VERIFY_EMAIL_SUCCESS', FAIL: 'VERIFY_EMAIL_FAIL'};
+    export const REQUEST_RESET = {REQUEST: 'REQUEST_RESET', SUCCESS: 'REQUEST_RESET_SUCCESS', FAIL: 'REQUEST_RESET_FAIL'};
+    export const VERIFY_RESET = {REQUEST: 'VERIFY_RESET', SUCCESS: 'VERIFY_RESET_SUCCESS', FAIL: 'VERIFY_RESET_FAIL'};
+    
 
     export const REDEEM_CREDIT = {REQUEST: 'REDEEM_CREDIT', SUCCESS: 'REDEEM_CREDIT_SUCCESS', FAIL: 'REDEEM_CREDIT_FAIL'};
    
@@ -100,7 +103,7 @@ export function validatePassword(token, pass){
     return (dispatch) => {
         dispatch({type: VALIDATE_PASSWORD.REQUEST});
 
-        return fetch(baseUrl+'verify',{
+        return fetch(baseUrl+'validate',{
             method: 'PUT',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -197,12 +200,12 @@ export function verifyEmail(code){
         
         dispatch({type: VERIFY_EMAIL.REQUEST});
 
-        return fetch(baseUrl+'validate', { 
+        return fetch(baseUrl+'verify', { 
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify({code: code})
+            body: JSON.stringify({type:'email',code: code})
         })
         .then((response) => {
             switch(response.status) {
@@ -211,6 +214,54 @@ export function verifyEmail(code){
                     break;
                 default:
                     dispatch(failure(VERIFY_EMAIL.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+export function requestReset(data){
+    return (dispatch) => {
+        fetch(baseUrl+'reset', { 
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    dispatch(success(REQUEST_RESET.SUCCESS));
+                    break;
+                default:
+                    dispatch(failure(REQUEST_RESET.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+export function verifyReset(code){
+    return (dispatch) => {
+        
+        dispatch({type: VERIFY_RESET.REQUEST});
+
+        return fetch(baseUrl+'verify', { 
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({type:'reset',code: code})
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    response.json()
+                .then((json) => dispatch(success(VERIFY_RESET.SUCCESS, json))); 
+                    break;
+                default:
+                    dispatch(failure(VERIFY_RESET.FAIL, response));
                     break;
             }
         })

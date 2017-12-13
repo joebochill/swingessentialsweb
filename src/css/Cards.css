@@ -25,11 +25,12 @@
 .card_header > :first-child{
   flex: 1 1 0rem;
 }
-.card_header > :last-child{
+.card_header > :not(:first-child){
   flex: 0 0 auto;
+  margin-left: 1rem;
 }
-.card_header > span:last-child:not(.disabled),
-.card_header > span:last-child:not([disabled]){
+.card_header > span:not(:first-child):not(.disabled),
+.card_header > span:not(:first-child):not([disabled]){
   cursor: pointer;
 }
 .card_body{

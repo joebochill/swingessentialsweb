@@ -15,7 +15,8 @@ import {LOCATION_CHANGE,
 		MENU, 
 		DRAWER,
 		CREATE_ACCOUNT,
-		VERIFY_EMAIL
+		VERIFY_EMAIL,
+		VERIFY_RESET
 } from '../actions/actions.js';
 
 /* Updates the basic info for the logged in user */
@@ -158,34 +159,25 @@ const blogsReducer = (state=[], action) => {
 const loginReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN.SUCCESS:
-		case CREATE_ACCOUNT.SUCCESS:
 			return{...state,
 				token: action.data.token,
-				failCount: 0,
-				pendingRegistration: false,
-				registrationActivated: false
+				failCount: 0
 			}
 		case LOGIN.FAIL:
 			return{...state,
 				token: null,
-				failCount: state.failCount + 1,
-				pendingRegistration: false,
-				registrationActivated: false
+				failCount: state.failCount + 1
 			}
 		case LOGOUT.SUCCESS:
 			return{...state,
 				token: null,
 				failCount: 0,
 				settingsAuthenticated: false,
-				pendingAuthentication: false,
-				pendingRegistration: false,
-				registrationActivated: false
+				pendingAuthentication: false
 			}
 		case LOGOUT.FAIL:
 			return {...state,
-				token: null,
-				pendingRegistration: false,
-				registrationActivated: false
+				token: null
 			}
 		case TOKEN_FROM_STORAGE:
 			return{...state,
@@ -204,9 +196,7 @@ const loginReducer = (state=[], action) => {
 		case LOCATION_CHANGE:
 			return{...state,
 				pendingAuthentication: false,
-				settingsAuthenticated: false,
-				pendingRegistration: false,
-				registrationActivated: false
+				settingsAuthenticated: false
 			}
 		case UPDATE_CREDENTIALS.REQUEST:
 		case UPDATE_CREDENTIALS.FAIL:
@@ -217,6 +207,19 @@ const loginReducer = (state=[], action) => {
 			return{...state,
 				settingsAuthenticated: false,
 				token: action.data.token
+			}
+		default:
+			return state;
+	}
+}
+
+const registrationReducer = (state=[], action) => {
+	switch(action.type){
+		case CREATE_ACCOUNT.SUCCESS:
+		case LOCATION_CHANGE:
+			return{...state,
+				pendingRegistration: false,
+				registrationActivated: false
 			}
 		case VERIFY_EMAIL.REQUEST:
 			return{...state,
@@ -235,6 +238,24 @@ const loginReducer = (state=[], action) => {
 				pendingRegistration: false,
 				registrationActivated: false,
 				registrationError: isNaN(parseInt(action.error,10)) ? '' : parseInt(action.error,10)
+			}
+		// case VERIFY_RESET:
+		// 	return{...state,
+		// 		checkingReset: true
+		// 	}
+		case VERIFY_RESET.SUCCESS:
+			return{...state,
+				checkingReset: false,
+				resetValid: true,
+				resetUser: action.data.username,
+				resetToken: action.data.auth
+			}
+		case VERIFY_RESET.FAIL:
+			return{...state,
+				checkingReset: false,
+				resetValid: false,
+				resetUser: '',
+				resetToken: ''
 			}
 		default:
 			return state;
@@ -294,6 +315,7 @@ const AppReducer = combineReducers({
 	blogs: blogsReducer,
     //packages: packagesReducer,
 	login: loginReducer,
+	registration: registrationReducer,
 	header: headerReducer,
 	communication: communicationReducer,
     router: routerReducer

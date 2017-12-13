@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {replace, goBack, push} from 'react-router-redux';
 import {connect} from 'react-redux';
-import {setTargetRoute, requestLogin} from '../../actions/actions.js';
+import {setTargetRoute, requestLogin, requestReset} from '../../actions/actions.js';
 import Footer from '../footer/Footer.js';
 
 
@@ -21,7 +21,8 @@ const mapDispatchToProps = (dispatch)=>{
     replace: (val) => {dispatch(replace(val))},
     register: () => {dispatch(push('/register'))},
     resetTargetRoute: () => {dispatch(setTargetRoute(''))},
-    requestLogin: (cred) => {dispatch(requestLogin(cred))}
+    requestLogin: (cred) => {dispatch(requestLogin(cred))},
+    requestReset: (data) => {dispatch(requestReset(data))}
   }
 }
 
@@ -30,7 +31,11 @@ class SigninPage extends Component {
     super(props);
     this.state={
       username:'',
-      password:''
+      password:'',
+      email: '',
+      validEmail: false,
+      reset: false,
+      resetSent: false
     };
   }
   componentWillMount(){
@@ -59,7 +64,7 @@ class SigninPage extends Component {
     }
     else{
         this.setState({password: ''});
-        this.pw.focus();
+        if(this.pw){this.pw.focus();}
         // TODO: if failure > 3 locked out
     }
   }
@@ -70,45 +75,104 @@ class SigninPage extends Component {
     }
   }
 
+  _keyPressReset(evt){
+    if(evt.key === "Enter" && this.state.email && this.state.validEmail){
+      this._requestReset();
+      this.setState({email:'', resetSent: true});
+    }
+  }
+
+  _requestReset(){
+    this.props.requestReset({email: this.state.email});
+    this.setState({email:'', resetSent: true});
+  }
+
+  _validateEmail(val=this.state.email){
+    if(!val){return;}
+    if(!val.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)){
+      this.setState({validEmail: false});
+    }
+    else{
+      this.setState({validEmail: true});
+    }
+  }
+
   render() {
     return (
       <div>
         <section className="landing_image image5">
           <main className="page_title">
-            <h1>Sign In</h1>
-            <h3>Access Your Account</h3>
+            <h1>{this.state.reset ? "Forgot Password" : "Sign In"}</h1>
+            <h3>{this.state.reset ? "Reset and Get Back to Golfing" : "Access Your Account"}</h3>
           </main>
         </section>
         <div>
           <section>
-            <div className="structured_panel">
-              <label>Username or Email</label>
-              <input 
-                ref={(ref)=>this.un=ref} 
-                value={this.state.username} 
-                onChange={(evt)=>this.setState({username:evt.target.value})} 
-              />
-              <label style={{marginTop:'1rem'}}>Password</label>
-              <input 
-                ref={(ref)=>this.pw=ref} 
-                value={this.state.password} 
-                onChange={(evt)=>this.setState({password:evt.target.value})} 
-                onKeyPress={this._keyPress.bind(this)}
-                type="password"
-              />
-              {this.props.loginFails > 0 && (<span className="validation_error">Your username / password was not correct, please try again.</span>)}
-              <div className="button se_button" 
-                    style={{marginTop:'2rem'}} 
-                    disabled={!this.state.username || !this.state.password}
-                    onClick={()=>this.props.requestLogin({username:this.state.username,password:this.state.password})}
-              >
-                <span>Sign In</span>
+            {!this.state.reset &&
+              <div className="structured_panel">
+                <label>Username</label>
+                <input 
+                  ref={(ref)=>this.un=ref} 
+                  value={this.state.username} 
+                  onChange={(evt)=>this.setState({username:evt.target.value})} 
+                />
+                <label style={{marginTop:'1rem'}}>Password</label>
+                <input 
+                  ref={(ref)=>this.pw=ref} 
+                  value={this.state.password} 
+                  onChange={(evt)=>this.setState({password:evt.target.value})} 
+                  onKeyPress={this._keyPress.bind(this)}
+                  type="password"
+                />
+                {this.props.loginFails > 0 && (<span className="validation_error">Your username / password was not correct, please try again.</span>)}
+                <div className="button se_button" 
+                      style={{marginTop:'2rem'}} 
+                      disabled={!this.state.username || !this.state.password}
+                      onClick={()=>this.props.requestLogin({username:this.state.username,password:this.state.password})}
+                >
+                  <span>Sign In</span>
+                </div>
+                <div className="account_links">
+                  <a onClick={()=>{this.setState({reset:true, username:'', password: ''})}}>Forgot Password?</a>
+                  <a onClick={()=>this.props.register()}>Create Account</a>
+                </div>
               </div>
-              <div className="account_links">
-                <a onClick={()=>alert('Coming soon')}>Forgot Password?</a>
-                <a onClick={()=>this.props.register()}>Create Account</a>
+            }
+            {this.state.reset && !this.state.resetSent &&
+              <div className="structured_panel">
+                <label>Email Address</label>
+                <input 
+                  ref={(ref)=>this.email=ref} 
+                  className={(this.state.email && !this.state.validEmail ? "error" : "")}
+                  value={this.state.email} 
+                  onKeyPress={this._keyPressReset.bind(this)}
+                  onChange={(evt)=>{this.setState({email:evt.target.value}); this._validateEmail(evt.target.value)}} 
+                  onBlur={(evt)=>this._validateEmail()}
+                />
+                {this.state.email && !this.state.validEmail && (<span className="validation_error">Enter the email address you used to register.</span>)}
+                <div className="button se_button" 
+                      style={{marginTop:'2rem'}} 
+                      disabled={!this.state.email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)}
+                      onClick={()=>this._requestReset()}
+                >
+                  <span>SEND INSTRUCTIONS</span>
+                </div>
+                <div className="account_links">
+                  <a onClick={()=>this.setState({reset:false, email: '', validEmail: false})}>Back to Sign In</a>
+                </div>
               </div>
-            </div>
+            }
+            {this.state.reset && this.state.resetSent &&
+              <div className="structured_panel">
+                <p>Your password reset request was received. Check your email for further instructions.</p>
+                <div className="button se_button" 
+                      style={{marginTop:'2rem'}} 
+                      onClick={()=>this.setState({reset:false, email: '', validEmail: false, resetSent:false})}
+                >
+                  <span>BACK TO SIGN IN</span>
+                </div>
+              </div>
+            }
           </section>
           <Footer/>
         </div>

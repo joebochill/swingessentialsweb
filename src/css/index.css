@@ -401,6 +401,16 @@ input::placeholder{
   color: rgba(0,0,0,.2);
   line-height: normal;
 }
+:-ms-input-placeholder{
+  overflow: visible;
+  font-style: italic;
+  color: rgba(0,0,0,.2);
+  line-height: normal;
+}
+input:-ms-clear{
+  height:0rem;
+  width:0rem;
+}
 .validation_error{
   display: block;
 

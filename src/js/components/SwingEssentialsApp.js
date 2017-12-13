@@ -7,6 +7,7 @@ import LessonsPage from './pages/Lessons.js';
 import LessonResponsePage from './pages/LessonResponse.js';
 import ProfilePage from './pages/Profile.js';
 import RegisterPage from './pages/Register.js';
+import ResetPage from './pages/Reset.js';
 import ValidationPage from './pages/Validation.js';
 import NineteenPage from './pages/19Hole.js';
 import TipPage from './pages/Tip.js';
@@ -46,6 +47,7 @@ class SwingEssentialsApp extends Component {
               <Route exact path="/profile" component={ProfilePage}/>
               <Route exact path="/register" component={RegisterPage}/>
               <Route exact path="/register/:validation_key" component={ValidationPage}/>
+              <Route exact path="/reset/:reset_key" component={ResetPage}/>
               <Route path="*">
                 <Redirect to="/"/>
               </Route>  

@@ -54,15 +54,22 @@ export const initialStore = {
     // swingessentials available lesson packages
     //packages:[],
 
-    // api validation token
+    // api validation token/ authentication
     login:{
         token: null,
         failCount: 0,
         settingsAuthenticated: false,
-        pendingAuthentication: false,
+        pendingAuthentication: false        
+    },
+
+    registration:{
         pendingRegistration: false,
         registrationActivated: false,
-        registrationError: ''
+        registrationError: '',
+        checkingReset: true,
+        resetValid: false,
+        resetUser: '',
+        resetToken: ''
     },
 
     header:{
