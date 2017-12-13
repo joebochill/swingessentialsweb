@@ -16,7 +16,9 @@ import {LOCATION_CHANGE,
 		DRAWER,
 		CREATE_ACCOUNT,
 		VERIFY_EMAIL,
-		VERIFY_RESET
+		VERIFY_RESET,
+		CHECK_USER,
+		CHECK_EMAIL
 } from '../actions/actions.js';
 
 /* Updates the basic info for the logged in user */
@@ -220,7 +222,12 @@ const registrationReducer = (state=[], action) => {
 		case LOCATION_CHANGE:
 			return{...state,
 				pendingRegistration: false,
-				registrationActivated: false
+				registrationActivated: false,
+				registrationFailure: false
+			}
+		case CREATE_ACCOUNT.FAIL:
+			return{...state,
+				registrationFailure: true
 			}
 		case VERIFY_EMAIL.REQUEST:
 			return{...state,
@@ -257,6 +264,14 @@ const registrationReducer = (state=[], action) => {
 				resetValid: false,
 				resetUser: '',
 				resetToken: ''
+			}
+		case CHECK_USER.SUCCESS:
+			return{...state,
+				userAvailable: action.data.available
+			}
+		case CHECK_EMAIL.SUCCESS:
+			return{...state,
+				emailAvailable: action.data.available
 			}
 		default:
 			return state;

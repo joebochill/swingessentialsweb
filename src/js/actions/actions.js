@@ -23,6 +23,9 @@
     export const REQUEST_RESET = {REQUEST: 'REQUEST_RESET', SUCCESS: 'REQUEST_RESET_SUCCESS', FAIL: 'REQUEST_RESET_FAIL'};
     export const VERIFY_RESET = {REQUEST: 'VERIFY_RESET', SUCCESS: 'VERIFY_RESET_SUCCESS', FAIL: 'VERIFY_RESET_FAIL'};
     
+    export const CHECK_USER = {REQUEST: 'CHECK_USER', SUCCESS: 'CHECK_USER_SUCCESS', FAIL:'CHECK_USER_FAIL'};
+    export const CHECK_EMAIL = {REQUEST: 'CHECK_EMAIL', SUCCESS: 'CHECK_EMAIL_SUCCESS', FAIL:'CHECK_EMAIL_FAIL'};
+    
 
     export const REDEEM_CREDIT = {REQUEST: 'REDEEM_CREDIT', SUCCESS: 'REDEEM_CREDIT_SUCCESS', FAIL: 'REDEEM_CREDIT_FAIL'};
    
@@ -163,6 +166,42 @@ export function putUserData(data, token){
                 default:
                     dispatch(failure(PUT_USER_DATA.FAIL, response));
                     dispatch(getUserData(token));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+export function checkUsernameAvailability($username){
+    return (dispatch) => {
+        return fetch(baseUrl+'checkUser?username='+$username)
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    response.json()
+                    .then((json)=>dispatch(success(CHECK_USER.SUCCESS, json)));
+                    break;
+                default:
+                    dispatch(failure(CHECK_USER.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+export function checkEmailAvailability($email){
+    return (dispatch) => {
+        return fetch(baseUrl+'checkEmail?email='+$email)
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    response.json()
+                    .then((json)=>dispatch(success(CHECK_EMAIL.SUCCESS,json)));
+                    break;
+                default:
+                    dispatch(failure(CHECK_EMAIL.FAIL, response));
                     break;
             }
         })

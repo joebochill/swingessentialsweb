@@ -4,7 +4,7 @@ import {replace} from 'react-router-redux';
 // import {/*requestLogout, */setTargetRoute, validatePassword, updateUserCredentials} from '../../actions/actions.js';
 import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
-import {createAccount} from '../../actions/actions.js';
+import {createAccount, checkUsernameAvailability, checkEmailAvailability} from '../../actions/actions.js';
 // import Loader from '../loader/Loader.js';
 import '../../../css/Cards.css';
 // import '../../../css/Buttons.css';
@@ -12,13 +12,18 @@ import '../../../css/Cards.css';
 
 const mapStateToProps = (state)=>{
   return {
-    token: state.login.token
+    token: state.login.token,
+    emailAvailable: state.registration.emailAvailable,
+    userAvailable: state.registration.userAvailable,
+    registrationFailure: state.registration.registrationFailure
   };
 }
 var mapDispatchToProps = function(dispatch){
   return {
     createAccount: (data) => {dispatch(createAccount(data))},
-    replace: (path) => {dispatch(replace(path))}
+    replace: (path) => {dispatch(replace(path))},
+    checkUser: (user) => {dispatch(checkUsernameAvailability(user))},
+    checkEmail: (email) => {dispatch(checkEmailAvailability(email))}
   }
 };
 
@@ -35,6 +40,8 @@ class RegisterPage extends Component {
       passwordConfirm: '',
       passwordsMatch: true,
       validEmail: true,
+      userFocus: false,
+      emailFocus: false,
       validPhone: true,
       validationError: false
     };
@@ -52,11 +59,12 @@ class RegisterPage extends Component {
       localStorage.setItem('token',nextProps.token);
       this.props.replace('/lessons');
     }
-    else{
-      //TODO: Handle registration error
+  }
+  _validateUser(){
+    if(this.state.username){
+      this.props.checkUser(this.state.username);
     }
   }
-
   _validateEmail(){
     if(!this.state.email){return;}
     if(!this.state.email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)){
@@ -65,6 +73,7 @@ class RegisterPage extends Component {
     else{
       this.setState({validEmail: true});
     }
+    this.props.checkEmail(this.state.email);
   }
   _validatePhone(){
     if(this.state.phone && this.state.phone.length<10){
@@ -76,10 +85,10 @@ class RegisterPage extends Component {
   }
   _validateFields(){
     return(
-      this.state.username && 
+      this.state.username && this.props.userAvailable &&
       this.state.firstName && 
       this.state.lastName && 
-      this.state.email && this.state.validEmail &&
+      this.state.email && this.state.validEmail && this.props.emailAvailable &&
       (!this.state.phone || (this.state.phone && this.state.validPhone)) &&
       this.state.password && 
       this.state.password === this.state.passwordConfirm);
@@ -148,14 +157,16 @@ class RegisterPage extends Component {
                   }
                   />
                   <CardRow alternate nohover title={"Email"} extra={
-                    <input value={this.state.email} placeholder={"Email Address"} className={(this.state.validEmail ? "" : "error")}
+                    <input value={this.state.email} placeholder={"Email Address"} className={((this.props.emailAvailable && this.state.validEmail) || this.state.emailFocus ? "" : "error")}
                       onChange={(evt) => this.setState({email: evt.target.value})}
-                      onFocus={() => this.setState({validEmail: true})}
-                      onBlur={()=>this._validateEmail()}/>
+                      onFocus={() => this.setState({emailFocus: true})}
+                      onBlur={()=>{this.setState({emailFocus:false}); this._validateEmail();}}/>
                   }/>
                   <CardRow alternate nohover title={"Username"} extra={
-                    <input value={this.state.username} placeholder={"Username"} 
-                      onChange={(evt) => this.setState({username: evt.target.value.replace(/[^A-Z0-9-_.$#@!+]/gi,"")})}/>
+                    <input value={this.state.username} placeholder={"Username"} className={(this.props.userAvailable || this.state.userFocus? "" : "error")}
+                      onChange={(evt) => this.setState({username: evt.target.value.replace(/[^A-Z0-9-_.$#@!+]/gi,"")})}
+                      onFocus={()=>this.setState({userFocus: true})}
+                      onBlur={()=>{this.setState({userFocus: false});this._validateUser()}}/>
                   }/>
                   <CardRow alternate nohover title={"Password"} extra={
                     <input type="password" value={this.state.password} placeholder={"Password"} className={(this.state.passwordsMatch ? "" : "error")} 
@@ -172,18 +183,27 @@ class RegisterPage extends Component {
               {!this.state.validPhone && !this.state.validationError && (
                 <span className="validation_error">Invalid Phone Number</span>
               )}
+              {!this.props.emailAvailable && !this.state.validationError && (
+                <span className="validation_error">Email Address Already Registered</span>
+              )}
               {!this.state.validEmail && !this.state.validationError && (
                 <span className="validation_error">Invalid Email Address</span>
+              )}
+              {!this.props.userAvailable && !this.state.validationError && (
+                <span className="validation_error">Username Already Taken</span>
               )}
               {!this.state.passwordsMatch && !this.state.validationError && (
                 <span className="validation_error">Passwords Don't Match</span>
               )}
-              {this.state.validationError && (
+              {this.state.validationError && !this.props.registrationFailure && (
                 <span className="validation_error">Invalid Registration Data</span>
+              )}
+              {this.props.registrationFailure && (
+                <span className="validation_error">There was an error submitting your registration. Please try again later.</span>
               )}
               <div className="button se_button" 
                 onClick={()=>this._submitRegistration()} style={{marginTop:'2rem'}}
-                disabled={!this._validateFields()}
+                disabled={!this._validateFields() || this.props.registrationFailure}
                 >
                 <span>CREATE</span>
               </div>

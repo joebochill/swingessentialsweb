@@ -69,7 +69,10 @@ export const initialStore = {
         checkingReset: true,
         resetValid: false,
         resetUser: '',
-        resetToken: ''
+        resetToken: '',
+        userAvailable: true,
+        emailAvailable: true,
+        registrationFailure: false
     },
 
     header:{
