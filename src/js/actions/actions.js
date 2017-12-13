@@ -173,7 +173,6 @@ export function putUserData(data, token){
 export function createAccount(data){
     return (dispatch) => {
         if(Object.keys(data).length < 1){return;}
-        
         dispatch({type: CREATE_ACCOUNT.REQUEST});
         
         return fetch(baseUrl+'user', { 

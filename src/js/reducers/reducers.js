@@ -159,6 +159,7 @@ const blogsReducer = (state=[], action) => {
 const loginReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN.SUCCESS:
+		case CREATE_ACCOUNT.SUCCESS:
 			return{...state,
 				token: action.data.token,
 				failCount: 0
