@@ -2,6 +2,7 @@
     export const LOCATION_CHANGE = '@@router/LOCATION_CHANGE';
     export const TOKEN_FROM_STORAGE = "TOKEN_FROM_STORAGE";
     export const SET_TARGET_ROUTE = 'SET_TARGET_ROUTE';
+    export const TOKEN_TIMEOUT = 'TOKEN_TIMEOUT';
 
     export const LOGIN = {SUCCESS: 'LOGIN_SUCCESS', FAIL: 'LOGIN_FAIL'};
     export const LOGOUT = {SUCCESS: 'LOGOUT_SUCCESS', FAIL: 'LOGOUT_FAIL'};
@@ -28,7 +29,8 @@
     
 
     export const REDEEM_CREDIT = {REQUEST: 'REDEEM_CREDIT', SUCCESS: 'REDEEM_CREDIT_SUCCESS', FAIL: 'REDEEM_CREDIT_FAIL'};
-   
+    export const PING = {REQUEST: 'PING_REQUEST', SUCCESS: 'PING_SUCCESS', FAIL: 'PING_FAIL'};
+
     export const MENU = {OPEN: 'OPEN_MENU', CLOSE: 'CLOSE_MENU'}; 
     export const DRAWER = {OPEN: 'OPEN_DRAWER', CLOSE: 'CLOSE_DRAWER'}; 
     
@@ -38,6 +40,32 @@ const baseUrl = 'http://www.josephpboyle.com/api/myapi.php/';
 
 
 /* Database fetch actions */
+
+// periodic check to see if our token is still valid
+// export function ping(token){
+//     console.log('pinging');
+//     return (dispatch) => {
+//         fetch(baseUrl+'ping', {
+//             headers: {
+//                 'Authorization': 'Bearer ' + token
+//             }
+//         })
+//         .then((response) => {
+//             switch(response.status){
+//                 case 200:
+//                     console.log('ping succeeded - new token');
+//                     const token = response.headers.get('Token');
+//                     localStorage.setItem('token', JSON.stringify(token));
+//                     dispatch(success(PING.SUCCESS, {token: token}));
+//                     break;
+//                 default:
+//                     console.log('ping failed');
+//                     checkTimeout(response, dispatch);
+//             }
+//         })
+//         .catch((error) => console.error(error));
+//     }
+// }
 
 export function requestDataFromToken(token){
     return (dispatch) => {
@@ -69,7 +97,7 @@ export function requestLogin(userCredentials){
                     //.then(() => dispatch(getPackages(token)));
                     break;
                 default:
-                    //dispatch(loginFailure(response));
+                    checkTimeout(response, dispatch);
                     dispatch(failure(LOGIN.FAIL, response));
                     break;
             }
@@ -94,6 +122,7 @@ export function requestLogout(token){
                     dispatch(success(LOGOUT.SUCCESS));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(LOGOUT.FAIL, response));
                     break;
             }
@@ -119,6 +148,7 @@ export function validatePassword(token, pass){
                     dispatch(success(VALIDATE_PASSWORD.SUCCESS));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(VALIDATE_PASSWORD.FAIL, response));
             }
         })
@@ -140,6 +170,7 @@ export function getUserData(token){
                     .then((json) => dispatch(success(GET_USER_DATA.SUCCESS, json)));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(GET_USER_DATA.FAIL, response));
                     break;
             }
@@ -164,6 +195,7 @@ export function putUserData(data, token){
                     dispatch(getUserData(token));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(PUT_USER_DATA.FAIL, response));
                     dispatch(getUserData(token));
                     break;
@@ -183,6 +215,7 @@ export function checkUsernameAvailability($username){
                     .then((json)=>dispatch(success(CHECK_USER.SUCCESS, json)));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(CHECK_USER.FAIL, response));
                     break;
             }
@@ -201,6 +234,7 @@ export function checkEmailAvailability($email){
                     .then((json)=>dispatch(success(CHECK_EMAIL.SUCCESS,json)));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(CHECK_EMAIL.FAIL, response));
                     break;
             }
@@ -225,6 +259,7 @@ export function createAccount(data){
                     dispatch(getUserData(response.headers.get('Token')));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(CREATE_ACCOUNT.FAIL, response));
                     break;
             }
@@ -251,6 +286,7 @@ export function verifyEmail(code){
                     dispatch(success(VERIFY_EMAIL.SUCCESS));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(VERIFY_EMAIL.FAIL, response));
                     break;
             }
@@ -258,6 +294,7 @@ export function verifyEmail(code){
         .catch((error) => console.error(error));
     }
 }
+
 export function requestReset(data){
     return (dispatch) => {
         fetch(baseUrl+'reset', { 
@@ -273,6 +310,7 @@ export function requestReset(data){
                     dispatch(success(REQUEST_RESET.SUCCESS));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(REQUEST_RESET.FAIL, response));
                     break;
             }
@@ -280,6 +318,7 @@ export function requestReset(data){
         .catch((error) => console.error(error));
     }
 }
+
 export function verifyReset(code){
     return (dispatch) => {
         
@@ -299,6 +338,7 @@ export function verifyReset(code){
                 .then((json) => dispatch(success(VERIFY_RESET.SUCCESS, json))); 
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(VERIFY_RESET.FAIL, response));
                     break;
             }
@@ -328,6 +368,7 @@ export function updateUserCredentials(data, token){
                     dispatch(getUserData(response.headers.get('Token')));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(UPDATE_CREDENTIALS.FAIL, response));
                     dispatch(getUserData(token));
                     break;
@@ -337,31 +378,32 @@ export function updateUserCredentials(data, token){
     }
 }
 
-export function redeemCredit(type, data, token){
-    return (dispatch) => {
-        dispatch({type: REDEEM_CREDIT.REQUEST});
+// export function redeemCredit(type, data, token){
+//     return (dispatch) => {
+//         dispatch({type: REDEEM_CREDIT.REQUEST});
         
-        return fetch(baseUrl+'redeem/'+type, { 
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + token
-            },
-            body: JSON.stringify({fo_swing:'test', dtl_swing:'test'})
-        })
-        .then((response) => {
-            switch(response.status) {
-                case 200:
-                    dispatch(success(REDEEM_CREDIT.SUCCESS));
-                    dispatch(getLessons(token));
-                    break;
-                default:
-                    dispatch(failure(REDEEM_CREDIT.FAIL, response));
-                    break;
-            }
-        })
-        .catch((error) => console.error(error));
-    }
-}
+//         return fetch(baseUrl+'redeem/'+type, { 
+//             method: 'POST',
+//             headers: {
+//                 'Authorization': 'Bearer ' + token
+//             },
+//             body: JSON.stringify({fo_swing:'test', dtl_swing:'test'})
+//         })
+//         .then((response) => {
+//             switch(response.status) {
+//                 case 200:
+//                     dispatch(success(REDEEM_CREDIT.SUCCESS));
+//                     dispatch(getLessons(token));
+//                     break;
+//                 default:
+//checkTimeout(response, dispatch);
+//                     dispatch(failure(REDEEM_CREDIT.FAIL, response));
+//                     break;
+//             }
+//         })
+//         .catch((error) => console.error(error));
+//     }
+// }
 
 export function getLessons(token){
     return (dispatch) => {
@@ -379,6 +421,7 @@ export function getLessons(token){
                     .then((response) => localStorage.setItem('lessons',JSON.stringify(response.data)));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(GET_LESSONS.FAIL, response));
                     break;
             }
@@ -399,6 +442,7 @@ export function getTips(){
                     .then((response) => localStorage.setItem('tips',JSON.stringify(response.data)));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(GET_TIPS.FAIL, response));
                     break;
             }
@@ -419,6 +463,7 @@ export function getBlogs(){
                     .then((response) => localStorage.setItem('blogs',JSON.stringify(response.data)));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(GET_BLOGS.FAIL, response));
                     break;
             }
@@ -427,27 +472,29 @@ export function getBlogs(){
     }
 }
 
-export function getCredits(token){
-    return (dispatch) => {
-        return fetch(baseUrl+'credits', { 
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        })
-        .then((response) => {
-            switch(response.status) {
-                case 200:
-                    response.json()
-                    .then((json) => dispatch(success(GET_CREDITS.SUCCESS, json)));
-                    break;
-                default:
-                    dispatch(failure(GET_CREDITS.FAIL, response));
-                    break;
-            }
-        })
-        .catch((error) => console.error(error));
-    }
-}
+// export function getCredits(token){
+//     return (dispatch) => {
+//         return fetch(baseUrl+'credits', { 
+//             headers: {
+//                 'Authorization': 'Bearer ' + token
+//             }
+//         })
+//         .then((response) => {
+//             switch(response.status) {
+//                 case 200:
+//                     response.json()
+//                     .then((json) =>{dispatch(success(GET_CREDITS.SUCCESS, json))})
+//                     .then((response) => localStorage.setItem('credits',JSON.stringify(response)));
+//                     break;
+//                 default:
+//checkTimeout(response, dispatch);
+//                     dispatch(failure(GET_CREDITS.FAIL, response));
+//                     break;
+//             }
+//         })
+//         .catch((error) => console.error(error));
+//     }
+// }
 
 export function getSettings(token){
     return (dispatch) => {
@@ -463,6 +510,7 @@ export function getSettings(token){
                     .then((json) => dispatch(success(GET_SETTINGS.SUCCESS, json)));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(GET_SETTINGS.FAIL, response));
                     break;
             }
@@ -485,6 +533,7 @@ export function getPackages(token){
                     .then((json) => dispatch(success(GET_PACKAGES.SUCCESS, json)));
                     break;
                 default:
+                    checkTimeout(response, dispatch);
                     dispatch(failure(GET_PACKAGES.FAIL, response));
                     break;
             }
@@ -495,6 +544,13 @@ export function getPackages(token){
 
 
 /* Success/Failure Actions for the above Request types */
+function checkTimeout(response, dispatch){
+    // If we get a failed API call, check if our authentication needs to be re-upped
+    const error = parseInt(response.headers.get('Error'),10);
+    if(error && (error >= 400200 && error <= 400212) && dispatch){
+        dispatch({type:TOKEN_TIMEOUT});
+    }
+}
 
 function failure(type, response){
     console.log(response.headers.get('Error'));

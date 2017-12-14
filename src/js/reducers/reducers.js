@@ -12,13 +12,16 @@ import {LOCATION_CHANGE,
 		GET_LESSONS, 
 		GET_TIPS, 
 		GET_BLOGS, 
+		GET_CREDITS,
 		MENU, 
 		DRAWER,
+		//PING,
 		CREATE_ACCOUNT,
 		VERIFY_EMAIL,
 		VERIFY_RESET,
 		CHECK_USER,
-		CHECK_EMAIL
+		CHECK_EMAIL,
+		TOKEN_TIMEOUT
 } from '../actions/actions.js';
 
 /* Updates the basic info for the logged in user */
@@ -76,9 +79,24 @@ const settingsReducer = (state=[], action) => {
 }
 
 /* Updates the available credits for the logged in user */
-// const creditsReducer = (state=[], action) => {
-// 	return state;
-// }
+const creditsReducer = (state=[], action) => {
+	switch(action.type){
+		case GET_CREDITS.SUCCESS:
+			return {...state,
+				count: parseInt(action.data.count, 10) || 0,
+				unlimited: action.data.unlimited_count,
+				unlimitedExpires: parseInt(action.data.unlimited_expires, 10) || 0
+			}
+		case GET_CREDITS.FAIL:
+			return {...state,
+				count: 0,
+				unlimited: 0,
+				unlimitedExpires: 0
+			}
+		default:
+			return state;
+	}
+}
 
 /* Updates the list of lessons for the logged in user */
 const lessonsReducer = (state=[], action) => {
@@ -161,6 +179,10 @@ const blogsReducer = (state=[], action) => {
 const loginReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN.SUCCESS:
+			return{...state,
+				token: action.data.token,
+				admin: (JSON.parse(window.atob(action.data.token.split('.')[1]))['role'].toLowerCase()==='administrator')
+			}
 		case CREATE_ACCOUNT.SUCCESS:
 			return{...state,
 				token: action.data.token,
@@ -184,7 +206,8 @@ const loginReducer = (state=[], action) => {
 			}
 		case TOKEN_FROM_STORAGE:
 			return{...state,
-				token: action.token
+				token: action.token,
+				admin: (JSON.parse(window.atob(action.token.split('.')[1]))['role'].toLowerCase()==='administrator')				
 			}
 		case VALIDATE_PASSWORD.REQUEST:
 			return{...state,
@@ -210,6 +233,19 @@ const loginReducer = (state=[], action) => {
 			return{...state,
 				settingsAuthenticated: false,
 				token: action.data.token
+			}
+		// case PING.SUCCESS:
+		// 	return{...state,
+		// 		token: action.data.token,
+		// 		lastPing: Date.now()
+		// 	}
+		// case PING.FAIL:
+		// 	return{...state,
+		// 		lastPing: Date.now()
+		// 	}
+		case TOKEN_TIMEOUT:
+			return{...state,
+				token: null
 			}
 		default:
 			return state;
@@ -319,13 +355,20 @@ const headerReducer = (state=[], action) => {
 
 /* Updates the messages shown to the user for various success/error conditions */
 const communicationReducer = (state=[], action) => {
-	return state;
+	switch(action.type){
+		case TOKEN_TIMEOUT:
+			return{...state,
+				signInMessage: 'For security purposes, you have been automatically signed out.'
+			}
+		default:
+			return state;
+	}
 }
 
 const AppReducer = combineReducers({
     userData: userReducer,
     settings: settingsReducer,
-    //credits: creditsReducer,
+    credits: creditsReducer,
 	lessons: lessonsReducer,
 	tips: tipsReducer,
 	blogs: blogsReducer,

@@ -143,11 +143,11 @@ class RegisterPage extends Component {
                 <div className="card_body">
                   <CardRow alternate nohover title={"First Name"} extra={
                     <input value={this.state.firstName} placeholder={"First Name"} 
-                      onChange={(evt) => this.setState({firstName: evt.target.value.replace(/[^A-Z- .]/gi,"")})}/>
+                      onChange={(evt) => this.setState({firstName: evt.target.value.replace(/[^A-Z- .]/gi,"").substr(0,32)})}/>
                   }/>
                   <CardRow alternate nohover title={"Last Name"} extra={
                     <input value={this.state.lastName} placeholder={"Last Name"} 
-                      onChange={(evt) => this.setState({lastName: evt.target.value.replace(/[^A-Z- .]/gi,"")})}/>
+                      onChange={(evt) => this.setState({lastName: evt.target.value.replace(/[^A-Z- .]/gi,"").substr(0,32)})}/>
                   }/>
                   <CardRow alternate nohover title={"Phone"} extra={ 
                     <input value={this.state.phone} placeholder={"Optional"} className={(this.state.validPhone ? "" : "error")}
@@ -158,13 +158,13 @@ class RegisterPage extends Component {
                   />
                   <CardRow alternate nohover title={"Email"} extra={
                     <input value={this.state.email} placeholder={"Email Address"} className={((this.props.emailAvailable && this.state.validEmail) || this.state.emailFocus ? "" : "error")}
-                      onChange={(evt) => this.setState({email: evt.target.value})}
+                      onChange={(evt) => this.setState({email: evt.target.value.substr(0,32)})}
                       onFocus={() => this.setState({emailFocus: true})}
                       onBlur={()=>{this.setState({emailFocus:false}); this._validateEmail();}}/>
                   }/>
                   <CardRow alternate nohover title={"Username"} extra={
                     <input value={this.state.username} placeholder={"Username"} className={(this.props.userAvailable || this.state.userFocus? "" : "error")}
-                      onChange={(evt) => this.setState({username: evt.target.value.replace(/[^A-Z0-9-_.$#@!+]/gi,"")})}
+                      onChange={(evt) => this.setState({username: evt.target.value.replace(/[^A-Z0-9-_.$#@!+]/gi,"").substr(0,32)})}
                       onFocus={()=>this.setState({userFocus: true})}
                       onBlur={()=>{this.setState({userFocus: false});this._validateUser()}}/>
                   }/>
@@ -206,6 +206,9 @@ class RegisterPage extends Component {
                 disabled={!this._validateFields() || this.props.registrationFailure}
                 >
                 <span>CREATE</span>
+              </div>
+              <div className="account_links">
+                <a onClick={()=>this.props.replace('/signin')}>Back to Sign In</a>
               </div>
             </div>
           </section>

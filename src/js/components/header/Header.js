@@ -5,7 +5,7 @@ import {push} from 'react-router-redux';
 import {NavLink} from 'react-router-dom';
 import Drawer from './Drawer.js';
 import {connect} from 'react-redux';
-import {requestLogout, openNavDrawer, closeNavDrawer, openNavMenu, closeNavMenu} from '../../actions/actions.js';
+import {requestLogout, openNavDrawer, closeNavDrawer, openNavMenu, closeNavMenu, /*ping*/} from '../../actions/actions.js';
 
 function mapStateToProps(state){
     return {
@@ -16,7 +16,8 @@ function mapStateToProps(state){
         drawerOpen: state.header.drawerOpen,
         menuOpen: state.header.menuOpen,
         activeRoute: state.header.activeRoute,
-        registrationActivated: state.login.registrationActivated
+        registrationActivated: state.login.registrationActivated,
+        lastPing: state.login.lastPing
     };
 }
 function mapDispatchToProps(dispatch){
@@ -27,7 +28,8 @@ function mapDispatchToProps(dispatch){
       closeMenu: () => {dispatch(closeNavMenu())},
       openDrawer: () => {dispatch(openNavDrawer())},
       closeDrawer: () => {dispatch(closeNavDrawer())},
-      goToSignIn: () => {dispatch(push('/signin'));}
+      goToSignIn: () => {dispatch(push('/signin'));}//,
+      // ping: (token) => {dispatch(ping(token))}
   }
 }
 
@@ -49,6 +51,9 @@ class Header extends Component {
     if(this.props.token && !nextProps.token){
       this.props.goToSignIn();
     }
+    // else if(nextProps.token && (this.props.lastPing+5000 < Date.now())){
+    //   //this.props.ping(nextProps.token);
+    // }
   }
 
   componentWillUnmount(){

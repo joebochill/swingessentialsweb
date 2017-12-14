@@ -27,11 +27,11 @@ export const initialStore = {
     },
 
     // user's available credits
-    // credits:{
-    //     count: 0,
-    //     unlimited: false,
-    //     unlimitedExpires: 0
-    // },
+    credits:{
+        count: 0,
+        unlimited: false,
+        unlimitedExpires: 0
+    },
 
     // user's lesson history
     lessons:{
@@ -57,9 +57,11 @@ export const initialStore = {
     // api validation token/ authentication
     login:{
         token: null,
+        admin: false,
         failCount: 0,
         settingsAuthenticated: false,
-        pendingAuthentication: false        
+        pendingAuthentication: false//,
+        // lastPing: 0
     },
 
     registration:{
@@ -83,7 +85,7 @@ export const initialStore = {
     },
 
     communication:{
-
+        signInMessage: ''
     },
 
     router: null
