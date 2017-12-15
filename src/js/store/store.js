@@ -37,7 +37,9 @@ export const initialStore = {
     lessons:{
         loading: false,
         pending:[],
-        closed:[]
+        closed:[],
+        linking: false,
+        linked: false
     },
 
     // tips of the month

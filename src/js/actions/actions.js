@@ -27,7 +27,9 @@
     export const CHECK_USER = {REQUEST: 'CHECK_USER', SUCCESS: 'CHECK_USER_SUCCESS', FAIL:'CHECK_USER_FAIL'};
     export const CHECK_EMAIL = {REQUEST: 'CHECK_EMAIL', SUCCESS: 'CHECK_EMAIL_SUCCESS', FAIL:'CHECK_EMAIL_FAIL'};
     
-
+    export const VIDEO_LINK = {REQUEST: 'VIDEO_LINK', SUCCESS: 'VIDEO_LINK_SUCCESS', FAIL: 'VIDEO_LINK_FAIL'};
+    export const CLEAR_VIDEO = {REQUEST: 'CLEAR_VIDEO', SUCCESS: 'CLEAR_VIDEO_SUCCESS', FAIL: 'CLEAR_VIDEO_FAIL'};
+    
     export const REDEEM_CREDIT = {REQUEST: 'REDEEM_CREDIT', SUCCESS: 'REDEEM_CREDIT_SUCCESS', FAIL: 'REDEEM_CREDIT_FAIL'};
     export const PING = {REQUEST: 'PING_REQUEST', SUCCESS: 'PING_SUCCESS', FAIL: 'PING_FAIL'};
 
@@ -43,28 +45,28 @@ const baseUrl = 'http://www.josephpboyle.com/api/myapi.php/';
 
 // periodic check to see if our token is still valid
 // export function ping(token){
-//     console.log('pinging');
-//     return (dispatch) => {
-//         fetch(baseUrl+'ping', {
-//             headers: {
-//                 'Authorization': 'Bearer ' + token
-//             }
-//         })
-//         .then((response) => {
-//             switch(response.status){
-//                 case 200:
-//                     console.log('ping succeeded - new token');
-//                     const token = response.headers.get('Token');
-//                     localStorage.setItem('token', JSON.stringify(token));
-//                     dispatch(success(PING.SUCCESS, {token: token}));
-//                     break;
-//                 default:
-//                     console.log('ping failed');
-//                     checkTimeout(response, dispatch);
-//             }
-//         })
-//         .catch((error) => console.error(error));
-//     }
+    //     console.log('pinging');
+    //     return (dispatch) => {
+    //         fetch(baseUrl+'ping', {
+    //             headers: {
+    //                 'Authorization': 'Bearer ' + token
+    //             }
+    //         })
+    //         .then((response) => {
+    //             switch(response.status){
+    //                 case 200:
+    //                     console.log('ping succeeded - new token');
+    //                     const token = response.headers.get('Token');
+    //                     localStorage.setItem('token', JSON.stringify(token));
+    //                     dispatch(success(PING.SUCCESS, {token: token}));
+    //                     break;
+    //                 default:
+    //                     console.log('ping failed');
+    //                     checkTimeout(response, dispatch);
+    //             }
+    //         })
+    //         .catch((error) => console.error(error));
+    //     }
 // }
 
 export function requestDataFromToken(token){
@@ -379,30 +381,30 @@ export function updateUserCredentials(data, token){
 }
 
 // export function redeemCredit(type, data, token){
-//     return (dispatch) => {
-//         dispatch({type: REDEEM_CREDIT.REQUEST});
-        
-//         return fetch(baseUrl+'redeem/'+type, { 
-//             method: 'POST',
-//             headers: {
-//                 'Authorization': 'Bearer ' + token
-//             },
-//             body: JSON.stringify({fo_swing:'test', dtl_swing:'test'})
-//         })
-//         .then((response) => {
-//             switch(response.status) {
-//                 case 200:
-//                     dispatch(success(REDEEM_CREDIT.SUCCESS));
-//                     dispatch(getLessons(token));
-//                     break;
-//                 default:
-//checkTimeout(response, dispatch);
-//                     dispatch(failure(REDEEM_CREDIT.FAIL, response));
-//                     break;
-//             }
-//         })
-//         .catch((error) => console.error(error));
-//     }
+    //     return (dispatch) => {
+    //         dispatch({type: REDEEM_CREDIT.REQUEST});
+            
+    //         return fetch(baseUrl+'redeem/'+type, { 
+    //             method: 'POST',
+    //             headers: {
+    //                 'Authorization': 'Bearer ' + token
+    //             },
+    //             body: JSON.stringify({fo_swing:'test', dtl_swing:'test'})
+    //         })
+    //         .then((response) => {
+    //             switch(response.status) {
+    //                 case 200:
+    //                     dispatch(success(REDEEM_CREDIT.SUCCESS));
+    //                     dispatch(getLessons(token));
+    //                     break;
+    //                 default:
+    //checkTimeout(response, dispatch);
+    //                     dispatch(failure(REDEEM_CREDIT.FAIL, response));
+    //                     break;
+    //             }
+    //         })
+    //         .catch((error) => console.error(error));
+    //     }
 // }
 
 export function getLessons(token){
@@ -473,27 +475,27 @@ export function getBlogs(){
 }
 
 // export function getCredits(token){
-//     return (dispatch) => {
-//         return fetch(baseUrl+'credits', { 
-//             headers: {
-//                 'Authorization': 'Bearer ' + token
-//             }
-//         })
-//         .then((response) => {
-//             switch(response.status) {
-//                 case 200:
-//                     response.json()
-//                     .then((json) =>{dispatch(success(GET_CREDITS.SUCCESS, json))})
-//                     .then((response) => localStorage.setItem('credits',JSON.stringify(response)));
-//                     break;
-//                 default:
-//checkTimeout(response, dispatch);
-//                     dispatch(failure(GET_CREDITS.FAIL, response));
-//                     break;
-//             }
-//         })
-//         .catch((error) => console.error(error));
-//     }
+    //     return (dispatch) => {
+    //         return fetch(baseUrl+'credits', { 
+    //             headers: {
+    //                 'Authorization': 'Bearer ' + token
+    //             }
+    //         })
+    //         .then((response) => {
+    //             switch(response.status) {
+    //                 case 200:
+    //                     response.json()
+    //                     .then((json) =>{dispatch(success(GET_CREDITS.SUCCESS, json))})
+    //                     .then((response) => localStorage.setItem('credits',JSON.stringify(response)));
+    //                     break;
+    //                 default:
+    //checkTimeout(response, dispatch);
+    //                     dispatch(failure(GET_CREDITS.FAIL, response));
+    //                     break;
+    //             }
+    //         })
+    //         .catch((error) => console.error(error));
+    //     }
 // }
 
 export function getSettings(token){
@@ -542,8 +544,52 @@ export function getPackages(token){
     }
 }
 
+export function getVideoLinks(token, id){
+    return (dispatch) => {
+        
+        dispatch({type:VIDEO_LINK.REQUEST});
+
+        return fetch(baseUrl+'videos/' + id, { 
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    dispatch(success(VIDEO_LINK.SUCCESS));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(VIDEO_LINK.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+export function clearVideoLinks(token){
+    return (dispatch) => {
+        return fetch(baseUrl+'unlink')
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    dispatch(success(CLEAR_VIDEO.SUCCESS));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(CLEAR_VIDEO.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
 
 /* Success/Failure Actions for the above Request types */
+
 function checkTimeout(response, dispatch){
     // If we get a failed API call, check if our authentication needs to be re-upped
     const error = parseInt(response.headers.get('Error'),10);

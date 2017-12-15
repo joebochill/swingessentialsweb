@@ -21,7 +21,8 @@ import {LOCATION_CHANGE,
 		VERIFY_RESET,
 		CHECK_USER,
 		CHECK_EMAIL,
-		TOKEN_TIMEOUT
+		TOKEN_TIMEOUT,
+		VIDEO_LINK
 } from '../actions/actions.js';
 
 /* Updates the basic info for the logged in user */
@@ -106,7 +107,7 @@ const lessonsReducer = (state=[], action) => {
 				loading: true
 			}
 		case GET_LESSONS.SUCCESS:
-			return {
+			return {...state,
 				loading: false,
 				pending: action.data.pending,
 				closed: action.data.closed
@@ -116,10 +117,24 @@ const lessonsReducer = (state=[], action) => {
 				loading: false
 			}
 		case LOGOUT.SUCCESS:
-			return{
+			return{...state,
 				loading: false,
 				pending: [],
 				closed: []
+			}
+		case VIDEO_LINK.REQUEST:
+			return{...state,
+				linking: true
+			}
+		case VIDEO_LINK.SUCCESS:
+			return{...state,
+				linking: false,
+				linked: true
+			}
+		case VIDEO_LINK.FAIL:
+			return{...state,
+				linking: false,
+				linked: false
 			}
 		default:
 			return state;

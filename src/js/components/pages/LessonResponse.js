@@ -7,13 +7,16 @@ import Loader from '../loader/Loader.js';
 import {formatDate} from '../../utils/utils.js';
 //import YouTube from 'react-youtube';
 
-import { setTargetRoute, getLessons } from '../../actions/actions';
+import { setTargetRoute, getLessons, getVideoLinks, clearVideoLinks } from '../../actions/actions';
 
 const mapStateToProps = (state)=>{
   return {
     username: state.userData.username,
     token: state.login.token,
-    lessons: state.lessons
+    lessons: state.lessons,
+    admin: state.login.admin,
+    linking: state.lessons.linking,
+    linked: state.lessons.linked
   };
 }
 var mapDispatchToProps = function(dispatch){
@@ -21,7 +24,9 @@ var mapDispatchToProps = function(dispatch){
     goToSignIn: () => {dispatch(replace('/signin'));},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
     getLessons: (token) => {dispatch(getLessons(token))},
-    goToLessons: () => {dispatch(replace('/lessons'))}
+    goToLessons: () => {dispatch(replace('/lessons'))},
+    getVideoLinks: (token, id) => {dispatch(getVideoLinks(token, id))},
+    clearVideoLinks: () => {dispatch(clearVideoLinks())}
   }
 };
 
@@ -36,6 +41,7 @@ class LessonResponsePage extends Component {
       // user is logged in, verify the requested lesson against their list
       window.scrollTo(0,0);
       this._verifyLesson();
+      this.props.getVideoLinks(this.props.token,this.props.match.params.lesson_id);
     }
   }
   componentWillReceiveProps(nextProps){
@@ -50,6 +56,10 @@ class LessonResponsePage extends Component {
         this._verifyLesson(nextProps.lessons);
       }
     }
+  }
+
+  componentWillUnmount(){
+    this.props.clearVideoLinks();
   }
 
   // converts a DB stored string into paragraphs (we do not store html in the database, just text)
@@ -129,19 +139,55 @@ class LessonResponsePage extends Component {
               </div>
             </section>
           }
-          <section className="left">
-            <div className="structured_panel">
-              <h1>Your Swing Videos</h1>
-              <div className="se_multi_video">
-                <div className="se_video_flex">
-                  <YoutubeVideo vid={this.lesson.dtl_swing}/>
-                </div>
-                <div className="se_video_flex">
-                  <YoutubeVideo vid={this.lesson.fo_swing}/>
+          {!this.props.admin &&
+            <section className="left">
+              <div className="structured_panel">
+                <h1>Your Swing Videos</h1>
+                <div className="se_multi_video">
+                  <div className="se_video_flex">
+                    <YoutubeVideo vid={this.lesson.dtl_swing}/>
+                  </div>
+                  <div className="se_video_flex">
+                    <YoutubeVideo vid={this.lesson.fo_swing}/>
+                  </div>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
+          }
+          {this.props.admin && !this.props.linking && this.props.linked &&
+            <section className="left">
+              <div className="structured_panel">
+                <h1>Your Swing Videos</h1>
+                <div className="se_multi_video">
+                  <div className="se_video_flex">
+                    <video width="100%" controls src={'http://www.josephpboyle.com/securevideos/'+this.lesson.request_url+'/'+this.lesson.fo_swing}>
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                  <div className="se_video_flex">
+                    <video width="100%" controls src={'http://www.josephpboyle.com/securevideos/'+this.lesson.request_url+'/'+this.lesson.dtl_swing}>
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                </div>
+              </div>
+            </section>
+          }
+          {this.props.admin && this.props.linking &&
+            <section className="left">
+              <div className="structured_panel">
+                <h1>Your Swing Videos</h1>
+                <div className="se_multi_video">
+                  <div className="se_video_flex">
+                    <Loader/>
+                  </div>
+                  <div className="se_video_flex">
+                    <Loader/>
+                  </div>
+                </div>
+              </div>
+            </section>
+          }
           <Footer/>
         </div>
       </div>
