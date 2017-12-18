@@ -33,16 +33,47 @@
     export const REDEEM_CREDIT = {REQUEST: 'REDEEM_CREDIT', SUCCESS: 'REDEEM_CREDIT_SUCCESS', FAIL: 'REDEEM_CREDIT_FAIL'};
     export const PING = {REQUEST: 'PING_REQUEST', SUCCESS: 'PING_SUCCESS', FAIL: 'PING_FAIL'};
 
+    export const PUT_LESSON_RESPONSE = {REQUEST: 'PUT_LESSON_RESPONSE', SUCCESS: 'PUT_LESSON_RESPONSE_SUCCESS', FAIL: 'PUT_LESSON_RESPONSE_FAIL'};
+
     export const MENU = {OPEN: 'OPEN_MENU', CLOSE: 'CLOSE_MENU'}; 
     export const DRAWER = {OPEN: 'OPEN_DRAWER', CLOSE: 'CLOSE_DRAWER'}; 
     
 
 /* Base URL for fetch commands */    
 const baseUrl = 'http://www.josephpboyle.com/api/myapi.php/';
-
+//const API_KEY = 'AIzaSyAzvggwVpvJ1pngsjQKJ84FcY8v07C8dNA';
+//const googleURL = 'https://www.googleapis.com/upload/storage/v1/b/www.joebochill.com/';
 
 /* Database fetch actions */
-
+// export function uploadFile(input){
+//     return (dispatch) => {
+//         console.log('dispatching');
+//         console.log(input.files[0]);
+//         let data = new FormData();
+//         data.append('file', input.files[0]);
+//         //POST https://www.googleapis.com/upload/storage/v1/b/myBucket/o?uploadType=media&name=myObject
+        
+//         fetch(googleURL+'o?uploadType=media&name=test&key='+API_KEY, {
+//           method: 'POST',
+//           headers: {
+//             'Accept': 'application/json',
+//             'Content-Type': 'multipart/form-data'
+//           },
+//           body: data
+//         })
+//         .then((response) => {
+//             console.log(response);
+//             switch(response.status) {
+//                 case 200:
+//                     dispatch(success('test_success'));
+//                     break;
+//                 default:
+//                     dispatch(failure('test_fail', response));
+//                     break;
+//             }
+//         })    
+//     }
+// }
 // periodic check to see if our token is still valid
 // export function ping(token){
     //     console.log('pinging');
@@ -432,6 +463,33 @@ export function getLessons(token){
     }
 }
 
+export function putLessonResponse(data, token){
+    return (dispatch) => {
+        dispatch({type: PUT_LESSON_RESPONSE.REQUEST});
+
+        return fetch(baseUrl+'lesson', {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(data)
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    dispatch(success(PUT_LESSON_RESPONSE.SUCCESS));
+                    dispatch(getLessons(token));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(PUT_LESSON_RESPONSE.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
 export function getTips(){
     return (dispatch) => {
         dispatch({type: GET_TIPS.REQUEST});
@@ -546,7 +604,6 @@ export function getPackages(token){
 
 export function getVideoLinks(token, id){
     return (dispatch) => {
-        
         dispatch({type:VIDEO_LINK.REQUEST});
 
         return fetch(baseUrl+'videos/' + id, { 

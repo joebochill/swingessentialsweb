@@ -7,7 +7,7 @@ import Loader from '../loader/Loader.js';
 import {formatDate} from '../../utils/utils.js';
 //import YouTube from 'react-youtube';
 
-import { setTargetRoute, getLessons, getVideoLinks, clearVideoLinks } from '../../actions/actions';
+import { setTargetRoute, getLessons, getVideoLinks, clearVideoLinks, putLessonResponse } from '../../actions/actions';
 
 const mapStateToProps = (state)=>{
   return {
@@ -26,11 +26,22 @@ var mapDispatchToProps = function(dispatch){
     getLessons: (token) => {dispatch(getLessons(token))},
     goToLessons: () => {dispatch(replace('/lessons'))},
     getVideoLinks: (token, id) => {dispatch(getVideoLinks(token, id))},
-    clearVideoLinks: () => {dispatch(clearVideoLinks())}
+    clearVideoLinks: () => {dispatch(clearVideoLinks())},
+    putLessonResponse: (data,token) => {dispatch(putLessonResponse(data,token))}
   }
 };
 
 class LessonResponsePage extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      editingResponse: false,
+      responseURL: '',
+      responseNotes: '',
+      responseStatus: ''
+    };
+  }
+
   componentWillMount(){
     if(!this.props.token){
       // user is not logged in. store the request and send to signin screen
@@ -107,6 +118,28 @@ class LessonResponsePage extends Component {
       this.props.goToLessons();
       return;
     }  
+    else{
+      this.setState({
+        responseURL: (this.state.responseURL) ? this.state.responseURL : (this.lesson.response_video || ''),
+        responseNotes: (this.state.responseNotes) ? this.state.responseNotes : (this.lesson.response_notes || ''),
+        responseStatus: (this.state.responseStatus) ? this.state.responseStatus : (this.lesson.response_status || 'good')
+      })
+    }
+  }
+
+  _sendUpdate(){
+    if(!this.lesson){return;}
+    
+    const data = {
+      lesson_id: this.lesson['request_id'],
+      username: this.lesson['username'],
+      response_video: this.state.responseURL,
+      response_notes: this.state.responseNotes,
+      response_status: this.state.responseStatus
+    };
+
+    this.props.putLessonResponse(data, this.props.token);
+    this.setState({editingResponse: false});
   }
 
   render() {
@@ -139,52 +172,76 @@ class LessonResponsePage extends Component {
               </div>
             </section>
           }
-          {!this.props.admin &&
-            <section className="left">
-              <div className="structured_panel">
-                <h1>Your Swing Videos</h1>
-                <div className="se_multi_video">
-                  <div className="se_video_flex">
-                    <YoutubeVideo vid={this.lesson.dtl_swing}/>
-                  </div>
-                  <div className="se_video_flex">
-                    <YoutubeVideo vid={this.lesson.fo_swing}/>
-                  </div>
-                </div>
-              </div>
-            </section>
-          }
-          {this.props.admin && !this.props.linking && this.props.linked &&
-            <section className="left">
-              <div className="structured_panel">
-                <h1>Your Swing Videos</h1>
-                <div className="se_multi_video">
-                  <div className="se_video_flex">
+          <section className="left">
+            <div className="structured_panel">
+              <h1>{this.props.admin ? "Swing Videos" : "Your Swing Videos"}</h1>
+              <div className="se_multi_video">
+                <div className="se_video_flex">
+                  {(!this.props.linking && this.props.linked) ?
                     <video width="100%" controls src={'http://www.josephpboyle.com/securevideos/'+this.lesson.request_url+'/'+this.lesson.fo_swing}>
                       Your browser does not support the video tag.
                     </video>
-                  </div>
-                  <div className="se_video_flex">
-                    <video width="100%" controls src={'http://www.josephpboyle.com/securevideos/'+this.lesson.request_url+'/'+this.lesson.dtl_swing}>
-                      Your browser does not support the video tag.
-                    </video>
-                  </div>
+                    : ((this.props.linking) ?
+                    <Loader/>
+                    : <span>Failed to load video. Try refreshing your browser.</span>
+                  )}
+                </div>
+                <div className="se_video_flex">
+                {(!this.props.linking && this.props.linked) ?
+                  <video width="100%" controls src={'http://www.josephpboyle.com/securevideos/'+this.lesson.request_url+'/'+this.lesson.dtl_swing}>
+                    Your browser does not support the video tag.
+                  </video>
+                  : (this.props.linking) ?
+                  <Loader/>
+                  : <span>Failed to load video. Try refreshing your browser.</span>
+                  }
+                </div>
+              </div>
+            </div>
+          </section>
+          {this.props.admin && !this.state.editingResponse &&
+            <section>
+              <div className="structured_panel">
+                <div className="button se_button" 
+                      onClick={()=>this.setState({editingResponse: true})}
+                >
+                  <span>{this.lesson.response_status ? "EDIT RESPONSE" : "CREATE RESPONSE"}</span>
                 </div>
               </div>
             </section>
           }
-          {this.props.admin && this.props.linking &&
-            <section className="left">
+          {this.props.admin && this.state.editingResponse &&
+            <section>
               <div className="structured_panel">
-                <h1>Your Swing Videos</h1>
-                <div className="se_multi_video">
-                  <div className="se_video_flex">
-                    <Loader/>
-                  </div>
-                  <div className="se_video_flex">
-                    <Loader/>
-                  </div>
+                <label>Response Video ID</label>
+                <input 
+                  placeholder="Youtube ID"
+                  value={this.state.responseURL} 
+                  onChange={(evt)=>this.setState({responseURL:evt.target.value})} 
+                />
+                <label style={{marginTop: '1rem'}}>Response Notes</label>
+                <textarea 
+                  placeholder="Add any comments here..."
+                  value={this.state.responseNotes} 
+                  onChange={(evt)=>this.setState({responseNotes:evt.target.value})} 
+                />
+                <label style={{marginTop: '1rem'}}>Response Status</label>
+                <select value={this.state.responseStatus} onChange={(evt)=>this.setState({responseStatus: evt.target.value})}>
+                  <option value='good'>Accepted</option>
+                  <option value='rejected'>Rejected</option>
+                </select>
+                <div className="button se_button"  style={{marginTop: '2rem'}}
+                  onClick={()=>this.setState({responseURL:'', response_status:'good', responseNotes:'', editingResponse: false})}
+                >
+                  <span>CANCEL</span>
                 </div>
+                <div className="button se_button"  style={{marginTop: '1rem'}}
+                  onClick={()=>this._sendUpdate()}
+                  disabled={!this.state.responseURL}
+                >
+                  <span>SUBMIT</span>
+                </div>
+                
               </div>
             </section>
           }

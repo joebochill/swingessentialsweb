@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {replace, goBack, push} from 'react-router-redux';
 import {connect} from 'react-redux';
-import {setTargetRoute, requestLogin, requestReset} from '../../actions/actions.js';
+import {setTargetRoute, requestLogin, requestReset/*, uploadFile*/} from '../../actions/actions.js';
 import Footer from '../footer/Footer.js';
 
 
@@ -23,7 +23,8 @@ const mapDispatchToProps = (dispatch)=>{
     register: () => {dispatch(push('/register'))},
     resetTargetRoute: () => {dispatch(setTargetRoute(''))},
     requestLogin: (cred) => {dispatch(requestLogin(cred))},
-    requestReset: (data) => {dispatch(requestReset(data))}
+    requestReset: (data) => {dispatch(requestReset(data))},
+    // uploadFile: (input) => {dispatch(uploadFile(input))}
   }
 }
 
