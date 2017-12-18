@@ -8,6 +8,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  position: relative;
 
   height: 3rem;
   padding: 0 1rem;
@@ -22,12 +23,27 @@
   font-weight: 600;
   user-select: none;
 }
+.card_header.infinity::after{
+  content: '\221E';
+  position: absolute;
+  opacity: .15;
+  font-size: 22rem;
+  line-height: 3rem;
+  top: -0.75rem;
+  left: -1.9375rem;
+
+}
 .card_header > :first-child{
   flex: 1 1 0rem;
+}
+.card_header.infinity > :first-child{
+  font-style: italic;
 }
 .card_header > :not(:first-child){
   flex: 0 0 auto;
   margin-left: 1rem;
+
+  text-align: right;
 }
 .card_header > span:not(:first-child):not(.disabled),
 .card_header > span:not(:first-child):not([disabled]){
@@ -89,16 +105,33 @@ section:nth-child(even) .card_row:not(.nohover):hover{
   background: rgba(35, 31, 97, .05);
 }
 .card_title{
-  /* flex: 0 0 auto; */
   flex: 1 1 0rem;
   
   margin-right: 1rem;
-  overflow: hidden;
+  overflow: visible;
   
   white-space: nowrap;
   line-height: 3rem;
   text-align: left;
   text-overflow: ellipsis;
+}
+.card_title.multi{
+  overflow: hidden;
+}
+.card_title.multi > div {
+  height: 1.3rem;
+  overflow: hidden;
+  
+  line-height: 1.1rem;
+  text-overflow: ellipsis;
+}
+.card_title.multi > div:last-child {
+  height: 0.8rem;
+
+  font-size: .7rem;
+  line-height: .7rem;
+  
+  opacity: .75;
 }
 .card_row.alternate .card_title{
   font-weight: 600;
@@ -205,5 +238,8 @@ section:nth-child(even) .card_row:not(.nohover):hover{
   }
   .card_extra > input{
     font-size: 1rem;
+  }
+  .card_header > :not(:first-child){
+    flex: 1 1 0rem;
   }
 }

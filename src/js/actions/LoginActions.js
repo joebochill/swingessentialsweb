@@ -1,7 +1,7 @@
 /* Constants */
-import {BASEURL, failure, success, checkTimeout} from './actions.js';
+import {BASEURL, /*getPackages,*/ failure, success, checkTimeout} from './actions.js';
 import {getUserData, getSettings} from './UserDataActions.js';
-import {getLessons} from './LessonActions.js';
+import {getLessons, getCredits} from './LessonActions.js';
 
 export const TOKEN_FROM_STORAGE = "TOKEN_FROM_STORAGE";
 export const LOGIN = {SUCCESS: 'LOGIN_SUCCESS', FAIL: 'LOGIN_FAIL'};
@@ -15,7 +15,7 @@ export function requestDataFromToken(token){
         dispatch({type:TOKEN_FROM_STORAGE, token:token});
         dispatch(getUserData(token))
         .then(() => dispatch(getLessons(token)))
-        //.then(() => dispatch(getCredits(token)))
+        .then(() => dispatch(getCredits(token)))
         .then(() => dispatch(getSettings(token)));
         //.then(() => dispatch(getPackages(token)));
     }
@@ -36,7 +36,7 @@ export function requestLogin(userCredentials){
                     response.json()
                     .then((json) => dispatch(success(LOGIN.SUCCESS, {...json,token:token})))
                     .then(() => dispatch(getLessons(token)))
-                    //.then(() => dispatch(getCredits(token)))
+                    .then(() => dispatch(getCredits(token)))
                     .then(() => dispatch(getSettings(token)));
                     //.then(() => dispatch(getPackages(token)));
                     break;

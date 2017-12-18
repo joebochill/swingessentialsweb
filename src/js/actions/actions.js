@@ -5,7 +5,7 @@ export const TOKEN_TIMEOUT = 'TOKEN_TIMEOUT';
 
 export const GET_TIPS = {REQUEST: 'GET_TIPS', SUCCESS: 'GET_TIPS_SUCCESS', FAIL: 'GET_TIPS_FAIL'};
 export const GET_BLOGS = {REQUEST: 'GET_BLOGS', SUCCESS: 'GET_BLOGS_SUCCESS', FAIL: 'GET_BLOGS_FAIL'};
-export const GET_PACKAGES = {SUCCESS: 'GET_PACKAGES_SUCCESS', FAIL: 'GET_PACKAGES_FAIL'};
+export const GET_PACKAGES = {REQUEST: 'GET_PACKAGES', SUCCESS: 'GET_PACKAGES_SUCCESS', FAIL: 'GET_PACKAGES_FAIL'};
 // export const PING = {REQUEST: 'PING_REQUEST', SUCCESS: 'PING_SUCCESS', FAIL: 'PING_FAIL'};
 
 /* Base URL for fetch commands */
@@ -117,6 +117,8 @@ export function getBlogs(){
 /* Retrieves List of available lesson packages and prices */
 export function getPackages(token){
     return (dispatch) => {
+        dispatch({type:GET_PACKAGES.REQUEST});
+
         return fetch(BASEURL+'packages', { 
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -126,7 +128,8 @@ export function getPackages(token){
             switch(response.status) {
                 case 200:
                     response.json()
-                    .then((json) => dispatch(success(GET_PACKAGES.SUCCESS, json)));
+                    .then((json) => dispatch(success(GET_PACKAGES.SUCCESS, json)))
+                    .then((response) => localStorage.setItem('packages',JSON.stringify(response.data)));                    
                     break;
                 default:
                     checkTimeout(response, dispatch);
@@ -137,7 +140,6 @@ export function getPackages(token){
         .catch((error) => console.error(error));
     }
 }
-
 
 /* Check if the request failed because of an expired token */
 export function checkTimeout(response, dispatch){

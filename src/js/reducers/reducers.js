@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux'
 
-import {LOCATION_CHANGE, GET_TIPS, GET_BLOGS, TOKEN_TIMEOUT} from '../actions/actions.js';
+import {LOCATION_CHANGE, GET_TIPS, GET_BLOGS, TOKEN_TIMEOUT, GET_PACKAGES} from '../actions/actions.js';
 import {SET_TARGET_ROUTE, MENU, DRAWER} from '../actions/NavigationActions.js';
 import {TOKEN_FROM_STORAGE, LOGIN, LOGOUT, VALIDATE_PASSWORD} from '../actions/LoginActions.js';
-import {GET_LESSONS, VIDEO_LINK, /*CLEAR_VIDEO, REDEEM_CREDIT, PUT_LESSON_RESPONSE*/} from '../actions/LessonActions.js';
+import {GET_LESSONS, VIDEO_LINK, GET_CREDITS /*CLEAR_VIDEO, REDEEM_CREDIT, PUT_LESSON_RESPONSE*/} from '../actions/LessonActions.js';
 import {CREATE_ACCOUNT, VERIFY_EMAIL, /*REQUEST_RESET,*/ VERIFY_RESET, CHECK_USER, CHECK_EMAIL} from '../actions/RegistrationActions.js';
 import {UPDATE_CREDENTIALS, /*PUT_USER_DATA,*/ GET_USER_DATA, GET_SETTINGS} from '../actions/UserDataActions.js';
 
@@ -65,18 +65,18 @@ const settingsReducer = (state=[], action) => {
 /* Updates the available credits for the logged in user */
 const creditsReducer = (state=[], action) => {
 	switch(action.type){
-		// case GET_CREDITS.SUCCESS:
-		// 	return {...state,
-		// 		count: parseInt(action.data.count, 10) || 0,
-		// 		unlimited: action.data.unlimited_count,
-		// 		unlimitedExpires: parseInt(action.data.unlimited_expires, 10) || 0
-		// 	}
-		// case GET_CREDITS.FAIL:
-		// 	return {...state,
-		// 		count: 0,
-		// 		unlimited: 0,
-		// 		unlimitedExpires: 0
-		// 	}
+		case GET_CREDITS.SUCCESS:
+			return {...state,
+				count: parseInt(action.data.count, 10) || 0,
+				unlimited: action.data.unlimited_count,
+				unlimitedExpires: parseInt(action.data.unlimited_expires, 10) || 0
+			}
+		case GET_CREDITS.FAIL:
+			return {...state,
+				count: 0,
+				unlimited: 0,
+				unlimitedExpires: 0
+			}
 		default:
 			return state;
 	}
@@ -169,9 +169,25 @@ const blogsReducer = (state=[], action) => {
 }
 
 /* Updates the list of available lesson packages */
-// const packagesReducer = (state=[], action) => {
-// 	return state;
-// }
+const packagesReducer = (state=[], action) => {
+	switch(action.type){
+		case GET_PACKAGES.REQUEST:
+			return{...state,
+				loading: true
+			}
+		case GET_PACKAGES.SUCCESS:
+			return{...state,
+				list: action.data,
+				loading: false
+			}
+		case GET_PACKAGES.FAIL:
+			return{...state,
+				loading: false
+			}
+		default:
+			return state;
+	}
+}
 
 /* Updates the current authentication tokens and login failures */
 const loginReducer = (state=[], action) => {
@@ -370,7 +386,7 @@ const AppReducer = combineReducers({
 	lessons: lessonsReducer,
 	tips: tipsReducer,
 	blogs: blogsReducer,
-    //packages: packagesReducer,
+    packages: packagesReducer,
 	login: loginReducer,
 	registration: registrationReducer,
 	header: headerReducer,

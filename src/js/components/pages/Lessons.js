@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import LessonRow from '../rows/LessonRow.js';
-import {replace} from 'react-router-redux';
+import {replace, push} from 'react-router-redux';
 //import Loader from '../loader/Loader.js';
 import Placeholder from '../rows/Placeholder.js';
 import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
 import {setTargetRoute} from '../../actions/NavigationActions.js';
-import {getLessons} from '../../actions/LessonActions.js';
+import {getLessons, getCredits} from '../../actions/LessonActions.js';
 import {formatDate} from '../../utils/utils.js';
 
 import '../../../css/Cards.css';
@@ -24,8 +24,9 @@ var mapDispatchToProps = function(dispatch){
   return {
     goToSignIn: () => {dispatch(replace('/signin'));},
     getLessons: (token) => {dispatch(getLessons(token))},
-    // getCredits: (token) => {dispatch(getCredits(token))},
+    getCredits: (token) => {dispatch(getCredits(token))},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
+    goToPackages: () => {dispatch(push('/packages'))}
     // redeemCredit: (type, data, token) => {dispatch(redeemCredit(type, data, token))}
   }
 };
@@ -45,9 +46,9 @@ class LessonsPage extends Component {
       }
 
       // if the credits list is empty, do a fetch for new credits
-      // if(!this.props.credits.count && !this.props.credits.unlimited && !this.props.credits.unlimitedExpires){
-      //   this.props.getCredits(this.props.token);
-      // }
+      if(!this.props.credits.count && !this.props.credits.unlimited && !this.props.credits.unlimitedExpires){
+        this.props.getCredits(this.props.token);
+      }
     }
   }
   componentWillReceiveProps(nextProps){
@@ -57,22 +58,23 @@ class LessonsPage extends Component {
     }
   }
 
-  // _formatUnlimited(){
-  //   let unlimitedRemaining = (this.props.credits.unlimitedExpires - (Date.now()/1000));
+  /* Format the time remaining string for unlimited lesson */
+  _formatUnlimited(){
+    let unlimitedRemaining = (this.props.credits.unlimitedExpires - (Date.now()/1000));
     
-  //   if(unlimitedRemaining > 24*60*60){
-  //     return Math.ceil(unlimitedRemaining/(24*60*60)) + " Days";
-  //   }
-  //   else if(unlimitedRemaining > 60*60){
-  //     return Math.ceil(unlimitedRemaining/(60*60)) + " Hours";
-  //   }
-  //   else if(unlimitedRemaining > 0){
-  //     return Math.ceil(unlimitedRemaining/60) + " Minutes";
-  //   }
-  //   else{
-  //     return (this.props.credits.unlimited ? this.props.credits.unlimited : "0") + " Rounds";
-  //   }
-  // }
+    if(unlimitedRemaining > 24*60*60){
+      return Math.ceil(unlimitedRemaining/(24*60*60)) + " Days";
+    }
+    else if(unlimitedRemaining > 60*60){
+      return Math.ceil(unlimitedRemaining/(60*60)) + " Hours";
+    }
+    else if(unlimitedRemaining > 0){
+      return Math.ceil(unlimitedRemaining/60) + " Minutes";
+    }
+    else{
+      return (this.props.credits.unlimited ? this.props.credits.unlimited : "0") + " Rounds";
+    }
+  }
 
 
   render() {
@@ -86,7 +88,7 @@ class LessonsPage extends Component {
           </main>
         </section>
         <div>
-        {(!this.props.admin && !loading && !this.props.lessons.closed.length && !this.props.lessons.pending.length) && 
+          {(!this.props.admin && !loading && !this.props.lessons.closed.length && !this.props.lessons.pending.length) && 
             <section>
               <h1>You haven't submitted any lessons!</h1>
               <p>Download our app today. Your first lesson is free!</p>
@@ -98,6 +100,58 @@ class LessonsPage extends Component {
           }
           <section>
             <div className="structured_panel">
+              {!this.props.admin && this.props.credits.unlimitedExpires > Date.now()/1000 &&
+                <div className="card">
+                  <div className="card_header infinity">
+                    <span>Unlimited Lessons</span>
+                    <span>{`${this._formatUnlimited()} Left`}</span>
+                  </div>
+                  <div className="card_body">
+                    <CardRow go 
+                      title={'Submit a Swing'} 
+                      className={"noflex"} 
+                      action={()=>alert('submit an unlimited swing')}
+                    />
+                    <CardRow  
+                      go
+                      title={'Order More'} 
+                      className={"noflex"} 
+                      action={()=>this.props.goToPackages()}
+                    />
+                  </div>
+                </div>
+              }
+              {!this.props.admin && this.props.credits.unlimitedExpires <= Date.now()/1000 &&
+                <div className="card">
+                  <div className="card_header">
+                    <span>Redeem a Lesson</span>
+                    <span></span>
+                  </div>
+                  <div className="card_body">
+                    <CardRow go 
+                      title={'Individual Lesson'} 
+                      extra={`${this.props.credits.count} Left`}
+                      disabled={!this.props.credits.count}
+                      className={"noflex"} 
+                      action={()=>alert('order a single')}
+                    />
+                    <CardRow  
+                      go
+                      title={'Activate Unlimited'} 
+                      extra={`${this.props.credits.unlimited} Left`}
+                      disabled={!this.props.credits.unlimited}
+                      className={"noflex"} 
+                      action={()=>alert('Are you sure you want to activate your unlimited package? You will have unlimited lessons for 45 days.')}
+                    />
+                    <CardRow  
+                      go
+                      title={'Order More'} 
+                      className={"noflex"} 
+                      action={()=>this.props.goToPackages()}
+                    />
+                  </div>
+                </div>
+              }
               <div className="card">
                 <div className="card_header">
                   <span>In Progress</span>
@@ -128,69 +182,6 @@ class LessonsPage extends Component {
               </div>
             </div>
           </section>
-          {/* <section>
-            <div className="structured_panel">
-            <div className="card">
-                <div className="card_header">
-                  <span>Redeem a Lesson</span>
-                  <span>REFRESH</span>
-                </div>
-                <div className="card_body">
-                  <CardRow go 
-                    title={'Individual Lesson'} 
-                    extra={`${this.props.credits.count} Left`} 
-                    disabled={!this.props.credits.count} 
-                    className={"noflex"} 
-                    action={()=>this.props.redeemCredit('single', null, this.props.token)}
-                  />
-                  <CardRow go 
-                    title={'Unlimited Deal'} 
-                    extra={`${this._formatUnlimited()} Left`} 
-                    disabled={(this.props.credits.unlimitedExpires < (Date.now()/1000) && !this.props.credits.unlimited)}
-                    className={"noflex"} 
-                    action={()=>this.props.redeemCredit('unlimited', null, this.props.token)}
-                  />
-                </div>
-              </div>
-            </div>
-          </section> */}
-            {!this.props.admin && 
-              <section>
-                <div className="structured_panel">
-                  <div className="card">
-                    <div className="card_header">
-                      <span>Unlimited Lessons</span>
-                      <span>45 Days Left</span>
-                    </div>
-                    <div className="card_body">
-                      <CardRow go 
-                        title={'Submit a Swing'} 
-                        className={"noflex"} 
-                      />
-                    </div>
-                  </div>
-                  <div className="card">
-                    <div className="card_header">
-                      <span>Redeem a Lesson</span>
-                      <span></span>
-                    </div>
-                    <div className="card_body">
-                      <CardRow go 
-                        title={'Individual Lesson'} 
-                        extra={'5 Left'}
-                        className={"noflex"} 
-                      />
-                      <CardRow  
-                        go
-                        title={'Activate Unlimited'} 
-                        extra={'2 Left'} 
-                        className={"noflex"} 
-                      />
-                    </div>
-                  </div>
-                </div>
-              </section>
-            }
           <Footer/>
         </div>
       </div>

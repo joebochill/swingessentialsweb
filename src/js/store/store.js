@@ -54,7 +54,10 @@ export const initialStore = {
     },
 
     // swingessentials available lesson packages
-    //packages:[],
+    packages:{
+        list: [],
+        loading: false
+    },
 
     // api validation token/ authentication
     login:{

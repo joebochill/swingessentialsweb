@@ -7,7 +7,7 @@ export const VIDEO_LINK = {REQUEST: 'VIDEO_LINK', SUCCESS: 'VIDEO_LINK_SUCCESS',
 export const CLEAR_VIDEO = {REQUEST: 'CLEAR_VIDEO', SUCCESS: 'CLEAR_VIDEO_SUCCESS', FAIL: 'CLEAR_VIDEO_FAIL'};
 export const REDEEM_CREDIT = {REQUEST: 'REDEEM_CREDIT', SUCCESS: 'REDEEM_CREDIT_SUCCESS', FAIL: 'REDEEM_CREDIT_FAIL'};
 export const PUT_LESSON_RESPONSE = {REQUEST: 'PUT_LESSON_RESPONSE', SUCCESS: 'PUT_LESSON_RESPONSE_SUCCESS', FAIL: 'PUT_LESSON_RESPONSE_FAIL'};
-// export const GET_CREDITS = {SUCCESS: 'GET_CREDITS_SUCCESS', FAIL: 'GET_CREDITS_FAIL'};
+export const GET_CREDITS = {SUCCESS: 'GET_CREDITS_SUCCESS', FAIL: 'GET_CREDITS_FAIL'};
 
 
 /* Retrieves a list of lessons */
@@ -65,29 +65,29 @@ export function putLessonResponse(data, token){
 }
 
 /* Retrieves available credits */
-// export function getCredits(token){
-    //     return (dispatch) => {
-    //         return fetch(BASEURL+'credits', { 
-    //             headers: {
-    //                 'Authorization': 'Bearer ' + token
-    //             }
-    //         })
-    //         .then((response) => {
-    //             switch(response.status) {
-    //                 case 200:
-    //                     response.json()
-    //                     .then((json) =>{dispatch(success(GET_CREDITS.SUCCESS, json))})
-    //                     .then((response) => localStorage.setItem('credits',JSON.stringify(response)));
-    //                     break;
-    //                 default:
-    //checkTimeout(response, dispatch);
-    //                     dispatch(failure(GET_CREDITS.FAIL, response));
-    //                     break;
-    //             }
-    //         })
-    //         .catch((error) => console.error(error));
-    //     }
-// }
+export function getCredits(token){
+    return (dispatch) => {
+        return fetch(BASEURL+'credits', { 
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    response.json()
+                    .then((json) =>{dispatch(success(GET_CREDITS.SUCCESS, json))})
+                    .then((response) => localStorage.setItem('credits',JSON.stringify(response)));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(GET_CREDITS.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
 
 /* Requests the server to make video available for download */
 export function getVideoLinks(token, id){

@@ -31,7 +31,13 @@ class CardRow extends Component {
         onClick={this.props.action ? ()=>this.props.action() : null}
         style={this.props.style}
         >
-        <span className="card_title">{this.props.title}</span>
+        {this.props.subtitle ? 
+          <div className="card_title multi">
+            <div>{this.props.title}</div>
+            <div>{this.props.subtitle}</div>
+          </div> :
+          <span className="card_title">{this.props.title}</span>
+        }
         <span className={"card_extra"} style={{color: this.props.specialColor}}>
         {this.props.loading ? (<Loader size=".5rem" fill="rgba(35, 31, 97, .3)"/>) : this.props.extra}
         </span>
