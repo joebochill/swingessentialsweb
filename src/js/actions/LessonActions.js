@@ -8,7 +8,36 @@ export const CLEAR_VIDEO = {REQUEST: 'CLEAR_VIDEO', SUCCESS: 'CLEAR_VIDEO_SUCCES
 export const REDEEM_CREDIT = {REQUEST: 'REDEEM_CREDIT', SUCCESS: 'REDEEM_CREDIT_SUCCESS', FAIL: 'REDEEM_CREDIT_FAIL'};
 export const PUT_LESSON_RESPONSE = {REQUEST: 'PUT_LESSON_RESPONSE', SUCCESS: 'PUT_LESSON_RESPONSE_SUCCESS', FAIL: 'PUT_LESSON_RESPONSE_FAIL'};
 export const GET_CREDITS = {SUCCESS: 'GET_CREDITS_SUCCESS', FAIL: 'GET_CREDITS_FAIL'};
+export const SET_PACKAGE_SELECTION = {REQUEST: 'SET_PACKAGE_SELECTION', SUCCESS: 'SET_PACKAGE_SELECTION_SUCCESS', FAIL: 'SET_PACKAGE_SELECTION_FAIL'};
+export const PURCHASE_LESSON = {REQUEST: 'PURCHASE_LESSON', SUCCESS: 'PURCHASE_LESSON_SUCCESS', FAIL: 'PURCHASE_LESSON_FAIL'};
 
+
+/* Purchases the selected lesson type and adds credits to user's account */
+export function purchaseLesson(type, token){
+    return (dispatch) => {
+        dispatch({type: PURCHASE_LESSON.REQUEST});
+
+        return fetch(BASEURL+'purchase/'+type, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    dispatch(success(PURCHASE_LESSON.SUCCESS));
+                    dispatch(getCredits(token));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(PURCHASE_LESSON.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
 
 /* Retrieves a list of lessons */
 export function getLessons(token){
@@ -161,4 +190,8 @@ export function clearVideoLinks(token){
     //     }
 // }
 
-
+export function setPackageSelection(deal){
+    return (dispatch) => {
+        dispatch({type: SET_PACKAGE_SELECTION.REQUEST, data: deal});
+    }
+}

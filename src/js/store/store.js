@@ -30,7 +30,9 @@ export const initialStore = {
     credits:{
         count: 0,
         unlimited: false,
-        unlimitedExpires: 0
+        unlimitedExpires: 0,
+        inProgress: false,
+        purchaseComplete: false
     },
 
     // user's lesson history
@@ -56,7 +58,8 @@ export const initialStore = {
     // swingessentials available lesson packages
     packages:{
         list: [],
-        loading: false
+        loading: false,
+        selectedPackage: null
     },
 
     // api validation token/ authentication

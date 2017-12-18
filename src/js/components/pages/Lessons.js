@@ -112,6 +112,21 @@ class LessonsPage extends Component {
                       className={"noflex"} 
                       action={()=>alert('submit an unlimited swing')}
                     />
+                    <CardRow go 
+                      title={'Individual Credits'} 
+                      extra={`${this.props.credits.count} Left`}
+                      disabled={true}
+                      className={"noflex"} 
+                    />
+                    {this.props.credits.unlimited && 
+                      <CardRow  
+                        go
+                        title={'Unlimited Rounds'} 
+                        extra={`${this.props.credits.unlimited} Left`}
+                        disabled={true}
+                        className={"noflex"} 
+                      />
+                    }
                     <CardRow  
                       go
                       title={'Order More'} 
@@ -125,7 +140,6 @@ class LessonsPage extends Component {
                 <div className="card">
                   <div className="card_header">
                     <span>Redeem a Lesson</span>
-                    <span></span>
                   </div>
                   <div className="card_body">
                     <CardRow go 
@@ -155,7 +169,6 @@ class LessonsPage extends Component {
               <div className="card">
                 <div className="card_header">
                   <span>In Progress</span>
-                  <span onClick={() => this.props.getLessons(this.props.token)}>REFRESH</span>
                 </div>
                 <div className="card_body">
                   {(!this.props.lessons.pending.length || loading) &&
@@ -169,7 +182,6 @@ class LessonsPage extends Component {
               <div className="card">
                 <div className="card_header">
                   <span>Completed</span>
-                  <span onClick={() => this.props.getLessons(this.props.token)}>REFRESH</span>
                 </div>
                 <div className="card_body">
                   {(!this.props.lessons.closed.length || loading) &&

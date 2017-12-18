@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {replace, push} from 'react-router-redux';
-import Placeholder from '../rows/Placeholder.js';
+// import Placeholder from '../rows/Placeholder.js';
 import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
 import {setTargetRoute} from '../../actions/NavigationActions.js';
+import {setPackageSelection} from '../../actions/LessonActions.js';
 import { getPackages } from '../../actions/actions.js';
 import '../../../css/Cards.css';
 
@@ -20,8 +21,10 @@ var mapDispatchToProps = function(dispatch){
   return {
     goToSignIn: () => {dispatch(replace('/signin'));},
     goToLessons: () => {dispatch(push('/lessons'))},
+    goToPurchase: () => {dispatch(push('/purchase'))},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
-    requestPackages: (token) => {dispatch(getPackages(token))}
+    requestPackages: (token) => {dispatch(getPackages(token))},
+    setPackageSelection: (deal) => {dispatch(setPackageSelection(deal))}
   }
 };
 
@@ -51,6 +54,11 @@ class PackagesPage extends Component {
     }
   }
 
+  _goToOrdersPage(code){
+    this.props.setPackageSelection(code);
+    this.props.goToPurchase();
+  }
+
   render() {
     const packages = (!this.props.packages.length ? this.localpackages : this.props.packages);
     return (
@@ -69,16 +77,16 @@ class PackagesPage extends Component {
                   <span>Purchase Lessons</span>
                 </div>
                 <div className="card_body">
-                  {this.props.loading &&
+                  {/* {this.props.loading &&
                     <Placeholder message={"Loading..."} loading={this.props.loading}/>
-                  }
+                  } */}
                   {packages && packages.map((deal,index) =>
                     <CardRow key={'package_'+index} go 
                       title={deal.name} 
                       subtitle={deal.description}
                       extra={'$'+deal.price}
                       className={"noflex"} 
-                      action={()=>alert('order '+deal.shortcode)}
+                      action={() => this._goToOrdersPage(deal.shortcode)}
                     />
                   )}
                 </div>
