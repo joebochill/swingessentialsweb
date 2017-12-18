@@ -19,7 +19,7 @@ import {Provider} from 'react-redux';
 import {ConnectedRouter} from 'react-router-redux/es';
 import {Switch, Redirect, Route} from 'react-router';
 
-import {requestDataFromToken} from '../actions/actions.js';
+import {requestDataFromToken} from '../actions/LoginActions.js';
 
 class SwingEssentialsApp extends Component {
   componentWillMount(){

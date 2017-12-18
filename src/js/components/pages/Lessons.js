@@ -6,7 +6,8 @@ import {replace} from 'react-router-redux';
 import Placeholder from '../rows/Placeholder.js';
 import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
-import {getLessons, setTargetRoute, /*redeemCredit, getCredits*/} from '../../actions/actions.js';
+import {setTargetRoute} from '../../actions/NavigationActions.js';
+import {getLessons} from '../../actions/LessonActions.js';
 import {formatDate} from '../../utils/utils.js';
 
 import '../../../css/Cards.css';

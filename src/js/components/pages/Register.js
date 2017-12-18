@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {replace} from 'react-router-redux';
-// import {/*requestLogout, */setTargetRoute, validatePassword, updateUserCredentials} from '../../actions/actions.js';
 import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
-import {createAccount, checkUsernameAvailability, checkEmailAvailability} from '../../actions/actions.js';
-// import Loader from '../loader/Loader.js';
+import {createAccount, checkUsernameAvailability, checkEmailAvailability} from '../../actions/RegistrationActions.js';
 import '../../../css/Cards.css';
-// import '../../../css/Buttons.css';
 
 
 const mapStateToProps = (state)=>{

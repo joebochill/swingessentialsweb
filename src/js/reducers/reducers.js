@@ -1,29 +1,12 @@
 import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux'
-import {LOCATION_CHANGE,
-		TOKEN_FROM_STORAGE,
-		SET_TARGET_ROUTE,
-		LOGIN, 
-		LOGOUT, 
-		VALIDATE_PASSWORD,
-		UPDATE_CREDENTIALS,
-		GET_USER_DATA, 
-		GET_SETTINGS,
-		GET_LESSONS, 
-		GET_TIPS, 
-		GET_BLOGS, 
-		GET_CREDITS,
-		MENU, 
-		DRAWER,
-		//PING,
-		CREATE_ACCOUNT,
-		VERIFY_EMAIL,
-		VERIFY_RESET,
-		CHECK_USER,
-		CHECK_EMAIL,
-		TOKEN_TIMEOUT,
-		VIDEO_LINK
-} from '../actions/actions.js';
+
+import {LOCATION_CHANGE, GET_TIPS, GET_BLOGS, TOKEN_TIMEOUT} from '../actions/actions.js';
+import {SET_TARGET_ROUTE, MENU, DRAWER} from '../actions/NavigationActions.js';
+import {TOKEN_FROM_STORAGE, LOGIN, LOGOUT, VALIDATE_PASSWORD} from '../actions/LoginActions.js';
+import {GET_LESSONS, VIDEO_LINK, /*CLEAR_VIDEO, REDEEM_CREDIT, PUT_LESSON_RESPONSE*/} from '../actions/LessonActions.js';
+import {CREATE_ACCOUNT, VERIFY_EMAIL, /*REQUEST_RESET,*/ VERIFY_RESET, CHECK_USER, CHECK_EMAIL} from '../actions/RegistrationActions.js';
+import {UPDATE_CREDENTIALS, /*PUT_USER_DATA,*/ GET_USER_DATA, GET_SETTINGS} from '../actions/UserDataActions.js';
 
 /* Updates the basic info for the logged in user */
 const userReducer = (state=[], action) => {
@@ -82,18 +65,18 @@ const settingsReducer = (state=[], action) => {
 /* Updates the available credits for the logged in user */
 const creditsReducer = (state=[], action) => {
 	switch(action.type){
-		case GET_CREDITS.SUCCESS:
-			return {...state,
-				count: parseInt(action.data.count, 10) || 0,
-				unlimited: action.data.unlimited_count,
-				unlimitedExpires: parseInt(action.data.unlimited_expires, 10) || 0
-			}
-		case GET_CREDITS.FAIL:
-			return {...state,
-				count: 0,
-				unlimited: 0,
-				unlimitedExpires: 0
-			}
+		// case GET_CREDITS.SUCCESS:
+		// 	return {...state,
+		// 		count: parseInt(action.data.count, 10) || 0,
+		// 		unlimited: action.data.unlimited_count,
+		// 		unlimitedExpires: parseInt(action.data.unlimited_expires, 10) || 0
+		// 	}
+		// case GET_CREDITS.FAIL:
+		// 	return {...state,
+		// 		count: 0,
+		// 		unlimited: 0,
+		// 		unlimitedExpires: 0
+		// 	}
 		default:
 			return state;
 	}

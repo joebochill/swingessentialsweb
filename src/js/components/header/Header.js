@@ -5,7 +5,9 @@ import {push} from 'react-router-redux';
 import {NavLink} from 'react-router-dom';
 import Drawer from './Drawer.js';
 import {connect} from 'react-redux';
-import {requestLogout, openNavDrawer, closeNavDrawer, openNavMenu, closeNavMenu, /*ping*/} from '../../actions/actions.js';
+import {openNavDrawer, closeNavDrawer, openNavMenu, closeNavMenu} from '../../actions/NavigationActions.js';
+import {requestLogout} from '../../actions/LoginActions.js';
+
 
 function mapStateToProps(state){
     return {

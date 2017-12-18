@@ -4,7 +4,8 @@ import {push} from 'react-router-redux';
 import {NavLink} from 'react-router-dom';
 
 import {connect} from 'react-redux';
-import {requestLogout, closeNavDrawer} from '../../actions/actions.js';
+import {closeNavDrawer} from '../../actions/NavigationActions.js';
+import {requestLogout} from '../../actions/LoginActions.js';
 
 function mapStateToProps(state){
     return {

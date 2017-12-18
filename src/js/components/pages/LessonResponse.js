@@ -7,7 +7,8 @@ import Loader from '../loader/Loader.js';
 import {formatDate} from '../../utils/utils.js';
 //import YouTube from 'react-youtube';
 
-import { setTargetRoute, getLessons, getVideoLinks, clearVideoLinks, putLessonResponse } from '../../actions/actions';
+import { setTargetRoute } from '../../actions/NavigationActions.js';
+import { getLessons, getVideoLinks, clearVideoLinks, putLessonResponse } from '../../actions/LessonActions.js';
 
 const mapStateToProps = (state)=>{
   return {

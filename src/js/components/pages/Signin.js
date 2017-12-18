@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import {replace, goBack, push} from 'react-router-redux';
 import {connect} from 'react-redux';
-import {setTargetRoute, requestLogin, requestReset/*, uploadFile*/} from '../../actions/actions.js';
+import {setTargetRoute} from '../../actions/NavigationActions.js';
+import {requestReset} from '../../actions/RegistrationActions.js';
+
+import {requestLogin} from '../../actions/LoginActions.js';
 import Footer from '../footer/Footer.js';
 
 

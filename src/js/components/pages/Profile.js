@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {replace} from 'react-router-redux';
-import {/*requestLogout, */setTargetRoute, validatePassword, updateUserCredentials} from '../../actions/actions.js';
+import {setTargetRoute} from '../../actions/NavigationActions.js';
+import {updateUserCredentials} from '../../actions/UserDataActions.js';
+import {validatePassword} from '../../actions/LoginActions.js';
+
 import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
-import {putUserData} from '../../actions/actions.js';
+import {putUserData} from '../../actions/UserDataActions.js';
 import Loader from '../loader/Loader.js';
 import '../../../css/Cards.css';
 import '../../../css/Buttons.css';
@@ -23,7 +26,6 @@ var mapDispatchToProps = function(dispatch){
   return {
     goToSignIn: () => {dispatch(replace('/signin'));},
     replace: (val) => {dispatch(replace(val));},
-    // requestLogout: (tok) => {dispatch(requestLogout(tok))},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
     putUserData: (data, token) => {dispatch(putUserData(data, token))},
     validatePassword: (token, pass) => {dispatch(validatePassword(token, pass))},
@@ -217,9 +219,6 @@ class ProfilePage extends Component {
                   }
                 </div>
               </div>
-              {/* <div className="button se_button" onClick={()=>this.props.requestLogout(this.props.token)} style={{marginTop:'4rem'}}>
-                <span>Sign Out</span>
-              </div> */}
             </div>
           </section>
           <Footer/>
