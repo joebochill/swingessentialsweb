@@ -303,6 +303,7 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    position: relative;
 
     margin-top: 1rem;
     padding: 0 1rem;
@@ -371,7 +372,7 @@ label{
   font-size: 1.1rem;
   color: #231f61;
   text-align: left;
-  
+  user-select: none;
 }
 input, textarea, select {
   width: 100%;
@@ -446,6 +447,14 @@ input:-ms-clear{
 }
 .structured_panel h1:not(:first-of-type) {
   margin-top: 2rem;
+}
+
+video{
+  display: block;
+  background: black;
+}
+video[src=""]{
+  height: 0rem;
 }
 /* End Form Elements */
 

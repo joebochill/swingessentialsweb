@@ -7,7 +7,7 @@ import Footer from '../footer/Footer.js';
 import {setTargetRoute} from '../../actions/NavigationActions.js';
 import {setPackageSelection, purchaseLesson} from '../../actions/LessonActions.js';
 import { getPackages } from '../../actions/actions.js';
-import '../../../css/Purchase.css';
+import '../../../css/Lessons.css';
 
 
 const mapStateToProps = (state)=>{
@@ -110,19 +110,19 @@ class PurchasePage extends Component {
         <div>
           <section>
             <div className="structured_panel">
-              <label>Package Type</label>
+              <h1>Package Type</h1>
               <select value={this.state.deal} onChange={(evt)=>this._updatePackageSelection(evt.target.value)}>
                 {this.props.packages.length && this.props.packages.map((deal, index)=>
                   <option key={'deal_'+index} value={deal.shortcode}>{deal.name + ', $' + deal.price}</option>
                 )}
               </select>
-              <label style={{marginTop:'2rem'}}>Order Details</label>
+              <h1 style={{marginTop:'2rem'}}>Order Details</h1>
               <div className="callout">
                 <h1>{this.deal.name}</h1>
                 <h3>{this.deal.description}</h3>
                 <span>{'$'+this.deal.price}</span>
               </div>
-              <label style={{marginTop:'2rem'}}>Coupon Code</label>
+              <h1 style={{marginTop:'2rem'}}>Coupon Code</h1>
               <div className="flexboxH">
                 <input/>
                 <div className="button se_button" 
@@ -145,7 +145,7 @@ class PurchasePage extends Component {
                   <span>{'$'+(this.deal.price-(0.1*this.deal.price)).toFixed(2)}</span>
                 </div>
               </div>
-              <div className="button se_button" 
+              <div className="button se_button" style={{marginTop:'2rem'}}
                 onClick={()=>this.props.purchaseLesson(this.state.deal, this.props.token)}
               >
                 <span>Complete Order w/ Paypal</span>

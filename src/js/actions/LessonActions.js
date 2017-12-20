@@ -163,32 +163,32 @@ export function clearVideoLinks(token){
 }
 
 /* Lets a user redeem a credit and submit a new lesson request */
-// export function redeemCredit(type, data, token){
-    //     return (dispatch) => {
-    //         dispatch({type: REDEEM_CREDIT.REQUEST});
+export function redeemCredit(data, token){
+        return (dispatch) => {
+            dispatch({type: REDEEM_CREDIT.REQUEST});
             
-    //         return fetch(BASEURL+'redeem/'+type, { 
-    //             method: 'POST',
-    //             headers: {
-    //                 'Authorization': 'Bearer ' + token
-    //             },
-    //             body: JSON.stringify({fo_swing:'test', dtl_swing:'test'})
-    //         })
-    //         .then((response) => {
-    //             switch(response.status) {
-    //                 case 200:
-    //                     dispatch(success(REDEEM_CREDIT.SUCCESS));
-    //                     dispatch(getLessons(token));
-    //                     break;
-    //                 default:
-    //checkTimeout(response, dispatch);
-    //                     dispatch(failure(REDEEM_CREDIT.FAIL, response));
-    //                     break;
-    //             }
-    //         })
-    //         .catch((error) => console.error(error));
-    //     }
-// }
+            return fetch(BASEURL+'redeem/', { 
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                body: data
+            })
+            .then((response) => {
+                switch(response.status) {
+                    case 200:
+                        dispatch(success(REDEEM_CREDIT.SUCCESS));
+                        dispatch(getLessons(token));
+                        break;
+                    default:
+                        checkTimeout(response, dispatch);
+                        dispatch(failure(REDEEM_CREDIT.FAIL, response));
+                        break;
+                }
+            })
+            .catch((error) => console.error(error));
+        }
+}
 
 export function setPackageSelection(deal){
     return (dispatch) => {

@@ -26,7 +26,8 @@ var mapDispatchToProps = function(dispatch){
     getLessons: (token) => {dispatch(getLessons(token))},
     getCredits: (token) => {dispatch(getCredits(token))},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
-    goToPackages: () => {dispatch(push('/packages'))}
+    goToPackages: () => {dispatch(push('/packages'))},
+    goToRedeem: () => {dispatch(push('/redeem'))}
     // redeemCredit: (type, data, token) => {dispatch(redeemCredit(type, data, token))}
   }
 };
@@ -104,15 +105,15 @@ class LessonsPage extends Component {
                 <div className="card">
                   <div className="card_header infinity">
                     <span>Unlimited Lessons</span>
-                    <span>{`${this._formatUnlimited()} Left`}</span>
+                    <span style={{cursor:'default'}}>{`${this._formatUnlimited()} Left`}</span>
                   </div>
                   <div className="card_body">
                     <CardRow go 
                       title={'Submit a Swing'} 
                       className={"noflex"} 
-                      action={()=>alert('submit an unlimited swing')}
+                      action={()=>this.props.goToRedeem()}
                     />
-                    <CardRow go 
+                    <CardRow 
                       title={'Individual Credits'} 
                       extra={`${this.props.credits.count} Left`}
                       disabled={true}
@@ -120,7 +121,6 @@ class LessonsPage extends Component {
                     />
                     {this.props.credits.unlimited && 
                       <CardRow  
-                        go
                         title={'Unlimited Rounds'} 
                         extra={`${this.props.credits.unlimited} Left`}
                         disabled={true}
@@ -147,7 +147,7 @@ class LessonsPage extends Component {
                       extra={`${this.props.credits.count} Left`}
                       disabled={!this.props.credits.count}
                       className={"noflex"} 
-                      action={()=>alert('order a single')}
+                      action={()=>this.props.goToRedeem()}
                     />
                     <CardRow  
                       go
