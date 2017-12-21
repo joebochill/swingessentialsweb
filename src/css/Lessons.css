@@ -61,7 +61,42 @@
 /* Redemption Screen */
 .placeholder_image{
   position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  
   height: 9rem;
+  
+  background-color: rgba(35,31,97,0.05);
+  border: 0.125rem solid #231f61;
+  
+  background-size: 7rem 7rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  overflow: hidden;
+}
+.placeholder_image::before {
+  content: '';
+  position: absolute;
+  left: 0rem;
+  top: 0rem;
+
+  height: 100%;
+  width: 100%;
+  
+  background: white;
+  opacity: .25;
+}
+.placeholder_image:hover::before {
+  opacity: 0;
+}
+.placeholder_image.fo{
+  background-image: url('../images/faceon.svg');
+  background-position: 30% center;
+}
+.placeholder_image.dtl{
+  background-image: url('../images/downtheline.svg');
 }
 .icon_button{
   position: relative;
@@ -71,6 +106,7 @@
   justify-content: center;
 
   margin-top: 0.5rem;
+  overflow: hidden;
 }
 .icon.camera{
   display: inline-block;
@@ -107,12 +143,6 @@
 
   cursor: pointer;
   opacity: 0;
-}
-.placeholder_image.fo{
-  background: blue;
-}
-.placeholder_image.dtl{
-  background: green;
 }
 .se_video_flex > span{
   display: block;

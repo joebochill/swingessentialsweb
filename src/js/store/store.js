@@ -40,8 +40,11 @@ export const initialStore = {
         loading: false,
         pending:[],
         closed:[],
-        linking: false,
-        linked: false
+        // linking: false,
+        // linked: false
+        redeemPending: false,
+        redeemFinished: false,
+        redeemSuccess: false
     },
 
     // tips of the month

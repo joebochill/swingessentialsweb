@@ -8,16 +8,16 @@ import {formatDate} from '../../utils/utils.js';
 //import YouTube from 'react-youtube';
 
 import { setTargetRoute } from '../../actions/NavigationActions.js';
-import { getLessons, getVideoLinks, clearVideoLinks, putLessonResponse } from '../../actions/LessonActions.js';
+import { getLessons, /*getVideoLinks, clearVideoLinks,*/ putLessonResponse } from '../../actions/LessonActions.js';
 
 const mapStateToProps = (state)=>{
   return {
     username: state.userData.username,
     token: state.login.token,
     lessons: state.lessons,
-    admin: state.login.admin,
-    linking: state.lessons.linking,
-    linked: state.lessons.linked
+    admin: state.login.admin//,
+    //linking: state.lessons.linking,
+    //linked: state.lessons.linked
   };
 }
 var mapDispatchToProps = function(dispatch){
@@ -26,8 +26,8 @@ var mapDispatchToProps = function(dispatch){
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
     getLessons: (token) => {dispatch(getLessons(token))},
     goToLessons: () => {dispatch(replace('/lessons'))},
-    getVideoLinks: (token, id) => {dispatch(getVideoLinks(token, id))},
-    clearVideoLinks: () => {dispatch(clearVideoLinks())},
+    //getVideoLinks: (token, id) => {dispatch(getVideoLinks(token, id))},
+    //clearVideoLinks: () => {dispatch(clearVideoLinks())},
     putLessonResponse: (data,token) => {dispatch(putLessonResponse(data,token))}
   }
 };
@@ -53,7 +53,7 @@ class LessonResponsePage extends Component {
       // user is logged in, verify the requested lesson against their list
       window.scrollTo(0,0);
       this._verifyLesson();
-      this.props.getVideoLinks(this.props.token,this.props.match.params.lesson_id);
+      //this.props.getVideoLinks(this.props.token,this.props.match.params.lesson_id);
     }
   }
   componentWillReceiveProps(nextProps){
@@ -71,7 +71,7 @@ class LessonResponsePage extends Component {
   }
 
   componentWillUnmount(){
-    this.props.clearVideoLinks();
+    //this.props.clearVideoLinks();
   }
 
   // converts a DB stored string into paragraphs (we do not store html in the database, just text)
@@ -178,24 +178,24 @@ class LessonResponsePage extends Component {
               <h1>{this.props.admin ? "Swing Videos" : "Your Swing Videos"}</h1>
               <div className="se_multi_video">
                 <div className="se_video_flex">
-                  {(!this.props.linking && this.props.linked) ?
+                  {/* {(!this.props.linking && this.props.linked) ? */}
                     <video width="100%" controls src={'http://www.josephpboyle.com/securevideos/'+this.lesson.request_url+'/'+this.lesson.fo_swing}>
                       Your browser does not support the video tag.
                     </video>
-                    : ((this.props.linking) ?
-                    <Loader/>
-                    : <span>Failed to load video. Try refreshing your browser.</span>
-                  )}
+                    {/* : ((this.props.linking) ? */}
+                    {/* <Loader/> */}
+                    {/* : <span>Failed to load video. Try refreshing your browser.</span> */}
+                  {/* )} */}
                 </div>
                 <div className="se_video_flex">
-                {(!this.props.linking && this.props.linked) ?
+                {/* {(!this.props.linking && this.props.linked) ? */}
                   <video width="100%" controls src={'http://www.josephpboyle.com/securevideos/'+this.lesson.request_url+'/'+this.lesson.dtl_swing}>
                     Your browser does not support the video tag.
                   </video>
-                  : (this.props.linking) ?
-                  <Loader/>
-                  : <span>Failed to load video. Try refreshing your browser.</span>
-                  }
+                  {/* : (this.props.linking) ? */}
+                  {/* <Loader/> */}
+                  {/* : <span>Failed to load video. Try refreshing your browser.</span> */}
+                  {/* } */}
                 </div>
               </div>
             </div>

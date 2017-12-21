@@ -4,9 +4,10 @@ import {routerReducer} from 'react-router-redux'
 import {LOCATION_CHANGE, GET_TIPS, GET_BLOGS, TOKEN_TIMEOUT, GET_PACKAGES} from '../actions/actions.js';
 import {SET_TARGET_ROUTE, MENU, DRAWER} from '../actions/NavigationActions.js';
 import {TOKEN_FROM_STORAGE, LOGIN, LOGOUT, VALIDATE_PASSWORD} from '../actions/LoginActions.js';
-import {GET_LESSONS, VIDEO_LINK, GET_CREDITS, /*CLEAR_VIDEO, REDEEM_CREDIT, PUT_LESSON_RESPONSE*/
+import {GET_LESSONS, /*VIDEO_LINK,*/ GET_CREDITS, /*CLEAR_VIDEO, REDEEM_CREDIT, PUT_LESSON_RESPONSE*/
 SET_PACKAGE_SELECTION,
-PURCHASE_LESSON} from '../actions/LessonActions.js';
+PURCHASE_LESSON,
+REDEEM_CREDIT} from '../actions/LessonActions.js';
 import {CREATE_ACCOUNT, VERIFY_EMAIL, /*REQUEST_RESET,*/ VERIFY_RESET, CHECK_USER, CHECK_EMAIL} from '../actions/RegistrationActions.js';
 import {UPDATE_CREDENTIALS, /*PUT_USER_DATA,*/ GET_USER_DATA, GET_SETTINGS} from '../actions/UserDataActions.js';
 
@@ -15,6 +16,7 @@ const userReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN.SUCCESS:
 		case GET_USER_DATA.SUCCESS:
+		console.log(action.data);
 			return{...state, 
 				username: action.data.personal.username,
 				firstName: action.data.personal.first_name,
@@ -123,20 +125,44 @@ const lessonsReducer = (state=[], action) => {
 				pending: [],
 				closed: []
 			}
-		case VIDEO_LINK.REQUEST:
-			return{...state,
-				linking: true
+		case REDEEM_CREDIT.REQUEST:
+			return {...state,
+				redeemPending: true,
+				redeemFinished: false,
+				redeemSuccess: false
 			}
-		case VIDEO_LINK.SUCCESS:
-			return{...state,
-				linking: false,
-				linked: true
+		case REDEEM_CREDIT.SUCCESS:
+			return {...state,
+				redeemPending: false,
+				redeemFinished: true,
+				redeemSuccess: true
 			}
-		case VIDEO_LINK.FAIL:
-			return{...state,
-				linking: false,
-				linked: false
+		case REDEEM_CREDIT.FAIL:
+			return {...state,
+				redeemPending: false,
+				redeemFinished: true,
+				redeemSuccess: false
 			}
+		case LOCATION_CHANGE:
+			return {...state,
+				redeemPending: false,
+				redeemFinished: false,
+				redeemSuccess: false
+			}
+		// case VIDEO_LINK.REQUEST:
+		// 	return{...state,
+		// 		linking: true
+		// 	}
+		// case VIDEO_LINK.SUCCESS:
+		// 	return{...state,
+		// 		linking: false,
+		// 		linked: true
+		// 	}
+		// case VIDEO_LINK.FAIL:
+		// 	return{...state,
+		// 		linking: false,
+		// 		linked: false
+		// 	}
 		default:
 			return state;
 	}

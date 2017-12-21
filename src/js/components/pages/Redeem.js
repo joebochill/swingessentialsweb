@@ -1,25 +1,21 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {replace, push} from 'react-router-redux';
-// import Placeholder from '../rows/Placeholder.js';
-// import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
-// import Loader from '../loader/Loader.js';
+import Loader from '../loader/Loader.js';
 
 import {setTargetRoute} from '../../actions/NavigationActions.js';
-import {/*setPackageSelection, purchaseLesson,*/ redeemCredit} from '../../actions/LessonActions.js';
-// import { getPackages } from '../../actions/actions.js';
+import {redeemCredit, getCredits} from '../../actions/LessonActions.js';
 import '../../../css/Lessons.css';
-
 
 const mapStateToProps = (state)=>{
   return {
     token: state.login.token,
     loading: state.packages.loading,
+    credits: state.credits,
     packages: state.packages.list,
-    selectedPackage: state.packages.selectedPackage,
-    purchaseInProgress: state.credits.inProgress,
-    purchaseComplete: state.credits.complete
+    redeemPending: state.lessons.redeemPending,
+    redeemSuccess: state.lessons.redeemSuccess
   };
 }
 var mapDispatchToProps = function(dispatch){
@@ -27,6 +23,7 @@ var mapDispatchToProps = function(dispatch){
     goToSignIn: () => {dispatch(replace('/signin'));},
     goToLessons: () => {dispatch(push('/lessons'))},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
+    getCredits: (token) => {dispatch(getCredits(token))},
     redeemCredit: (data,token) => {dispatch(redeemCredit(data,token))}
   }
 };
@@ -35,14 +32,17 @@ class RedeemPage extends Component {
   constructor(props){
     super(props);
     this.state={
-      // deal: this.props.selectedPackage,
       dtlsrc: null,
       fosrc: null,
-      notes:''
+      notes:'',
+      error:'',
+      videoError: '',
+      role:'pending'
     };
     this.dtl = null;
     this.fo = null;
   }
+
   componentWillMount(){
     if(!this.props.token){
       this.props.setTargetRoute('/redeem');
@@ -50,63 +50,43 @@ class RedeemPage extends Component {
     }
     //TODO: send away if no credits
     else{
-      // if(!this.props.packages.length){
-      //   this.props.requestPackages();
-      // }
-      // else{
-      //   if(this.props.selectedPackage){
-      //     this.setState({deal: this.props.selectedPackage});
-      //     this._getPackageDetails(this.props.selectedPackage, this.props.packages);
-      //   }else{
-      //     this._getPackageDetails(this.state.deal, this.props.packages);
-      //   }
-        
-      // }
+      if(!this.props.credits.count && this.props.credits.unlimitedExpires < Date.now()/1000 && !this.props.credits.unlimited){
+        this.props.getCredits(this.props.token);
+      }
+      const role = JSON.parse(window.atob(this.props.token.split('.')[1])).role;
+      if(role === 'pending'){
+        this.setState({error: 'You must validate your email address before you can submit lessons'});
+      }
+      else{
+        this.setState({role: role});
+      }
       window.scrollTo(0,0);
     }
-  }
-
-  componentWillUnmount(){
-    // this.props.setPackageSelection(this.state.deal);
   }
 
   componentWillReceiveProps(nextProps){
     if(!nextProps.token){
       this.props.goToSignIn();
     }
-    // if(nextProps.purchaseComplete){
-    //   this.props.goToLessons();
-    // }
-    // if(nextProps.packages){
-    //   this._getPackageDetails(this.state.deal, nextProps.packages);
-    // }
-    // if(!this.state.deal && nextProps.selectedPackage){
-    //   this.setState({deal: nextProps.selectedPackage});
-    // }
-  }
-
-  _getPackageDetails(code, list){
-    // for(let i = 0; i < list.length; i++){
-    //   if(code === list[i].shortcode){
-    //     this.deal = list[i];
-    //     return;
-    //   }
-    // }
-    // if(list.length){
-    //   this.deal = list[0];
-    //   this.setState({deal: list[0].shortcode});
-    // }
-  }
-
-  _updatePackageSelection(newPackage){
-    // this.setState({deal: newPackage});
-    // this._getPackageDetails(newPackage, this.props.packages);
+    if(nextProps.redeemSuccess){
+      this.props.goToLessons();
+    }
+    if(!nextProps.credits.count && nextProps.credits.unlimitedExpires < Date.now()/1000){
+      this.props.goToLessons();
+    }
+    if(this.props.redeemPending && !nextProps.redeemPending && !nextProps.redeemSuccess){
+      this.setState({error: 'Failed to submit your lesson request. Check your video files and try again.'})
+    }
   }
 
   _updateVideo(evt, type){
-    if(evt.target.files[0].size > 10*1024*1024){
-      alert('this file is too big. Max size 10MB');
+    if(!evt.target.files || !evt.target.files[0]){
+      this.setState({videoError: ''});
+      return;
+    }
+    else if(evt.target.files[0].size > 10*1024*1024){
       evt.target.files = null;
+      this.setState({videoError: 'Video is too large - max size is 10MB'});
       return;
     }
     if(type === 'dtl'){
@@ -115,7 +95,7 @@ class RedeemPage extends Component {
       this.dtl.src = URL.createObjectURL(evt.target.files[0]);
       this.dtl.controls = true;
       this.dtl.load();
-      this.setState({dtlsrc: evt.target.files[0]});
+      this.setState({dtlsrc: evt.target.files[0], videoError: ''});
     }
     else if(type === 'fo'){
       if(!this.fo){return;}
@@ -123,13 +103,20 @@ class RedeemPage extends Component {
       this.fo.src = URL.createObjectURL(evt.target.files[0]);
       this.fo.controls = true;
       this.fo.load();
-      this.setState({fosrc: evt.target.files[0]});
+      this.setState({fosrc: evt.target.files[0], videoError: ''});
     }
   }
 
   _redeemLesson(){
     //TODO: validate the inputs before sending and the user type
     if(!this.fo || !this.dtl){return;}
+    if(!this.state.dtlsrc || !this.state.fosrc){
+      this.setState({error: 'Missing Required Videos'});
+      return;
+    }
+    if(this.state.role === 'pending'){
+      return;
+    }
     let data = new FormData();
     data.append('fo', this.state.fosrc);
     data.append('dtl', this.state.dtlsrc);
@@ -159,7 +146,11 @@ class RedeemPage extends Component {
                   {!this.state.fosrc ?
                     <div className={"swing_placeholder"}>
                       <div className="placeholder_image fo">
-                        <input type="file" accept=".mov,.mp4,.mpeg,.3gp" title="Select a new Face-On video" onChange={(evt)=>this._updateVideo(evt, 'fo')}/>
+                        <input type="file"
+                          accept=".mov,.mp4,.mpeg,.3gp" 
+                          title="Select a new Face-On video"
+                          onChange={(evt)=>{this._updateVideo(evt, 'fo')}}
+                        />
                       </div>
                       <div className="icon_button">
                         <svg viewBox="0 0 24 24" className="icon camera">
@@ -168,7 +159,11 @@ class RedeemPage extends Component {
                           <path d="M0 0h24v24H0z" fill="none"/>
                         </svg>
                         <span>Face-On</span>
-                        <input type="file" accept=".mov,.mp4,.mpeg,.3gp" title="Select a new Face-On video" onChange={(evt)=>this._updateVideo(evt, 'fo')}/>
+                        <input type="file" 
+                          accept=".mov,.mp4,.mpeg,.3gp" 
+                          title="Select a new Face-On video" 
+                          onChange={(evt)=>this._updateVideo(evt, 'fo')}
+                        />
                       </div>
                     </div>:
                     <div className="icon_button">
@@ -178,7 +173,11 @@ class RedeemPage extends Component {
                         <path d="M0 0h24v24H0z" fill="none"/>
                       </svg>
                       <span>Face-On</span>
-                      <input type="file" accept=".mov,.mp4,.mpeg,.3gp" title="Select a new Face-On video" onChange={(evt)=>this._updateVideo(evt, 'fo')}/>
+                      <input type="file" 
+                        accept=".mov,.mp4,.mpeg,.3gp" 
+                        title="Select a new Face-On video" 
+                        onChange={(evt)=>this._updateVideo(evt, 'fo')}
+                      />
                     </div>
                   }
                 </div>
@@ -189,7 +188,11 @@ class RedeemPage extends Component {
                   {!this.state.dtlsrc ?
                     <div className={"swing_placeholder"}>
                       <div className="placeholder_image dtl">
-                        <input type="file" accept=".mov,.mp4,.mpeg,.3gp" title="Select a new Down-the-Line video" onChange={(evt)=>this._updateVideo(evt, 'dtl')}/>
+                        <input type="file" 
+                          accept=".mov,.mp4,.mpeg,.3gp" 
+                          title="Select a new Down-the-Line video" 
+                          onChange={(evt)=>this._updateVideo(evt, 'dtl')}
+                        />
                       </div>
                       <div className="icon_button">
                         <svg viewBox="0 0 24 24" className="icon camera">
@@ -198,7 +201,11 @@ class RedeemPage extends Component {
                           <path d="M0 0h24v24H0z" fill="none"/>
                         </svg>
                         <span>Down-the-Line</span>
-                        <input type="file" accept=".mov,.mp4,.mpeg,.3gp" title="Select a new Down-the-Line video" onChange={(evt)=>this._updateVideo(evt, 'dtl')}/>
+                        <input type="file" 
+                          accept=".mov,.mp4,.mpeg,.3gp" 
+                          title="Select a new Down-the-Line video" 
+                          onChange={(evt)=>this._updateVideo(evt, 'dtl')}
+                        />
                       </div>
                     </div>:
                     <div className="icon_button">
@@ -208,19 +215,29 @@ class RedeemPage extends Component {
                         <path d="M0 0h24v24H0z" fill="none"/>
                       </svg>
                       <span>Down-the-Line</span>
-                      <input type="file" accept=".mov,.mp4,.mpeg,.3gp" title="Select a new Down-the-Line video" onChange={(evt)=>this._updateVideo(evt, 'dtl')}/>
+                      <input type="file" 
+                        accept=".mov,.mp4,.mpeg,.3gp" 
+                        title="Select a new Down-the-Line video" 
+                        onChange={(evt)=>this._updateVideo(evt, 'dtl')}
+                      />
                     </div>
                   }
                 </div>
               </div>
+              {this.state.videoError && <span className="validation_error">{this.state.videoError}</span>}
               <h1 style={{marginTop: '2rem'}}>Comments / Special Requests</h1>
               <textarea 
                 placeholder="Add any comments here..."
                 value={this.state.notes} 
                 onChange={(evt)=>this.setState({notes:evt.target.value})} 
               />
+              {this.props.redeemPending && 
+                <Loader/>
+              }
+              {this.state.error && <span className="validation_error">{this.state.error}</span>}
               <div className="button se_button" 
                 style={{marginTop:'2rem'}} 
+                disabled={!this.state.dtlsrc || !this.state.fosrc || this.state.role === 'pending'}
                 onClick={()=>this._redeemLesson()}
               >
                 <span>SUBMIT</span>
