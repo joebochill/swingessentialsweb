@@ -44,7 +44,8 @@ export const initialStore = {
         // linked: false
         redeemPending: false,
         redeemFinished: false,
-        redeemSuccess: false
+        redeemSuccess: false,
+        coupon: {type: '', value: 0}
     },
 
     // tips of the month

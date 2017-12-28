@@ -10,7 +10,27 @@ export const PUT_LESSON_RESPONSE = {REQUEST: 'PUT_LESSON_RESPONSE', SUCCESS: 'PU
 export const GET_CREDITS = {SUCCESS: 'GET_CREDITS_SUCCESS', FAIL: 'GET_CREDITS_FAIL'};
 export const SET_PACKAGE_SELECTION = {REQUEST: 'SET_PACKAGE_SELECTION', SUCCESS: 'SET_PACKAGE_SELECTION_SUCCESS', FAIL: 'SET_PACKAGE_SELECTION_FAIL'};
 export const PURCHASE_LESSON = {REQUEST: 'PURCHASE_LESSON', SUCCESS: 'PURCHASE_LESSON_SUCCESS', FAIL: 'PURCHASE_LESSON_FAIL'};
+export const CHECK_COUPON = {REQUEST: 'CHECK_COUPON', SUCCESS: 'CHECK_COUPON_SUCCESS', FAIL: 'CHECK_COUPON_FAILURE'};
 
+/* Checks the specified coupon code for validity */
+export function checkCoupon(code){
+    return (dispatch) => {
+        dispatch({type: CHECK_COUPON.REQUEST});
+
+        return fetch(BASEURL+'coupon/'+code)
+        .then((response) => {
+            switch(response.status){
+                case 200:
+                    response.json()
+                    .then((json) => dispatch(success(CHECK_COUPON.SUCCESS, json)));
+                    break;
+                default:
+                    dispatch(failure(CHECK_COUPON.FAIL, response));
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
 
 /* Purchases the selected lesson type and adds credits to user's account */
 export function purchaseLesson(type, token){

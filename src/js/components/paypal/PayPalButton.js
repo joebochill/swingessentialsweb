@@ -72,7 +72,6 @@ class PaypalButton extends Component {
 
 
   render() {
-      console.log(this.props);
     return (
         <div id="ppbutton" style={{marginTop:'2rem'}}></div>
     );

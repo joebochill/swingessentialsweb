@@ -7,7 +7,8 @@ import {TOKEN_FROM_STORAGE, LOGIN, LOGOUT, VALIDATE_PASSWORD} from '../actions/L
 import {GET_LESSONS, /*VIDEO_LINK,*/ GET_CREDITS, /*CLEAR_VIDEO, REDEEM_CREDIT, PUT_LESSON_RESPONSE*/
 SET_PACKAGE_SELECTION,
 PURCHASE_LESSON,
-REDEEM_CREDIT} from '../actions/LessonActions.js';
+REDEEM_CREDIT,
+CHECK_COUPON} from '../actions/LessonActions.js';
 import {CREATE_ACCOUNT, VERIFY_EMAIL, /*REQUEST_RESET,*/ VERIFY_RESET, CHECK_USER, CHECK_EMAIL} from '../actions/RegistrationActions.js';
 import {UPDATE_CREDENTIALS, /*PUT_USER_DATA,*/ GET_USER_DATA, GET_SETTINGS} from '../actions/UserDataActions.js';
 
@@ -146,7 +147,12 @@ const lessonsReducer = (state=[], action) => {
 			return {...state,
 				redeemPending: false,
 				redeemFinished: false,
-				redeemSuccess: false
+				redeemSuccess: false,
+				coupon:{
+					type: '',
+					value: 0,
+					error: ''
+				}
 			}
 		// case VIDEO_LINK.REQUEST:
 		// 	return{...state,
@@ -162,6 +168,22 @@ const lessonsReducer = (state=[], action) => {
 		// 		linking: false,
 		// 		linked: false
 		// 	}
+		case CHECK_COUPON.SUCCESS:
+			return{...state,
+				coupon:{
+					type: action.data.type,
+					value: parseInt(action.data.value, 10),
+					error: ''
+				}
+			}
+		case CHECK_COUPON.FAIL:
+			return{...state,
+				coupon:{
+					type: '',
+					value: 0,
+					error: (action.error === 400301) ? "Coupon Code is Expired" : "Invalid Coupon Code"
+				}
+			}
 		default:
 			return state;
 	}
