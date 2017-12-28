@@ -3,12 +3,12 @@ import {connect} from 'react-redux';
 import {replace, push} from 'react-router-redux';
 // import Placeholder from '../rows/Placeholder.js';
 // import CardRow from '../rows/CardRow.js';
+import PayPalButton from '../paypal/PayPalButton.js';
 import Footer from '../footer/Footer.js';
 import {setTargetRoute} from '../../actions/NavigationActions.js';
 import {setPackageSelection, purchaseLesson} from '../../actions/LessonActions.js';
 import { getPackages } from '../../actions/actions.js';
 import '../../../css/Lessons.css';
-
 
 const mapStateToProps = (state)=>{
   return {
@@ -97,6 +97,11 @@ class PurchasePage extends Component {
     this._getPackageDetails(newPackage, this.props.packages);
   }
 
+  _getTotal(){
+    // TODO: coupon codes
+    return (this.deal.price-(0.1*this.deal.price)).toFixed(2);
+  }
+
   render() {
     if(!this.deal){return null;}
     return (
@@ -142,14 +147,19 @@ class PurchasePage extends Component {
                 </div>
                 <div className="orderRow">
                   <span>Total</span>
-                  <span>{'$'+(this.deal.price-(0.1*this.deal.price)).toFixed(2)}</span>
+                  <span>{'$'+this._getTotal()}</span>
                 </div>
               </div>
-              <div className="button se_button" style={{marginTop:'2rem'}}
-                onClick={()=>this.props.purchaseLesson(this.state.deal, this.props.token)}
-              >
-                <span>Complete Order w/ Paypal</span>
-              </div>
+              <PayPalButton 
+                deal={this.deal}
+                total={this._getTotal()} 
+                authorized={(data,actions) => actions.payment.execute()
+                  .then(() => this.props.purchaseLesson(this.deal.shortcode, this.props.token))
+                  .then(() => this.props.goToLessons())
+                  .catch((error) => console.error(error))
+                }  
+                //canceled={()=>alert('canceled')}
+              />
             </div>
           </section>
           <Footer/>

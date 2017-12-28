@@ -16,7 +16,6 @@ const userReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN.SUCCESS:
 		case GET_USER_DATA.SUCCESS:
-		console.log(action.data);
 			return{...state, 
 				username: action.data.personal.username,
 				firstName: action.data.personal.first_name,

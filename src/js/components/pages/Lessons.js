@@ -115,14 +115,14 @@ class LessonsPage extends Component {
                     />
                     <CardRow 
                       title={'Individual Credits'} 
-                      extra={`${this.props.credits.count} Left`}
+                      extra={`${this.props.credits.count ? this.props.credits.count : '0'} Left`}
                       disabled={true}
                       className={"noflex"} 
                     />
                     {this.props.credits.unlimited && 
                       <CardRow  
                         title={'Unlimited Rounds'} 
-                        extra={`${this.props.credits.unlimited} Left`}
+                        extra={`${this.props.credits.unlimited ? this.props.credits.unlimited : '0'} Left`}
                         disabled={true}
                         className={"noflex"} 
                       />
@@ -144,7 +144,7 @@ class LessonsPage extends Component {
                   <div className="card_body">
                     <CardRow go 
                       title={'Individual Lesson'} 
-                      extra={`${this.props.credits.count} Left`}
+                      extra={`${this.props.credits.count ? this.props.credits.count : '0'} Left`}
                       disabled={!this.props.credits.count}
                       className={"noflex"} 
                       action={()=>this.props.goToRedeem()}
@@ -152,7 +152,7 @@ class LessonsPage extends Component {
                     <CardRow  
                       go
                       title={'Activate Unlimited'} 
-                      extra={`${this.props.credits.unlimited} Left`}
+                      extra={`${this.props.credits.unlimited ? this.props.credits.unlimited : '0'} Left`}
                       disabled={!this.props.credits.unlimited}
                       className={"noflex"} 
                       action={()=>alert('Are you sure you want to activate your unlimited package? You will have unlimited lessons for 45 days.')}
