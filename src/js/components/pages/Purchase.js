@@ -2,22 +2,23 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {replace, push} from 'react-router-redux';
 // import Placeholder from '../rows/Placeholder.js';
-// import CardRow from '../rows/CardRow.js';
 import PayPalButton from '../paypal/PayPalButton.js';
+import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
 import {setTargetRoute} from '../../actions/NavigationActions.js';
-import {setPackageSelection, purchaseLesson, checkCoupon} from '../../actions/LessonActions.js';
+import {purchaseLesson, checkCoupon} from '../../actions/LessonActions.js';
 import { getPackages } from '../../actions/actions.js';
 import '../../../css/Lessons.css';
+import '../../../css/Cards.css';
 
 const mapStateToProps = (state)=>{
   return {
     token: state.login.token,
     loading: state.packages.loading,
     packages: state.packages.list,
-    selectedPackage: state.packages.selectedPackage,
     purchaseInProgress: state.credits.inProgress,
-    purchaseComplete: state.credits.complete,
+    purchaseSuccess: state.credits.success,
+    purchaseFail: state.credits.fail,
     coupon: state.lessons.coupon
   };
 }
@@ -25,9 +26,9 @@ var mapDispatchToProps = function(dispatch){
   return {
     goToSignIn: () => {dispatch(replace('/signin'));},
     goToLessons: () => {dispatch(push('/lessons'))},
+    goToRedeem: () => {dispatch(push('/redeem'))},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
     requestPackages: (token) => {dispatch(getPackages(token))},
-    setPackageSelection: (deal) => {dispatch(setPackageSelection(deal))},
     purchaseLesson: (deal, token) => {dispatch(purchaseLesson(deal, token))},
     checkCoupon: (code) => {dispatch(checkCoupon(code))}
   }
@@ -37,7 +38,7 @@ class PurchasePage extends Component {
   constructor(props){
     super(props);
     this.state={
-      deal: this.props.selectedPackage,
+      deal: null,
       code: ''
     }
   }
@@ -47,72 +48,47 @@ class PurchasePage extends Component {
       this.props.goToSignIn();
     }
     else{
+      window.scrollTo(0,0);
+
+      // make a request for updated packages and use localstorage in the meantime if we have it
       if(!this.props.packages.length){
-        this.props.requestPackages();
+
+        this.props.requestPackages(this.props.token);
+        let localpackages = JSON.parse(localStorage.getItem('packages'));
+        if(localpackages){
+          this.localpackages= localpackages;
+          return;
+        }
       }
       else{
-        if(this.props.selectedPackage){
-          this.setState({deal: this.props.selectedPackage});
-          this._getPackageDetails(this.props.selectedPackage, this.props.packages);
-        }else{
-          this._getPackageDetails(this.state.deal, this.props.packages);
-        }
-        
+        this.setState({deal: this.props.packages[0]});
       }
-      window.scrollTo(0,0);
     }
   }
-
-  componentWillUnmount(){
-    this.props.setPackageSelection(this.state.deal);
-  }
-
   componentWillReceiveProps(nextProps){
     if(!nextProps.token){
       this.props.goToSignIn();
     }
-    if(nextProps.purchaseComplete){
-      this.props.goToLessons();
-    }
     if(nextProps.packages){
-      this._getPackageDetails(this.state.deal, nextProps.packages);
-    }
-    if(!this.state.deal && nextProps.selectedPackage){
-      this.setState({deal: nextProps.selectedPackage});
-    }
-  }
-
-  _getPackageDetails(code, list){
-    for(let i = 0; i < list.length; i++){
-      if(code === list[i].shortcode){
-        this.deal = list[i];
-        return;
+      if(!this.state.deal){
+        this.setState({deal: nextProps.packages[0]});
       }
     }
-    if(list.length){
-      this.deal = list[0];
-      this.setState({deal: list[0].shortcode});
-    }
-  }
-
-  _updatePackageSelection(newPackage){
-    this.setState({deal: newPackage});
-    this._getPackageDetails(newPackage, this.props.packages);
   }
 
   _getTotal(){
     // TODO: coupon codes
     if(this.props.coupon.value <= 0){
-      return this.deal.price;
+      return this.state.deal.price;
     }
     else if(this.props.coupon.type === 'amount'){
-      return (this.deal.price-this.props.coupon.amount).toFixed(2);
+      return (this.state.deal.price-this.props.coupon.amount).toFixed(2);
     }
     else if(this.props.coupon.type === 'percent'){
-      return (this.deal.price-(this.props.coupon.value/100)*this.deal.price).toFixed(2);
+      return (this.state.deal.price-(this.props.coupon.value/100)*this.state.deal.price).toFixed(2);
     }
     else{
-      return this.deal.price;
+      return this.state.deal.price;
     }
   }
 
@@ -129,7 +105,9 @@ class PurchasePage extends Component {
   }
 
   render() {
-    if(!this.deal){return null;}
+    if(!this.state.deal){return null;}
+    const packages = (!this.props.packages.length ? this.localpackages : this.props.packages);
+
     return (
       <div>
         <section className="landing_image image2">
@@ -140,77 +118,97 @@ class PurchasePage extends Component {
         </section>
         <div>
           <section>
-            <div className="structured_panel">
-              <h1>Package Type</h1>
-              <select value={this.state.deal} onChange={(evt)=>this._updatePackageSelection(evt.target.value)}>
-                {this.props.packages.length && this.props.packages.map((deal, index)=>
-                  <option key={'deal_'+index} value={deal.shortcode}>{deal.name + ', $' + deal.price}</option>
-                )}
-              </select>
-              <h1 style={{marginTop:'2rem'}}>Order Details</h1>
-              <div className="callout">
-                <h1>{this.deal.name}</h1>
-                <h3>{this.deal.description}</h3>
-                <span>{'$'+this.deal.price}</span>
-              </div>
-              <h1 style={{marginTop:'2rem'}}>Coupon Code</h1>
-              <div className="flexboxH">
-                <input 
-                  ref={(ref) => this.couponcode = ref}
-                  value={this.state.code}
-                  onChange={(evt) => this.setState({code:evt.target.value})}
-                  onKeyPress={this._keyPress.bind(this)}
-                />
-                <div className="button se_button" 
-                  onClick={()=>this._checkCoupon()}
-                  disabled={!this.state.code}
-                >
-                  <span>Apply</span>
-                </div>
-              </div>
-              {this.props.coupon.error && <span className="validation_error">{this.props.coupon.error}</span>}
-              <div style={{marginTop:'2rem'}}>
-                <div className="orderRow">
-                  <span>Sub-total</span>
-                  <span>{'$'+this.deal.price}</span>
-                </div>
-                {this.props.coupon.value > 0 && (
-                  <div className="orderRow">
-                    <span>Coupon <span style={{fontSize:'0.6rem', verticalAlign:'middle'}}>
-                      {(this.props.coupon.type === 'amount' ? '($' : '(') + this.props.coupon.value +
-                        (this.props.coupon.type === 'percent' ? '% off)' : ' off)')}
-                    </span></span>
-                    <span style={{fontStyle:"italic"}}>{'-$'+(this.deal.price - this._getTotal())}</span>
+            {!this.props.purchaseSuccess && !this.props.purchaseFail &&
+              <div className="structured_panel">
+                <div className="card">
+                  <div className="card_header">
+                    <span>Select a Package</span>
                   </div>
-                )}
-                <div className="orderRow">
-                  <span>Tax</span>
-                  <span>{'$0.00'}</span>
+                  <div className="card_body">
+                    {packages && packages.map((deal,index) =>
+                      <CardRow key={'package_'+index} 
+                        title={deal.name} 
+                        subtitle={deal.description}
+                        extra={'$'+deal.price}
+                        className={"noflex " + (this.state.deal.shortcode === deal.shortcode ? 'selected' : '')} 
+                        action={() => {this.setState({deal: deal})}}
+                      />
+                    )}
+                  </div>
                 </div>
-                <div className="orderRow">
-                  <span>Total</span>
-                  <span>{'$'+this._getTotal()}</span>
+                <div className="card">
+                  <div className="card_header">
+                    <span>Discount Code</span>
+                  </div>
+                  <div className="flexboxH" style={{marginTop:'1rem'}}>
+                    <input 
+                      ref={(ref) => this.couponcode = ref}
+                      value={this.state.code}
+                      onChange={(evt) => this.setState({code:evt.target.value})}
+                      onKeyPress={this._keyPress.bind(this)}
+                    />
+                    <div className="button se_button" 
+                      onClick={()=>this._checkCoupon()}
+                      disabled={!this.state.code}
+                    >
+                      <span>Apply</span>
+                    </div>
+                  </div>
+                </div>
+                {this.props.coupon.error && <span className="validation_error">{this.props.coupon.error}</span>}
+                <div className="card">
+                  <div className="card_header">
+                    <span>Order Details</span>
+                  </div>
+                  <div className="card_body">
+                    <CardRow title={"Sub-total"} extra={'$'+this.state.deal.price} className={"noflex nohover"} />
+                    {this.props.coupon.value > 0 &&
+                      <CardRow title={"Discount"} 
+                        subtitle={(this.props.coupon.type === 'amount' ? '$' : '') + this.props.coupon.value +
+                            (this.props.coupon.type === 'percent' ? '% off' : ' off')} 
+                        extra={'-$'+(this.state.deal.price - this._getTotal())} className={"noflex nohover extraitalic"} />
+                    }
+                    <CardRow title={"Tax"} extra={'$0.00'} className={"noflex nohover"} />
+
+                    <CardRow title={"Total"} extra={'$'+this._getTotal()} className={"noflex nohover"} />
+                  </div>
+                </div>
+                {this._getTotal() > 0 ?
+                  <PayPalButton 
+                    deal={this.state.deal}
+                    total={this._getTotal()} 
+                    authorized={(data,actions) => actions.payment.execute()
+                      .then(() => this.props.purchaseLesson(this.state.deal.shortcode, this.props.token))
+                      //.then(() => this.props.goToLessons())
+                      .catch((error) => console.error(error))
+                    }  
+                    //canceled={()=>alert('canceled')}
+                  />
+                  :
+                  <div className="button se_button" style={{marginTop: '2rem'}}
+                    onClick={() => this.props.purchaseLesson(this.state.deal.shortcode, this.props.token)}
+                  >
+                    <span>Complete Purchase</span>
+                  </div>
+                }
+              </div>
+            }
+            {this.props.purchaseSuccess &&
+              <div className="structured_panel">
+                <h2>Thank you for your purchase!</h2>
+                <div className="button se_button" onClick={() => this.props.goToRedeem()}>
+                  <span>Redeem Now</span>
+                </div>
+                <div className="button se_button" onClick={() => this.props.goToLessons()}>
+                  <span>Back to Lessons</span>
                 </div>
               </div>
-              {this._getTotal() > 0 ?
-                <PayPalButton 
-                  deal={this.deal}
-                  total={this._getTotal()} 
-                  authorized={(data,actions) => actions.payment.execute()
-                    .then(() => this.props.purchaseLesson(this.deal.shortcode, this.props.token))
-                    //.then(() => this.props.goToLessons())
-                    .catch((error) => console.error(error))
-                  }  
-                  //canceled={()=>alert('canceled')}
-                />
-                :
-                <div className="button se_button" style={{marginTop: '2rem'}}
-                  onClick={() => this.props.purchaseLesson(this.deal.shortcode, this.props.token)}
-                >
-                  <span>Complete Purchase</span>
-                </div>
-              }
-            </div>
+            }
+            {this.props.purchaseFail &&
+              <div className="structured_panel">
+                <p>There was an error processing your purchase. Please <a href="http://www.google.com">Contact Us</a> for more information.</p>
+              </div>
+            }
           </section>
           <Footer/>
         </div>

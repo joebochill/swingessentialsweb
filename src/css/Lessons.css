@@ -30,22 +30,22 @@
   flex: 0 0 auto;
 }
 
-.orderRow {
+/* .orderRow {
   display: flex;
   flex-direction: row;
   align-items: center;
   
   height: 3rem;
   
-  background: rgba(242,242,242,.1);/*#f2f2f2;*/
+  background: rgba(242,242,242,.1);
   border-bottom: 0.0625rem solid rgba(0,0,0,0.15);
   
   font-size: 1.1rem;
   color: #231f61;
   text-align: left;
   user-select: none;
-}
-.orderRow:last-child{
+} */
+/* .orderRow:last-child{
   border-width: 0rem;
 }
 
@@ -56,7 +56,7 @@
 .orderRow > :not(:first-child){
   flex: 0 0 auto;
   text-align: right;
-}
+} */
 
 /* Redemption Screen */
 .placeholder_image{
@@ -157,7 +157,7 @@
 }
 
 @media only screen and (max-width: 25rem){
-  .orderRow, .callout > h1, .callout > h3, .callout > span{
+  .callout > h1, .callout > h3, .callout > span{
     font-size: 0.9rem;
   }
 }

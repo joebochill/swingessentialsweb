@@ -5,7 +5,6 @@ import {LOCATION_CHANGE, GET_TIPS, GET_BLOGS, TOKEN_TIMEOUT, GET_PACKAGES} from 
 import {SET_TARGET_ROUTE, MENU, DRAWER} from '../actions/NavigationActions.js';
 import {TOKEN_FROM_STORAGE, LOGIN, LOGOUT, VALIDATE_PASSWORD} from '../actions/LoginActions.js';
 import {GET_LESSONS, /*VIDEO_LINK,*/ GET_CREDITS, /*CLEAR_VIDEO, REDEEM_CREDIT, PUT_LESSON_RESPONSE*/
-SET_PACKAGE_SELECTION,
 PURCHASE_LESSON,
 REDEEM_CREDIT,
 CHECK_COUPON} from '../actions/LessonActions.js';
@@ -84,18 +83,26 @@ const creditsReducer = (state=[], action) => {
 		case PURCHASE_LESSON.REQUEST:
 			return{...state,
 				inProgress: true,
-				complete: false
+				success: false,
+				fail: false
 			}
 		case PURCHASE_LESSON.SUCCESS:
 			return{...state,
 				inProgress: false,
-				complete: true
+				success: true,
+				fail: false
 			}
 		case PURCHASE_LESSON.FAIL:
+			return{...state,
+				inProgress: false,
+				success: false,
+				fail: true
+			}
 		case LOCATION_CHANGE:
 			return{...state,
 				inProgress: false,
-				complete: false
+				success: false,
+				fail: false
 			}
 		default:
 			return state;
@@ -248,10 +255,6 @@ const packagesReducer = (state=[], action) => {
 		case GET_PACKAGES.FAIL:
 			return{...state,
 				loading: false
-			}
-		case SET_PACKAGE_SELECTION.REQUEST:
-			return{...state,
-				selectedPackage: action.data
 			}
 		default:
 			return state;

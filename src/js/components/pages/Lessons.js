@@ -26,7 +26,7 @@ var mapDispatchToProps = function(dispatch){
     getLessons: (token) => {dispatch(getLessons(token))},
     getCredits: (token) => {dispatch(getCredits(token))},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
-    goToPackages: () => {dispatch(push('/packages'))},
+    goToOrder: () => {dispatch(push('/purchase'))},
     goToRedeem: () => {dispatch(push('/redeem'))}
     // redeemCredit: (type, data, token) => {dispatch(redeemCredit(type, data, token))}
   }
@@ -131,7 +131,7 @@ class LessonsPage extends Component {
                       go
                       title={'Order More'} 
                       className={"noflex"} 
-                      action={()=>this.props.goToPackages()}
+                      action={()=>this.props.goToOrder()}
                     />
                   </div>
                 </div>
@@ -161,7 +161,7 @@ class LessonsPage extends Component {
                       go
                       title={'Order More'} 
                       className={"noflex"} 
-                      action={()=>this.props.goToPackages()}
+                      action={()=>this.props.goToOrder()}
                     />
                   </div>
                 </div>

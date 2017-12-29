@@ -29,6 +29,13 @@ class PaypalButton extends Component {
 
     paypal.Button.render({
         env: 'sandbox',
+        style: {
+            size: 'responsive',
+            color: 'blue',
+            shape: 'rect',
+            label: 'pay',
+            fundingicons: true
+        },
         client: {
         // from https://developer.paypal.com/developer/applications/
             sandbox:    'AUdpw5-vad4rjjbmn52xP5Gw_8NfZO14Ff0iB0GvjN2cvjFNvq-9yzgVuAUxckNVIf9VDRQCnd8OF2Vg',
@@ -36,34 +43,40 @@ class PaypalButton extends Component {
         },
         // See https://developer.paypal.com/docs/api/payments/#payment_create 
         payment: (data, actions) =>
-        actions.payment.create({
-            intent: "sale",
-            transactions: [
-                {
-                    amount: {
-                        total: this.props.total,
-                        currency: "USD",
-                        details: {
-                            subtotal: this.props.total,
-                            tax: "0.00",
-                            shipping: "0.00"
+            actions.payment.create({
+                intent: "sale",
+                payment: {
+                    transactions: [
+                    {
+                        amount: {
+                            total: this.props.total,
+                            currency: "USD",
+                            details: {
+                                subtotal: this.props.total,
+                                tax: "0.00"
+                            }
+                        },
+                        description: "Golf Swing Analysis",
+                        item_list: {
+                            items: [
+                            {
+                                name: this.props.deal.name,
+                                description: this.props.deal.description,
+                                quantity: 1,
+                                price: this.props.total,
+                                tax: "0.00",
+                                currency: "USD"
+                            }
+                            ]
                         }
-                    },
-                    description: "Golf Swing Analysis",
-                    item_list: {
-                        items: [
-                        {
-                            name: this.props.deal.name,
-                            description: this.props.deal.description,
-                            quantity: 1,
-                            price: this.props.total,
-                            tax: "0.00",
-                            currency: "USD"
-                        }
-                        ]
+                    }]
+                },
+                experience: {
+                    input_fields: {
+                        no_shipping: 1
                     }
-                }]
-        }),
+                }
+            }),
         commit: true,
         onAuthorize: this.props.authorized,//(data, actions)=>{}
         onCancel: this.props.canceled //(data)=>{}
@@ -73,7 +86,7 @@ class PaypalButton extends Component {
 
   render() {
     return (
-        <div id="ppbutton" style={{marginTop:'2rem'}}></div>
+        <div id="ppbutton" className="button" style={{marginTop:'2rem', height: 'auto'}}></div>
     );
   }
 }

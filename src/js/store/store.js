@@ -32,7 +32,8 @@ export const initialStore = {
         unlimited: false,
         unlimitedExpires: 0,
         inProgress: false,
-        purchaseComplete: false
+        success: false,
+        fail: false
     },
 
     // user's lesson history
@@ -62,8 +63,7 @@ export const initialStore = {
     // swingessentials available lesson packages
     packages:{
         list: [],
-        loading: false,
-        selectedPackage: null
+        loading: false
     },
 
     // api validation token/ authentication
@@ -72,8 +72,7 @@ export const initialStore = {
         admin: false,
         failCount: 0,
         settingsAuthenticated: false,
-        pendingAuthentication: false//,
-        // lastPing: 0
+        pendingAuthentication: false
     },
 
     registration:{

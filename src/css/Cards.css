@@ -100,8 +100,11 @@ section:nth-child(even) .card_row{
   
   pointer-events: none;
 }
-.card_row:not(.nohover):hover,
-section:nth-child(even) .card_row:not(.nohover):hover{
+.card_row.selected{
+  background: rgba(35, 31, 97, 0.40);
+}
+.card_row:not(.nohover):not(.selected):hover,
+section:nth-child(even) .card_row:not(.nohover):not(.selected):hover{
   background: rgba(35, 31, 97, .05);
 }
 .card_title{
@@ -159,6 +162,10 @@ section:nth-child(even) .card_row:not(.nohover):hover{
 }
 .card_row.full .card_extra{
   display: none;
+}
+.card_row.extraitalic .card_extra{
+  font-style: italic;
+  overflow: visible;
 }
 .card_go{
   flex: 0 0 auto;
