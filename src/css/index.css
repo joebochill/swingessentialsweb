@@ -149,6 +149,7 @@ body {
   section a {
     font-weight: 700;
     color: inherit;
+    cursor: pointer;
   }
 
   /* Graphics */
@@ -350,6 +351,15 @@ body {
   .account_links > a:hover{
     text-decoration: underline;
   }
+  .button_link{
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+    margin-bottom: 2rem;
+  }
+  .button_link:hover{
+    text-decoration: underline;
+  }
 /* End Buttons */
 
 .se_footer{
@@ -436,6 +446,9 @@ input:-ms-clear{
 .structured_panel{
   width: 100%;
   max-width: 28.125rem;
+}
+.structured_panel.wide{
+  max-width: 38.5rem;
 }
 .structured_panel h1 {
   margin-bottom: 2rem;

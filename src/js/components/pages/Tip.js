@@ -14,13 +14,14 @@ import Paginator from '../paginator/Paginator.js';
 const mapStateToProps = (state)=>{
   return {
     //username: state.userData.username
+    token: state.login.token,
     tips: state.tips.tipList,
     loading: state.tips.loading
   };
 }
 var mapDispatchToProps = function(dispatch){
   return {
-    requestTips: () => {dispatch(getTips());},
+    requestTips: (token) => {dispatch(getTips(token));},
     goToTips: () => {dispatch(replace('/tip-of-the-month'));},
     goToTipsPage: (page) => {dispatch(push('/tip-of-the-month/'+page));}
   }
@@ -38,7 +39,7 @@ class TipPage extends Component {
 
     // make a request for updated tips and use localstorage in the meantime if we have it
     if(!this.props.tips.length){
-      this.props.requestTips();
+      this.props.requestTips(this.props.token);
       let localtips = JSON.parse(localStorage.getItem('tips'));
       if(localtips){
         this.localtips = localtips;

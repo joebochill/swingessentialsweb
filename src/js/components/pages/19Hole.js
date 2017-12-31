@@ -3,33 +3,38 @@ import {connect} from 'react-redux';
 import {replace, push} from 'react-router-redux';
 import Footer from '../footer/Footer.js';
 import Datestamp from '../datestamp/Datestamp.js';
-import {convertTextToP, validatePageNumber} from '../../utils/utils.js';
+import {convertTextToP, convertLineToText, convertTextToLine, validatePageNumber} from '../../utils/utils.js';
 import Loader from '../loader/Loader.js';
-import {getBlogs} from '../../actions/actions.js';
+import {getBlogs, updateBlog} from '../../actions/actions.js';
 import Paginator from '../paginator/Paginator.js';
 
 
 const mapStateToProps = (state)=>{
   return {
+    token: state.login.token,
+    admin: state.login.admin,
     blogs: state.blogs.blogList,
     loading: state.blogs.loading
   };
 }
 var mapDispatchToProps = function(dispatch){
   return {
-    requestBlogs: () => {dispatch(getBlogs());},
+    requestBlogs: (token) => {dispatch(getBlogs(token));},
     goToBlogs: () => {dispatch(replace('/19th-hole'));},
-    goToBlogsPage: (page) => {dispatch(push('/19th-hole/'+page));}
+    goToBlogsPage: (page) => {dispatch(push('/19th-hole/'+page));},
+    updateBlog: (token, blog) => {dispatch(updateBlog(token, blog));}
   }
 };
 
 class NineteenPage extends Component {
   constructor(props){
     super(props);
-    
     this.start = 0;
     this.perPage = 3;
     this.localblogs = [];
+    this.state={
+      editing: null
+    }
   }
 
   componentWillMount(){
@@ -37,7 +42,7 @@ class NineteenPage extends Component {
 
     // make a request for updated blogs and use localstorage in the meantime if we have it
     if(!this.props.blogs.length){
-      this.props.requestBlogs();
+      this.props.requestBlogs(this.props.token);
       let localblogs = JSON.parse(localStorage.getItem('blogs'));
       if(localblogs){
         this.localblogs= localblogs;
@@ -56,6 +61,40 @@ class NineteenPage extends Component {
       const landing = document.getElementsByClassName("landing_image")[0].offsetHeight || 0;
       window.scrollTo(0,landing - header);
     }
+    if(this.props.loading && !nextProps.loading){
+      this.setState({saving: null});
+    }
+  }
+
+  _changeEdit(newBlog, save){
+    if(this.state.editing && save){
+      // push the changes
+      //TODO: validate the date
+      this.props.updateBlog(this.props.token,{
+        id: this.state.editing,
+        date: this.state.date,
+        title: this.state.title,
+        body: convertLineToText(this.state.body)
+      });
+    }
+    if(newBlog){
+      this.setState({
+        editing: newBlog.id,
+        date: newBlog.date,
+        title: newBlog.title,
+        body: convertTextToLine(newBlog.body)
+      });
+      setTimeout(()=>window.scrollTo(0, document.getElementById('section_'+newBlog.id).offsetTop-48), 100);
+    }
+    else{
+      this.setState({
+        editing: null,
+        date: null,
+        title: null,
+        body: null,
+        saving: save ? this.state.editing : null
+      });
+    }
   }
 
   render() {
@@ -72,23 +111,73 @@ class NineteenPage extends Component {
         </section>
         <div>
           {this.props.loading &&
-              <section className="left">
-                <div>
-                    <p>Loading 19th Hole...</p>
-                    <Loader/>
-                </div>
-              </section>
-            }
-            {blogs.length > 0 && blogs.slice(this.start, this.start+this.perPage).map((blog)=>
-              <section key={blog.id} className="left">
-                <Datestamp datestamp={blog.date}/>
-                <h1>{blog.title}</h1>
-                {convertTextToP(blog.body)}
-              </section>
-            )}
-            <section>
-              <Paginator pages={Math.ceil(blogs.length/this.perPage)} current={this.start/this.perPage+1} navigate={this.props.goToBlogsPage}/>
+            <section className="left">
+              <div>
+                  <p>Loading 19th Hole...</p>
+                  <Loader/>
+              </div>
             </section>
+          }
+          {blogs.length > 0 && blogs.slice(this.start, this.start+this.perPage).map((blog)=>
+            <section key={blog.id} id={'section_' + blog.id} className="left">
+              <Datestamp datestamp={blog.date}/>
+              {this.props.admin && this.state.editing !== blog.id &&
+                <span style={{marginBottom: '2rem'}}>
+                  <a 
+                    className="button_link"
+                    onClick={this._changeEdit.bind(this, blog, false)}
+                  >EDIT</a>
+                  <a 
+                    className="button_link"
+                    style={{marginLeft:'1rem'}}
+                    onClick={() => alert('coming soon')}
+                  >DELETE</a>
+                </span>
+              }
+              {this.props.admin && this.state.editing === blog.id &&
+                <span>
+                  <a 
+                    className="button_link"
+                    onClick={this._changeEdit.bind(this, null, true)}
+                  >SAVE</a>
+                  <a 
+                    className="button_link"
+                    style={{marginLeft:'1rem'}}
+                    onClick={this._changeEdit.bind(this, null, false)}
+                  >CANCEL</a>
+                </span>
+              }
+              {this.state.editing === blog.id &&
+                <div className="structured_panel wide" style={{marginTop:'2rem'}}>
+                  <label>Date</label>
+                  <input type="text" 
+                    value={this.state.date}
+                    placeholder={'YYYY-MM-DD'}
+                    onChange={(evt) => this.setState({date: evt.target.value})}
+                  />
+                  <label style={{marginTop:'1rem'}}>Title</label>
+                  <input type="text" 
+                    value={this.state.title}
+                    onChange={(evt) => this.setState({title: evt.target.value})}
+                  />
+                  <label style={{marginTop:'1rem'}}>Post</label>
+                  <textarea value={this.state.body} style={{minHeight: '30rem'}}
+                    onChange={(evt) => this.setState({body: evt.target.value})}
+                  />
+                </div>
+              }
+              {this.props.loading && this.state.saving === blog.id &&  <Loader/>}
+              {this.state.editing !== blog.id && this.state.saving !== blog.id && 
+                <h1>{blog.title}</h1>
+              }
+              {this.state.editing !== blog.id && this.state.saving !== blog.id && 
+                convertTextToP(blog.body)
+              }
+            </section>
+          )}
+          <section>
+            <Paginator pages={Math.ceil(blogs.length/this.perPage)} current={this.start/this.perPage+1} navigate={this.props.goToBlogsPage}/>
+          </section>
           <Footer/>
         </div>
       </div>

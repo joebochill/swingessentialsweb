@@ -6,6 +6,7 @@ export const TOKEN_TIMEOUT = 'TOKEN_TIMEOUT';
 export const GET_TIPS = {REQUEST: 'GET_TIPS', SUCCESS: 'GET_TIPS_SUCCESS', FAIL: 'GET_TIPS_FAIL'};
 export const GET_BLOGS = {REQUEST: 'GET_BLOGS', SUCCESS: 'GET_BLOGS_SUCCESS', FAIL: 'GET_BLOGS_FAIL'};
 export const GET_PACKAGES = {REQUEST: 'GET_PACKAGES', SUCCESS: 'GET_PACKAGES_SUCCESS', FAIL: 'GET_PACKAGES_FAIL'};
+export const UPDATE_BLOGS = {REQUEST: 'UPDATE_BLOG', SUCCESS: 'UPDATE_BLOG_SUCCESS', FAIL: 'UPDATE_BLOG_FAIL'};
 // export const PING = {REQUEST: 'PING_REQUEST', SUCCESS: 'PING_SUCCESS', FAIL: 'PING_FAIL'};
 
 /* Base URL for fetch commands */
@@ -71,10 +72,15 @@ export const BASEURL = 'http://www.josephpboyle.com/api/myapi.php/';
 // }
 
 /* Retrieves List of Tips-of-the-month */
-export function getTips(){
+export function getTips(token=null){
     return (dispatch) => {
         dispatch({type: GET_TIPS.REQUEST});
-        return fetch(BASEURL+'tips')
+        return fetch(BASEURL+'tips', {
+            method: 'GET',
+            headers: (!token ? {} : {
+                'Authorization': 'Bearer ' + token
+            }) 
+        })
         .then((response) => {
             switch(response.status) {
                 case 200:
@@ -93,10 +99,15 @@ export function getTips(){
 }
 
 /* Retrives list of 19th-hole blog posts */
-export function getBlogs(){
+export function getBlogs(token = null){
     return (dispatch) => {
         dispatch({type: GET_BLOGS.REQUEST});
-        return fetch(BASEURL+'blogs')
+        return fetch(BASEURL+'blogs', {
+            method: 'GET',
+            headers: (!token ? {} : {
+                'Authorization': 'Bearer ' + token
+            }) 
+        })
         .then((response) => {
             switch(response.status) {
                 case 200:
@@ -107,6 +118,33 @@ export function getBlogs(){
                 default:
                     checkTimeout(response, dispatch);
                     dispatch(failure(GET_BLOGS.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+/* Updates the specified blog's details */
+export function updateBlog(token, blog){
+    return (dispatch) => {
+        dispatch({type: UPDATE_BLOGS.REQUEST});
+        return fetch(BASEURL+'blog', {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(blog)
+        })
+        .then((response) => {
+            switch(response.status){
+                case 200:
+                    dispatch(success(UPDATE_BLOGS.SUCCESS));
+                    dispatch(getBlogs(token));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(UPDATE_BLOGS.FAIL, response));
                     break;
             }
         })
@@ -146,6 +184,11 @@ export function checkTimeout(response, dispatch){
     // If we get a failed API call, check if our authentication needs to be re-upped
     const error = parseInt(response.headers.get('Error'),10);
     if(error && (error >= 400200 && error <= 400212) && dispatch){
+        localStorage.removeItem('token');
+        localStorage.removeItem('lessons');
+        localStorage.removeItem('credits');
+        localStorage.removeItem('blogs');
+        localStorage.removeItem('tips');
         dispatch({type:TOKEN_TIMEOUT});
     }
 }

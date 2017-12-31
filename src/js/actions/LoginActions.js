@@ -52,8 +52,11 @@ export function requestLogin(userCredentials){
 
 /* clears the current authentication token */
 export function requestLogout(token){
-
     localStorage.removeItem('token');
+    localStorage.removeItem('lessons');
+    localStorage.removeItem('credits');
+    localStorage.removeItem('blogs');
+    localStorage.removeItem('tips');
 
     return (dispatch) => {
         return fetch(BASEURL+'logout', { 

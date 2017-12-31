@@ -8,6 +8,19 @@
     return array.map((val, index)=><p key={index}>{val}</p>);
   };
 
+  export function convertTextToLine(string){
+    if(!string.length){return null;}
+    
+    let array = string.split(":::");
+    return array.join('\r\n\r\n');
+  }
+  export function convertLineToText(string){
+    if(!string.length){return null;}
+
+    let array = string.split(/[\r\n]+/);
+    return array.join(':::');
+  }
+
   // checks if the requested page is valid
   // if valid, it returns the index of the list record to start with
   export function validatePageNumber(list, perPage, pagenum, backToHome){

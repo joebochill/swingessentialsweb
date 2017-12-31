@@ -113,7 +113,7 @@ class PurchasePage extends Component {
         <section className="landing_image image2">
           <main className="page_title">
             <h1>Purchase Lesson</h1>
-            <h3>Use Now Or Save For Later</h3>
+            <h3>Multiple Package Options</h3>
           </main>
         </section>
         <div>

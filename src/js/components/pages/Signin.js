@@ -14,7 +14,8 @@ const mapStateToProps = (state)=>{
       loginFails: state.login.failCount,
       token: state.login.token,
       target: state.header.targetRoute,
-      message: state.communication.signInMessage
+      message: state.communication.signInMessage,
+      blogs: state.blogs.blogList
     };
 }
 
@@ -48,8 +49,6 @@ class SigninPage extends Component {
         this.props.replace('/profile');
     }
     else{
-      localStorage.removeItem('token');
-      localStorage.removeItem('lessons');
       window.scrollTo(0,0);
     }
   }
