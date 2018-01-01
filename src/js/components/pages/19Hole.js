@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {replace, push} from 'react-router-redux';
 import Footer from '../footer/Footer.js';
 import Datestamp from '../datestamp/Datestamp.js';
-import {convertTextToP, convertLineToText, convertTextToLine, validatePageNumber} from '../../utils/utils.js';
+import {getToday, convertTextToP, convertLineToText, convertTextToLine, validatePageNumber} from '../../utils/utils.js';
 import Loader from '../loader/Loader.js';
 import {getBlogs, updateBlog, addBlog, removeBlog} from '../../actions/actions.js';
 import Paginator from '../paginator/Paginator.js';
@@ -126,21 +126,12 @@ class NineteenPage extends Component {
     }
   }
 
-  _getToday(){
-    let today = new Date();
-    let dd = today.getDate();
-    let mm = today.getMonth()+1; 
-    let yyyy = today.getFullYear();
-    if(dd<10){dd='0'+dd;} 
-    if(mm<10) {mm='0'+mm;} 
-    return (yyyy + '-' + mm + '-' + dd);
-  }
 
   _createNewPost(){
     this.setState({
       newPost: true,
       editing: -1,
-      date: this._getToday(),
+      date: getToday(),
       dateError: '',
       title: '',
       body: '',
@@ -192,7 +183,7 @@ class NineteenPage extends Component {
               </div>
             </section>
           }
-           {this.props.admin && 
+          {this.props.admin && 
             <section className="left">
               {!this.state.newPost && 
                 <div className="structured_panel wide">

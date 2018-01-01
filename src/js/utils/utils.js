@@ -49,3 +49,12 @@
     const months = ['JAN','FEB','MAR','APR','MAY','JUNE','JULY','AUG','SEP','OCT','NOV','DEC'];
     return `${parts[0]}-${months[parseInt(parts[1],10)-1]}-${parts[2]}`;
   }
+  export function getToday(){
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth()+1; 
+    let yyyy = today.getFullYear();
+    if(dd<10){dd='0'+dd;} 
+    if(mm<10) {mm='0'+mm;} 
+    return (yyyy + '-' + mm + '-' + dd);
+  }

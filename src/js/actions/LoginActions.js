@@ -1,5 +1,5 @@
 /* Constants */
-import {BASEURL, /*getPackages,*/ failure, success, checkTimeout} from './actions.js';
+import {BASEURL, /*getPackages,*/ failure, success, checkTimeout, getBlogs, getTips} from './actions.js';
 import {getUserData, getSettings} from './UserDataActions.js';
 import {getLessons, getCredits} from './LessonActions.js';
 
@@ -16,7 +16,9 @@ export function requestDataFromToken(token){
         dispatch(getUserData(token))
         .then(() => dispatch(getLessons(token)))
         .then(() => dispatch(getCredits(token)))
-        .then(() => dispatch(getSettings(token)));
+        .then(() => dispatch(getSettings(token)))
+        .then(() => dispatch(getBlogs(token)))
+        .then(() => dispatch(getTips(token)));
         //.then(() => dispatch(getPackages(token)));
     }
 }
@@ -37,7 +39,9 @@ export function requestLogin(userCredentials){
                     .then((json) => dispatch(success(LOGIN.SUCCESS, {...json,token:token})))
                     .then(() => dispatch(getLessons(token)))
                     .then(() => dispatch(getCredits(token)))
-                    .then(() => dispatch(getSettings(token)));
+                    .then(() => dispatch(getSettings(token)))
+                    .then(() => dispatch(getBlogs(token)))
+                    .then(() => dispatch(getTips(token)));
                     //.then(() => dispatch(getPackages(token)));
                     break;
                 default:

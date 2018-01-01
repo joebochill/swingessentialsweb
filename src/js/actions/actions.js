@@ -4,6 +4,10 @@ export const LOCATION_CHANGE = '@@router/LOCATION_CHANGE';
 export const TOKEN_TIMEOUT = 'TOKEN_TIMEOUT';
 
 export const GET_TIPS = {REQUEST: 'GET_TIPS', SUCCESS: 'GET_TIPS_SUCCESS', FAIL: 'GET_TIPS_FAIL'};
+export const UPDATE_TIP = {REQUEST: 'UPDATE_TIP', SUCCESS: 'UPDATE_TIP_SUCCESS', FAIL: 'UPDATE_TIP_FAIL'};
+export const ADD_TIP = {REQUEST: 'ADD_TIP', SUCCESS: 'ADD_TIP_SUCCESS', FAIL: 'ADD_TIP_FAIL'};
+export const REMOVE_TIP = {REQUEST: 'REMOVE_TIP', SUCCESS: 'REMOVE_TIP_SUCCESS', FAIL: 'REMOVE_TIP_FAIL'};
+
 export const GET_BLOGS = {REQUEST: 'GET_BLOGS', SUCCESS: 'GET_BLOGS_SUCCESS', FAIL: 'GET_BLOGS_FAIL'};
 export const GET_PACKAGES = {REQUEST: 'GET_PACKAGES', SUCCESS: 'GET_PACKAGES_SUCCESS', FAIL: 'GET_PACKAGES_FAIL'};
 export const UPDATE_BLOGS = {REQUEST: 'UPDATE_BLOG', SUCCESS: 'UPDATE_BLOG_SUCCESS', FAIL: 'UPDATE_BLOG_FAIL'};
@@ -100,6 +104,87 @@ export function getTips(token=null){
     }
 }
 
+/* Updates the specified tip's details */
+export function updateTip(token, tip){
+    return (dispatch) => {
+        dispatch({type: UPDATE_TIP.REQUEST});
+        return fetch(BASEURL+'tip', {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(tip)
+        })
+        .then((response) => {
+            switch(response.status){
+                case 200:
+                    dispatch(success(UPDATE_TIP.SUCCESS));
+                    dispatch(getTips(token));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(UPDATE_TIP.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+/* Adds a new tip of the month to the database */
+export function addTip(token, tip){
+    return (dispatch) => {
+        dispatch({type: ADD_TIP.REQUEST});
+        return fetch(BASEURL+'tip', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(tip)
+        })
+        .then((response) => {
+            switch(response.status){
+                case 200:
+                    dispatch(success(ADD_TIP.SUCCESS));
+                    dispatch(getTips(token));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(ADD_TIP.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+/* Removes a tip of the month from the database */
+export function removeTip(token, tip){
+    return (dispatch) => {
+        dispatch({type: REMOVE_TIP.REQUEST});
+        return fetch(BASEURL+'removeTip', {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(tip)
+        })
+        .then((response) => {
+            switch(response.status){
+                case 200:
+                    dispatch(success(REMOVE_TIP.SUCCESS));
+                    dispatch(getTips(token));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(REMOVE_TIP.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
 /* Retrives list of 19th-hole blog posts */
 export function getBlogs(token = null){
     return (dispatch) => {
@@ -185,7 +270,7 @@ export function addBlog(token, blog){
 export function removeBlog(token, blog){
     return (dispatch) => {
         dispatch({type: REMOVE_BLOG.REQUEST});
-        return fetch(BASEURL+'removeblog', {
+        return fetch(BASEURL+'removeBlog', {
             method: 'PUT',
             headers: {
                 'Authorization': 'Bearer ' + token
