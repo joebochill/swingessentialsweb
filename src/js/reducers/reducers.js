@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux'
 
-import {LOCATION_CHANGE, GET_TIPS, GET_BLOGS, TOKEN_TIMEOUT, GET_PACKAGES, UPDATE_BLOGS} from '../actions/actions.js';
+import {LOCATION_CHANGE, GET_TIPS, GET_BLOGS, TOKEN_TIMEOUT, GET_PACKAGES, UPDATE_BLOGS, ADD_BLOG} from '../actions/actions.js';
 import {SET_TARGET_ROUTE, MENU, DRAWER} from '../actions/NavigationActions.js';
 import {TOKEN_FROM_STORAGE, LOGIN, LOGOUT, VALIDATE_PASSWORD} from '../actions/LoginActions.js';
 import {GET_LESSONS, /*VIDEO_LINK,*/ GET_CREDITS, /*CLEAR_VIDEO, REDEEM_CREDIT, PUT_LESSON_RESPONSE*/
@@ -234,6 +234,7 @@ const blogsReducer = (state=[], action) => {
 	switch(action.type){
 		case GET_BLOGS.REQUEST:
 		case UPDATE_BLOGS.REQUEST:
+		case ADD_BLOG.REQUEST:
 			return{...state,
 				loading: true
 			}

@@ -7,6 +7,8 @@ export const GET_TIPS = {REQUEST: 'GET_TIPS', SUCCESS: 'GET_TIPS_SUCCESS', FAIL:
 export const GET_BLOGS = {REQUEST: 'GET_BLOGS', SUCCESS: 'GET_BLOGS_SUCCESS', FAIL: 'GET_BLOGS_FAIL'};
 export const GET_PACKAGES = {REQUEST: 'GET_PACKAGES', SUCCESS: 'GET_PACKAGES_SUCCESS', FAIL: 'GET_PACKAGES_FAIL'};
 export const UPDATE_BLOGS = {REQUEST: 'UPDATE_BLOG', SUCCESS: 'UPDATE_BLOG_SUCCESS', FAIL: 'UPDATE_BLOG_FAIL'};
+export const ADD_BLOG = {REQUEST: 'ADD_BLOG', SUCCESS: 'ADD_BLOG_SUCCESS', FAIL: 'ADD_BLOG_FAIL'};
+export const REMOVE_BLOG = {REQUEST: 'REMOVE_BLOG', SUCCESS: 'REMOVE_BLOG_SUCCESS', FAIL: 'REMOVE_BLOG_FAIL'};
 // export const PING = {REQUEST: 'PING_REQUEST', SUCCESS: 'PING_SUCCESS', FAIL: 'PING_FAIL'};
 
 /* Base URL for fetch commands */
@@ -145,6 +147,60 @@ export function updateBlog(token, blog){
                 default:
                     checkTimeout(response, dispatch);
                     dispatch(failure(UPDATE_BLOGS.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+/* Adds a new blog post to the database */
+export function addBlog(token, blog){
+    return (dispatch) => {
+        dispatch({type: ADD_BLOG.REQUEST});
+        return fetch(BASEURL+'blog', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(blog)
+        })
+        .then((response) => {
+            switch(response.status){
+                case 200:
+                    dispatch(success(ADD_BLOG.SUCCESS));
+                    dispatch(getBlogs(token));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(ADD_BLOG.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+/* Removes a new blog post from the database */
+export function removeBlog(token, blog){
+    return (dispatch) => {
+        dispatch({type: REMOVE_BLOG.REQUEST});
+        return fetch(BASEURL+'removeblog', {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(blog)
+        })
+        .then((response) => {
+            switch(response.status){
+                case 200:
+                    dispatch(success(REMOVE_BLOG.SUCCESS));
+                    dispatch(getBlogs(token));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(REMOVE_BLOG.FAIL, response));
                     break;
             }
         })

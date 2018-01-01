@@ -151,6 +151,11 @@ body {
     color: inherit;
     cursor: pointer;
   }
+  section a[disabled]{
+    opacity: 0.5;
+    text-decoration: line-through;
+    pointer-events: none;
+  }
 
   /* Graphics */
   .headshot{
