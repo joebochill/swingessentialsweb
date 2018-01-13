@@ -9,6 +9,7 @@ import Footer from '../footer/Footer.js';
 import {setTargetRoute} from '../../actions/NavigationActions.js';
 import {getLessons, getCredits} from '../../actions/LessonActions.js';
 import {formatDate} from '../../utils/utils.js';
+import {openModal} from '../../actions/modalActions.js';
 
 import '../../../css/Cards.css';
 
@@ -22,12 +23,13 @@ const mapStateToProps = (state)=>{
 }
 var mapDispatchToProps = function(dispatch){
   return {
-    goToSignIn: () => {dispatch(replace('/signin'));},
+    goToSignIn: () => {dispatch(replace('/signin'))},
     getLessons: (token) => {dispatch(getLessons(token))},
     getCredits: (token) => {dispatch(getCredits(token))},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
     goToOrder: () => {dispatch(push('/purchase'))},
-    goToRedeem: () => {dispatch(push('/redeem'))}
+    goToRedeem: () => {dispatch(push('/redeem'))},
+    openModal: (modal) => {dispatch(openModal(modal))}
     // redeemCredit: (type, data, token) => {dispatch(redeemCredit(type, data, token))}
   }
 };
@@ -70,7 +72,8 @@ class LessonsPage extends Component {
       return Math.ceil(unlimitedRemaining/(60*60)) + " Hours";
     }
     else if(unlimitedRemaining > 0){
-      return Math.ceil(unlimitedRemaining/60) + " Minutes";
+      const min = Math.ceil(unlimitedRemaining/60);
+      return min + (min > 1 ? " Minutes" : " Minute");
     }
     else{
       return (this.props.credits.unlimited ? this.props.credits.unlimited : "0") + " Rounds";
@@ -89,7 +92,7 @@ class LessonsPage extends Component {
           </main>
         </section>
         <div>
-          {(!this.props.admin && !loading && !this.props.lessons.closed.length && !this.props.lessons.pending.length) && 
+          {/* {(!this.props.admin && !loading && !this.props.lessons.closed.length && !this.props.lessons.pending.length) && 
             <section>
               <h1>You haven't submitted any lessons!</h1>
               <p>Download our app today. Your first lesson is free!</p>
@@ -98,7 +101,7 @@ class LessonsPage extends Component {
                 <div className="button google_store" onClick={()=>alert('Coming Soon!')}/>
               </div>
             </section>
-          }
+          } */}
           <section>
             <div className="structured_panel">
               {!this.props.admin && this.props.credits.unlimitedExpires > Date.now()/1000 &&
@@ -111,10 +114,22 @@ class LessonsPage extends Component {
                     <CardRow go 
                       title={'Submit a Swing'} 
                       className={"noflex"} 
-                      action={()=>this.props.goToRedeem()}
+                      action={(this.props.lessons.pending && this.props.lessons.pending.length > 0 ? 
+                        () => this.props.openModal({
+                          type: 'CONFIRM',
+                          props:{
+                            title: 'Swing Analysis in Progress',
+                            body: ['You already have a swing analysis in progress. Please wait for that analysis to finish before submitting a new swing.',
+                                    'We guarantee a 48-hour turnaround on all lessons.'],
+                            cancel: 'OK'
+                          }
+                        })
+                        :
+                        ()=>this.props.goToRedeem()
+                      )}
                     />
                     <CardRow 
-                      title={'Individual Credits'} 
+                      title={'Individual Lessons'} 
                       extra={`${this.props.credits.count ? this.props.credits.count : '0'} Left`}
                       disabled={true}
                       className={"noflex"} 
@@ -143,7 +158,7 @@ class LessonsPage extends Component {
                   </div>
                   <div className="card_body">
                     <CardRow go 
-                      title={'Individual Lesson'} 
+                      title={'Individual Lessons'} 
                       extra={`${this.props.credits.count ? this.props.credits.count : '0'} Left`}
                       disabled={!this.props.credits.count}
                       className={"noflex"} 
@@ -153,9 +168,9 @@ class LessonsPage extends Component {
                       go
                       title={'Activate Unlimited'} 
                       extra={`${this.props.credits.unlimited ? this.props.credits.unlimited : '0'} Left`}
-                      disabled={!this.props.credits.unlimited}
+                      disabled={this.props.credits.unlimited < 1}
                       className={"noflex"} 
-                      action={()=>alert('Are you sure you want to activate your unlimited package? You will have unlimited lessons for 45 days.')}
+                      action={()=>this.props.openModal({type:'ACTIVATE_UNLIMITED'})}
                     />
                     <CardRow  
                       go

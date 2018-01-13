@@ -96,7 +96,8 @@ export const initialStore = {
     },
 
     communication:{
-        signInMessage: ''
+        signInMessage: '',
+        modalList: []
     },
 
     router: null

@@ -5,8 +5,9 @@ import Footer from '../footer/Footer.js';
 import Loader from '../loader/Loader.js';
 
 import {setTargetRoute} from '../../actions/NavigationActions.js';
-import {redeemCredit, getCredits} from '../../actions/LessonActions.js';
+import {redeemCredit, getCredits, getLessons} from '../../actions/LessonActions.js';
 import '../../../css/Lessons.css';
+import { openModal } from '../../actions/modalActions';
 
 const mapStateToProps = (state)=>{
   return {
@@ -14,6 +15,7 @@ const mapStateToProps = (state)=>{
     loading: state.packages.loading,
     credits: state.credits,
     packages: state.packages.list,
+    lessons: state.lessons.pending,
     redeemPending: state.lessons.redeemPending,
     redeemSuccess: state.lessons.redeemSuccess
   };
@@ -24,7 +26,9 @@ var mapDispatchToProps = function(dispatch){
     goToLessons: () => {dispatch(push('/lessons'))},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
     getCredits: (token) => {dispatch(getCredits(token))},
-    redeemCredit: (data,token) => {dispatch(redeemCredit(data,token))}
+    redeemCredit: (data,token) => {dispatch(redeemCredit(data,token))},
+    getLessons: (token) => {dispatch(getLessons(token))},
+    openModal: (modal) => {dispatch(openModal(modal))}
   }
 };
 
@@ -50,9 +54,17 @@ class RedeemPage extends Component {
     }
     //TODO: send away if no credits
     else{
+      // If we don't have the credits for the user, we need to fetch them
       if(!this.props.credits.count && this.props.credits.unlimitedExpires < Date.now()/1000 && !this.props.credits.unlimited){
         this.props.getCredits(this.props.token);
       }
+
+      // If pending lesson array is empty, do a fetch for new lessons
+      if(!this.props.lessons.length){
+        this.props.getLessons(this.props.token);
+      }
+
+      // check if the user is allowed to redeem
       const role = JSON.parse(window.atob(this.props.token.split('.')[1])).role;
       if(role === 'pending'){
         this.setState({error: 'You must validate your email address before you can submit lessons'});
@@ -65,15 +77,36 @@ class RedeemPage extends Component {
   }
 
   componentWillReceiveProps(nextProps){
+    // If user has logged out, go to sign in
     if(!nextProps.token){
       this.props.goToSignIn();
     }
+
+    // If user has redeemed successfully, go to lessons
     if(nextProps.redeemSuccess){
       this.props.goToLessons();
     }
+
+    // If user has no credits, go to lessons
     if(!nextProps.credits.count && nextProps.credits.unlimitedExpires < Date.now()/1000){
       this.props.goToLessons();
     }
+
+    // If user already has a pending lesson, go to lessons and show popup
+    if(nextProps.lessons.length > 0){
+      this.props.goToLessons();
+      this.props.openModal({
+        type: 'CONFIRM',
+        props:{
+          title: 'Swing Analysis in Progress',
+          body: ['You already have a swing analysis in progress. Please wait for that analysis to finish before submitting a new swing.',
+                  'We guarantee a 48-hour turnaround on all lessons.'],
+          cancel: 'OK'
+        }
+      })
+    }
+
+    // If there was an error with redemption, show an error message
     if(this.props.redeemPending && !nextProps.redeemPending && !nextProps.redeemSuccess){
       this.setState({error: 'Failed to submit your lesson request. Check your video files and try again.'})
     }
@@ -114,9 +147,10 @@ class RedeemPage extends Component {
       this.setState({error: 'Missing Required Videos'});
       return;
     }
-    if(this.state.role === 'pending'){
+    if(this.state.role === 'pending' || this.props.lessons.length > 0){
       return;
     }
+
     let data = new FormData();
     data.append('fo', this.state.fosrc);
     data.append('dtl', this.state.dtlsrc);
@@ -126,6 +160,7 @@ class RedeemPage extends Component {
   }
 
   render() {
+    if(this.props.lessons.length > 0){return null;}
     return (
       <div>
         <section className="landing_image image2">

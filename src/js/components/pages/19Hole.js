@@ -7,6 +7,7 @@ import {getToday, convertTextToP, convertLineToText, convertTextToLine, validate
 import Loader from '../loader/Loader.js';
 import {getBlogs, updateBlog, addBlog, removeBlog} from '../../actions/actions.js';
 import Paginator from '../paginator/Paginator.js';
+import {openModal} from '../../actions/modalActions.js';
 
 
 const mapStateToProps = (state)=>{
@@ -24,7 +25,8 @@ var mapDispatchToProps = function(dispatch){
     goToBlogsPage: (page) => {dispatch(push('/19th-hole/'+page));},
     updateBlog: (token, blog) => {dispatch(updateBlog(token, blog));},
     addBlog: (token, blog) => {dispatch(addBlog(token, blog));},
-    removeBlog: (token, blog) => {dispatch(removeBlog(token, blog));}
+    removeBlog: (token, blog) => {dispatch(removeBlog(token, blog));},
+    openModal: (modal) => {dispatch(openModal(modal))}
   }
 };
 
@@ -195,18 +197,6 @@ class NineteenPage extends Component {
               {this.state.newPost && <h1>New Post</h1>}
               {this.state.newPost &&
                 <div className="structured_panel wide" style={{marginTop:'2rem'}}>
-                  <span>
-                    <a 
-                      className="button_link"
-                      onClick={()=>this._addNewPost()}
-                      disabled={!this.state.title || !this.state.body || this.state.dateError || !this.state.date}
-                    >ADD</a>
-                    <a 
-                      className="button_link"
-                      style={{marginLeft:'1rem'}}
-                      onClick={()=>this.setState({newPost:false})}
-                    >CANCEL</a>
-                  </span>
                   <label style={{marginTop:'2rem'}}>Date</label>
                   <input type="text" 
                     value={this.state.date}
@@ -225,6 +215,20 @@ class NineteenPage extends Component {
                   />
                 </div>
               }
+              {this.state.newPost &&
+                <span style={{marginTop: '2rem'}}>
+                  <a 
+                    className="button_link"
+                    onClick={()=>this._addNewPost()}
+                    disabled={!this.state.title || !this.state.body || this.state.dateError || !this.state.date}
+                  >ADD</a>
+                  <a 
+                    className="button_link"
+                    style={{marginLeft:'1rem'}}
+                    onClick={()=>this.setState({newPost:false})}
+                  >CANCEL</a>
+                </span>
+              }
             </section>
           }
           {blogs.length > 0 && blogs.slice(this.start, this.start+this.perPage).map((blog)=>
@@ -238,27 +242,8 @@ class NineteenPage extends Component {
                   >EDIT</a>
                 </span>
               }
-              {this.props.admin && this.state.editing === blog.id &&
-                <span>
-                  <a 
-                    className="button_link"
-                    onClick={this._changeEdit.bind(this, null, true)}
-                    disabled={!this.state.title || !this.state.body || this.state.dateError || !this.state.date}
-                  >SAVE</a>
-                  <a 
-                    className="button_link"
-                    style={{marginLeft:'1rem'}}
-                    onClick={this._changeEdit.bind(this, null, false)}
-                  >CANCEL</a>
-                  <a 
-                    className="button_link"
-                    style={{marginLeft:'1rem'}}
-                    onClick={() => this._removeBlog(blog.id)}
-                  >DELETE</a>
-                </span>
-              }
               {this.state.editing === blog.id &&
-                <div className="structured_panel wide" style={{marginTop:'2rem'}}>
+                <div className="structured_panel wide">
                   <label>Date</label>
                   <input type="text" 
                     value={this.state.date}
@@ -276,6 +261,35 @@ class NineteenPage extends Component {
                     onChange={(evt) => this.setState({body: evt.target.value})}
                   />
                 </div>
+              }
+              {this.props.admin && this.state.editing === blog.id &&
+                <span style={{marginTop: '2rem'}}>
+                  <a 
+                    className="button_link"
+                    onClick={this._changeEdit.bind(this, null, true)}
+                    disabled={!this.state.title || !this.state.body || this.state.dateError || !this.state.date}
+                  >SAVE</a>
+                  <a 
+                    className="button_link"
+                    style={{marginLeft:'1rem'}}
+                    onClick={this._changeEdit.bind(this, null, false)}
+                  >CANCEL</a>
+                  <a 
+                    className="button_link"
+                    style={{marginLeft:'1rem'}}
+                    onClick={() => this.props.openModal({
+                      type: 'CONFIRM',
+                      props:{
+                        title: 'Remove Post: ' + this.state.title,
+                        body: ['Deleting this post will permanently remove it from the database. This action cannot be undone.',
+                                'Are you sure you want to delete this post?'],
+                        buttons: [
+                          {name:'DELETE', action: () => this._removeBlog(blog.id)}
+                        ]
+                      }
+                    })}
+                  >DELETE</a>
+                </span>
               }
               {this.props.loading && this.state.saving === blog.id &&  <Loader/>}
               {this.state.editing !== blog.id && this.state.saving !== blog.id && 

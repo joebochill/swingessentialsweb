@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {push} from 'react-router-redux';
 import Footer from '../footer/Footer.js';
+import {openModal} from '../../actions/modalActions.js';
+
 
 const mapStateToProps = (state)=>{
   return {
@@ -11,7 +13,8 @@ const mapStateToProps = (state)=>{
 
 const mapDispatchToProps = (dispatch)=>{
   return {
-    goToSignin: () => {dispatch(push('/signin'))}
+    goToSignin: () => {dispatch(push('/signin'))},
+    openModal: (modal) => {dispatch(openModal(modal))}    
   }
 }
 
@@ -19,6 +22,18 @@ class HomePage extends Component {
   componentWillMount(){
     window.scrollTo(0,0);
   }
+
+  _showComingSoon(){
+    this.props.openModal({
+      type: 'CONFIRM',
+      props:{
+        title: 'Coming Soon!',
+        body: ['Keep an eye out for our app in the app store.'],
+        cancel: 'OK'
+      }
+    });
+  }
+
   render() {
     return (
       <div>
@@ -29,8 +44,8 @@ class HomePage extends Component {
             <h3>a PGA Pro in your pocket at home and on the links</h3>
           </main>
           <div>
-            <div className="button apple_store" onClick={()=>alert('Coming Soon!')}/>
-            <div className="button google_store" onClick={()=>alert('Coming Soon!')}/>
+            <div className="button apple_store" onClick={()=>this._showComingSoon()}/>
+            <div className="button google_store" onClick={()=>this._showComingSoon()}/>
           </div>
         </section>
         <div>
@@ -80,8 +95,8 @@ class HomePage extends Component {
             <h1>Try It Today</h1>
             <p>Still not convinced? Download our app and give it a try. Your first lesson is on us.</p>
             <div className="multi_col">
-              <div className="button apple_store" onClick={()=>alert('Coming Soon!')}/>
-              <div className="button google_store" onClick={()=>alert('Coming Soon!')}/>
+              <div className="button apple_store" onClick={()=>this._showComingSoon()}/>
+              <div className="button google_store" onClick={()=>this._showComingSoon()}/>
             </div>
             {!this.props.token && <div className="button small se_button" onClick={()=>this.props.goToSignin()}><span>Sign In</span></div>}
           </section>

@@ -15,6 +15,8 @@ import NineteenPage from './pages/19Hole.js';
 import TipPage from './pages/Tip.js';
 import Header from './header/Header.js';
 
+import ModalConductor from './modals/ModalConductor.js';
+
 import {store} from '../store/store.js';
 import {history} from '../store/store.js';
 import {Provider} from 'react-redux';
@@ -56,6 +58,7 @@ class SwingEssentialsApp extends Component {
                 <Redirect to="/"/>
               </Route>  
             </Switch>
+            <ModalConductor/>
           </div>
         </ConnectedRouter>
       </Provider>

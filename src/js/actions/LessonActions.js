@@ -6,6 +6,7 @@ export const GET_LESSONS = {REQUEST: 'GET_LESSONS', SUCCESS: 'GET_LESSONS_SUCCES
 // export const VIDEO_LINK = {REQUEST: 'VIDEO_LINK', SUCCESS: 'VIDEO_LINK_SUCCESS', FAIL: 'VIDEO_LINK_FAIL'};
 // export const CLEAR_VIDEO = {REQUEST: 'CLEAR_VIDEO', SUCCESS: 'CLEAR_VIDEO_SUCCESS', FAIL: 'CLEAR_VIDEO_FAIL'};
 export const REDEEM_CREDIT = {REQUEST: 'REDEEM_CREDIT', SUCCESS: 'REDEEM_CREDIT_SUCCESS', FAIL: 'REDEEM_CREDIT_FAIL'};
+export const ACTIVATE_UNLIMITED = {REQUEST: 'ACTIVATE_UNLIMITED', SUCCESS: 'ACTIVATE_UNLIMITED_SUCCESS', FAIL: 'ACTIVATE_UNLIMITED_FAIL'};
 export const PUT_LESSON_RESPONSE = {REQUEST: 'PUT_LESSON_RESPONSE', SUCCESS: 'PUT_LESSON_RESPONSE_SUCCESS', FAIL: 'PUT_LESSON_RESPONSE_FAIL'};
 export const GET_CREDITS = {SUCCESS: 'GET_CREDITS_SUCCESS', FAIL: 'GET_CREDITS_FAIL'};
 // export const SET_PACKAGE_SELECTION = {REQUEST: 'SET_PACKAGE_SELECTION', SUCCESS: 'SET_PACKAGE_SELECTION_SUCCESS', FAIL: 'SET_PACKAGE_SELECTION_FAIL'};
@@ -139,73 +140,99 @@ export function getCredits(token){
 }
 
 /* Requests the server to make video available for download */
-// export function getVideoLinks(token, id){
-//     return (dispatch) => {
-//         dispatch({type:VIDEO_LINK.REQUEST});
+    // export function getVideoLinks(token, id){
+    //     return (dispatch) => {
+    //         dispatch({type:VIDEO_LINK.REQUEST});
 
-//         return fetch(BASEURL+'videos/' + id, { 
-//             headers: {
-//                 'Authorization': 'Bearer ' + token
-//             }
-//         })
-//         .then((response) => {
-//             switch(response.status) {
-//                 case 200:
-//                     dispatch(success(VIDEO_LINK.SUCCESS));
-//                     break;
-//                 default:
-//                     checkTimeout(response, dispatch);
-//                     dispatch(failure(VIDEO_LINK.FAIL, response));
-//                     break;
-//             }
-//         })
-//         .catch((error) => console.error(error));
-//     }
-// }
+    //         return fetch(BASEURL+'videos/' + id, { 
+    //             headers: {
+    //                 'Authorization': 'Bearer ' + token
+    //             }
+    //         })
+    //         .then((response) => {
+    //             switch(response.status) {
+    //                 case 200:
+    //                     dispatch(success(VIDEO_LINK.SUCCESS));
+    //                     break;
+    //                 default:
+    //                     checkTimeout(response, dispatch);
+    //                     dispatch(failure(VIDEO_LINK.FAIL, response));
+    //                     break;
+    //             }
+    //         })
+    //         .catch((error) => console.error(error));
+    //     }
+    // }
 
 /* Removes videos from downloadable location on server */
-// export function clearVideoLinks(token){
-//     return (dispatch) => {
-//         return fetch(BASEURL+'unlink')
-//         .then((response) => {
-//             switch(response.status) {
-//                 case 200:
-//                     dispatch(success(CLEAR_VIDEO.SUCCESS));
-//                     break;
-//                 default:
-//                     checkTimeout(response, dispatch);
-//                     dispatch(failure(CLEAR_VIDEO.FAIL, response));
-//                     break;
-//             }
-//         })
-//         .catch((error) => console.error(error));
-//     }
-// }
+    // export function clearVideoLinks(token){
+    //     return (dispatch) => {
+    //         return fetch(BASEURL+'unlink')
+    //         .then((response) => {
+    //             switch(response.status) {
+    //                 case 200:
+    //                     dispatch(success(CLEAR_VIDEO.SUCCESS));
+    //                     break;
+    //                 default:
+    //                     checkTimeout(response, dispatch);
+    //                     dispatch(failure(CLEAR_VIDEO.FAIL, response));
+    //                     break;
+    //             }
+    //         })
+    //         .catch((error) => console.error(error));
+    //     }
+    // }
 
 /* Lets a user redeem a credit and submit a new lesson request */
 export function redeemCredit(data, token){
-        return (dispatch) => {
-            dispatch({type: REDEEM_CREDIT.REQUEST});
-            
-            return fetch(BASEURL+'redeem/', { 
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                },
-                body: data
-            })
-            .then((response) => {
-                switch(response.status) {
-                    case 200:
-                        dispatch(success(REDEEM_CREDIT.SUCCESS));
-                        dispatch(getLessons(token));
-                        break;
-                    default:
-                        checkTimeout(response, dispatch);
-                        dispatch(failure(REDEEM_CREDIT.FAIL, response));
-                        break;
-                }
-            })
-            .catch((error) => console.error(error));
-        }
+    return (dispatch) => {
+        dispatch({type: REDEEM_CREDIT.REQUEST});
+        
+        return fetch(BASEURL+'redeem/', { 
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body: data
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    dispatch(success(REDEEM_CREDIT.SUCCESS));
+                    dispatch(getLessons(token));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(REDEEM_CREDIT.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+export function activateUnlimited(token){
+    return (dispatch) => {
+        dispatch({type: ACTIVATE_UNLIMITED.REQUEST});
+        
+        return fetch(BASEURL+'unlimited/', { 
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    dispatch(success(ACTIVATE_UNLIMITED.SUCCESS));
+                    dispatch(getCredits(token));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(ACTIVATE_UNLIMITED.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
 }

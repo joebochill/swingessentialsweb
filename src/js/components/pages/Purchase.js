@@ -177,10 +177,10 @@ class PurchasePage extends Component {
                   <PayPalButton 
                     deal={this.state.deal}
                     total={this._getTotal()} 
-                    authorized={(data,actions) => actions.payment.execute()
+                    authorized={(data,actions) => {console.log(data); console.log(actions);actions.payment.execute()
                       .then(() => this.props.purchaseLesson(this.state.deal.shortcode, this.props.token))
                       //.then(() => this.props.goToLessons())
-                      .catch((error) => console.error(error))
+                      .catch((error) => console.error(error))}
                     }  
                     //canceled={()=>alert('canceled')}
                   />

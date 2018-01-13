@@ -10,6 +10,7 @@ REDEEM_CREDIT,
 CHECK_COUPON} from '../actions/LessonActions.js';
 import {CREATE_ACCOUNT, VERIFY_EMAIL, /*REQUEST_RESET,*/ VERIFY_RESET, CHECK_USER, CHECK_EMAIL} from '../actions/RegistrationActions.js';
 import {UPDATE_CREDENTIALS, /*PUT_USER_DATA,*/ GET_USER_DATA, GET_SETTINGS} from '../actions/UserDataActions.js';
+import { OPEN_MODAL, CLOSE_MODAL } from '../actions/modalActions';
 
 /* Updates the basic info for the logged in user */
 const userReducer = (state=[], action) => {
@@ -467,6 +468,15 @@ const communicationReducer = (state=[], action) => {
 		case TOKEN_TIMEOUT:
 			return{...state,
 				signInMessage: 'For security purposes, you have been automatically signed out.'
+			}
+		case OPEN_MODAL:
+			return{...state,
+				modalList: [...state.modalList, action.modal]
+			}
+		case CLOSE_MODAL:
+			if(state.modalList.length < 1){ return state;}
+			return {...state,
+				modalList: state.modalList.slice(0,-1)
 			}
 		default:
 			return state;

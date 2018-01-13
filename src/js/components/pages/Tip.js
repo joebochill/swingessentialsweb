@@ -9,6 +9,7 @@ import {getTips, updateTip, addTip, removeTip} from '../../actions/actions.js';
 import Loader from '../loader/Loader.js';
 import {getToday, validatePageNumber, convertTextToP, convertLineToText, convertTextToLine} from '../../utils/utils.js';
 import Paginator from '../paginator/Paginator.js';
+import {openModal} from '../../actions/modalActions.js';
 
 
 const mapStateToProps = (state)=>{
@@ -26,7 +27,8 @@ var mapDispatchToProps = function(dispatch){
     goToTipsPage: (page) => {dispatch(push('/tip-of-the-month/'+page));},
     updateTip: (token, tip) => {dispatch(updateTip(token, tip))},
     addTip: (token, tip) => {dispatch(addTip(token, tip))},
-    removeTip: (token, tip) => {dispatch(removeTip(token, tip))}
+    removeTip: (token, tip) => {dispatch(removeTip(token, tip))},
+    openModal: (modal) => {dispatch(openModal(modal))}    
   }
 };
 
@@ -200,19 +202,7 @@ class TipPage extends Component {
               }
               {this.state.newPost && <h1>New Tip</h1>}
               {this.state.newPost &&
-                <div className="structured_panel" style={{marginTop:'2rem'}}>
-                  <span>
-                    <a 
-                      className="button_link"
-                      onClick={()=>this._addNewPost()}
-                      disabled={!this.state.title || !this.state.video || !this.state.comments || this.state.dateError || !this.state.date}
-                    >ADD</a>
-                    <a 
-                      className="button_link"
-                      style={{marginLeft:'1rem'}}
-                      onClick={()=>this.setState({newPost:false})}
-                    >CANCEL</a>
-                  </span>
+                <div className="structured_panel">
                   <label style={{marginTop:'2rem'}}>Date</label>
                   <input type="text" 
                     value={this.state.date}
@@ -236,6 +226,20 @@ class TipPage extends Component {
                   />
                 </div>
               }
+              {this.state.newPost && 
+                <span style={{marginTop:'2rem'}}>
+                  <a 
+                    className="button_link"
+                    onClick={()=>this._addNewPost()}
+                    disabled={!this.state.title || !this.state.video || !this.state.comments || this.state.dateError || !this.state.date}
+                  >ADD</a>
+                  <a 
+                    className="button_link"
+                    style={{marginLeft:'1rem'}}
+                    onClick={()=>this.setState({newPost:false})}
+                  >CANCEL</a>
+                </span>
+              }
             </section>
           }
 
@@ -251,27 +255,8 @@ class TipPage extends Component {
                   >EDIT</a>
                 </span>
               }
-              {this.props.admin && this.state.editing === tip.id &&
-                <span>
-                  <a 
-                    className="button_link"
-                    onClick={this._changeEdit.bind(this, null, true)}
-                    disabled={!this.state.title || !this.state.video || !this.state.comments || this.state.dateError || !this.state.date}
-                  >SAVE</a>
-                  <a 
-                    className="button_link"
-                    style={{marginLeft:'1rem'}}
-                    onClick={this._changeEdit.bind(this, null, false)}
-                  >CANCEL</a>
-                  <a 
-                    className="button_link"
-                    style={{marginLeft:'1rem'}}
-                    onClick={() => this._removeTip(tip.id)}
-                  >DELETE</a>
-                </span>
-              }
               {this.state.editing === tip.id &&
-                <div className="structured_panel" style={{marginTop:'2rem'}}>
+                <div className="structured_panel">
                   <label>Date</label>
                   <input type="text" 
                     value={this.state.date}
@@ -294,6 +279,35 @@ class TipPage extends Component {
                     onChange={(evt) => this.setState({comments: evt.target.value})}
                   />
                 </div>
+              }
+              {this.props.admin && this.state.editing === tip.id &&
+                <span style={{marginTop:'2rem'}}>
+                  <a 
+                    className="button_link"
+                    onClick={this._changeEdit.bind(this, null, true)}
+                    disabled={!this.state.title || !this.state.video || !this.state.comments || this.state.dateError || !this.state.date}
+                  >SAVE</a>
+                  <a 
+                    className="button_link"
+                    style={{marginLeft:'1rem'}}
+                    onClick={this._changeEdit.bind(this, null, false)}
+                  >CANCEL</a>
+                  <a 
+                    className="button_link"
+                    style={{marginLeft:'1rem'}}
+                    onClick={() => this.props.openModal({
+                      type: 'CONFIRM',
+                      props:{
+                        title: 'Remove Tip: ' + this.state.title,
+                        body: ['Deleting this tip will permanently remove it from the database. This action cannot be undone.',
+                                'Are you sure you want to delete this tip?'],
+                        buttons: [
+                          {name:'DELETE', action: () => this._removeTip(tip.id)}
+                        ]
+                      }
+                    })}
+                  >DELETE</a>
+                </span>
               }
               {this.props.loading && this.state.saving === tip.id &&  <Loader/>}
               {this.state.editing !== tip.id && this.state.saving !== tip.id &&
