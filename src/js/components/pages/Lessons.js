@@ -115,15 +115,7 @@ class LessonsPage extends Component {
                       title={'Submit a Swing'} 
                       className={"noflex"} 
                       action={(this.props.lessons.pending && this.props.lessons.pending.length > 0 ? 
-                        () => this.props.openModal({
-                          type: 'CONFIRM',
-                          props:{
-                            title: 'Swing Analysis in Progress',
-                            body: ['You already have a swing analysis in progress. Please wait for that analysis to finish before submitting a new swing.',
-                                    'We guarantee a 48-hour turnaround on all lessons.'],
-                            cancel: 'OK'
-                          }
-                        })
+                        () => this.props.openModal({type: 'PENDING_SWING'})
                         :
                         ()=>this.props.goToRedeem()
                       )}

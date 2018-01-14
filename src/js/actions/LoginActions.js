@@ -7,7 +7,7 @@ export const TOKEN_FROM_STORAGE = "TOKEN_FROM_STORAGE";
 export const LOGIN = {SUCCESS: 'LOGIN_SUCCESS', FAIL: 'LOGIN_FAIL'};
 export const LOGOUT = {SUCCESS: 'LOGOUT_SUCCESS', FAIL: 'LOGOUT_FAIL'};
 export const VALIDATE_PASSWORD = {REQUEST: 'VALIDATE_PASSWORD', SUCCESS: 'VALIDATE_PASSWORD_SUCCESS', FAIL: 'VALIDATE_PASSWORD_FAIL'};
-
+export const REFRESH_TOKEN = {REQUEST: 'REFRESH_TOKEN', SUCCESS: 'REFRESH_TOKEN_SUCCESS', FAIL: 'REFRESH_TOKEN_FAIL'};
 
 /* requests application data from a token retrieved from localstorage */
 export function requestDataFromToken(token){
@@ -103,6 +103,30 @@ export function validatePassword(token, pass){
                 default:
                     checkTimeout(response, dispatch);
                     dispatch(failure(VALIDATE_PASSWORD.FAIL, response));
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+// Submit a request to get a new token - users will be prompted prior to their session expiring
+export function refreshToken(token){
+    return (dispatch) => {
+        fetch(BASEURL+'refresh', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then((response) => {
+            switch(response.status){
+                case 200:
+                    const token = response.headers.get('Token');
+                    localStorage.setItem('token', token);
+                    dispatch(success(REFRESH_TOKEN.SUCCESS, {token: token}));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(REFRESH_TOKEN.FAIL, response));
             }
         })
         .catch((error) => console.error(error));

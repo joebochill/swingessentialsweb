@@ -3,7 +3,7 @@ import {routerReducer} from 'react-router-redux'
 
 import {LOCATION_CHANGE, GET_TIPS, UPDATE_TIP, ADD_TIP, GET_BLOGS, TOKEN_TIMEOUT, GET_PACKAGES, UPDATE_BLOGS, ADD_BLOG} from '../actions/actions.js';
 import {SET_TARGET_ROUTE, MENU, DRAWER} from '../actions/NavigationActions.js';
-import {TOKEN_FROM_STORAGE, LOGIN, LOGOUT, VALIDATE_PASSWORD} from '../actions/LoginActions.js';
+import {TOKEN_FROM_STORAGE, LOGIN, LOGOUT, VALIDATE_PASSWORD, REFRESH_TOKEN} from '../actions/LoginActions.js';
 import {GET_LESSONS, /*VIDEO_LINK,*/ GET_CREDITS, /*CLEAR_VIDEO, REDEEM_CREDIT, PUT_LESSON_RESPONSE*/
 PURCHASE_LESSON,
 REDEEM_CREDIT,
@@ -285,6 +285,7 @@ const packagesReducer = (state=[], action) => {
 const loginReducer = (state=[], action) => {
 	switch(action.type){
 		case LOGIN.SUCCESS:
+		case REFRESH_TOKEN.SUCCESS:
 			return{...state,
 				token: action.data.token,
 				admin: (JSON.parse(window.atob(action.data.token.split('.')[1]))['role'].toLowerCase()==='administrator')
@@ -307,6 +308,7 @@ const loginReducer = (state=[], action) => {
 				settingsAuthenticated: false,
 				pendingAuthentication: false
 			}
+		case REFRESH_TOKEN.FAIL:
 		case LOGOUT.FAIL:
 			return {...state,
 				token: null,

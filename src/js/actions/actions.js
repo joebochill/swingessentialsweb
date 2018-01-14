@@ -20,63 +20,6 @@ export const BASEURL = 'http://www.josephpboyle.com/api/myapi.php/';
 //const API_KEY = 'AIzaSyAzvggwVpvJ1pngsjQKJ84FcY8v07C8dNA';
 //const googleURL = 'https://www.googleapis.com/upload/storage/v1/b/www.joebochill.com/';
 
-
-
-// export function uploadFile(input){
-    //     return (dispatch) => {
-    //         console.log('dispatching');
-    //         console.log(input.files[0]);
-    //         let data = new FormData();
-    //         data.append('file', input.files[0]);
-    //         //POST https://www.googleapis.com/upload/storage/v1/b/myBucket/o?uploadType=media&name=myObject
-            
-    //         fetch(googleURL+'o?uploadType=media&name=test&key='+API_KEY, {
-    //           method: 'POST',
-    //           headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'multipart/form-data'
-    //           },
-    //           body: data
-    //         })
-    //         .then((response) => {
-    //             console.log(response);
-    //             switch(response.status) {
-    //                 case 200:
-    //                     dispatch(success('test_success'));
-    //                     break;
-    //                 default:
-    //                     dispatch(failure('test_fail', response));
-    //                     break;
-    //             }
-    //         })    
-    //     }
-// }
-// periodic check to see if our token is still valid
-// export function ping(token){
-        //     console.log('pinging');
-        //     return (dispatch) => {
-        //         fetch(BASEURL+'ping', {
-        //             headers: {
-        //                 'Authorization': 'Bearer ' + token
-        //             }
-        //         })
-        //         .then((response) => {
-        //             switch(response.status){
-        //                 case 200:
-        //                     console.log('ping succeeded - new token');
-        //                     const token = response.headers.get('Token');
-        //                     localStorage.setItem('token', JSON.stringify(token));
-        //                     dispatch(success(PING.SUCCESS, {token: token}));
-        //                     break;
-        //                 default:
-        //                     console.log('ping failed');
-        //                     checkTimeout(response, dispatch);
-        //             }
-        //         })
-        //         .catch((error) => console.error(error));
-        //     }
-// }
-
 /* Retrieves List of Tips-of-the-month */
 export function getTips(token=null){
     return (dispatch) => {

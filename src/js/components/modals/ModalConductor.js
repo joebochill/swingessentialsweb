@@ -4,9 +4,14 @@ import {connect} from 'react-redux';
 // import the modals that we will be using
 import confirmModal from './ConfirmModal.js';
 import activateUnlimited from './ActivateUnlimited.js';
+import pendingSwing from './PendingSwing.js';
+import tokenExpire from './TokenExpire.js';
+
 const ModalComponents = {
   'CONFIRM': confirmModal,
-  'ACTIVATE_UNLIMITED': activateUnlimited
+  'ACTIVATE_UNLIMITED': activateUnlimited,
+  'PENDING_SWING': pendingSwing,
+  'TOKEN_EXPIRE': tokenExpire
 }
 
 const mapStateToProps = (state)=>{

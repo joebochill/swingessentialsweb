@@ -6,9 +6,7 @@ import { activateUnlimited } from '../../actions/LessonActions';
 
 const mapStateToProps = (state)=>{
   return {
-    token: state.login.token,
-    modals: state.communication.modalList,
-    modalBodyText: state.communication.modalBodyText
+    token: state.login.token
   };
 }
 var mapDispatchToProps = function(dispatch){
@@ -20,7 +18,9 @@ var mapDispatchToProps = function(dispatch){
 
 class ActivateUnlimitedModal extends Component {
   _cancel(evt){
-    this.props.closeModal();
+    this.closing = true;
+    this.forceUpdate();
+    setTimeout(()=>this.props.closeModal(),400);
   }
 
   _okay(evt){
@@ -32,7 +32,7 @@ class ActivateUnlimitedModal extends Component {
 
   render() {
     return (
-      <div className={"modal_overlay" + (this.props.topModal ? " topModal" : "")}>
+      <div className={"modal_overlay" + (this.closing ? " closing" : "")}>
         <div className="modal" style={{maxWidth:'30rem'}}>
           <header className="modal_header">
             <span>Activate Unlimited</span>

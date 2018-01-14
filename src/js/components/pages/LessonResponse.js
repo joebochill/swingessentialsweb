@@ -173,6 +173,14 @@ class LessonResponsePage extends Component {
               </div>
             </section>
           }
+          {this.lesson && this.lesson.response_status && this.lesson.response_status==="rejected" &&
+            <section className="left">
+              <div className="structured_panel">
+                <h1>Comments</h1>
+                {this._convertTextToP(this.lesson.response_notes)}
+              </div>
+            </section>
+          }
           <section className="left">
             <div className="structured_panel">
               <h1>{this.props.admin ? "Swing Videos" : "Your Swing Videos"}</h1>

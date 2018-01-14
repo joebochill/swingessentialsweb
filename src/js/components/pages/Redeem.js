@@ -95,15 +95,7 @@ class RedeemPage extends Component {
     // If user already has a pending lesson, go to lessons and show popup
     if(nextProps.lessons.length > 0){
       this.props.goToLessons();
-      this.props.openModal({
-        type: 'CONFIRM',
-        props:{
-          title: 'Swing Analysis in Progress',
-          body: ['You already have a swing analysis in progress. Please wait for that analysis to finish before submitting a new swing.',
-                  'We guarantee a 48-hour turnaround on all lessons.'],
-          cancel: 'OK'
-        }
-      })
+      this.props.openModal({type: 'PENDING_SWING'});
     }
 
     // If there was an error with redemption, show an error message

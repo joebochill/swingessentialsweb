@@ -7,6 +7,7 @@ import Drawer from './Drawer.js';
 import {connect} from 'react-redux';
 import {openNavDrawer, closeNavDrawer, openNavMenu, closeNavMenu} from '../../actions/NavigationActions.js';
 import {requestLogout} from '../../actions/LoginActions.js';
+import {openModal} from '../../actions/modalActions.js';
 
 
 function mapStateToProps(state){
@@ -19,7 +20,7 @@ function mapStateToProps(state){
         menuOpen: state.header.menuOpen,
         activeRoute: state.header.activeRoute,
         registrationActivated: state.login.registrationActivated,
-        lastPing: state.login.lastPing
+        // lastPing: state.login.lastPing
     };
 }
 function mapDispatchToProps(dispatch){
@@ -30,7 +31,8 @@ function mapDispatchToProps(dispatch){
       closeMenu: () => {dispatch(closeNavMenu())},
       openDrawer: () => {dispatch(openNavDrawer())},
       closeDrawer: () => {dispatch(closeNavDrawer())},
-      goToSignIn: () => {dispatch(push('/signin'));}//,
+      goToSignIn: () => {dispatch(push('/signin'));},
+      openModal: (modal) => {dispatch(openModal(modal))}
       // ping: (token) => {dispatch(ping(token))}
   }
 }
@@ -46,16 +48,27 @@ class Header extends Component {
   componentDidMount(){
     this._removeEventListeners();
     this._addEventListeners();
+
+    if(this.props.token){
+      this.tokenTimer = setInterval(() => this._checkTokenTimeout(), 1000);//5*60*1000);
+      this.exp = JSON.parse(window.atob(this.props.token.split('.')[1])).exp;
+    }
   }
 
   componentWillReceiveProps(nextProps){
     // Logout should redirect to the signin screen
     if(this.props.token && !nextProps.token){
       this.props.goToSignIn();
+      if(this.tokenTimer){clearInterval(this.tokenTimer);}
     }
     // else if(nextProps.token && (this.props.lastPing+5000 < Date.now())){
     //   //this.props.ping(nextProps.token);
     // }
+    else if(nextProps.token){
+      if(this.tokenTimer){clearInterval(this.tokenTimer);}
+      this.tokenTimer = setInterval(() => this._checkTokenTimeout(), 1000);//5*60*1000);
+      this.exp = JSON.parse(window.atob(nextProps.token.split('.')[1])).exp;
+    }
   }
 
   componentWillUnmount(){
@@ -65,11 +78,15 @@ class Header extends Component {
   _addEventListeners(){
     window.addEventListener('resize',this.closeMenus);
     window.addEventListener('click', this.bodyAction);
+
     //window.addEventListener('scroll', this.bodyAction);
   }
   _removeEventListeners(){
     window.removeEventListener('resize',this.closeMenus);
     window.removeEventListener('click', this.bodyAction);
+
+    if(this.tokenTimer){clearInterval(this.tokenTimer);}
+
     //window.removeEventListener('scroll', this.bodyAction);
   }
   _closeMenus(){
@@ -81,6 +98,18 @@ class Header extends Component {
     else if(!evt.target.closest('.se_drop_menu') && !evt.target.closest('.se_menu_button')) {
         this._closeMenus();
     }       
+  }
+
+  // Periodically checks the token timeout and will show a renew dialog if the time is < 5 minutes, < 2 minutes
+  _checkTokenTimeout(){
+    if(!this.props.token){
+      if(this.tokenTimer){clearInterval(this.tokenTimer);}
+      return;
+    }
+    if(this.exp && (this.exp - Date.now()/1000 < 4*60)){
+      this.props.openModal({type: 'TOKEN_EXPIRE'});
+      clearInterval(this.tokenTimer);
+    }
   }
 
   render() {
