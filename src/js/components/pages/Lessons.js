@@ -35,6 +35,12 @@ var mapDispatchToProps = function(dispatch){
 };
 
 class LessonsPage extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      timer:''
+    }
+  }
   componentWillMount(){
     if(!this.props.token){
       this.props.setTargetRoute('/lessons');
@@ -52,6 +58,11 @@ class LessonsPage extends Component {
       if(!this.props.credits.count && !this.props.credits.unlimited && !this.props.credits.unlimitedExpires){
         this.props.getCredits(this.props.token);
       }
+
+      // if unlimited is activated, start the timer
+      if(this.props.credits.unlimitedExpires > 0){
+        this._setupTimer();
+      }
     }
   }
   componentWillReceiveProps(nextProps){
@@ -59,25 +70,49 @@ class LessonsPage extends Component {
       //this.props.setTargetRoute('/lessons');
       this.props.goToSignIn();
     }
+
+    if(nextProps.credits.unlimitedExpires > 0){
+      this._setupTimer();
+    }
+  }
+
+  _setupTimer(){
+    if(this.expireTimer){clearInterval(this.expireTimer);}
+    
+    this._formatUnlimited();
+    
+    let remaining = this.props.credits.unlimitedExpires - Date.now()/1000;
+    if(remaining > 60*60*24){
+      // No timer for over 1 day
+    }
+    else if(remaining > 60*60*1){
+      this.expireTimer = setInterval(this._formatUnlimited.bind(this), 1000*60*60); //every hour
+    }
+    else if(remaining > 0){
+      this.expireTimer = setInterval(this._formatUnlimited.bind(this), 1000*60); //every minute
+    }
   }
 
   /* Format the time remaining string for unlimited lesson */
   _formatUnlimited(){
     let unlimitedRemaining = (this.props.credits.unlimitedExpires - (Date.now()/1000));
-    
+    let countdown;
+
     if(unlimitedRemaining > 24*60*60){
-      return Math.ceil(unlimitedRemaining/(24*60*60)) + " Days";
+      countdown = Math.ceil(unlimitedRemaining/(24*60*60)) + " Days Left";
     }
     else if(unlimitedRemaining > 60*60){
-      return Math.ceil(unlimitedRemaining/(60*60)) + " Hours";
+      countdown =  Math.ceil(unlimitedRemaining/(60*60)) + " Hours Left";
     }
     else if(unlimitedRemaining > 0){
       const min = Math.ceil(unlimitedRemaining/60);
-      return min + (min > 1 ? " Minutes" : " Minute");
+      countdown =  min + (min > 1 ? " Minutes Left" : " Minute Left");
     }
-    else{
-      return (this.props.credits.unlimited ? this.props.credits.unlimited : "0") + " Rounds";
+    else{ 
+      return;
     }
+
+    this.setState({timer: countdown});
   }
 
 
@@ -108,7 +143,7 @@ class LessonsPage extends Component {
                 <div className="card">
                   <div className="card_header infinity">
                     <span>Unlimited Lessons</span>
-                    <span style={{cursor:'default'}}>{`${this._formatUnlimited()} Left`}</span>
+                    <span style={{cursor:'default'}}>{this.state.timer}</span>
                   </div>
                   <div className="card_body">
                     <CardRow go 

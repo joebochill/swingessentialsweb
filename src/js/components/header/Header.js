@@ -106,7 +106,7 @@ class Header extends Component {
       if(this.tokenTimer){clearInterval(this.tokenTimer);}
       return;
     }
-    if(this.exp && (this.exp - Date.now()/1000 < 4*60)){
+    if(this.exp && (this.exp - Date.now()/1000 < 3*60)){
       this.props.openModal({type: 'TOKEN_EXPIRE'});
       clearInterval(this.tokenTimer);
     }
