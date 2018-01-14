@@ -71,7 +71,7 @@ class LessonsPage extends Component {
       this.props.goToSignIn();
     }
 
-    if(nextProps.credits.unlimitedExpires > 0){
+    if(nextProps.credits.unlimitedExpires > 0 && nextProps.credits.unlimitedExpires > Date.now()/1000){
       this._setupTimer();
     }
   }
@@ -109,7 +109,9 @@ class LessonsPage extends Component {
       countdown =  min + (min > 1 ? " Minutes Left" : " Minute Left");
     }
     else{ 
-      return;
+      countdown = '';
+      if(this.expireTimer){clearInterval(this.expireTimer);}
+      this.props.getCredits(this.props.token);
     }
 
     this.setState({timer: countdown});

@@ -5,19 +5,16 @@ import YoutubeVideo from '../youtube/YoutubeVideo.js';
 import Footer from '../footer/Footer.js';
 import Loader from '../loader/Loader.js';
 import {formatDate} from '../../utils/utils.js';
-//import YouTube from 'react-youtube';
 
 import { setTargetRoute } from '../../actions/NavigationActions.js';
-import { getLessons, /*getVideoLinks, clearVideoLinks,*/ putLessonResponse } from '../../actions/LessonActions.js';
+import { getLessons, putLessonResponse, markLessonViewed } from '../../actions/LessonActions.js';
 
 const mapStateToProps = (state)=>{
   return {
     username: state.userData.username,
     token: state.login.token,
     lessons: state.lessons,
-    admin: state.login.admin//,
-    //linking: state.lessons.linking,
-    //linked: state.lessons.linked
+    admin: state.login.admin
   };
 }
 var mapDispatchToProps = function(dispatch){
@@ -26,9 +23,8 @@ var mapDispatchToProps = function(dispatch){
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
     getLessons: (token) => {dispatch(getLessons(token))},
     goToLessons: () => {dispatch(replace('/lessons'))},
-    //getVideoLinks: (token, id) => {dispatch(getVideoLinks(token, id))},
-    //clearVideoLinks: () => {dispatch(clearVideoLinks())},
-    putLessonResponse: (data,token) => {dispatch(putLessonResponse(data,token))}
+    putLessonResponse: (data,token) => {dispatch(putLessonResponse(data,token))},
+    markViewed: (id, token) => {dispatch(markLessonViewed(id, token))}
   }
 };
 
@@ -120,6 +116,11 @@ class LessonResponsePage extends Component {
       return;
     }  
     else{
+      // If the user is viewing the lesson, mark it viewed
+      if(this.lesson.viewed === "0" && !this.props.admin){
+        this.props.markViewed({id:this.lesson.request_id}, this.props.token);
+      }
+      
       this.setState({
         responseURL: (this.state.responseURL) ? this.state.responseURL : (this.lesson.response_video || ''),
         responseNotes: (this.state.responseNotes) ? this.state.responseNotes : (this.lesson.response_notes || ''),

@@ -12,6 +12,7 @@ export const GET_CREDITS = {SUCCESS: 'GET_CREDITS_SUCCESS', FAIL: 'GET_CREDITS_F
 // export const SET_PACKAGE_SELECTION = {REQUEST: 'SET_PACKAGE_SELECTION', SUCCESS: 'SET_PACKAGE_SELECTION_SUCCESS', FAIL: 'SET_PACKAGE_SELECTION_FAIL'};
 export const PURCHASE_LESSON = {REQUEST: 'PURCHASE_LESSON', SUCCESS: 'PURCHASE_LESSON_SUCCESS', FAIL: 'PURCHASE_LESSON_FAIL'};
 export const CHECK_COUPON = {REQUEST: 'CHECK_COUPON', SUCCESS: 'CHECK_COUPON_SUCCESS', FAIL: 'CHECK_COUPON_FAILURE'};
+export const MARK_VIEWED = {REQUEST: 'MARK_VIEWED', SUCCESS: 'MARK_VIEWED_SUCCESS', FAIL: 'MARK_VIEWED_FAIL'};
 
 /* Checks the specified coupon code for validity */
 export function checkCoupon(code){
@@ -139,50 +140,6 @@ export function getCredits(token){
     }
 }
 
-/* Requests the server to make video available for download */
-    // export function getVideoLinks(token, id){
-    //     return (dispatch) => {
-    //         dispatch({type:VIDEO_LINK.REQUEST});
-
-    //         return fetch(BASEURL+'videos/' + id, { 
-    //             headers: {
-    //                 'Authorization': 'Bearer ' + token
-    //             }
-    //         })
-    //         .then((response) => {
-    //             switch(response.status) {
-    //                 case 200:
-    //                     dispatch(success(VIDEO_LINK.SUCCESS));
-    //                     break;
-    //                 default:
-    //                     checkTimeout(response, dispatch);
-    //                     dispatch(failure(VIDEO_LINK.FAIL, response));
-    //                     break;
-    //             }
-    //         })
-    //         .catch((error) => console.error(error));
-    //     }
-    // }
-
-/* Removes videos from downloadable location on server */
-    // export function clearVideoLinks(token){
-    //     return (dispatch) => {
-    //         return fetch(BASEURL+'unlink')
-    //         .then((response) => {
-    //             switch(response.status) {
-    //                 case 200:
-    //                     dispatch(success(CLEAR_VIDEO.SUCCESS));
-    //                     break;
-    //                 default:
-    //                     checkTimeout(response, dispatch);
-    //                     dispatch(failure(CLEAR_VIDEO.FAIL, response));
-    //                     break;
-    //             }
-    //         })
-    //         .catch((error) => console.error(error));
-    //     }
-    // }
-
 /* Lets a user redeem a credit and submit a new lesson request */
 export function redeemCredit(data, token){
     return (dispatch) => {
@@ -211,6 +168,7 @@ export function redeemCredit(data, token){
     }
 }
 
+/* Activates an unlimited lesson deal */
 export function activateUnlimited(token){
     return (dispatch) => {
         dispatch({type: ACTIVATE_UNLIMITED.REQUEST});
@@ -230,6 +188,35 @@ export function activateUnlimited(token){
                 default:
                     checkTimeout(response, dispatch);
                     dispatch(failure(ACTIVATE_UNLIMITED.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+/* Mark the specified lesson as viewed when it's seen by the target user */
+export function markLessonViewed(data, token){
+    console.log('marking lesson viewed');
+    return (dispatch) => {
+        dispatch({type: MARK_VIEWED.REQUEST});
+        
+        return fetch(BASEURL+'viewed/', { 
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(data)
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    dispatch(success(MARK_VIEWED.SUCCESS));
+                    dispatch(getLessons(token));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(MARK_VIEWED.FAIL, response));
                     break;
             }
         })
