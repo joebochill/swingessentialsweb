@@ -14,6 +14,7 @@ import ValidationPage from './pages/Validation.js';
 import NineteenPage from './pages/19Hole.js';
 import TipPage from './pages/Tip.js';
 import PackagesPage from './pages/Packages.js';
+import DiscountsPage from './pages/Discounts.js';
 import Header from './header/Header.js';
 
 import ModalConductor from './modals/ModalConductor.js';
@@ -56,6 +57,7 @@ class SwingEssentialsApp extends Component {
               <Route exact path="/register/:validation_key" component={ValidationPage}/>
               <Route exact path="/reset/:reset_key" component={ResetPage}/>
               <Route exact path="/packages" component={PackagesPage}/>
+              <Route exact path="/discounts" component={DiscountsPage}/>
               <Route path="*">
                 <Redirect to="/"/>
               </Route>  

@@ -52,9 +52,9 @@ class Drawer extends Component {
             {(this.props.token && this.props.admin) && (
               <NavLink to='/packages/'>Packages</NavLink>
             )}
-            {/* {(this.props.token && this.props.admin) && (
+            {(this.props.token && this.props.admin) && (
               <NavLink to='/discounts/'>Discounts</NavLink>
-            )} */}
+            )}
             {(this.props.token) && (
               <a onClick={()=>{this.props.requestLogout(this.props.token); this.props.closeDrawer()}}>Sign Out</a>
             )}

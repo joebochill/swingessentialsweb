@@ -4,7 +4,7 @@ import {replace} from 'react-router-redux';
 
 import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
-// import Loader from '../loader/Loader.js';
+import Loader from '../loader/Loader.js';
 
 import { getPackages, updatePackage, removePackage, addPackage } from '../../actions/PackageActions.js';
 import {openModal} from '../../actions/modalActions.js';
@@ -172,6 +172,14 @@ class PackagesPage extends Component {
           </main>
         </section>
         <div>
+        {this.props.packages.loading &&
+            <section className="left">
+              <div>
+                  <p>Loading Packages...</p>
+                  <Loader/>
+              </div>
+            </section>
+          }
         <section className="left">
             <div className="structured_panel">
               <h1>PACKAGES</h1>

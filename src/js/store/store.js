@@ -67,7 +67,7 @@ export const initialStore = {
     },
 
     // discount codes for swingessentials (can only be viewed by admin)
-    coupons:{
+    discounts:{
         list: [],
         loading: false
     },

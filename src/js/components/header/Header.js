@@ -138,9 +138,9 @@ class Header extends Component {
                   {this.props.admin &&
                   <NavLink to='/packages/'>Packages</NavLink>
                   }
-                  {/* {this.props.admin &&
+                  {this.props.admin &&
                   <NavLink to='/discounts/'>Discounts</NavLink>
-                  } */}
+                  }
                   <a onClick={()=>{this.props.requestLogout(this.props.token); this.props.closeMenu();}}>Sign Out</a>
                 </div>
               </div>

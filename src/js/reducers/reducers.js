@@ -12,6 +12,7 @@ import {CREATE_ACCOUNT, VERIFY_EMAIL, /*REQUEST_RESET,*/ VERIFY_RESET, CHECK_USE
 import {UPDATE_CREDENTIALS, /*PUT_USER_DATA,*/ GET_USER_DATA, GET_SETTINGS} from '../actions/UserDataActions.js';
 import { OPEN_MODAL, CLOSE_MODAL } from '../actions/modalActions';
 import { UPDATE_PACKAGE, ADD_PACKAGE } from '../actions/PackageActions';
+import { GET_DISCOUNTS, UPDATE_DISCOUNT, ADD_DISCOUNT } from '../actions/DiscountActions';
 
 /* Updates the basic info for the logged in user */
 const userReducer = (state=[], action) => {
@@ -285,8 +286,23 @@ const packagesReducer = (state=[], action) => {
 }
 
 /* Updates the list of available discount code coupons */
-const couponReducer = (state = [], action) => {
+const discountsReducer = (state = [], action) => {
 	switch(action.type){
+		case GET_DISCOUNTS.REQUEST:
+		case UPDATE_DISCOUNT.REQUEST:
+		case ADD_DISCOUNT.REQUEST:
+			return{...state,
+				loading: true
+			}
+		case GET_DISCOUNTS.SUCCESS:
+			return{...state,
+				list: action.data,
+				loading: false
+			}
+		case GET_DISCOUNTS.FAIL:
+			return{...state,
+				loading:false
+			}
 		default:
 			return state;
 	}
@@ -504,7 +520,7 @@ const AppReducer = combineReducers({
 	tips: tipsReducer,
 	blogs: blogsReducer,
 	packages: packagesReducer,
-	coupons: couponReducer,
+	discounts: discountsReducer,
 	login: loginReducer,
 	registration: registrationReducer,
 	header: headerReducer,
