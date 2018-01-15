@@ -16,6 +16,7 @@ function mapStateToProps(state){
         fname: state.userData.firstName,
         lname: state.userData.lastName,
         token: state.login.token,
+        admin: state.login.admin,
         drawerOpen: state.header.drawerOpen,
         menuOpen: state.header.menuOpen,
         activeRoute: state.header.activeRoute,
@@ -106,6 +107,7 @@ class Header extends Component {
       if(this.tokenTimer){clearInterval(this.tokenTimer);}
       return;
     }
+    // If there are < 3 minutes left on the session, show the popup
     if(this.exp && (this.exp - Date.now()/1000 < 3*60)){
       this.props.openModal({type: 'TOKEN_EXPIRE'});
       clearInterval(this.tokenTimer);
@@ -133,6 +135,12 @@ class Header extends Component {
                 <div className="se_menu_panel_links">
                   <NavLink to='/lessons' exact>Lessons</NavLink>
                   <NavLink to='/profile/'>Profile</NavLink>
+                  {this.props.admin &&
+                  <NavLink to='/packages/'>Packages</NavLink>
+                  }
+                  {/* {this.props.admin &&
+                  <NavLink to='/discounts/'>Discounts</NavLink>
+                  } */}
                   <a onClick={()=>{this.props.requestLogout(this.props.token); this.props.closeMenu();}}>Sign Out</a>
                 </div>
               </div>

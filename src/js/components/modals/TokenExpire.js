@@ -4,7 +4,7 @@ import {push} from 'react-router-redux';
 
 import {closeModal} from '../../actions/modalActions.js';
 import '../../../css/Modals.css';
-import { refreshToken } from '../../actions/LoginActions';
+import { refreshToken, requestLogout } from '../../actions/LoginActions';
 
 const mapStateToProps = (state)=>{
   return {
@@ -15,7 +15,8 @@ var mapDispatchToProps = function(dispatch){
   return {
     closeModal: () => {dispatch(closeModal());},
     goToSignIn: () => {dispatch(push('/signin'));},
-    refreshToken: (token) => {dispatch(refreshToken(token))}
+    refreshToken: (token) => {dispatch(refreshToken(token))},
+    logout: (token) => {dispatch(requestLogout(token))}
   };
 };
 
@@ -57,7 +58,9 @@ class TokenExpireModal extends Component {
     let remaining = this.exp - Date.now()/1000;
 
     if(remaining <= 0){
-      this.props.goToSignIn();
+      if(this.tokenTimer){clearInterval(this.tokenTimer);}
+      this.props.logout();
+      this._cancel();
     }
 
     let min = Math.floor(remaining/60);

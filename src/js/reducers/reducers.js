@@ -11,6 +11,7 @@ CHECK_COUPON} from '../actions/LessonActions.js';
 import {CREATE_ACCOUNT, VERIFY_EMAIL, /*REQUEST_RESET,*/ VERIFY_RESET, CHECK_USER, CHECK_EMAIL} from '../actions/RegistrationActions.js';
 import {UPDATE_CREDENTIALS, /*PUT_USER_DATA,*/ GET_USER_DATA, GET_SETTINGS} from '../actions/UserDataActions.js';
 import { OPEN_MODAL, CLOSE_MODAL } from '../actions/modalActions';
+import { UPDATE_PACKAGE, ADD_PACKAGE } from '../actions/PackageActions';
 
 /* Updates the basic info for the logged in user */
 const userReducer = (state=[], action) => {
@@ -264,6 +265,8 @@ const blogsReducer = (state=[], action) => {
 const packagesReducer = (state=[], action) => {
 	switch(action.type){
 		case GET_PACKAGES.REQUEST:
+		case UPDATE_PACKAGE.REQUEST:
+		case ADD_PACKAGE.REQUEST:
 			return{...state,
 				loading: true
 			}
@@ -276,6 +279,14 @@ const packagesReducer = (state=[], action) => {
 			return{...state,
 				loading: false
 			}
+		default:
+			return state;
+	}
+}
+
+/* Updates the list of available discount code coupons */
+const couponReducer = (state = [], action) => {
+	switch(action.type){
 		default:
 			return state;
 	}
@@ -492,7 +503,8 @@ const AppReducer = combineReducers({
 	lessons: lessonsReducer,
 	tips: tipsReducer,
 	blogs: blogsReducer,
-    packages: packagesReducer,
+	packages: packagesReducer,
+	coupons: couponReducer,
 	login: loginReducer,
 	registration: registrationReducer,
 	header: headerReducer,

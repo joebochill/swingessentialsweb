@@ -236,33 +236,6 @@ export function removeBlog(token, blog){
     }
 }
 
-/* Retrieves List of available lesson packages and prices */
-export function getPackages(token){
-    return (dispatch) => {
-        dispatch({type:GET_PACKAGES.REQUEST});
-
-        return fetch(BASEURL+'packages', { 
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        })
-        .then((response) => {
-            switch(response.status) {
-                case 200:
-                    response.json()
-                    .then((json) => dispatch(success(GET_PACKAGES.SUCCESS, json)))
-                    .then((response) => localStorage.setItem('packages',JSON.stringify(response.data)));                    
-                    break;
-                default:
-                    checkTimeout(response, dispatch);
-                    dispatch(failure(GET_PACKAGES.FAIL, response));
-                    break;
-            }
-        })
-        .catch((error) => console.error(error));
-    }
-}
-
 /* Check if the request failed because of an expired token */
 export function checkTimeout(response, dispatch){
     // If we get a failed API call, check if our authentication needs to be re-upped

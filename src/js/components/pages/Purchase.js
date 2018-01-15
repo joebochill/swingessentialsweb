@@ -7,7 +7,7 @@ import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
 import {setTargetRoute} from '../../actions/NavigationActions.js';
 import {purchaseLesson, checkCoupon} from '../../actions/LessonActions.js';
-import { getPackages } from '../../actions/actions.js';
+import { getPackages } from '../../actions/PackageActions.js';
 import '../../../css/Lessons.css';
 import '../../../css/Cards.css';
 

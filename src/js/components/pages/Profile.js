@@ -146,7 +146,7 @@ class ProfilePage extends Component {
             <div className="structured_panel">
               <div className="card">
                 <div className="card_header">
-                  <span>PERSONAL</span>
+                  <span>Personal</span>
                   <span onClick={() => this.updateSettings("personal")}>{this.state.editPersonal ? "DONE" : "EDIT"}</span>
                 </div>
                 <div className="card_body">
@@ -169,7 +169,7 @@ class ProfilePage extends Component {
               </div>
               <div className="card">
                 <div className="card_header">
-                  <span>AUTHENTICATION</span>
+                  <span>Authentication</span>
                   <span onClick={() => this.updateSettings("security")}>{this.state.editSecurity ? "DONE" : "EDIT"}</span>
                 </div>
                 <div className="card_body">

@@ -197,7 +197,6 @@ export function activateUnlimited(token){
 
 /* Mark the specified lesson as viewed when it's seen by the target user */
 export function markLessonViewed(data, token){
-    console.log('marking lesson viewed');
     return (dispatch) => {
         dispatch({type: MARK_VIEWED.REQUEST});
         

@@ -94,7 +94,6 @@ class TipPage extends Component {
   _changeEdit(newTip, save){
     if(this.state.editing && save){ // clicked save button
       // push the changes
-      //TODO: validate the data
       if(!this._validateDate() || !this.state.title || !this.state.video || !this.state.comments){return;}
       
       this.props.updateTip(this.props.token,{

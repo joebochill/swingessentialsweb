@@ -49,6 +49,11 @@
 .card_header > span:not(:first-child):not([disabled]){
   cursor: pointer;
 }
+.card_header > span[disabled]{
+  opacity: 0.5;
+  text-decoration: line-through;
+  pointer-events: none;
+}
 .card_body{
   position: relative;
 
@@ -147,6 +152,7 @@ section:nth-child(even) .card_row:not(.nohover):not(.selected):hover{
   flex-direction: row;
   align-items: center;
   justify-content: flex-end; */
+  max-width: 15rem;
   
   overflow: hidden;
 
@@ -177,7 +183,10 @@ section:nth-child(even) .card_row:not(.nohover):not(.selected):hover{
   opacity: 0.7;
 }
 
-.card_extra > input{
+.card_extra > input:not([type="checkbox"]),
+.card_extra > select,
+.card_extra > span > input:not([type="checkbox"]),
+.card_extra > span > select{
   height: 2rem;
   max-width: 15rem;
   padding: 0 .5rem;
@@ -186,6 +195,13 @@ section:nth-child(even) .card_row:not(.nohover):not(.selected):hover{
   /* border: 0.0625rem solid rgba(35, 31, 97, .2); */
 
   text-align: right;
+}
+
+.card_extra > span{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .security_check{

@@ -13,6 +13,7 @@ function mapStateToProps(state){
         fname: state.userData.firstName,
         lname: state.userData.lastName,
         token: state.login.token,
+        admin: state.login.admin,
         drawerOpen: state.header.drawerOpen
     };
 }
@@ -48,6 +49,12 @@ class Drawer extends Component {
             {(this.props.token) && (
               <NavLink to='/profile/'>Profile</NavLink>
             )}
+            {(this.props.token && this.props.admin) && (
+              <NavLink to='/packages/'>Packages</NavLink>
+            )}
+            {/* {(this.props.token && this.props.admin) && (
+              <NavLink to='/discounts/'>Discounts</NavLink>
+            )} */}
             {(this.props.token) && (
               <a onClick={()=>{this.props.requestLogout(this.props.token); this.props.closeDrawer()}}>Sign Out</a>
             )}

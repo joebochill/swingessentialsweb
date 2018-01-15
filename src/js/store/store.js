@@ -66,6 +66,12 @@ export const initialStore = {
         loading: false
     },
 
+    // discount codes for swingessentials (can only be viewed by admin)
+    coupons:{
+        list: [],
+        loading: false
+    },
+
     // api validation token/ authentication
     login:{
         token: null,
