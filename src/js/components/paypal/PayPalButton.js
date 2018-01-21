@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
 import paypal from 'paypal-checkout';
-//var braintree = require('braintree-web');
-
-
-// let paypal = require('braintree-web/paypal');
-// let client = require('braintree-web/client');
-// let paypalCheckout = require('braintree-web/paypal-checkout');
-// import {paypalCheckout} from 'braintree-web';
-// import {paypal} from 'braintree-web';
 
 class PaypalButton extends Component {
   componentDidMount(){
@@ -26,7 +18,7 @@ class PaypalButton extends Component {
         return;
     }
     document.getElementById('ppbutton').innerHTML = "";
-
+    
     paypal.Button.render({
         env: 'sandbox',
         style: {
@@ -41,52 +33,68 @@ class PaypalButton extends Component {
             sandbox:    'AUdpw5-vad4rjjbmn52xP5Gw_8NfZO14Ff0iB0GvjN2cvjFNvq-9yzgVuAUxckNVIf9VDRQCnd8OF2Vg',
             production: 'xxxxxxxxx'  
         },
+        validate: (actions) => {
+            if(this.props.disabled){actions.disable();}
+            else{actions.enable();}
+        },
         // See https://developer.paypal.com/docs/api/payments/#payment_create 
         payment: (data, actions) =>
-            actions.payment.create({
-                intent: "sale",
-                payment: {
-                    transactions: [
-                    {
-                        amount: {
-                            total: this.props.total,
-                            currency: "USD",
-                            details: {
-                                subtotal: this.props.total,
-                                tax: "0.00"
+                actions.payment.create({
+                    intent: "sale",
+                    payment: {
+                        transactions: [
+                        {
+                            amount: {
+                                total: this.props.total,
+                                currency: "USD",
+                                details: {
+                                    subtotal: this.props.total,
+                                    tax: "0.00"
+                                }
+                            },
+                            description: "Golf Swing Analysis",
+                            item_list: {
+                                items: [
+                                {
+                                    name: this.props.deal.name,
+                                    description: this.props.deal.description,
+                                    quantity: 1,
+                                    price: Math.max(this.props.total, 0.01),
+                                    tax: "0.00",
+                                    currency: "USD"
+                                }
+                                ]
                             }
-                        },
-                        description: "Golf Swing Analysis",
-                        item_list: {
-                            items: [
-                            {
-                                name: this.props.deal.name,
-                                description: this.props.deal.description,
-                                quantity: 1,
-                                price: this.props.total,
-                                tax: "0.00",
-                                currency: "USD"
-                            }
-                            ]
+                        }]
+                    },
+                    experience: {
+                        input_fields: {
+                            no_shipping: 1
                         }
-                    }]
-                },
-                experience: {
-                    input_fields: {
-                        no_shipping: 1
                     }
-                }
-            }),
+                }),
         commit: true,
-        onAuthorize: this.props.authorized,//(data, actions)=>{}
-        onCancel: this.props.canceled //(data)=>{}
+        onAuthorize: this.props.authorized,//(data, actions) => {}
+        onCancel: this.props.canceled, //(data)=>{}
+        onError: this.props.error //(err) => {}
     }, '#ppbutton');
   }
 
 
   render() {
+    const style = this.props.disabled ? {
+        marginTop: '2rem',
+        height: 'auto',
+        opacity: '0.5',
+        pointerEvents: 'none'
+    } :
+    {
+        marginTop: '2rem',
+        height: 'auto'
+    };
+
     return (
-        <div id="ppbutton" className="button" style={{marginTop:'2rem', height: 'auto'}}></div>
+        <div id="ppbutton" className="button" style={style}></div>
     );
   }
 }

@@ -63,6 +63,10 @@ class RedeemPage extends Component {
       if(!this.props.lessons.length){
         this.props.getLessons(this.props.token);
       }
+      else if(this.props.lessons.length > 0){// If user already has a pending lesson, go to lessons and show popup
+        this.props.goToLessons();
+        this.props.openModal({type: 'PENDING_SWING'});
+      }
 
       // check if the user is allowed to redeem
       const role = JSON.parse(window.atob(this.props.token.split('.')[1])).role;

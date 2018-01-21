@@ -11,6 +11,7 @@ export const PUT_LESSON_RESPONSE = {REQUEST: 'PUT_LESSON_RESPONSE', SUCCESS: 'PU
 export const GET_CREDITS = {SUCCESS: 'GET_CREDITS_SUCCESS', FAIL: 'GET_CREDITS_FAIL'};
 // export const SET_PACKAGE_SELECTION = {REQUEST: 'SET_PACKAGE_SELECTION', SUCCESS: 'SET_PACKAGE_SELECTION_SUCCESS', FAIL: 'SET_PACKAGE_SELECTION_FAIL'};
 export const PURCHASE_LESSON = {REQUEST: 'PURCHASE_LESSON', SUCCESS: 'PURCHASE_LESSON_SUCCESS', FAIL: 'PURCHASE_LESSON_FAIL'};
+export const EXECUTE_PAYMENT = {REQUEST: 'EXECUTE_PAYMENT', SUCCESS: 'EXECUTE_PAYMENT_SUCCESS', FAIL: 'EXECUTE_PAYMENT_FAIL'};
 export const CHECK_COUPON = {REQUEST: 'CHECK_COUPON', SUCCESS: 'CHECK_COUPON_SUCCESS', FAIL: 'CHECK_COUPON_FAILURE'};
 export const MARK_VIEWED = {REQUEST: 'MARK_VIEWED', SUCCESS: 'MARK_VIEWED_SUCCESS', FAIL: 'MARK_VIEWED_FAIL'};
 
@@ -216,6 +217,34 @@ export function markLessonViewed(data, token){
                 default:
                     checkTimeout(response, dispatch);
                     dispatch(failure(MARK_VIEWED.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+/* Hands the payment processing over to the server */
+export function executePayment(data, token){
+    return (dispatch) => {
+        dispatch({type: EXECUTE_PAYMENT.REQUEST});
+
+        return fetch(BASEURL+'executepayment/', {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(data)
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    dispatch(success(EXECUTE_PAYMENT.SUCCESS));
+                    dispatch(getCredits(token));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(EXECUTE_PAYMENT.FAIL, response));
                     break;
             }
         })
