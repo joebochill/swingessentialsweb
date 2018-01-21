@@ -239,7 +239,7 @@ export function removeBlog(token, blog){
 /* Check if the request failed because of an expired token */
 export function checkTimeout(response, dispatch){
     // If we get a failed API call, check if our authentication needs to be re-upped
-    const error = parseInt(response.headers.get('Error'),10);
+    const error = (response && response.headers && response.headers.get)?parseInt(response.headers.get('Error'),10):999;
     if(error && (error >= 400200 && error <= 400212) && dispatch){
         localStorage.removeItem('token');
         localStorage.removeItem('lessons');
@@ -252,12 +252,29 @@ export function checkTimeout(response, dispatch){
 
 /* Dispatch a failure action for the supplied action type */
 export function failure(type, response){
-    console.log(response.headers.get('Error'));
-    console.log(response.headers.get('Message'));
+    if(response && response.headers && response.headers.get){
+        console.log(response.headers.get('Error'));
+        console.log(response.headers.get('Message'));
+    }
+    
     return{
         type: type,
         response: response,
-        error: response.headers.get('Error')
+        error: (response && response.headers && response.headers.get) ? response.headers.get('Error') : 'N/A'
+    }
+}
+
+/* Dispatch a failure action for the supplied action type, XMLHTTPRequest variant */
+export function xhrfailure(type, response){
+    if(response && response.getResponseHeader){
+        console.log(response.getResponseHeader('Error'));
+        console.log(response.getResponseHeader('Message'));
+    }
+    
+    return{
+        type: type,
+        response: response,
+        error: (response && response.getResponseHeader) ? response.getResponseHeader('Error') : 'N/A'
     }
 }
 

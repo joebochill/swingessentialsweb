@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {replace, push} from 'react-router-redux';
 import Footer from '../footer/Footer.js';
 import Loader from '../loader/Loader.js';
+import Progress from '../progressbar/Progress.js';
 
 import {setTargetRoute} from '../../actions/NavigationActions.js';
 import {redeemCredit, getCredits, getLessons} from '../../actions/LessonActions.js';
@@ -26,7 +27,7 @@ var mapDispatchToProps = function(dispatch){
     goToLessons: () => {dispatch(push('/lessons'))},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
     getCredits: (token) => {dispatch(getCredits(token))},
-    redeemCredit: (data,token) => {dispatch(redeemCredit(data,token))},
+    redeemCredit: (data,token,progress) => {dispatch(redeemCredit(data,token,progress))},
     getLessons: (token) => {dispatch(getLessons(token))},
     openModal: (modal) => {dispatch(openModal(modal))}
   }
@@ -41,7 +42,8 @@ class RedeemPage extends Component {
       notes:'',
       error:'',
       videoError: '',
-      role:'pending'
+      role:'pending',
+      progress: 0
     };
     this.dtl = null;
     this.fo = null;
@@ -150,7 +152,12 @@ class RedeemPage extends Component {
     data.append('dtl', this.state.dtlsrc);
     data.append('notes', this.state.notes);
 
-    this.props.redeemCredit(data, this.props.token);
+    this.props.redeemCredit(data, this.props.token, this._updateProgress.bind(this));
+  }
+
+  _updateProgress(event){
+    // console.log((event.loaded/event.total).toFixed(2));
+    this.setState({progress: (event.loaded/event.total)*100})
   }
 
   render() {
@@ -262,6 +269,9 @@ class RedeemPage extends Component {
               />
               {this.props.redeemPending && 
                 <Loader/>
+              }
+              {this.props.redeemPending && 
+                <Progress progress={this.state.progress}/>
               }
               {this.state.error && <span className="validation_error">{this.state.error}</span>}
               <div className="button se_button" 
