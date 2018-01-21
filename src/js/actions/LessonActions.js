@@ -20,10 +20,7 @@ export function checkCoupon(code){
     return (dispatch) => {
         dispatch({type: CHECK_COUPON.REQUEST});
 
-        return fetch(BASEURL+'coupon',{
-            method: 'PUT',
-            body: JSON.stringify({code: code})
-        })
+        return fetch(BASEURL+'checkCoupon?code='+code)
         .then((response) => {
             switch(response.status){
                 case 200:
