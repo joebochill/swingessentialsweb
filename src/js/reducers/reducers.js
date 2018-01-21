@@ -7,7 +7,8 @@ import {TOKEN_FROM_STORAGE, LOGIN, LOGOUT, VALIDATE_PASSWORD, REFRESH_TOKEN} fro
 import {GET_LESSONS, /*VIDEO_LINK,*/ GET_CREDITS, /*CLEAR_VIDEO, REDEEM_CREDIT, PUT_LESSON_RESPONSE*/
 PURCHASE_LESSON,
 REDEEM_CREDIT,
-CHECK_COUPON} from '../actions/LessonActions.js';
+CHECK_COUPON,
+EXECUTE_PAYMENT} from '../actions/LessonActions.js';
 import {CREATE_ACCOUNT, VERIFY_EMAIL, /*REQUEST_RESET,*/ VERIFY_RESET, CHECK_USER, CHECK_EMAIL} from '../actions/RegistrationActions.js';
 import {UPDATE_CREDENTIALS, /*PUT_USER_DATA,*/ GET_USER_DATA, GET_SETTINGS} from '../actions/UserDataActions.js';
 import { OPEN_MODAL, CLOSE_MODAL } from '../actions/modalActions';
@@ -91,18 +92,21 @@ const creditsReducer = (state=[], action) => {
 				unlimitedExpires: 0
 			}
 		case PURCHASE_LESSON.REQUEST:
+		case EXECUTE_PAYMENT.REQUEST:
 			return{...state,
 				inProgress: true,
 				success: false,
 				fail: false
 			}
 		case PURCHASE_LESSON.SUCCESS:
+		case EXECUTE_PAYMENT.SUCCESS:
 			return{...state,
 				inProgress: false,
 				success: true,
 				fail: false
 			}
 		case PURCHASE_LESSON.FAIL:
+		case EXECUTE_PAYMENT.FAIL:
 			return{...state,
 				inProgress: false,
 				success: false,
@@ -189,6 +193,7 @@ const lessonsReducer = (state=[], action) => {
 		case CHECK_COUPON.SUCCESS:
 			return{...state,
 				coupon:{
+					code: action.data.code,
 					type: action.data.type,
 					value: parseInt(action.data.value, 10),
 					error: ''

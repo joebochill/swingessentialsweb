@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
 import paypal from 'paypal-checkout';
-//var braintree = require('braintree-web');
-
-
-// let paypal = require('braintree-web/paypal');
-// let client = require('braintree-web/client');
-// let paypalCheckout = require('braintree-web/paypal-checkout');
-// import {paypalCheckout} from 'braintree-web';
-// import {paypal} from 'braintree-web';
 
 class PaypalButton extends Component {
   componentDidMount(){
@@ -26,9 +18,6 @@ class PaypalButton extends Component {
         return;
     }
     document.getElementById('ppbutton').innerHTML = "";
-
-    let CREATE_PAYMENT_URL = 'http://www.josephpboyle.com/api/myapi.php/createpayment';
-    let EXECUTE_PAYMENT_URL = 'http://www.josephpboyle.com/api/myapi.php/executepayment';
     
     paypal.Button.render({
         env: 'sandbox',
@@ -40,10 +29,14 @@ class PaypalButton extends Component {
             fundingicons: true
         },
         client: {
-            // from https://developer.paypal.com/developer/applications/
-                sandbox:    'AUdpw5-vad4rjjbmn52xP5Gw_8NfZO14Ff0iB0GvjN2cvjFNvq-9yzgVuAUxckNVIf9VDRQCnd8OF2Vg',
-                production: 'xxxxxxxxx'  
-            },
+        // from https://developer.paypal.com/developer/applications/
+            sandbox:    'AUdpw5-vad4rjjbmn52xP5Gw_8NfZO14Ff0iB0GvjN2cvjFNvq-9yzgVuAUxckNVIf9VDRQCnd8OF2Vg',
+            production: 'xxxxxxxxx'  
+        },
+        validate: (actions) => {
+            if(this.props.disabled){actions.disable();}
+            else{actions.enable();}
+        },
         // See https://developer.paypal.com/docs/api/payments/#payment_create 
         payment: (data, actions) =>
                 actions.payment.create({
@@ -66,7 +59,7 @@ class PaypalButton extends Component {
                                     name: this.props.deal.name,
                                     description: this.props.deal.description,
                                     quantity: 1,
-                                    price: this.props.total,
+                                    price: Math.max(this.props.total, 0.01),
                                     tax: "0.00",
                                     currency: "USD"
                                 }
@@ -80,31 +73,28 @@ class PaypalButton extends Component {
                         }
                     }
                 }),
-        // payment: function(){
-        //     return paypal.request.post(CREATE_PAYMENT_URL).then(function(data){
-        //         return data.id;
-        //     });
-        // },
         commit: true,
-        // onAuthorize: (data) =>{
-        //     return paypal.request.post(EXECUTE_PAYMENT_URL, {
-        //         paymentID: data.paymentID,
-        //         payerID: data.payerID
-        //     })
-        //     .then(()=>
-        //         alert('success: payment complete')
-        // )
-        // },
-        //onAuthorize: this.props.authorized,//(data, actions)=>{}
-        onAuthorize: (data, actions) => this.props.executePayment({paymentID: data.paymentID, payerID: data.payerID}),
-        onCancel:(data)=>console.log(data)// this.props.canceled //(data)=>{}
+        onAuthorize: this.props.authorized,//(data, actions) => {}
+        onCancel: this.props.canceled, //(data)=>{}
+        onError: this.props.error //(err) => {}
     }, '#ppbutton');
   }
 
 
   render() {
+    const style = this.props.disabled ? {
+        marginTop: '2rem',
+        height: 'auto',
+        opacity: '0.5',
+        pointerEvents: 'none'
+    } :
+    {
+        marginTop: '2rem',
+        height: 'auto'
+    };
+
     return (
-        <div id="ppbutton" className="button" style={{marginTop:'2rem', height: 'auto'}}></div>
+        <div id="ppbutton" className="button" style={style}></div>
     );
   }
 }
