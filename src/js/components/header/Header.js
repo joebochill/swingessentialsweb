@@ -57,9 +57,9 @@ class Header extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    // Logout should redirect to the signin screen
+    // Logout should redirect to the signin screen (except for email validation)
     if(this.props.token && !nextProps.token){
-      this.props.goToSignIn();
+      if(!nextProps.activeRoute.match(/^\/register\/[A-Z0-9]{12}$/i)){this.props.goToSignIn();}
       if(this.tokenTimer){clearInterval(this.tokenTimer);}
     }
     // else if(nextProps.token && (this.props.lastPing+5000 < Date.now())){

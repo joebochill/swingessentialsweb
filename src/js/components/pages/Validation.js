@@ -5,19 +5,22 @@ import Footer from '../footer/Footer.js';
 import Loader from '../loader/Loader.js';
 import '../../../css/Cards.css';
 import {verifyEmail } from '../../actions/RegistrationActions.js';
+import { requestLogout } from '../../actions/LoginActions';
 
 const mapStateToProps = (state)=>{
   return {
     token: state.login.token,
-    pendingRegistration: state.login.pendingRegistration,
-    registrationActivated: state.login.registrationActivated,
-    registrationError: state.login.registrationError
+    pendingRegistration: state.registration.pendingRegistration,
+    registrationActivated: state.registration.registrationActivated,
+    registrationError: state.registration.registrationError
   };
 }
 var mapDispatchToProps = function(dispatch){
   return {
     replace: (path) => {dispatch(replace(path))},
-    verifyEmail: (code) => {dispatch(verifyEmail(code))}
+    goToSignin: () => {dispatch(replace('/signin'))},
+    verifyEmail: (code) => {dispatch(verifyEmail(code))},
+    requestLogout: (token) => {dispatch(requestLogout(token))}
   }
 };
 
@@ -32,7 +35,9 @@ class ValidationPage extends Component {
   
     // Make the verification request to the database
     if(this.props.match.params.validation_key){
+      if(this.props.token){this.props.requestLogout(this.props.token);}
       this.props.verifyEmail(this.props.match.params.validation_key);
+      
     }
     else{
       // This should never happen
@@ -46,7 +51,6 @@ class ValidationPage extends Component {
 
   render() {
     let regError = this.props.registrationError;
-
     return (
       <div>
         <section className="landing_image image5">
@@ -64,7 +68,7 @@ class ValidationPage extends Component {
           {this.props.registrationActivated && !regError &&
             <section>
               <h1>Thank You,</h1>
-              <p>Your email address has been confirmed.<br/>Please Sign In to view you account.</p>
+              <p>Your email address has been confirmed.<br/>Please <a onClick={()=>this.props.goToSignin()}>Sign In</a> to view you account.</p>
             </section>
           }
           {regError === 400322 &&
