@@ -93,7 +93,6 @@ class NineteenPage extends Component {
   _changeEdit(newBlog, save){
     if(this.state.editing && save){ // clicked save button
       // push the changes
-      //TODO: validate the data
       if(!this._validateDate() || !this.state.title || !this.state.body){return;}
       
       this.props.updateBlog(this.props.token,{
@@ -112,8 +111,8 @@ class NineteenPage extends Component {
         title: newBlog.title,
         body: convertTextToLine(newBlog.body)
       });
-      //TODO: calculate from REMS
-      setTimeout(()=>window.scrollTo(0, document.getElementById('section_'+newBlog.id).offsetTop-48), 100);
+      
+      setTimeout(()=>window.scrollTo(0, document.getElementById('section_'+newBlog.id).offsetTop-(3*parseFloat(getComputedStyle(document.documentElement).fontSize))), 100);
     }
     else{ // clicked cancel or save
       this.setState({
@@ -272,11 +271,6 @@ class NineteenPage extends Component {
                   <a 
                     className="button_link"
                     style={{marginLeft:'1rem'}}
-                    onClick={this._changeEdit.bind(this, null, false)}
-                  >CANCEL</a>
-                  <a 
-                    className="button_link"
-                    style={{marginLeft:'1rem'}}
                     onClick={() => this.props.openModal({
                       type: 'CONFIRM',
                       props:{
@@ -289,6 +283,12 @@ class NineteenPage extends Component {
                       }
                     })}
                   >DELETE</a>
+                  <a 
+                    className="button_link"
+                    style={{marginLeft:'1rem'}}
+                    onClick={this._changeEdit.bind(this, null, false)}
+                  >CANCEL</a>
+                  
                 </span>
               }
               {this.props.loading && this.state.saving === blog.id &&  <Loader/>}

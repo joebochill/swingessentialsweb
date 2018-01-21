@@ -114,8 +114,8 @@ class TipPage extends Component {
         video: newTip.video,
         comments: convertTextToLine(newTip.comments)
       });
-      //TODO: calculate from REMS
-      setTimeout(()=>window.scrollTo(0, document.getElementById('section_'+newTip.id).offsetTop-48), 100);
+
+      setTimeout(()=>window.scrollTo(0, document.getElementById('section_'+newTip.id).offsetTop-(3*parseFloat(getComputedStyle(document.documentElement).fontSize))), 100);
     }
     else{ // clicked cancel or save
       this.setState({
@@ -289,11 +289,6 @@ class TipPage extends Component {
                   <a 
                     className="button_link"
                     style={{marginLeft:'1rem'}}
-                    onClick={this._changeEdit.bind(this, null, false)}
-                  >CANCEL</a>
-                  <a 
-                    className="button_link"
-                    style={{marginLeft:'1rem'}}
                     onClick={() => this.props.openModal({
                       type: 'CONFIRM',
                       props:{
@@ -306,6 +301,12 @@ class TipPage extends Component {
                       }
                     })}
                   >DELETE</a>
+                  <a 
+                    className="button_link"
+                    style={{marginLeft:'1rem'}}
+                    onClick={this._changeEdit.bind(this, null, false)}
+                  >CANCEL</a>
+                  
                 </span>
               }
               {this.props.loading && this.state.saving === tip.id &&  <Loader/>}

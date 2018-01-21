@@ -52,7 +52,6 @@ class RedeemPage extends Component {
       this.props.setTargetRoute('/redeem');
       this.props.goToSignIn();
     }
-    //TODO: send away if no credits
     else{
       // If we don't have the credits for the user, we need to fetch them
       if(!this.props.credits.count && this.props.credits.unlimitedExpires < Date.now()/1000 && !this.props.credits.unlimited){
@@ -137,7 +136,6 @@ class RedeemPage extends Component {
   }
 
   _redeemLesson(){
-    //TODO: validate the inputs before sending and the user type
     if(!this.fo || !this.dtl){return;}
     if(!this.state.dtlsrc || !this.state.fosrc){
       this.setState({error: 'Missing Required Videos'});

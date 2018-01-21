@@ -101,7 +101,6 @@ class PurchasePage extends Component {
   }
 
   _getTotal(){
-    // TODO: coupon codes
     if(this.props.coupon.value <= 0){
       return this.state.deal.price;
     }
