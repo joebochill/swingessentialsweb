@@ -188,7 +188,7 @@ class LessonResponsePage extends Component {
               <div className="se_multi_video">
                 <div className="se_video_flex">
                   {/* {(!this.props.linking && this.props.linked) ? */}
-                    <video width="100%" controls src={'http://www.josephpboyle.com/securevideos/'+this.lesson.request_url+'/'+this.lesson.fo_swing}>
+                    <video width="100%" controls src={'http://www.josephpboyle.com/video_links/'+this.lesson.request_url+'/'+this.lesson.fo_swing}>
                       Your browser does not support the video tag.
                     </video>
                     {/* : ((this.props.linking) ? */}
@@ -198,7 +198,7 @@ class LessonResponsePage extends Component {
                 </div>
                 <div className="se_video_flex">
                 {/* {(!this.props.linking && this.props.linked) ? */}
-                  <video width="100%" controls src={'http://www.josephpboyle.com/securevideos/'+this.lesson.request_url+'/'+this.lesson.dtl_swing}>
+                  <video width="100%" controls src={'http://www.josephpboyle.com/video_links/'+this.lesson.request_url+'/'+this.lesson.dtl_swing}>
                     Your browser does not support the video tag.
                   </video>
                   {/* : (this.props.linking) ? */}

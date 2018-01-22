@@ -1,5 +1,5 @@
 /* Constants */
-import {BASEURL, failure, success, checkTimeout} from './actions.js';
+import {BASEURL, failure, xhrfailure, success, checkTimeout} from './actions.js';
 // import {getUserData, getSettings} from './UserDataActions.js';
 
 export const GET_LESSONS = {REQUEST: 'GET_LESSONS', SUCCESS: 'GET_LESSONS_SUCCESS', FAIL: 'GET_LESSONS_FAIL'};
@@ -140,28 +140,49 @@ export function getCredits(token){
         .catch((error) => console.error(error));
     }
 }
+export function futch(url, opts={}, onProgress) {
+    return new Promise( (res, rej)=>{
+        var xhr = new XMLHttpRequest();
 
+        // xhr.onreadystatechange = () => {
+        //     if (xhr.readyState === 4) {
+        //         res(xhr/*'test'/*xhr.response*/); //Outputs a DOMString by default
+        //     }
+        // }
+
+        xhr.open(opts.method || 'get', url);
+        for (var k in opts.headers||{})
+            xhr.setRequestHeader(k, opts.headers[k]);
+        xhr.onload = e => res(xhr);
+        xhr.onerror = rej;
+        if (xhr.upload && onProgress)
+            xhr.upload.onprogress = onProgress; // event.loaded / event.total * 100 ; //event.lengthComputable
+        xhr.send(opts.body);
+    });
+}
+
+// futch('/').then(console.log)
 /* Lets a user redeem a credit and submit a new lesson request */
-export function redeemCredit(data, token){
+export function redeemCredit(data, token, updateProgress){
     return (dispatch) => {
         dispatch({type: REDEEM_CREDIT.REQUEST});
         
-        return fetch(BASEURL+'redeem/', { 
+        return futch(BASEURL+'redeem/', { 
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + token
             },
             body: data
-        })
+        }, updateProgress)//(event)=> {console.log((event.loaded/event.total).toFixed(2))})
         .then((response) => {
             switch(response.status) {
                 case 200:
                     dispatch(success(REDEEM_CREDIT.SUCCESS));
                     dispatch(getLessons(token));
                     break;
-                default:
+                default:    
                     checkTimeout(response, dispatch);
-                    dispatch(failure(REDEEM_CREDIT.FAIL, response));
+                    dispatch(xhrfailure(REDEEM_CREDIT.FAIL, response));
                     break;
             }
         })

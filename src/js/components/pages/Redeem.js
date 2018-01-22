@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {replace, push} from 'react-router-redux';
 import Footer from '../footer/Footer.js';
-import Loader from '../loader/Loader.js';
+// import Loader from '../loader/Loader.js';
+import Progress from '../progressbar/Progress.js';
 
 import {setTargetRoute} from '../../actions/NavigationActions.js';
 import {redeemCredit, getCredits, getLessons} from '../../actions/LessonActions.js';
@@ -26,7 +27,7 @@ var mapDispatchToProps = function(dispatch){
     goToLessons: () => {dispatch(push('/lessons'))},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
     getCredits: (token) => {dispatch(getCredits(token))},
-    redeemCredit: (data,token) => {dispatch(redeemCredit(data,token))},
+    redeemCredit: (data,token,progress) => {dispatch(redeemCredit(data,token,progress))},
     getLessons: (token) => {dispatch(getLessons(token))},
     openModal: (modal) => {dispatch(openModal(modal))}
   }
@@ -41,7 +42,8 @@ class RedeemPage extends Component {
       notes:'',
       error:'',
       videoError: '',
-      role:'pending'
+      role:'pending',
+      progress: 0
     };
     this.dtl = null;
     this.fo = null;
@@ -136,7 +138,7 @@ class RedeemPage extends Component {
   }
 
   _redeemLesson(){
-    if(!this.fo || !this.dtl){return;}
+    if(!this.fo || !this.dtl || this.props.redeemPending){return;}
     if(!this.state.dtlsrc || !this.state.fosrc){
       this.setState({error: 'Missing Required Videos'});
       return;
@@ -150,7 +152,12 @@ class RedeemPage extends Component {
     data.append('dtl', this.state.dtlsrc);
     data.append('notes', this.state.notes);
 
-    this.props.redeemCredit(data, this.props.token);
+    this.props.redeemCredit(data, this.props.token, this._updateProgress.bind(this));
+  }
+
+  _updateProgress(event){
+    // console.log((event.loaded/event.total).toFixed(2));
+    this.setState({progress: (event.loaded/event.total)*100})
   }
 
   render() {
@@ -178,6 +185,7 @@ class RedeemPage extends Component {
                         <input type="file"
                           accept=".mov,.mp4,.mpeg,.3gp" 
                           title="Select a new Face-On video"
+                          disabled={this.props.redeemPending}
                           onChange={(evt)=>{this._updateVideo(evt, 'fo')}}
                         />
                       </div>
@@ -191,6 +199,7 @@ class RedeemPage extends Component {
                         <input type="file" 
                           accept=".mov,.mp4,.mpeg,.3gp" 
                           title="Select a new Face-On video" 
+                          disabled={this.props.redeemPending}
                           onChange={(evt)=>this._updateVideo(evt, 'fo')}
                         />
                       </div>
@@ -205,6 +214,7 @@ class RedeemPage extends Component {
                       <input type="file" 
                         accept=".mov,.mp4,.mpeg,.3gp" 
                         title="Select a new Face-On video" 
+                        disabled={this.props.redeemPending}
                         onChange={(evt)=>this._updateVideo(evt, 'fo')}
                       />
                     </div>
@@ -220,6 +230,7 @@ class RedeemPage extends Component {
                         <input type="file" 
                           accept=".mov,.mp4,.mpeg,.3gp" 
                           title="Select a new Down-the-Line video" 
+                          disabled={this.props.redeemPending}
                           onChange={(evt)=>this._updateVideo(evt, 'dtl')}
                         />
                       </div>
@@ -233,6 +244,7 @@ class RedeemPage extends Component {
                         <input type="file" 
                           accept=".mov,.mp4,.mpeg,.3gp" 
                           title="Select a new Down-the-Line video" 
+                          disabled={this.props.redeemPending}
                           onChange={(evt)=>this._updateVideo(evt, 'dtl')}
                         />
                       </div>
@@ -247,6 +259,7 @@ class RedeemPage extends Component {
                       <input type="file" 
                         accept=".mov,.mp4,.mpeg,.3gp" 
                         title="Select a new Down-the-Line video" 
+                        disabled={this.props.redeemPending}
                         onChange={(evt)=>this._updateVideo(evt, 'dtl')}
                       />
                     </div>
@@ -258,15 +271,16 @@ class RedeemPage extends Component {
               <textarea 
                 placeholder="Add any comments here..."
                 value={this.state.notes} 
+                disabled={this.props.redeemPending}
                 onChange={(evt)=>this.setState({notes:evt.target.value})} 
               />
               {this.props.redeemPending && 
-                <Loader/>
+                <Progress progress={this.state.progress} infinite={this.state.progress >= 100} label={this.state.progress < 100 ? 'Uploading Video Files... ' + this.state.progress.toFixed(0) + '%' : 'Creating Lesson...'}/>
               }
               {this.state.error && <span className="validation_error">{this.state.error}</span>}
               <div className="button se_button" 
                 style={{marginTop:'2rem'}} 
-                disabled={!this.state.dtlsrc || !this.state.fosrc || this.state.role === 'pending'}
+                disabled={!this.state.dtlsrc || !this.state.fosrc || this.state.role === 'pending'|| this.props.redeemPending}
                 onClick={()=>this._redeemLesson()}
               >
                 <span>SUBMIT</span>
