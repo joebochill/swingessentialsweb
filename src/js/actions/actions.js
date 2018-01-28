@@ -16,7 +16,11 @@ export const REMOVE_BLOG = {REQUEST: 'REMOVE_BLOG', SUCCESS: 'REMOVE_BLOG_SUCCES
 // export const PING = {REQUEST: 'PING_REQUEST', SUCCESS: 'PING_SUCCESS', FAIL: 'PING_FAIL'};
 
 /* Base URL for fetch commands */
-export const BASEURL = 'http://www.josephpboyle.com/api/swingessentialsapi.php/';
+// export const BASEURL = 'http://www.josephpboyle.com/api/swingessentialsapi.php/';
+export const BASEURL = 'https://www.swingessentials.com/apis/swingessentials.php/';
+// export const BASEURL = 'http://www.josephpboyle.com/apis/swingessentials.php/';
+
+
 //const API_KEY = 'AIzaSyAzvggwVpvJ1pngsjQKJ84FcY8v07C8dNA';
 //const googleURL = 'https://www.googleapis.com/upload/storage/v1/b/www.joebochill.com/';
 

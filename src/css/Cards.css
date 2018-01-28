@@ -58,7 +58,7 @@
   position: relative;
 
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
   border: 0.0625rem solid rgba(0,0,0,0.15);
 }
 

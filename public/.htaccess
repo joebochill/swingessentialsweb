@@ -5,14 +5,18 @@ Options -MultiViews
 # Stop Apache from stripping the Authorization Header
 SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 
+# Redirect to SSL
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 # Redirect for maintenance updates
-RewriteCond %{REMOTE_ADDR} !^123\.456\.789\.000
-RewriteCond %{DOCUMENT_ROOT}/swingessentials/maintenance.html -f
-RewriteCond %{DOCUMENT_ROOT}/swingessentials/maintenance.on -f
+RewriteCond %{REMOTE_ADDR} !^173\.75\.41\.239
+RewriteCond %{DOCUMENT_ROOT}/maintenance.html -f
+RewriteCond %{DOCUMENT_ROOT}/maintenance.on -f
 RewriteCond %{SCRIPT_FILENAME} !maintenance.html
 RewriteCond %{SCRIPT_FILENAME} !maintenance.png
-RewriteRule ^.*$ /swingessentials/maintenance.html [R=503,L]
-ErrorDocument 503 /swingessentials/maintenance.html
+RewriteRule ^.*$ /maintenance.html [R=503,L]
+ErrorDocument 503 /maintenance.html
 Header Set Cache-Control "max-age=0, no-store"
 
 # Redirect non-existent files to the application

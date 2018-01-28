@@ -47,7 +47,7 @@ class YoutubeVideo extends Component {
                     //     playerVars: {autoplay: 0}  
                         playerVars:{
                             "showinfo":0,
-                            "origin":"www.josephpboyle.com",
+                            "origin":"www.swingessentials.com",
                             "playsinline":1,
                             "rel":0
                         }

@@ -3,7 +3,7 @@ import AppReducer from '../reducers/reducers.js'
 import thunk from 'redux-thunk';
 import {routerMiddleware} from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory';
-export const history = createHistory({basename: '/swingessentials'});
+export const history = createHistory({basename: '/'});
 // The initial state of the store
 export const initialStore = {
     
