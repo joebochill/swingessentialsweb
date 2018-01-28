@@ -156,7 +156,6 @@ class RedeemPage extends Component {
   }
 
   _updateProgress(event){
-    // console.log((event.loaded/event.total).toFixed(2));
     this.setState({progress: (event.loaded/event.total)*100})
   }
 

@@ -263,7 +263,7 @@ class PurchasePage extends Component {
             }
             {this.props.purchaseFail &&
               <div className="structured_panel">
-                <p>There was an error processing your purchase. Please <a href="http://www.google.com">Contact Us</a> for more information.</p>
+                <p>There was an error processing your purchase. Please <a href="mailto:info@swingessentials.com">Contact Us</a> for more information.</p>
               </div>
             }
           </section>

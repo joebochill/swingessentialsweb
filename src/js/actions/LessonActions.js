@@ -161,7 +161,6 @@ export function futch(url, opts={}, onProgress) {
     });
 }
 
-// futch('/').then(console.log)
 /* Lets a user redeem a credit and submit a new lesson request */
 export function redeemCredit(data, token, updateProgress){
     return (dispatch) => {
@@ -221,7 +220,7 @@ export function activateUnlimited(token){
 export function markLessonViewed(data, token){
     return (dispatch) => {
         dispatch({type: MARK_VIEWED.REQUEST});
-        
+
         return fetch(BASEURL+'viewed/', { 
             method: 'PUT',
             headers: {

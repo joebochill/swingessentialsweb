@@ -159,14 +159,14 @@ class LessonsPage extends Component {
                     />
                     <CardRow 
                       title={'Individual Lessons'} 
-                      extra={`${this.props.credits.count ? this.props.credits.count : '0'} Left`}
+                      extra={`${this.props.credits.count > 0 ? this.props.credits.count : '0'} Left`}
                       disabled={true}
                       className={"noflex"} 
                     />
-                    {this.props.credits.unlimited && 
+                    {this.props.credits.unlimited !== undefined && 
                       <CardRow  
                         title={'Unlimited Rounds'} 
-                        extra={`${this.props.credits.unlimited ? this.props.credits.unlimited : '0'} Left`}
+                        extra={`${this.props.credits.unlimited > 0 ? this.props.credits.unlimited : '0'} Left`}
                         disabled={true}
                         className={"noflex"} 
                       />
@@ -188,15 +188,15 @@ class LessonsPage extends Component {
                   <div className="card_body">
                     <CardRow go 
                       title={'Individual Lessons'} 
-                      extra={`${this.props.credits.count ? this.props.credits.count : '0'} Left`}
-                      disabled={!this.props.credits.count}
+                      extra={`${this.props.credits.count > 0 ? this.props.credits.count : '0'} Left`}
+                      disabled={this.props.credits.count === undefined || this.props.credits.count <= 0}
                       className={"noflex"} 
                       action={()=>this.props.goToRedeem()}
                     />
                     <CardRow  
                       go
                       title={'Activate Unlimited'} 
-                      extra={`${this.props.credits.unlimited ? this.props.credits.unlimited : '0'} Left`}
+                      extra={`${this.props.credits.unlimited > 0 ? this.props.credits.unlimited : '0'} Left`}
                       disabled={this.props.credits.unlimited < 1}
                       className={"noflex"} 
                       action={()=>this.props.openModal({type:'ACTIVATE_UNLIMITED'})}
@@ -215,7 +215,7 @@ class LessonsPage extends Component {
                   <span>In Progress</span>
                 </div>
                 <div className="card_body">
-                  {(!this.props.lessons.pending.length || loading) &&
+                  {(this.props.lessons.pending.length === 0 || loading) &&
                     <Placeholder message={loading?"Loading...":"No Lessons In Progress"} loading={loading}/>
                   }
                   {this.props.lessons.pending.length > 0 && this.props.lessons.pending.map((lesson)=>
@@ -228,7 +228,7 @@ class LessonsPage extends Component {
                   <span>Completed</span>
                 </div>
                 <div className="card_body">
-                  {(!this.props.lessons.closed.length || loading) &&
+                  {(this.props.lessons.closed.length === 0 || loading) &&
                     <Placeholder message={loading?"Loading...":"No Completed Lessons"} loading={loading}/>
                   }
                   {this.props.lessons.closed.length > 0 && this.props.lessons.closed.map((lesson)=>

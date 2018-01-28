@@ -86,7 +86,7 @@ class LessonResponsePage extends Component {
       lessons = less.closed.concat(less.pending);
     }
     // check if there are lessons in localstorage
-    else if(!this.props.lessons.closed.length && !this.props.lessons.pending.length){
+    else if(this.props.lessons.closed.length === 0 && this.props.lessons.pending.length === 0){
       const ls = JSON.parse(localStorage.getItem('lessons'));
       if(ls === null){
        // nothing in localstorage or current props, wait for another cycle
@@ -117,7 +117,7 @@ class LessonResponsePage extends Component {
     }  
     else{
       // If the user is viewing the lesson, mark it viewed
-      if(this.lesson.viewed === "0" && !this.props.admin){
+      if(parseInt(this.lesson.viewed, 10) === 0 && !this.props.admin){
         this.props.markViewed({id:this.lesson.request_id}, this.props.token);
       }
       
@@ -188,7 +188,7 @@ class LessonResponsePage extends Component {
               <div className="se_multi_video">
                 <div className="se_video_flex">
                   {/* {(!this.props.linking && this.props.linked) ? */}
-                    <video width="100%" controls src={'http://www.swingessentials.com/video_links/'+this.lesson.request_url+'/'+this.lesson.fo_swing}>
+                    <video width="100%" controls src={'https://www.swingessentials.com/video_links/'+this.lesson.request_url+'/'+this.lesson.fo_swing}>
                       Your browser does not support the video tag.
                     </video>
                     {/* : ((this.props.linking) ? */}
@@ -198,7 +198,7 @@ class LessonResponsePage extends Component {
                 </div>
                 <div className="se_video_flex">
                 {/* {(!this.props.linking && this.props.linked) ? */}
-                  <video width="100%" controls src={'http://www.swingessentials.com/video_links/'+this.lesson.request_url+'/'+this.lesson.dtl_swing}>
+                  <video width="100%" controls src={'https://www.swingessentials.com/video_links/'+this.lesson.request_url+'/'+this.lesson.dtl_swing}>
                     Your browser does not support the video tag.
                   </video>
                   {/* : (this.props.linking) ? */}
