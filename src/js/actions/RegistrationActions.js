@@ -11,9 +11,9 @@ export const CHECK_USER = {REQUEST: 'CHECK_USER', SUCCESS: 'CHECK_USER_SUCCESS',
 export const CHECK_EMAIL = {REQUEST: 'CHECK_EMAIL', SUCCESS: 'CHECK_EMAIL_SUCCESS', FAIL:'CHECK_EMAIL_FAIL'};
 
 /* Check if a requested username is available */
-export function checkUsernameAvailability($username){
+export function checkUsernameAvailability(username){
     return (dispatch) => {
-        return fetch(BASEURL+'checkUser?username='+$username)
+        return fetch(BASEURL+'checkUser?username='+encodeURIComponent(username))
         .then((response) => {
             switch(response.status) {
                 case 200:
@@ -31,9 +31,9 @@ export function checkUsernameAvailability($username){
 }
 
 /* Check if an email address is already registered */
-export function checkEmailAvailability($email){
+export function checkEmailAvailability(email){
     return (dispatch) => {
-        return fetch(BASEURL+'checkEmail?email='+$email)
+        return fetch(BASEURL+'checkEmail?email='+encodeURIComponent(email))
         .then((response) => {
             switch(response.status) {
                 case 200:

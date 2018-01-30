@@ -8,6 +8,7 @@ import {validatePassword} from '../../actions/LoginActions.js';
 import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
 import {putUserData} from '../../actions/UserDataActions.js';
+import {checkUsernameAvailability, checkEmailAvailability} from '../../actions/RegistrationActions.js';
 import Loader from '../loader/Loader.js';
 import '../../../css/Cards.css';
 import '../../../css/Buttons.css';
@@ -19,7 +20,9 @@ const mapStateToProps = (state)=>{
     userSettings: state.settings,
     token: state.login.token,
     securityAuthorized: state.login.settingsAuthenticated,
-    authorizing: state.login.pendingAuthentication
+    authorizing: state.login.pendingAuthentication,
+    emailAvailable: state.registration.emailAvailable,
+    userAvailable: state.registration.userAvailable,
   };
 }
 var mapDispatchToProps = function(dispatch){
@@ -29,7 +32,9 @@ var mapDispatchToProps = function(dispatch){
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
     putUserData: (data, token) => {dispatch(putUserData(data, token))},
     validatePassword: (token, pass) => {dispatch(validatePassword(token, pass))},
-    updateUserCredentials: (data, token) => {dispatch(updateUserCredentials(data, token))}
+    updateUserCredentials: (data, token) => {dispatch(updateUserCredentials(data, token))},
+    checkUser: (user) => {dispatch(checkUsernameAvailability(user))},
+    checkEmail: (email) => {dispatch(checkEmailAvailability(email))}
   }
 };
 
@@ -40,12 +45,17 @@ class ProfilePage extends Component {
       editPersonal: false,
       editSecurity: false,
       username: props.userData.username,
+      userFocus: false,
       firstName: props.userData.firstName,
       lastName: props.userData.lastName,
       phone: props.userData.phone,
+      validPhone: true,
       email: props.userData.email,
+      validEmail: true,
+      emailFocus: false,
       oldPassword: '',
-      newPassword: ''
+      newPassword: '',
+      validationError: false
     };
   }
   componentWillMount(){
@@ -75,10 +85,14 @@ class ProfilePage extends Component {
       // don't update these properties if we are currently editing them
       if(!this.state.editPersonal){
         newState = {...newState,
-          username: nextProps.userData.username,
           firstName: nextProps.userData.firstName,
           lastName: nextProps.userData.lastName,
-          phone: nextProps.userData.phone,
+          phone: nextProps.userData.phone
+        }
+      }
+      if(!this.state.editSecurity){
+        newState = {...newState,
+          username: nextProps.userData.username,
           email: nextProps.userData.email
         }
       }
@@ -88,8 +102,9 @@ class ProfilePage extends Component {
 
   updateSettings(type){
     if(type==="personal"){
-      if(this.state.editPersonal && (
-        this.state.firstName !== this.props.userData.firstName ||
+      if(!this.state.firstName || !this.state.lastName || !this.state.validPhone){return false;}
+      if(this.state.editPersonal && 
+        (this.state.firstName !== this.props.userData.firstName ||
         this.state.lastName !== this.props.userData.lastName ||
         this.state.phone !== this.props.userData.phone)){
           this.props.putUserData({
@@ -104,10 +119,12 @@ class ProfilePage extends Component {
       if(this.state.editSecurity){
         // PUSH THE NEW SETTINGS
         let data = {};
-        if(this.state.username !== this.props.userData.username){
+        if(this.state.username && this.state.username !== this.props.userData.username){
+          if(!this.props.userAvailable){return false;}
           data.username = this.state.username;
         }
-        if(this.state.email !== this.props.userData.email){
+        if(this.state.email && this.state.email !== this.props.userData.email){
+          if(!this.props.emailAvailable || !this.state.validEmail){return false;}
           data.email = this.state.email;
         }
         if(this.state.newPassword !== ''){
@@ -132,6 +149,32 @@ class ProfilePage extends Component {
     return this.state.phone.substr(0,3)+'.'+this.state.phone.substr(3,3)+'.'+this.state.phone.substr(6);
   }
 
+  _validatePhone(){
+    if(this.state.phone && this.state.phone.length<10){
+      this.setState({validPhone: false});
+    }
+    else{
+      this.setState({validPhone: true});
+    }
+  }
+
+  _validateUser(){
+    if(this.state.username){
+      this.props.checkUser(this.state.username);
+    }
+  }
+
+  _validateEmail(){
+    if(!this.state.email){return;}
+    if(!this.state.email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)){
+      this.setState({validEmail: false});
+    }
+    else{
+      this.setState({validEmail: true});
+    }
+    this.props.checkEmail(this.state.email);
+  }
+
   render() {
     return (
       <div>
@@ -147,7 +190,9 @@ class ProfilePage extends Component {
               <div className="card">
                 <div className="card_header">
                   <span>Personal</span>
-                  <span onClick={() => this.updateSettings("personal")}>{this.state.editPersonal ? "DONE" : "EDIT"}</span>
+                  <span 
+                    disabled={this.state.editPersonal && (!this.state.validPhone || !this.state.firstName || !this.state.lastName)}
+                    onClick={() => this.updateSettings("personal")}>{this.state.editPersonal ? "DONE" : "EDIT"}</span>
                 </div>
                 <div className="card_body">
                   <CardRow alternate nohover title={"First Name"} extra={this.state.editPersonal ? (
@@ -159,9 +204,15 @@ class ProfilePage extends Component {
                     (this.state.lastName)
                   }/>
                   <CardRow alternate nohover title={"Phone"} extra={ this.state.editPersonal ? (
-                      <input ref={(me) => this.phone = me} value={this.state.phone} placeholder={"New Phone"} 
-                      onChange={(evt) => {let pos = this.phone.selectionStart; this.setState({phone: evt.target.value.replace(/[^0-9]/gi,"").substr(0,10)}); this.phone.selectionStart = pos;}}
-                      /*onKeyDown={this._phoneKey.bind(this)}*//>) :
+                      <input 
+                        className={(this.state.validPhone ? "" : "error")}
+                        ref={(me) => this.phone = me} 
+                        value={this.state.phone} 
+                        placeholder={"New Phone"} 
+                        onFocus={() => this.setState({validPhone: true})}
+                        onBlur={() => this._validatePhone()}
+                        onChange={(evt) => {let pos = this.phone.selectionStart; this.setState({phone: evt.target.value.replace(/[^0-9]/gi,"").substr(0,10)}); this.phone.selectionStart = pos;}}
+                      />) :
                       (this.formattedPhone())
                     }
                   />
@@ -170,7 +221,12 @@ class ProfilePage extends Component {
               <div className="card">
                 <div className="card_header">
                   <span>Authentication</span>
-                  <span onClick={() => this.updateSettings("security")}>{this.state.editSecurity ? "DONE" : "EDIT"}</span>
+                  <span 
+                    disabled={this.state.editSecurity && 
+                      (!this.state.validEmail || 
+                        (!this.props.emailAvailable && this.state.email && this.state.email !== this.props.userData.email) || 
+                        (!this.props.userAvailable && this.state.username && this.state.username !== this.props.userData.username))}
+                    onClick={() => this.updateSettings("security")}>{this.state.editSecurity ? "DONE" : "EDIT"}</span>
                 </div>
                 <div className="card_body">
                 {this.state.editSecurity && !this.props.securityAuthorized &&
@@ -200,11 +256,24 @@ class ProfilePage extends Component {
                     </div>
                   }
                   <CardRow alternate nohover title={"Email"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
-                    <input value={this.state.email} placeholder={"New Email Address"} onChange={(evt) => this.setState({email: evt.target.value})}/>) :
+                    <input 
+                      className={((this.props.emailAvailable && this.state.validEmail) || this.state.emailFocus || this.state.email === this.props.userData.email ? "" : "error")}
+                      value={this.state.email} 
+                      placeholder={"New Email Address"} 
+                      onChange={(evt) => {this.setState({email: evt.target.value.substr(0,32)});}}
+                      onFocus={() => this.setState({emailFocus: true})}
+                      onBlur={()=>{this.setState({emailFocus:false}); this._validateEmail();}}/>) 
+                    :
                     (this.state.email)
                   }/>
                   <CardRow alternate nohover title={"Username"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
-                    <input value={this.state.username} placeholder={"New Username"} onChange={(evt) => this.setState({username: evt.target.value})}/>) :
+                    <input 
+                      className={(this.props.userAvailable || this.state.userFocus || this.state.username === this.props.userData.username ? "" : "error")}
+                      value={this.state.username} 
+                      placeholder={"New Username"} 
+                      onFocus={()=>this.setState({userFocus: true})}
+                      onBlur={()=>{this.setState({userFocus: false});this._validateUser()}}
+                      onChange={(evt) => this.setState({username: evt.target.value})}/>) :
                     (this.state.username)
                   }/>
                   <CardRow alternate nohover title={"Password"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
@@ -219,6 +288,18 @@ class ProfilePage extends Component {
                   }
                 </div>
               </div>
+              {!this.state.validPhone && !this.state.validationError && (
+                <span className="validation_error">Invalid Phone Number</span>
+              )}
+              {!this.props.emailAvailable && (this.state.email !== this.props.userData.email) && (
+                <span className="validation_error">Email Address Already Registered</span>
+              )}
+              {!this.state.validEmail &&  (
+                <span className="validation_error">Invalid Email Address</span>
+              )}
+              {!this.props.userAvailable && (this.state.username !== this.props.userData.username) && (
+                <span className="validation_error">Username Already Taken</span>
+              )}
             </div>
           </section>
           <Footer/>

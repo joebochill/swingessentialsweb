@@ -172,7 +172,7 @@ export function redeemCredit(data, token, updateProgress){
                 'Authorization': 'Bearer ' + token
             },
             body: data
-        }, updateProgress)//(event)=> {console.log((event.loaded/event.total).toFixed(2))})
+        }, updateProgress)
         .then((response) => {
             switch(response.status) {
                 case 200:
