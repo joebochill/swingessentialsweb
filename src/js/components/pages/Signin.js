@@ -129,7 +129,7 @@ class SigninPage extends Component {
                   type="password"
                 />
                 {this.props.loginFails > 0 && (<span className="validation_error">Your username / password was not correct, please try again.</span>)}
-                {this.props.message && (<span className="validation_error">{this.props.message}</span>)}
+                {/* {this.props.message && (<span className="validation_error">{this.props.message}</span>)} */}
                 <div className="button se_button" 
                       style={{marginTop:'2rem'}} 
                       disabled={!this.state.username || !this.state.password}

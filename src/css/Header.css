@@ -275,7 +275,7 @@
 /* End Menu/Close Button */
 
 
-@media only screen and (max-width: 50rem){
+@media only screen and (max-width: 48rem){
     .se_menu_list{
         display: none;
     }

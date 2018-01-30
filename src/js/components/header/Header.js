@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../../../css/Header.css';
-import se_logo from '../../../images/se_logo.png';
+import se_logo from '../../../images/SE_horizontal.svg';
 import {push} from 'react-router-redux';
 import {NavLink} from 'react-router-dom';
 import Drawer from './Drawer.js';
@@ -117,7 +117,7 @@ class Header extends Component {
   render() {
     return (
       <header className="se_header" ref={(ref)=>this.ref=ref}>
-        <img src={se_logo} alt="se_logo" style={{height:'3rem'}}/>
+        <img src={se_logo} alt="se_logo" style={{height:'2.5rem', cursor: 'pointer'}} onClick={()=>this.props.push('/')}/>
         <ul className="se_menu_list">
           <li><NavLink to='/' exact>Home</NavLink></li>
           <li><NavLink to='/our-pro/'>Meet Our Pro</NavLink></li>

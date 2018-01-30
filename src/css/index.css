@@ -482,7 +482,7 @@ video[src=""]{
 /* End Form Elements */
 
 /* Media Queries */
-@media only screen and (max-width: 50rem){
+@media only screen and (max-width: 48rem){
   .multi_col {
     display: block;
     width: auto;
