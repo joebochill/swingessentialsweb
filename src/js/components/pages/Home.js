@@ -14,6 +14,7 @@ const mapStateToProps = (state)=>{
 const mapDispatchToProps = (dispatch)=>{
   return {
     goToSignin: () => {dispatch(push('/signin'))},
+    goTo: (path) => {dispatch(push(path))},
     openModal: (modal) => {dispatch(openModal(modal))}    
   }
 }
@@ -41,7 +42,7 @@ class HomePage extends Component {
           <div className="pga_overlay"/>
           <main className="page_title">
             <h1>Swing<span className="hidden_space"> </span><br className="hidden_break"/>Essentials</h1>
-            <h3>a PGA Pro in your pocket at home and on the links</h3>
+            <h3>a PGA Pro in your pocket - on and off the course</h3>
           </main>
           <div>
             <div className="button apple_store" onClick={()=>this._showComingSoon()}/>
@@ -58,7 +59,7 @@ class HomePage extends Component {
             <div className="multi_col">
               <div>
                 <div className="number_icon">1</div>
-                <p>Pull out your smart phone and snap a short video of your swing using our <a>iPhone</a> or <a>Android</a> app.</p>
+                <p>Pull out your smart phone and snap a short video of your swing using your camera.</p>
               </div>
               <div>
                 <div className="number_icon">2</div>
@@ -78,27 +79,28 @@ class HomePage extends Component {
             <h1>Testimonials</h1>
             <div className="multi_col">
               <div>
-                <h3>DAVE L.</h3>
-                <p>“Swing Essentials is the greatest thing ever. I went from shooting 120+ to 80 in just three lessons.”</p>
+                <h3>David A.</h3>
+                <p>"Thanks for the great work this last year. After working with you, I've lowered my handicap by three and a half."</p>
               </div>
               <div>
-                <h3>ANGELA P.</h3>
-                <p>“AJ is the greatest. He took me under his wing and turned me into a total golf badass. My husand hates that I’m better than him now. Time to sign him up for a lesson.”</p>
+                <h3>DEAN L.</h3>
+                <p>"I sent my swing in to Swing Essentials and I'm playing so much better - it's easily taken four to five shots off my game. I strongly recommend it!"</p>
               </div>
               <div>
-                <h3>REGGIE A.</h3>
-                <p>“I was skeptical at first, but now I’m a firm believer in Swing Essentials. I couldn’t believe how much my game has improved in such a short period of time.”</p>
+                <h3>Will M.</h3>
+                <p>"Thanks to you, I have been playing my best golf. It's all finally clicking now!"</p>
               </div>
             </div>
           </section>
           <section>
             <h1>Try It Today</h1>
-            <p>Still not convinced? Download our app and give it a try. Your first lesson is on us.</p>
-            <div className="multi_col">
+            <p>Still not convinced? Sign up and give it a try. Your first lesson is on us.</p>
+            {/* <div className="multi_col">
               <div className="button apple_store" onClick={()=>this._showComingSoon()}/>
               <div className="button google_store" onClick={()=>this._showComingSoon()}/>
-            </div>
+            </div> */}
             {!this.props.token && <div className="button small se_button" onClick={()=>this.props.goToSignin()}><span>Sign In</span></div>}
+            {!this.props.token && <div className="button small se_button" onClick={()=>this.props.goTo('/register')}><span>Sign Up</span></div>}
           </section>
           <Footer/>
         </div>
