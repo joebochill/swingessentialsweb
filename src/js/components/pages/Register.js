@@ -155,7 +155,7 @@ class RegisterPage extends Component {
                   />
                   <CardRow alternate nohover title={"Email"} extra={
                     <input value={this.state.email} placeholder={"Email Address"} className={((this.props.emailAvailable && this.state.validEmail) || this.state.emailFocus ? "" : "error")}
-                      onChange={(evt) => this.setState({email: evt.target.value.substr(0,32)})}
+                      onChange={(evt) => this.setState({email: evt.target.value.substr(0,128)})}
                       onFocus={() => this.setState({emailFocus: true})}
                       onBlur={()=>{this.setState({emailFocus:false}); this._validateEmail();}}/>
                   }/>

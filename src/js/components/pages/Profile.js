@@ -260,7 +260,7 @@ class ProfilePage extends Component {
                       className={((this.props.emailAvailable && this.state.validEmail) || this.state.emailFocus || this.state.email === this.props.userData.email ? "" : "error")}
                       value={this.state.email} 
                       placeholder={"New Email Address"} 
-                      onChange={(evt) => {this.setState({email: evt.target.value.substr(0,32)});}}
+                      onChange={(evt) => {this.setState({email: evt.target.value.substr(0,128)});}}
                       onFocus={() => this.setState({emailFocus: true})}
                       onBlur={()=>{this.setState({emailFocus:false}); this._validateEmail();}}/>) 
                     :
@@ -273,7 +273,7 @@ class ProfilePage extends Component {
                       placeholder={"New Username"} 
                       onFocus={()=>this.setState({userFocus: true})}
                       onBlur={()=>{this.setState({userFocus: false});this._validateUser()}}
-                      onChange={(evt) => this.setState({username: evt.target.value})}/>) :
+                      onChange={(evt) => this.setState({username: evt.target.value.substr(0,32)})}/>) :
                     (this.state.username)
                   }/>
                   <CardRow alternate nohover title={"Password"} extra={this.state.editSecurity && this.props.securityAuthorized ? (

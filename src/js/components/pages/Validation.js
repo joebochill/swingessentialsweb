@@ -71,25 +71,25 @@ class ValidationPage extends Component {
               <p>Your email address has been confirmed.<br/>Please <a onClick={()=>this.props.goToSignin()}>Sign In</a> to view you account.</p>
             </section>
           }
-          {regError === 400322 &&
+          {regError === 400302 &&
             <section>
               <h1>Oops,</h1>
               <p>Your verification link is invalid.<br/>Please check your registration email and try again. If you continue to have problems, please CONTACT US.</p>
             </section>
           }
-          {regError === 400323 &&
+          {regError === 400303 &&
             <section>
               <h1>Oops,</h1>
               <p>Your verification link has expired.<br/>Click below to request a new link.</p>
             </section>
           }
-          {regError === 400324 &&
+          {regError === 400304 &&
             <section>
               <h1>Oops,</h1>
               <p>Your your email address has already been verified.<br/>Click below to go to your account.</p>
             </section>
           }
-          {regError && regError !== 400324 && regError !== 400323 && regError !== 400322 &&
+          {regError && regError !== 400302 && regError !== 400303 && regError !== 400304 &&
             <section>
               <h1>Oops,</h1>
               <p>There was an error verifying your email address.<br/>Please try again later.</p>

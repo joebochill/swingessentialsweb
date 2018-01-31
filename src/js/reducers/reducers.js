@@ -204,7 +204,7 @@ const lessonsReducer = (state=[], action) => {
 				coupon:{
 					type: '',
 					value: 0,
-					error: (action.error === 400301) ? "Coupon Code is Expired" : "Invalid Coupon Code"
+					error: (action.error === 400801) ? "Coupon Code is Expired" : "Invalid Coupon Code"
 				}
 			}
 		default:

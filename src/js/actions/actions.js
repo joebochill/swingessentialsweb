@@ -244,7 +244,7 @@ export function removeBlog(token, blog){
 export function checkTimeout(response, dispatch){
     // If we get a failed API call, check if our authentication needs to be re-upped
     const error = (response && response.headers && response.headers.get)?parseInt(response.headers.get('Error'),10):999;
-    if(error && (error >= 400200 && error <= 400212) && dispatch){
+    if(error && (error == 400100) && dispatch){
         localStorage.removeItem('token');
         localStorage.removeItem('lessons');
         localStorage.removeItem('credits');
