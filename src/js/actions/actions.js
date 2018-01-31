@@ -109,7 +109,7 @@ export function addTip(token, tip){
 export function removeTip(token, tip){
     return (dispatch) => {
         dispatch({type: REMOVE_TIP.REQUEST});
-        return fetch(BASEURL+'removeTip', {
+        return fetch(BASEURL+'removetip', {
             method: 'PUT',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -217,7 +217,7 @@ export function addBlog(token, blog){
 export function removeBlog(token, blog){
     return (dispatch) => {
         dispatch({type: REMOVE_BLOG.REQUEST});
-        return fetch(BASEURL+'removeBlog', {
+        return fetch(BASEURL+'removeblog', {
             method: 'PUT',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -244,7 +244,7 @@ export function removeBlog(token, blog){
 export function checkTimeout(response, dispatch){
     // If we get a failed API call, check if our authentication needs to be re-upped
     const error = (response && response.headers && response.headers.get)?parseInt(response.headers.get('Error'),10):999;
-    if(error && (error == 400100) && dispatch){
+    if(error && (error === 400100) && dispatch){
         localStorage.removeItem('token');
         localStorage.removeItem('lessons');
         localStorage.removeItem('credits');

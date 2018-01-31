@@ -195,7 +195,7 @@ const lessonsReducer = (state=[], action) => {
 				coupon:{
 					code: action.data.code,
 					type: action.data.type,
-					value: parseInt(action.data.value, 10),
+					value: parseFloat(action.data.value),
 					error: ''
 				}
 			}

@@ -108,7 +108,7 @@ class Header extends Component {
       return;
     }
     // If there are < 3 minutes left on the session, show the popup
-    if(this.exp && (this.exp - Date.now()/1000 < 3*60)){
+    if(this.exp && (this.exp - Date.now()/1000 < 3*60) && (this.exp - Date.now()/1000 > 0)){
       this.props.openModal({type: 'TOKEN_EXPIRE'});
       clearInterval(this.tokenTimer);
     }

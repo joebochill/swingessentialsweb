@@ -29,9 +29,9 @@ class PaypalButton extends Component {
             fundingicons: true
         },
         client: {
-        // from https://developer.paypal.com/developer/applications/
-            sandbox:    'AUdpw5-vad4rjjbmn52xP5Gw_8NfZO14Ff0iB0GvjN2cvjFNvq-9yzgVuAUxckNVIf9VDRQCnd8OF2Vg',
-            production: 'xxxxxxxxx'  
+            // from https://developer.paypal.com/developer/applications/
+            sandbox: 'SANDBOX-CREDENTIAL',
+            production: 'PRODUCTION-CREDENTIAL'  
         },
         validate: (actions) => {
             if(this.props.disabled){actions.disable();}
