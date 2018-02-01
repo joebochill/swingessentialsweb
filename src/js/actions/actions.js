@@ -257,8 +257,7 @@ export function checkTimeout(response, dispatch){
 /* Dispatch a failure action for the supplied action type */
 export function failure(type, response){
     if(response && response.headers && response.headers.get){
-        console.log(response.headers.get('Error'));
-        console.log(response.headers.get('Message'));
+        console.error('Error ' + response.headers.get('Error') + ': ' + response.headers.get('Message'));
     }
     
     return{
@@ -271,8 +270,7 @@ export function failure(type, response){
 /* Dispatch a failure action for the supplied action type, XMLHTTPRequest variant */
 export function xhrfailure(type, response){
     if(response && response.getResponseHeader){
-        console.log(response.getResponseHeader('Error'));
-        console.log(response.getResponseHeader('Message'));
+        console.error('Error ' + response.getResponseHeader('Error') + ': ' + response.getResponseHeader('Message'));
     }
     
     return{

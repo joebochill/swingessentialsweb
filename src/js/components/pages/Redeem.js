@@ -182,7 +182,7 @@ class RedeemPage extends Component {
                     <div className={"swing_placeholder"}>
                       <div className="placeholder_image fo">
                         <input type="file"
-                          accept=".mov,.mp4,.mpeg,.3gp" 
+                          accept=".mov,.mp4,.mpeg" 
                           title="Select a new Face-On video"
                           disabled={this.props.redeemPending}
                           onChange={(evt)=>{this._updateVideo(evt, 'fo')}}
@@ -196,7 +196,7 @@ class RedeemPage extends Component {
                         </svg>
                         <span>Face-On</span>
                         <input type="file" 
-                          accept=".mov,.mp4,.mpeg,.3gp" 
+                          accept=".mov,.mp4,.mpeg" 
                           title="Select a new Face-On video" 
                           disabled={this.props.redeemPending}
                           onChange={(evt)=>this._updateVideo(evt, 'fo')}
@@ -211,7 +211,7 @@ class RedeemPage extends Component {
                       </svg>
                       <span>Face-On</span>
                       <input type="file" 
-                        accept=".mov,.mp4,.mpeg,.3gp" 
+                        accept=".mov,.mp4,.mpeg" 
                         title="Select a new Face-On video" 
                         disabled={this.props.redeemPending}
                         onChange={(evt)=>this._updateVideo(evt, 'fo')}
@@ -227,7 +227,7 @@ class RedeemPage extends Component {
                     <div className={"swing_placeholder"}>
                       <div className="placeholder_image dtl">
                         <input type="file" 
-                          accept=".mov,.mp4,.mpeg,.3gp" 
+                          accept=".mov,.mp4,.mpeg" 
                           title="Select a new Down-the-Line video" 
                           disabled={this.props.redeemPending}
                           onChange={(evt)=>this._updateVideo(evt, 'dtl')}
@@ -241,7 +241,7 @@ class RedeemPage extends Component {
                         </svg>
                         <span>Down-the-Line</span>
                         <input type="file" 
-                          accept=".mov,.mp4,.mpeg,.3gp" 
+                          accept=".mov,.mp4,.mpeg" 
                           title="Select a new Down-the-Line video" 
                           disabled={this.props.redeemPending}
                           onChange={(evt)=>this._updateVideo(evt, 'dtl')}
@@ -256,7 +256,7 @@ class RedeemPage extends Component {
                       </svg>
                       <span>Down-the-Line</span>
                       <input type="file" 
-                        accept=".mov,.mp4,.mpeg,.3gp" 
+                        accept=".mov,.mp4,.mpeg" 
                         title="Select a new Down-the-Line video" 
                         disabled={this.props.redeemPending}
                         onChange={(evt)=>this._updateVideo(evt, 'dtl')}
@@ -266,7 +266,7 @@ class RedeemPage extends Component {
                 </div>
               </div>
               {this.state.videoError && <span className="validation_error">{this.state.videoError}</span>}
-              <h1 style={{marginTop: '2rem'}}>Comments / Special Requests</h1>
+              <h1 style={{marginTop: '2rem'}}>Special Requests</h1>
               <textarea 
                 placeholder="Add any comments here..."
                 value={this.state.notes} 

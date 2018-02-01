@@ -204,6 +204,16 @@ section:nth-child(even) .card_row:not(.nohover):not(.selected):hover{
   justify-content: flex-end;
 }
 
+.hint{
+  padding: 1rem 1rem;
+  background: rgba(35, 31, 97, .8);
+  color: white;
+}
+.hint.hidden{
+  height: 0px;
+  padding: 0rem 1rem;
+}
+
 .security_check{
   display: flex;
   flex-direction: row;

@@ -165,6 +165,9 @@ class RegisterPage extends Component {
                       onFocus={()=>this.setState({userFocus: true})}
                       onBlur={()=>{this.setState({userFocus: false});this._validateUser()}}/>
                   }/>
+                  <div className={'hint ' + (this.state.userFocus ? '' : 'hidden')}>
+                    <p style={{fontSize: '0.9rem', textAlign: 'center'}}>Username may contain Letters, Numbers, and Special Characters (-_.$#@!+). Spaces are <b style={{fontWeight: 'bold'}}>NOT</b> allowed.</p>
+                  </div>
                   <CardRow alternate nohover title={"Password"} extra={
                     <input type="password" value={this.state.password} placeholder={"Password"} className={(this.state.passwordsMatch ? "" : "error")} 
                       onChange={(evt) => {this.setState({password: evt.target.value}); this._checkPasswords(evt.target.value,this.state.passwordConfirm);}} 

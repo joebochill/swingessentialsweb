@@ -4,7 +4,7 @@ import {replace} from 'react-router-redux';
 import YoutubeVideo from '../youtube/YoutubeVideo.js';
 import Footer from '../footer/Footer.js';
 import Loader from '../loader/Loader.js';
-import {formatDate} from '../../utils/utils.js';
+import {formatDate, convertTextToP, convertLineToText, convertTextToLine} from '../../utils/utils.js';
 
 import { setTargetRoute } from '../../actions/NavigationActions.js';
 import { getLessons, putLessonResponse, markLessonViewed } from '../../actions/LessonActions.js';
@@ -70,12 +70,6 @@ class LessonResponsePage extends Component {
     //this.props.clearVideoLinks();
   }
 
-  // converts a DB stored string into paragraphs (we do not store html in the database, just text)
-  _convertTextToP(string){
-    let array = string.split(":::");
-    return array.map((val, index)=><p key={index}>{val}</p>);
-  }
-
   // checks if the requested lessons is in the user's list
   _verifyLesson(less=null){
     const lid = this.props.match.params.lesson_id;
@@ -136,7 +130,7 @@ class LessonResponsePage extends Component {
       lesson_id: this.lesson['request_id'],
       username: this.lesson['username'],
       response_video: this.state.responseURL,
-      response_notes: this.state.responseNotes,
+      response_notes: convertLineToText(this.state.responseNotes),
       response_status: this.state.responseStatus
     };
 
@@ -155,6 +149,7 @@ class LessonResponsePage extends Component {
         </section>
       )
     }
+
     return (
       <div>
         <section className="landing_image image2">
@@ -170,7 +165,7 @@ class LessonResponsePage extends Component {
                 <h1>Video Response</h1>
                 <YoutubeVideo vid={this.lesson.response_video}/>
                 <h1>Comments</h1>
-                {this._convertTextToP(this.lesson.response_notes)}
+                {convertTextToP(this.lesson.response_notes)}
               </div>
             </section>
           }
@@ -178,7 +173,7 @@ class LessonResponsePage extends Component {
             <section className="left">
               <div className="structured_panel">
                 <h1>Comments</h1>
-                {this._convertTextToP(this.lesson.response_notes)}
+                {convertTextToP(this.lesson.response_notes)}
               </div>
             </section>
           }
@@ -207,13 +202,19 @@ class LessonResponsePage extends Component {
                   {/* } */}
                 </div>
               </div>
+              {this.lesson && this.lesson.request_notes &&
+                <div style={{marginTop: '2rem'}}>
+                  <h1>Special Requests</h1>
+                  {convertTextToP(this.lesson.request_notes)}
+                </div>
+              }
             </div>
           </section>
           {this.props.admin && !this.state.editingResponse &&
             <section>
               <div className="structured_panel">
                 <div className="button se_button" 
-                      onClick={()=>this.setState({editingResponse: true})}
+                      onClick={()=>this.setState({editingResponse: true, responseNotes: convertTextToLine(this.state.responseNotes)})}
                 >
                   <span>{this.lesson.response_status ? "EDIT RESPONSE" : "CREATE RESPONSE"}</span>
                 </div>
