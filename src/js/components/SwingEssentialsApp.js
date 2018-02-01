@@ -16,6 +16,7 @@ import TipPage from './pages/Tip.js';
 import PackagesPage from './pages/Packages.js';
 import DiscountsPage from './pages/Discounts.js';
 import Header from './header/Header.js';
+import Banner from './banner/Banner.js';
 
 import ModalConductor from './modals/ModalConductor.js';
 
@@ -62,6 +63,7 @@ class SwingEssentialsApp extends Component {
                 <Redirect to="/"/>
               </Route>  
             </Switch>
+            <Banner/>
             <ModalConductor/>
           </div>
         </ConnectedRouter>

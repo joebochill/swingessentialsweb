@@ -43,6 +43,10 @@
     border-collapse: collapse;
     border-spacing: 0;
   }
+  a:-webkit-any-link{
+    color: inherit;
+    text-decoration: inherit;
+  }
 /* END CSS RESET */
 html{
   font-size: 100%;
@@ -67,6 +71,21 @@ body {
 }
 .noScroll{
   overflow: hidden;
+}
+.banner{
+  position: fixed;
+  bottom: 0rem;
+  
+  padding: 1rem 4rem;
+  min-height: 3rem;
+  width: 100%;
+
+  background: rgba(35,31,97,0.8);
+  
+  font-size: 1rem;
+  line-height: 1.5rem;
+  text-align: center;
+  color: white;
 }
 
 .landing_image{
