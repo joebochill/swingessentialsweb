@@ -18,7 +18,7 @@ export function checkUsernameAvailability(username){
             switch(response.status) {
                 case 200:
                     response.json()
-                    .then((json)=>dispatch(success(CHECK_USER.SUCCESS, json)));
+                    .then((json)=>dispatch(success(CHECK_USER.SUCCESS, {...json, lastChecked: username})));
                     break;
                 default:
                     checkTimeout(response, dispatch);
@@ -38,7 +38,7 @@ export function checkEmailAvailability(email){
             switch(response.status) {
                 case 200:
                     response.json()
-                    .then((json)=>dispatch(success(CHECK_EMAIL.SUCCESS,json)));
+                    .then((json)=>dispatch(success(CHECK_EMAIL.SUCCESS, {...json, lastChecked: email})));
                     break;
                 default:
                     checkTimeout(response, dispatch);

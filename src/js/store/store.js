@@ -90,7 +90,9 @@ export const initialStore = {
         resetUser: '',
         resetToken: '',
         userAvailable: true,
+        lastUserChecked: '',
         emailAvailable: true,
+        lastEmailChecked: '',
         registrationFailure: false
     },
 

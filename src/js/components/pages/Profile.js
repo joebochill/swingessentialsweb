@@ -22,7 +22,9 @@ const mapStateToProps = (state)=>{
     securityAuthorized: state.login.settingsAuthenticated,
     authorizing: state.login.pendingAuthentication,
     emailAvailable: state.registration.emailAvailable,
+    lastEmailChecked: state.registration.lastEmailChecked,
     userAvailable: state.registration.userAvailable,
+    lastUserChecked: state.registration.lastUserChecked
   };
 }
 var mapDispatchToProps = function(dispatch){
@@ -224,8 +226,8 @@ class ProfilePage extends Component {
                   <span 
                     disabled={this.state.editSecurity && 
                       (!this.state.validEmail || 
-                        (!this.props.emailAvailable && this.state.email && this.state.email !== this.props.userData.email) || 
-                        (!this.props.userAvailable && this.state.username && this.state.username !== this.props.userData.username))}
+                        (!this.props.emailAvailable && this.state.email && this.state.email !== this.props.userData.email && this.props.lastEmailChecked !== this.props.userData.email) || 
+                        (!this.props.userAvailable && this.state.username && this.state.username !== this.props.userData.username && (this.props.lastUserChecked !== this.props.userData.username)))}
                     onClick={() => this.updateSettings("security")}>{this.state.editSecurity ? "DONE" : "EDIT"}</span>
                 </div>
                 <div className="card_body">
@@ -257,7 +259,9 @@ class ProfilePage extends Component {
                   }
                   <CardRow alternate nohover title={"Email"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
                     <input 
-                      className={((this.props.emailAvailable && this.state.validEmail) || this.state.emailFocus || this.state.email === this.props.userData.email ? "" : "error")}
+                      className={((this.props.emailAvailable && this.state.validEmail) || 
+                                  ((!this.props.emailAvailable && this.props.lastEmailChecked === this.props.userData.email)) || 
+                                  this.state.emailFocus || this.state.email === this.props.userData.email ? "" : "error")}
                       value={this.state.email} 
                       placeholder={"New Email Address"} 
                       onChange={(evt) => {this.setState({email: evt.target.value.substr(0,128)});}}
@@ -268,14 +272,20 @@ class ProfilePage extends Component {
                   }/>
                   <CardRow alternate nohover title={"Username"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
                     <input 
-                      className={(this.props.userAvailable || this.state.userFocus || this.state.username === this.props.userData.username ? "" : "error")}
+                      className={(this.props.userAvailable || 
+                                  ((!this.props.userAvailable && this.props.lastUserChecked === this.props.userData.username)) || 
+                                  this.state.userFocus || 
+                                  this.state.username === this.props.userData.username ? "" : "error")}
                       value={this.state.username} 
                       placeholder={"New Username"} 
                       onFocus={()=>this.setState({userFocus: true})}
                       onBlur={()=>{this.setState({userFocus: false});this._validateUser()}}
-                      onChange={(evt) => this.setState({username: evt.target.value.substr(0,32)})}/>) :
+                      onChange={(evt) => this.setState({username: evt.target.value.replace(/[^A-Z0-9-_.$#@!+]/gi,"").substr(0,32)})}/>) :
                     (this.state.username)
                   }/>
+                  <div className={'hint ' + (this.state.userFocus ? '' : 'hidden')}>
+                    <p style={{fontSize: '0.9rem', textAlign: 'center'}}>Username may contain Letters, Numbers, and Special Characters (-_.$#@!+). Spaces are <b style={{fontWeight: 'bold'}}>NOT</b> allowed.</p>
+                  </div>
                   <CardRow alternate nohover title={"Password"} extra={this.state.editSecurity && this.props.securityAuthorized ? (
                     <input type="password" value={this.state.newPassword} placeholder={"New Password"} onChange={(evt) => this.setState({newPassword: evt.target.value})}/>) :
                     ("************")
@@ -291,13 +301,13 @@ class ProfilePage extends Component {
               {!this.state.validPhone && !this.state.validationError && (
                 <span className="validation_error">Invalid Phone Number</span>
               )}
-              {!this.props.emailAvailable && (this.state.email !== this.props.userData.email) && (
+              {!this.props.emailAvailable && (this.props.lastEmailChecked !== this.props.userData.email) && (this.state.email !== this.props.userData.email) && (
                 <span className="validation_error">Email Address Already Registered</span>
               )}
               {!this.state.validEmail &&  (
                 <span className="validation_error">Invalid Email Address</span>
               )}
-              {!this.props.userAvailable && (this.state.username !== this.props.userData.username) && (
+              {!this.props.userAvailable && (this.props.lastUserChecked !== this.props.userData.username) && (this.state.username !== this.props.userData.username) && (
                 <span className="validation_error">Username Already Taken</span>
               )}
             </div>

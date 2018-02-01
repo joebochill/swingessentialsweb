@@ -101,6 +101,7 @@ class HomePage extends Component {
             </div> */}
             {!this.props.token && <div className="button small se_button" onClick={()=>this.props.goToSignin()}><span>Sign In</span></div>}
             {!this.props.token && <div className="button small se_button" onClick={()=>this.props.goTo('/register')}><span>Sign Up</span></div>}
+            {this.props.token && <div className="button small se_button" onClick={()=>this.props.goTo('/lessons')}><span>Lessons</span></div>}
           </section>
           <Footer/>
         </div>

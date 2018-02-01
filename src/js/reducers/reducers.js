@@ -176,20 +176,6 @@ const lessonsReducer = (state=[], action) => {
 					error: ''
 				}
 			}
-		// case VIDEO_LINK.REQUEST:
-		// 	return{...state,
-		// 		linking: true
-		// 	}
-		// case VIDEO_LINK.SUCCESS:
-		// 	return{...state,
-		// 		linking: false,
-		// 		linked: true
-		// 	}
-		// case VIDEO_LINK.FAIL:
-		// 	return{...state,
-		// 		linking: false,
-		// 		linked: false
-		// 	}
 		case CHECK_COUPON.SUCCESS:
 			return{...state,
 				coupon:{
@@ -446,11 +432,13 @@ const registrationReducer = (state=[], action) => {
 			}
 		case CHECK_USER.SUCCESS:
 			return{...state,
-				userAvailable: action.data.available
+				userAvailable: action.data.available,
+				lastUserChecked: action.data.lastChecked
 			}
 		case CHECK_EMAIL.SUCCESS:
 			return{...state,
-				emailAvailable: action.data.available
+				emailAvailable: action.data.available,
+				lastEmailChecked: action.data.lastChecked
 			}
 		default:
 			return state;
