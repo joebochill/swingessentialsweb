@@ -75,6 +75,7 @@ body {
 .banner{
   position: fixed;
   bottom: 0rem;
+  z-index: 1000;
   
   padding: 1rem 4rem;
   min-height: 3rem;

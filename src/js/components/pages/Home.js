@@ -73,7 +73,7 @@ class HomePage extends Component {
           </section>
           <section>
             <h1>Why Swing Essentials?</h1>
-            <p>Swing Essenials offers a true one-on-one experience. Our PGA-certified professional puts a personal touch on each and every lesson, giving you the confidence to know that your lesson is just for you. But don’t take our word for it - hear what our customers have to say.</p>
+            <p>Swing Essentials offers a true one-on-one experience. Our PGA-certified professional puts a personal touch on each and every lesson, giving you the confidence to know that your lesson is just for you. But don’t take our word for it - hear what our customers have to say.</p>
           </section>
           <section>
             <h1>Testimonials</h1>

@@ -63,7 +63,10 @@ class SwingEssentialsApp extends Component {
                 <Redirect to="/"/>
               </Route>  
             </Switch>
-            <Banner/>
+            <Banner 
+              message={<span>Welcome to our newly designed site! If you find any bugs, please let us know at <b style={{fontWeight: 'bold'}}><a href='mailto:info@swingessentials.com'>info@swingessentials.com</a></b>.</span>}
+              expires={1519862400}
+            />
             <ModalConductor/>
           </div>
         </ConnectedRouter>

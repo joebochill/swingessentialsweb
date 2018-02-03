@@ -8,9 +8,9 @@ class Banner extends Component {
     }
   }
   render() {
-    return (
+    return (Date.now()/1000 > this.props.expires) ? null : (
       <span className="banner" style={this.state.hidden?{display:'none'}:{}}>
-        Welcome to our new site! If you find any bugs, please let us know at <b style={{fontWeight: 'bold'}}><a href='mailto:info@swingessentials.com'>info@swingessentials.com</a></b>.
+        {this.props.message}
         <svg viewBox="0 0 20 20" onClick={()=>this.setState({hidden:true})} style={{
           position: 'absolute',
           right: '1rem',
