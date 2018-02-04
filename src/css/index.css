@@ -179,14 +179,17 @@ body {
 
   /* Graphics */
   .headshot{
+    display: block;
+
     height: 12rem;
     width: 12rem;
     margin-bottom: 2rem;
 
     border-radius: 50%;
-    background-image: url('../images/headshot.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
+    /* background-image: url('../images/headshot.jpg'); */
+    /* background-repeat: no-repeat; */
+    /* background-size: cover; */
+    background: rgba(50, 31, 97, 0.2);
   }
 
   /* Multi Column Layout*/
@@ -488,6 +491,11 @@ input:-ms-clear{
   font-size: 1.1rem;
   font-weight: 600;
   text-align: left;
+}
+.structured_panel.bold h1{
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
 }
 .structured_panel h1:not(:first-of-type) {
   margin-top: 2rem;

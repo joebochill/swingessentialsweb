@@ -14,6 +14,7 @@ import {UPDATE_CREDENTIALS, /*PUT_USER_DATA,*/ GET_USER_DATA, GET_SETTINGS} from
 import { OPEN_MODAL, CLOSE_MODAL } from '../actions/modalActions';
 import { UPDATE_PACKAGE, ADD_PACKAGE } from '../actions/PackageActions';
 import { GET_DISCOUNTS, UPDATE_DISCOUNT, ADD_DISCOUNT } from '../actions/DiscountActions';
+import { GET_BIOS, UPDATE_BIO, ADD_BIO } from '../actions/BioActions';
 
 /* Updates the basic info for the logged in user */
 const userReducer = (state=[], action) => {
@@ -247,6 +248,29 @@ const blogsReducer = (state=[], action) => {
 			return{
 				loading: false,
 				blogList: []
+			}
+		default:
+			return state;
+	}
+}
+
+/* Updates the list of pros */
+const prosReducer = (state=[], action) => {
+	switch(action.type){
+		case GET_BIOS.REQUEST:
+		case UPDATE_BIO.REQUEST:
+		case ADD_BIO.REQUEST:
+			return{...state,
+				loading: true
+			}
+		case GET_BIOS.SUCCESS:
+			return{...state,
+				list: action.data,
+				loading: false
+			}
+		case GET_BIOS.FAIL:
+			return{...state,
+				loading: false
 			}
 		default:
 			return state;
@@ -512,6 +536,7 @@ const AppReducer = combineReducers({
 	lessons: lessonsReducer,
 	tips: tipsReducer,
 	blogs: blogsReducer,
+	pros: prosReducer,
 	packages: packagesReducer,
 	discounts: discountsReducer,
 	login: loginReducer,

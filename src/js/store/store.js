@@ -55,9 +55,16 @@ export const initialStore = {
         tipList: []
     },
 
+    // 19th Hole
     blogs:{
         loading: false,
         blogList: []
+    },
+
+    // Pro Bios
+    pros:{
+        loading: false,
+        list: []
     },
 
     // swingessentials available lesson packages
