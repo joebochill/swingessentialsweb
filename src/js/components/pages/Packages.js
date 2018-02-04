@@ -172,7 +172,7 @@ class PackagesPage extends Component {
           </main>
         </section>
         <div>
-        {this.props.packages.loading &&
+          {this.props.packages.loading &&
             <section className="left">
               <div>
                   <p>Loading Packages...</p>
@@ -180,7 +180,7 @@ class PackagesPage extends Component {
               </div>
             </section>
           }
-        <section className="left">
+          <section className="left">
             <div className="structured_panel">
               <h1>PACKAGES</h1>
               {!this.state.newPackage && 
