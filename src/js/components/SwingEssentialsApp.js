@@ -15,6 +15,8 @@ import NineteenPage from './pages/19Hole.js';
 import TipPage from './pages/Tip.js';
 import PackagesPage from './pages/Packages.js';
 import DiscountsPage from './pages/Discounts.js';
+import PrivacyPage from './pages/Privacy.js';
+import TermsPage from './pages/Terms.js';
 import Header from './header/Header.js';
 import Banner from './banner/Banner.js';
 
@@ -59,6 +61,8 @@ class SwingEssentialsApp extends Component {
               <Route exact path="/reset/:reset_key" component={ResetPage}/>
               <Route exact path="/packages" component={PackagesPage}/>
               <Route exact path="/discounts" component={DiscountsPage}/>
+              <Route exact path="/legal/privacy" component={PrivacyPage}/>
+              <Route exact path="/legal/terms" component={TermsPage}/>
               <Route path="*">
                 <Redirect to="/"/>
               </Route>  

@@ -12,6 +12,7 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 # Redirect for maintenance updates
 RewriteCond %{REMOTE_ADDR} !^173\.75\.41\.239
 RewriteCond %{REMOTE_ADDR} !^96\.255\.14\.93
+RewriteCond %{REMOTE_ADDR} !^108\.17\.70\.81
 RewriteCond %{DOCUMENT_ROOT}/maintenance.html -f
 RewriteCond %{DOCUMENT_ROOT}/maintenance.on -f
 RewriteCond %{SCRIPT_FILENAME} !maintenance.html
