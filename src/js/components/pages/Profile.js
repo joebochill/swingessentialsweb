@@ -7,7 +7,7 @@ import {validatePassword} from '../../actions/LoginActions.js';
 
 import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
-import {putUserData} from '../../actions/UserDataActions.js';
+import {putUserData, putSettings} from '../../actions/UserDataActions.js';
 import {checkUsernameAvailability, checkEmailAvailability} from '../../actions/RegistrationActions.js';
 import Loader from '../loader/Loader.js';
 import '../../../css/Cards.css';
@@ -33,6 +33,7 @@ var mapDispatchToProps = function(dispatch){
     replace: (val) => {dispatch(replace(val));},
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
     putUserData: (data, token) => {dispatch(putUserData(data, token))},
+    putSettings: (data, token) => {dispatch(putSettings(data, token))},
     validatePassword: (token, pass) => {dispatch(validatePassword(token, pass))},
     updateUserCredentials: (data, token) => {dispatch(updateUserCredentials(data, token))},
     checkUser: (user) => {dispatch(checkUsernameAvailability(user))},
@@ -51,6 +52,7 @@ class ProfilePage extends Component {
       firstName: props.userData.firstName,
       lastName: props.userData.lastName,
       phone: props.userData.phone,
+      subbed: props.userSettings.subbed,
       validPhone: true,
       email: props.userData.email,
       validEmail: true,
@@ -89,7 +91,8 @@ class ProfilePage extends Component {
         newState = {...newState,
           firstName: nextProps.userData.firstName,
           lastName: nextProps.userData.lastName,
-          phone: nextProps.userData.phone
+          phone: nextProps.userData.phone,
+          subbed: nextProps.userSettings.subbed
         }
       }
       if(!this.state.editSecurity){
@@ -114,6 +117,9 @@ class ProfilePage extends Component {
             lastName: this.state.lastName,
             phone: this.state.phone
           }, this.props.token);
+      }
+      if(this.state.editPersonal && this.state.subbed !== this.props.userSettings.subbed){
+        this.props.putSettings({subscribe: this.state.subbed}, this.props.token);
       }
       this.setState({editPersonal: !this.state.editPersonal})
     }
@@ -216,6 +222,18 @@ class ProfilePage extends Component {
                         onChange={(evt) => {let pos = this.phone.selectionStart; this.setState({phone: evt.target.value.replace(/[^0-9]/gi,"").substr(0,10)}); this.phone.selectionStart = pos;}}
                       />) :
                       (this.formattedPhone())
+                    }
+                  />
+                  <CardRow alternate nohover title={"Notifications"} extra={ this.state.editPersonal ? (
+                      <span>
+                        <input 
+                          type="checkbox" 
+                          onChange={(evt) => this.setState({subbed: evt.target.checked})}
+                          checked={this.state.subbed}
+                        />
+                        <span style={{marginLeft:'0.5rem'}}>Emails</span>
+                      </span>) :
+                      (this.state.subbed ? 'Emails On' : 'Emails Off')
                     }
                   />
                 </div>
