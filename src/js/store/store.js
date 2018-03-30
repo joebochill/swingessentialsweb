@@ -12,13 +12,16 @@ export const initialStore = {
         username: '',
         firstName: '',
         lastName: '',
-        email: ''
+        email: '',
+        unsubscribeSuccess: false,
+        unsubscribePending: false
     },
 
     // user settings
     settings:{
         avatar: '',
         handedness: 'right',
+        subbed: true,
         camera:{
             delay: 5,
             duration: 8,

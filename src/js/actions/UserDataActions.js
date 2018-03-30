@@ -5,6 +5,7 @@ export const UPDATE_CREDENTIALS = {REQUEST: 'UPDATE_CREDENTIALS', SUCCESS: 'UPDA
 export const PUT_USER_DATA = {SUCCESS: 'PUT_USER_DATA_SUCCESS', FAIL: 'PUT_USER_DATA_FAIL'};
 export const GET_USER_DATA = {SUCCESS: 'GET_USER_DATA_SUCCESS', FAIL: 'GET_USER_DATA_FAIL'};
 export const GET_SETTINGS = {SUCCESS: 'GET_SETTINGS_SUCCESS', FAIL: 'GET_SETTINGS_FAIL'};
+export const UNSUBSCRIBE = {REQUEST: 'UNSUBSCRIBE', SUCCESS: 'UNSUBSCRIBE_SUCCESS', FAIL: 'UNSUBSCRIBE_FAIL'};
 
 
 /* Retrieves user personal data from the database */
@@ -107,6 +108,26 @@ export function getSettings(token){
                 default:
                     checkTimeout(response, dispatch);
                     dispatch(failure(GET_SETTINGS.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+/* Unsubscribes the user from new lesson response emails */
+export function unsubscribe(uid, kid){
+    return (dispatch) => {
+        dispatch({type: UNSUBSCRIBE.REQUEST});
+
+        return fetch(BASEURL+'unsubscribe?uid='+uid+'&kid='+kid)
+        .then((response) => {
+            switch(response.status){
+                case 200:
+                    dispatch(success(UNSUBSCRIBE.SUCCESS));
+                    break;
+                default:
+                    dispatch(failure(UNSUBSCRIBE.FAIL, response));
                     break;
             }
         })
