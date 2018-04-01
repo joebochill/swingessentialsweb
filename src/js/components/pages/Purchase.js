@@ -10,6 +10,8 @@ import {purchaseLesson, checkCoupon, executePayment} from '../../actions/LessonA
 import { getPackages } from '../../actions/PackageActions.js';
 import {roundNumber} from '../../utils/utils.js';
 import Loader from '../loader/Loader.js';
+import { checkToken } from '../../actions/LoginActions';
+
 
 import '../../../css/Lessons.css';
 import '../../../css/Cards.css';
@@ -34,7 +36,8 @@ var mapDispatchToProps = function(dispatch){
     requestPackages: (token) => {dispatch(getPackages(token))},
     purchaseLesson: (deal, token) => {dispatch(purchaseLesson(deal, token))},
     checkCoupon: (code) => {dispatch(checkCoupon(code))},
-    executePayment: (data, token) => {dispatch(executePayment(data, token))}
+    executePayment: (data, token) => {dispatch(executePayment(data, token))},
+    checkToken: (token) => {dispatch(checkToken(token))}    
   }
 };
 
@@ -73,6 +76,7 @@ class PurchasePage extends Component {
       // check if the user is allowed to purchase
       const role = JSON.parse(window.atob(this.props.token.split('.')[1])).role;
       if(role === 'pending'){
+        this.tokenCheckTimer = setInterval(()=>{this.props.checkToken(this.props.token)}, 1000*60);        
         this.setState({role: 'pending', error: 'You must validate your email address before you can purchase lessons'});
       }
       else{
@@ -84,6 +88,14 @@ class PurchasePage extends Component {
     if(!nextProps.token){
       this.props.goToSignIn();
     }
+
+    // If we get a new token, update the user role
+    if(nextProps.token && nextProps.token !== this.props.token){
+      const newrole = JSON.parse(window.atob(nextProps.token.split('.')[1])).role;
+      this.setState({role: newrole, error: newrole !== 'pending' ? '' : 'You must validate your email address before you can purchase lessons'});
+      if(this.tokenCheckTimer){clearInterval(this.tokenCheckTimer);}
+    }
+
     if(nextProps.packages){
       if(!this.state.deal){
         this.setState({deal: nextProps.packages[0]});

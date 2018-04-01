@@ -9,6 +9,7 @@ import {setTargetRoute} from '../../actions/NavigationActions.js';
 import {redeemCredit, getCredits, getLessons} from '../../actions/LessonActions.js';
 import '../../../css/Lessons.css';
 import { openModal } from '../../actions/modalActions';
+import { checkToken } from '../../actions/LoginActions';
 
 const mapStateToProps = (state)=>{
   return {
@@ -29,7 +30,8 @@ var mapDispatchToProps = function(dispatch){
     getCredits: (token) => {dispatch(getCredits(token))},
     redeemCredit: (data,token,progress) => {dispatch(redeemCredit(data,token,progress))},
     getLessons: (token) => {dispatch(getLessons(token))},
-    openModal: (modal) => {dispatch(openModal(modal))}
+    openModal: (modal) => {dispatch(openModal(modal))},
+    checkToken: (token) => {dispatch(checkToken(token))}
   }
 };
 
@@ -72,10 +74,11 @@ class RedeemPage extends Component {
       // check if the user is allowed to redeem
       const role = JSON.parse(window.atob(this.props.token.split('.')[1])).role;
       if(role === 'pending'){
+        this.tokenCheckTimer = setInterval(()=>{this.props.checkToken(this.props.token)}, 1000*60);
         this.setState({error: 'You must validate your email address before you can submit lessons'});
       }
       else{
-        this.setState({role: role});
+        this.setState({role: role, error: ''});
       }
       window.scrollTo(0,0);
     }
@@ -85,6 +88,13 @@ class RedeemPage extends Component {
     // If user has logged out, go to sign in
     if(!nextProps.token){
       this.props.goToSignIn();
+    }
+
+    // If we get a new token, update the user role
+    if(nextProps.token && nextProps.token !== this.props.token){
+      const newrole = JSON.parse(window.atob(nextProps.token.split('.')[1])).role;
+      this.setState({role: newrole, error: newrole !== 'pending' ? '' : 'You must validate your email address before you can submit lessons'});
+      if(this.tokenCheckTimer){clearInterval(this.tokenCheckTimer);}
     }
 
     // If user has redeemed successfully, go to lessons
