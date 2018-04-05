@@ -164,7 +164,7 @@ class LessonResponsePage extends Component {
               <div className="structured_panel">
                 <h1>Video Response</h1>
                 <YoutubeVideo vid={this.lesson.response_video}/>
-                <h1>Comments</h1>
+                {this.lesson.response_notes !== '' && <h1>Comments</h1>}
                 {convertTextToP(this.lesson.response_notes)}
               </div>
             </section>

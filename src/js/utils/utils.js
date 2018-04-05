@@ -9,13 +9,13 @@
   };
 
   export function convertTextToLine(string){
-    if(!string.length){return null;}
+    if(!string.length){return '';}
     
     let array = string.split(":::");
     return array.join('\r\n\r\n');
   }
   export function convertLineToText(string){
-    if(!string.length){return null;}
+    if(!string.length){return '';}
 
     let array = string.split(/[\r\n]+/);
     return array.join(':::');
