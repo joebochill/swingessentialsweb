@@ -29,7 +29,8 @@ var mapDispatchToProps = function(dispatch){
     setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
     goToOrder: () => {dispatch(push('/purchase'))},
     goToRedeem: () => {dispatch(push('/redeem'))},
-    openModal: (modal) => {dispatch(openModal(modal))}
+    openModal: (modal) => {dispatch(openModal(modal))},
+    goToFree: () => {dispatch(push('/newlesson'));}
     // redeemCredit: (type, data, token) => {dispatch(redeemCredit(type, data, token))}
   }
 };
@@ -139,6 +140,15 @@ class LessonsPage extends Component {
               </div>
             </section>
           } */}
+          {!this.state.admin && 
+            <section>
+              <div className="structured_panel">
+                <div className="button se_button" style={{marginTop:'0rem'}} onClick={()=>this.props.goToFree()}>
+                  <span>New In-Person Lesson</span>
+                </div>
+              </div>
+            </section>
+          }
           <section>
             <div className="structured_panel">
               {!this.props.admin && this.props.credits.unlimitedExpires > Date.now()/1000 &&
