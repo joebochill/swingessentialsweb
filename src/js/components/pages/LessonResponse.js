@@ -177,39 +177,41 @@ class LessonResponsePage extends Component {
               </div>
             </section>
           }
-          <section className="left">
-            <div className="structured_panel">
-              <h1>{this.props.admin ? "Swing Videos" : "Your Swing Videos"}</h1>
-              <div className="se_multi_video">
-                <div className="se_video_flex">
+          {this.lesson.fo_swing && this.lesson.dtl_swing && 
+            <section className="left">
+              <div className="structured_panel">
+                <h1>{this.props.admin ? "Swing Videos" : "Your Swing Videos"}</h1>
+                <div className="se_multi_video">
+                  <div className="se_video_flex">
+                    {/* {(!this.props.linking && this.props.linked) ? */}
+                      <video width="100%" controls src={'https://www.swingessentials.com/video_links/'+this.lesson.request_url+'/'+this.lesson.fo_swing}>
+                        Your browser does not support the video tag.
+                      </video>
+                      {/* : ((this.props.linking) ? */}
+                      {/* <Loader/> */}
+                      {/* : <span>Failed to load video. Try refreshing your browser.</span> */}
+                    {/* )} */}
+                  </div>
+                  <div className="se_video_flex">
                   {/* {(!this.props.linking && this.props.linked) ? */}
-                    <video width="100%" controls src={'https://www.swingessentials.com/video_links/'+this.lesson.request_url+'/'+this.lesson.fo_swing}>
+                    <video width="100%" controls src={'https://www.swingessentials.com/video_links/'+this.lesson.request_url+'/'+this.lesson.dtl_swing}>
                       Your browser does not support the video tag.
                     </video>
-                    {/* : ((this.props.linking) ? */}
+                    {/* : (this.props.linking) ? */}
                     {/* <Loader/> */}
                     {/* : <span>Failed to load video. Try refreshing your browser.</span> */}
-                  {/* )} */}
+                    {/* } */}
+                  </div>
                 </div>
-                <div className="se_video_flex">
-                {/* {(!this.props.linking && this.props.linked) ? */}
-                  <video width="100%" controls src={'https://www.swingessentials.com/video_links/'+this.lesson.request_url+'/'+this.lesson.dtl_swing}>
-                    Your browser does not support the video tag.
-                  </video>
-                  {/* : (this.props.linking) ? */}
-                  {/* <Loader/> */}
-                  {/* : <span>Failed to load video. Try refreshing your browser.</span> */}
-                  {/* } */}
-                </div>
+                {this.lesson && this.lesson.request_notes &&
+                  <div style={{marginTop: '2rem'}}>
+                    <h1>Special Requests</h1>
+                    {convertTextToP(this.lesson.request_notes)}
+                  </div>
+                }
               </div>
-              {this.lesson && this.lesson.request_notes &&
-                <div style={{marginTop: '2rem'}}>
-                  <h1>Special Requests</h1>
-                  {convertTextToP(this.lesson.request_notes)}
-                </div>
-              }
-            </div>
-          </section>
+            </section>
+          }
           {this.props.admin && !this.state.editingResponse &&
             <section>
               <div className="structured_panel">

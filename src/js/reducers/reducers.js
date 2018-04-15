@@ -10,7 +10,7 @@ REDEEM_CREDIT,
 CHECK_COUPON,
 EXECUTE_PAYMENT} from '../actions/LessonActions.js';
 import {CREATE_ACCOUNT, VERIFY_EMAIL, /*REQUEST_RESET,*/ VERIFY_RESET, CHECK_USER, CHECK_EMAIL} from '../actions/RegistrationActions.js';
-import {UPDATE_CREDENTIALS, /*PUT_USER_DATA,*/ GET_USER_DATA, GET_SETTINGS, UNSUBSCRIBE} from '../actions/UserDataActions.js';
+import {UPDATE_CREDENTIALS, /*PUT_USER_DATA,*/ GET_USER_DATA, GET_SETTINGS, UNSUBSCRIBE, GET_USERS} from '../actions/UserDataActions.js';
 import { OPEN_MODAL, CLOSE_MODAL } from '../actions/modalActions';
 import { UPDATE_PACKAGE, ADD_PACKAGE } from '../actions/PackageActions';
 import { GET_DISCOUNTS, UPDATE_DISCOUNT, ADD_DISCOUNT } from '../actions/DiscountActions';
@@ -61,6 +61,14 @@ const userReducer = (state=[], action) => {
 				unsubscribePending: false,
 				unsubscribeSuccess: false
 			};
+		case GET_USERS.SUCCESS:
+			return {...state,
+				users: action.data
+			}
+		case GET_USERS.FAIL:
+			return {...state,
+				users: []
+			}
 		default:
 			return state;
 	}
