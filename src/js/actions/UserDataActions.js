@@ -4,6 +4,7 @@ import {BASEURL, failure, success, checkTimeout} from './actions.js';
 export const UPDATE_CREDENTIALS = {REQUEST: 'UPDATE_CREDENTIALS', SUCCESS: 'UPDATE_CREDENTIALS_SUCCESS', FAIL: 'UPDATE_CREDENTIALS_FAIL'};
 export const PUT_USER_DATA = {SUCCESS: 'PUT_USER_DATA_SUCCESS', FAIL: 'PUT_USER_DATA_FAIL'};
 export const GET_USER_DATA = {SUCCESS: 'GET_USER_DATA_SUCCESS', FAIL: 'GET_USER_DATA_FAIL'};
+export const GET_USERS = {SUCCESS: 'GET_USERS_SUCCESS', FAIL: 'GET_USERS_FAIL'};
 export const GET_SETTINGS = {SUCCESS: 'GET_SETTINGS_SUCCESS', FAIL: 'GET_SETTINGS_FAIL'};
 export const PUT_SETTINGS = {SUCCESS: 'PUT_SETTINGS_SUCCESS', FAIL: 'PUT_SETTINGS_FAIL'};
 export const UNSUBSCRIBE = {REQUEST: 'UNSUBSCRIBE', SUCCESS: 'UNSUBSCRIBE_SUCCESS', FAIL: 'UNSUBSCRIBE_FAIL'};
@@ -26,6 +27,30 @@ export function getUserData(token){
                 default:
                     checkTimeout(response, dispatch);
                     dispatch(failure(GET_USER_DATA.FAIL, response));
+                    break;
+            }
+        })
+        .catch((error) => console.error(error));
+    }
+}
+
+/* Retrieves a list of users from the database */
+export function getUsers(token){
+    return (dispatch) => {
+        return fetch(BASEURL+'users', { 
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then((response) => {
+            switch(response.status) {
+                case 200:
+                    response.json()
+                    .then((json) => dispatch(success(GET_USERS.SUCCESS, json)));
+                    break;
+                default:
+                    checkTimeout(response, dispatch);
+                    dispatch(failure(GET_USERS.FAIL, response));
                     break;
             }
         })

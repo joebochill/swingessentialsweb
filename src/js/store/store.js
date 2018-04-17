@@ -14,7 +14,8 @@ export const initialStore = {
         lastName: '',
         email: '',
         unsubscribeSuccess: false,
-        unsubscribePending: false
+        unsubscribePending: false,
+        users: []
     },
 
     // user settings
