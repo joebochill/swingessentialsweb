@@ -140,7 +140,7 @@ class LessonsPage extends Component {
               </div>
             </section>
           } */}
-          {!this.state.admin && 
+          {this.props.admin && 
             <section>
               <div className="structured_panel">
                 <div className="button se_button" style={{marginTop:'0rem'}} onClick={()=>this.props.goToFree()}>
