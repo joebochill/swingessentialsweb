@@ -47,7 +47,6 @@ class PackagesPage extends Component {
       p_unlimited: false,
       p_duration: '',
       p_price: '',
-      p_ios_price: '',
       p_ios_sku: ''
     };
   }
@@ -81,7 +80,6 @@ class PackagesPage extends Component {
         count: (this.state.p_unlimited ? -1 : this.state.p_count),
         duration: (this.state.p_unlimited ? this.state.p_duration : 0),
         price: this.state.p_price,
-        ios_price: this.state.p_ios_price,
         ios_sku: this.state.p_ios_sku
       });
     }
@@ -95,7 +93,6 @@ class PackagesPage extends Component {
         p_unlimited: (parseInt(newPackage.count, 10) === -1),
         p_duration: newPackage.duration,
         p_price: newPackage.price,
-        p_ios_price: newPackage.ios_price,
         p_ios_sku: newPackage.ios_sku
       }); 
     }
@@ -111,7 +108,6 @@ class PackagesPage extends Component {
         p_unlimited: null,
         p_duration: null,
         p_price: null,
-        p_ios_price: null,
         p_ios_sku: null
       }); 
     }
@@ -125,7 +121,6 @@ class PackagesPage extends Component {
       (this.state.p_unlimited && !this.state.p_duration) ||
       !this.state.p_price ||
       !this.state.p_price.match(/^[0-9]*\.[0-9]{2}$/i) ||
-      !this.state.p_ios_price.match(/^[0-9]*\.[0-9]{2}$/i) ||
       !this.state.p_ios_sku
     );
   }
@@ -144,7 +139,6 @@ class PackagesPage extends Component {
       p_unlimited: false,
       p_duration: '',
       p_price: '',
-      p_ios_price: '',
       p_ios_sku: ''
     });
   }
@@ -159,7 +153,6 @@ class PackagesPage extends Component {
       count: (this.state.p_unlimited ? -1 : this.state.p_count),
       duration: (this.state.p_unlimited ? this.state.p_duration : 0),
       price: this.state.p_price,
-      ios_price: this.state.p_ios_price,
       ios_sku: this.state.p_ios_sku
     });
 
@@ -173,7 +166,6 @@ class PackagesPage extends Component {
       p_unlimited: false,
       p_duration: '',
       p_price: '',
-      p_ios_price: '',
       p_ios_sku: ''
     });
   }
@@ -274,18 +266,6 @@ class PackagesPage extends Component {
                       }}
                     />
                   }/>
-                  <CardRow alternate nohover title={"Price (ios)"} extra={
-                    <input 
-                      ref={(me) => this.ios_price = me}
-                      value={this.state.p_ios_price} 
-                      placeholder={'XX.XX'}
-                      onChange={(evt) => {
-                        let pos = this.ios_price.selectionStart; 
-                        this.setState({p_ios_price: evt.target.value.replace(/[^0-9.]/gi,"")}); 
-                        this.ios_price.selectionStart = pos;
-                      }}
-                    />
-                  }/>
                   <CardRow alternate nohover title={"SKU (ios)"} extra={
                     <input 
                       value={this.state.p_ios_sku} 
@@ -380,18 +360,6 @@ class PackagesPage extends Component {
                         }}
                       />
                     }/>
-                    <CardRow alternate nohover title={"Price (ios)"} extra={
-                      <input 
-                        ref={(me) => this.ios_price = me}
-                        value={this.state.p_ios_price} 
-                        placeholder={'XX.XX'}
-                        onChange={(evt) => {
-                          let pos = this.ios_price.selectionStart; 
-                          this.setState({p_ios_price: evt.target.value.replace(/[^0-9.]/gi,"")}); 
-                          this.ios_price.selectionStart = pos;
-                        }}
-                      />
-                    }/>
                     <CardRow alternate nohover title={"SKU (ios)"} extra={
                       <input 
                         value={this.state.p_ios_sku} 
@@ -414,7 +382,6 @@ class PackagesPage extends Component {
                       <CardRow alternate nohover title={"Duration (Days)"} extra={deal.duration}/>
                     }
                     <CardRow alternate nohover title={"Price"} extra={"$" + deal.price}/>
-                    <CardRow alternate nohover title={"Price (ios)"} extra={"$" + deal.ios_price}/>
                     <CardRow alternate nohover title={"SKU (ios)"} extra={deal.ios_sku}/>
                   </div>
                 </div>
