@@ -68,7 +68,7 @@ class ValidationPage extends Component {
           {this.props.registrationActivated && !regError &&
             <section>
               <h1>Thank You,</h1>
-              <p>Your email address has been confirmed.<br/>Please <a onClick={()=>this.props.goToSignin()}>Sign In</a> to view you account.</p>
+              <p>Your email address has been confirmed.<br/>Please <a onClick={()=>this.props.goToSignin()}>Sign In</a> to view your account.</p>
             </section>
           }
           {regError === 400302 &&

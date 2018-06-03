@@ -72,8 +72,9 @@ class SwingEssentialsApp extends Component {
               </Route>  
             </Switch>
             <Banner 
-              message={<span>Welcome to our newly designed site! If you find any bugs, please let us know at <b style={{fontWeight: 'bold'}}><a href='mailto:info@swingessentials.com'>info@swingessentials.com</a></b>.</span>}
-              expires={1519862400}
+              link={'https://itunes.apple.com/us/app/swing-essentials-golf-app/id1382453145?mt=8'}
+              message={<span>Our iOS App is now available on the App Store! Check it out!</span>}
+              expires={1530374400}
             />
             <ModalConductor/>
           </div>

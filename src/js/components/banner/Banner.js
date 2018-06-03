@@ -7,11 +7,17 @@ class Banner extends Component {
       hidden: false
     }
   }
+
+  openLink(url){
+    if(!url){return;}
+    window.open(url);
+  }
+
   render() {
     return (Date.now()/1000 > this.props.expires) ? null : (
-      <span className="banner" style={this.state.hidden?{display:'none'}:{}}>
+      <span className="banner" style={this.state.hidden?{display:'none'}:{}} onClick={this.props.link ? () => this.openLink(this.props.link) : null}>
         {this.props.message}
-        <svg viewBox="0 0 20 20" onClick={()=>this.setState({hidden:true})} style={{
+        <svg viewBox="0 0 20 20" onClick={(evt)=>{this.setState({hidden:true}); evt.stopPropagation();}} style={{
           position: 'absolute',
           right: '1rem',
           top: '50%',

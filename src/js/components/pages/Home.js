@@ -45,7 +45,7 @@ class HomePage extends Component {
             <h3>a PGA Pro in your pocket - on and off the course</h3>
           </main>
           <div>
-            <div className="button apple_store" onClick={()=>this._showComingSoon()}/>
+            <div className="button apple_store" onClick={()=>{window.open('https://itunes.apple.com/us/app/swing-essentials-golf-app/id1382453145?mt=8')}}/>
             <div className="button google_store" onClick={()=>this._showComingSoon()}/>
           </div>
         </section>
