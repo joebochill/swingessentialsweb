@@ -46,7 +46,7 @@ class HomePage extends Component {
           </main>
           <div>
             <div className="button apple_store" onClick={()=>{window.open('https://itunes.apple.com/us/app/swing-essentials-golf-app/id1382453145?mt=8')}}/>
-            <div className="button google_store" onClick={()=>this._showComingSoon()}/>
+            <div className="button google_store" onClick={()=>{window.open('https://play.google.com/store/apps/details?id=com.swingessentials.app')}}/>
           </div>
         </section>
         <div>
@@ -99,6 +99,8 @@ class HomePage extends Component {
               <div className="button apple_store" onClick={()=>this._showComingSoon()}/>
               <div className="button google_store" onClick={()=>this._showComingSoon()}/>
             </div> */}
+            <div className="button apple_store" onClick={()=>{window.open('https://itunes.apple.com/us/app/swing-essentials-golf-app/id1382453145?mt=8')}}/>
+            <div className="button google_store" onClick={()=>{window.open('https://play.google.com/store/apps/details?id=com.swingessentials.app')}}/>
             {!this.props.token && <div className="button small se_button" onClick={()=>this.props.goToSignin()}><span>Sign In</span></div>}
             {!this.props.token && <div className="button small se_button" onClick={()=>this.props.goTo('/register')}><span>Sign Up</span></div>}
             {this.props.token && <div className="button small se_button" onClick={()=>this.props.goTo('/lessons')}><span>Lessons</span></div>}
