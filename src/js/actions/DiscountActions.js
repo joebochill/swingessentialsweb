@@ -1,5 +1,5 @@
 /* Constants */
-import {BASEURL, failure, success, checkTimeout} from './actions.js';
+import {BASEURL, AUTH, failure, success, checkTimeout} from './actions.js';
 
 export const GET_DISCOUNTS = {REQUEST: 'GET_DISCOUNTS', SUCCESS: 'GET_DISCOUNTS_SUCCESS', FAIL: 'GET_DISCOUNTS_FAIL'};
 export const UPDATE_DISCOUNT = {REQUEST: 'UPDATE_DISCOUNT', SUCCESS: 'UPDATE_DISCOUNT_SUCCESS', FAIL: 'UPDATE_DISCOUNT_FAIL'};
@@ -13,7 +13,7 @@ export function getDiscounts(token){
 
         return fetch(BASEURL+'discounts', { 
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }
         })
         .then((response) => {
@@ -39,7 +39,7 @@ export function updateDiscount(token, coupon){
         return fetch(BASEURL+'discount', {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(coupon)
         })
@@ -66,7 +66,7 @@ export function removeDiscount(token, coupon){
         return fetch(BASEURL+'removediscount', {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(coupon)
         })
@@ -93,7 +93,7 @@ export function addDiscount(token, coupon){
         return fetch(BASEURL+'discount', {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(coupon)
         })

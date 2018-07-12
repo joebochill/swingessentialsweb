@@ -1,5 +1,5 @@
 /* Constants */
-import {BASEURL, failure, xhrfailure, success, checkTimeout} from './actions.js';
+import {BASEURL, AUTH, failure, xhrfailure, success, checkTimeout} from './actions.js';
 // import {getUserData, getSettings} from './UserDataActions.js';
 
 export const GET_LESSONS = {REQUEST: 'GET_LESSONS', SUCCESS: 'GET_LESSONS_SUCCESS', FAIL: 'GET_LESSONS_FAIL'};
@@ -43,7 +43,7 @@ export function purchaseLesson(type, token){
         return fetch(BASEURL+'purchase/'+type, {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }
         })
         .then((response) => {
@@ -68,7 +68,7 @@ export function getLessons(token){
         dispatch({type: GET_LESSONS.REQUEST});
         return fetch(BASEURL+'lessons', { 
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }
         })
         .then((response) => {
@@ -96,7 +96,7 @@ export function putLessonResponse(data, token){
         return fetch(BASEURL+'lesson', {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(data)
         })
@@ -121,7 +121,7 @@ export function getCredits(token){
     return (dispatch) => {
         return fetch(BASEURL+'credits', { 
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }
         })
         .then((response) => {
@@ -169,7 +169,7 @@ export function redeemCredit(data, token, updateProgress){
         return futch(BASEURL+'redeem/', { 
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: data
         }, updateProgress)
@@ -197,7 +197,7 @@ export function activateUnlimited(token){
         return fetch(BASEURL+'unlimited/', { 
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }
         })
         .then((response) => {
@@ -224,7 +224,7 @@ export function markLessonViewed(data, token){
         return fetch(BASEURL+'viewed/', { 
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(data)
         })
@@ -252,7 +252,7 @@ export function executePayment(data, token){
         return fetch(BASEURL+'executepayment/', {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(data)
         })

@@ -16,9 +16,10 @@ export const REMOVE_BLOG = {REQUEST: 'REMOVE_BLOG', SUCCESS: 'REMOVE_BLOG_SUCCES
 // export const PING = {REQUEST: 'PING_REQUEST', SUCCESS: 'PING_SUCCESS', FAIL: 'PING_FAIL'};
 
 /* Base URL for fetch commands */
-// export const BASEURL = 'http://www.josephpboyle.com/api/swingessentialsapi.php/';
+// export const BASEURL = 'http://www.josephpboyle.com/api/swingessentials2.php/';
 export const BASEURL = 'https://www.swingessentials.com/apis/swingessentials.php/';
 // export const BASEURL = 'http://www.josephpboyle.com/apis/swingessentials.php/';
+export const AUTH = 'Message'; //The HTTP Header to use to pass authorization info
 
 
 //const API_KEY = 'AIzaSyAzvggwVpvJ1pngsjQKJ84FcY8v07C8dNA';
@@ -31,7 +32,7 @@ export function getTips(token=null){
         return fetch(BASEURL+'tips', {
             method: 'GET',
             headers: (!token ? {} : {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }) 
         })
         .then((response) => {
@@ -58,7 +59,7 @@ export function updateTip(token, tip){
         return fetch(BASEURL+'tip', {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(tip)
         })
@@ -85,7 +86,7 @@ export function addTip(token, tip){
         return fetch(BASEURL+'tip', {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(tip)
         })
@@ -112,7 +113,7 @@ export function removeTip(token, tip){
         return fetch(BASEURL+'removetip', {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(tip)
         })
@@ -139,7 +140,7 @@ export function getBlogs(token = null){
         return fetch(BASEURL+'blogs', {
             method: 'GET',
             headers: (!token ? {} : {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }) 
         })
         .then((response) => {
@@ -166,7 +167,7 @@ export function updateBlog(token, blog){
         return fetch(BASEURL+'blog', {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(blog)
         })
@@ -193,7 +194,7 @@ export function addBlog(token, blog){
         return fetch(BASEURL+'blog', {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(blog)
         })
@@ -220,7 +221,7 @@ export function removeBlog(token, blog){
         return fetch(BASEURL+'removeblog', {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(blog)
         })

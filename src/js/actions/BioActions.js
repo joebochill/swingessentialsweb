@@ -1,5 +1,5 @@
 /* Constants */
-import {BASEURL, failure, success, checkTimeout} from './actions.js';
+import {BASEURL, AUTH, failure, success, checkTimeout} from './actions.js';
 
 export const GET_BIOS = {REQUEST: 'GET_BIOS', SUCCESS: 'GET_BIOS_SUCCESS', FAIL: 'GET_BIOS_FAIL'};
 export const UPDATE_BIO = {REQUEST: 'UPDATE_BIO', SUCCESS: 'UPDATE_BIO_SUCCESS', FAIL: 'UPDATE_BIO_FAIL'};
@@ -13,7 +13,7 @@ export function getBios(token){
 
         return fetch(BASEURL+'bios', { 
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }
         })
         .then((response) => {
@@ -40,7 +40,7 @@ export function updateBio(token, pack){
         return fetch(BASEURL+'bio', {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(pack)
         })
@@ -67,7 +67,7 @@ export function removeBio(token, pack){
         return fetch(BASEURL+'removebio', {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(pack)
         })
@@ -94,7 +94,7 @@ export function addBio(token, pack){
         return fetch(BASEURL+'bio', {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(pack)
         })

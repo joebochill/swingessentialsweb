@@ -1,5 +1,5 @@
 /* Constants */
-import {BASEURL, failure, success, checkTimeout} from './actions.js';
+import {BASEURL, AUTH, failure, success, checkTimeout} from './actions.js';
 
 export const UPDATE_CREDENTIALS = {REQUEST: 'UPDATE_CREDENTIALS', SUCCESS: 'UPDATE_CREDENTIALS_SUCCESS', FAIL: 'UPDATE_CREDENTIALS_FAIL'};
 export const PUT_USER_DATA = {SUCCESS: 'PUT_USER_DATA_SUCCESS', FAIL: 'PUT_USER_DATA_FAIL'};
@@ -15,7 +15,7 @@ export function getUserData(token){
     return (dispatch) => {
         return fetch(BASEURL+'user', { 
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }
         })
         .then((response) => {
@@ -39,7 +39,7 @@ export function getUsers(token){
     return (dispatch) => {
         return fetch(BASEURL+'users', { 
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }
         })
         .then((response) => {
@@ -64,7 +64,7 @@ export function putUserData(data, token){
         return fetch(BASEURL+'details', { 
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(data)
         })
@@ -95,7 +95,7 @@ export function updateUserCredentials(data, token){
         return fetch(BASEURL+'credentials', { 
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token,
+                [AUTH]: 'Bearer ' + token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
@@ -122,7 +122,7 @@ export function getSettings(token){
     return (dispatch) => {
         return fetch(BASEURL+'settings', { 
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }
         })
         .then((response) => {
@@ -147,7 +147,7 @@ export function putSettings(data, token){
         return fetch(BASEURL+'settings', { 
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(data)
         })

@@ -1,5 +1,5 @@
 /* Constants */
-import {BASEURL, /*getPackages,*/ failure, success, checkTimeout, getBlogs, getTips} from './actions.js';
+import {BASEURL, AUTH, /*getPackages,*/ failure, success, checkTimeout, getBlogs, getTips} from './actions.js';
 import {getUserData, getSettings} from './UserDataActions.js';
 import {getLessons, getCredits} from './LessonActions.js';
 
@@ -29,7 +29,7 @@ export function requestLogin(userCredentials){
     return (dispatch) => {
         return fetch(BASEURL+'login', { 
             headers: {
-                'Authorization': 'Basic ' + window.btoa(userCredentials.username) + '.' + window.btoa(userCredentials.password)
+                [AUTH]: 'Basic ' + window.btoa(userCredentials.username) + '.' + window.btoa(userCredentials.password)
             }
         })
         .then((response) => {
@@ -66,7 +66,7 @@ export function requestLogout(token){
     return (dispatch) => {
         return fetch(BASEURL+'logout', { 
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }
         })
         .then((response) => {
@@ -92,7 +92,7 @@ export function validatePassword(token, pass){
         return fetch(BASEURL+'validate',{
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify({password:window.btoa(pass)})
         })
@@ -115,7 +115,7 @@ export function refreshToken(token){
     return (dispatch) => {
         fetch(BASEURL+'refresh', {
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }
         })
         .then((response) => {
@@ -139,7 +139,7 @@ export function checkToken(token){
     return (dispatch) => {
         fetch(BASEURL+'checkToken', {
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }
         })
         .then((response) => {

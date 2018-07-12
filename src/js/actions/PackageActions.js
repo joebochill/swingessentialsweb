@@ -1,5 +1,5 @@
 /* Constants */
-import {BASEURL, failure, success, checkTimeout} from './actions.js';
+import {BASEURL, AUTH, failure, success, checkTimeout} from './actions.js';
 
 export const GET_PACKAGES = {REQUEST: 'GET_PACKAGES', SUCCESS: 'GET_PACKAGES_SUCCESS', FAIL: 'GET_PACKAGES_FAIL'};
 export const UPDATE_PACKAGE = {REQUEST: 'UPDATE_PACKAGE', SUCCESS: 'UPDATE_PACKAGE_SUCCESS', FAIL: 'UPDATE_PACKAGE_FAIL'};
@@ -13,7 +13,7 @@ export function getPackages(token){
 
         return fetch(BASEURL+'packages', { 
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             }
         })
         .then((response) => {
@@ -40,7 +40,7 @@ export function updatePackage(token, pack){
         return fetch(BASEURL+'package', {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(pack)
         })
@@ -67,7 +67,7 @@ export function removePackage(token, pack){
         return fetch(BASEURL+'removepackage', {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(pack)
         })
@@ -94,7 +94,7 @@ export function addPackage(token, pack){
         return fetch(BASEURL+'package', {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + token
+                [AUTH]: 'Bearer ' + token
             },
             body: JSON.stringify(pack)
         })
