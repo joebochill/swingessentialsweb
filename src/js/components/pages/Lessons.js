@@ -6,6 +6,8 @@ import {replace, push} from 'react-router-redux';
 import Placeholder from '../rows/Placeholder.js';
 import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
+import Paginator from '../paginator/Paginator.js';
+
 import {setTargetRoute} from '../../actions/NavigationActions.js';
 import {getLessons, getCredits} from '../../actions/LessonActions.js';
 import {formatDate} from '../../utils/utils.js';
@@ -38,8 +40,10 @@ var mapDispatchToProps = function(dispatch){
 class LessonsPage extends Component {
   constructor(props){
     super(props);
+    this.perPage = 10;
     this.state={
-      timer:''
+      start: 0,
+      timer: ''
     }
   }
   componentWillMount(){
@@ -120,7 +124,10 @@ class LessonsPage extends Component {
 
 
   render() {
-    const loading = this.props.lessons.loading;
+    const {lessons} = this.props;
+    const {start} = this.state;
+    const loading = lessons.loading;
+    
     return (
       <div>
         <section className="landing_image image2">
@@ -130,7 +137,7 @@ class LessonsPage extends Component {
           </main>
         </section>
         <div>
-          {/* {(!this.props.admin && !loading && !this.props.lessons.closed.length && !this.props.lessons.pending.length) && 
+          {/* {(!this.props.admin && !loading && !lessons.closed.length && !lessons.pending.length) && 
             <section>
               <h1>You haven't submitted any lessons!</h1>
               <p>Download our app today. Your first lesson is free!</p>
@@ -161,7 +168,7 @@ class LessonsPage extends Component {
                     <CardRow go 
                       title={'Submit a Swing'} 
                       className={"noflex"} 
-                      action={(this.props.lessons.pending && this.props.lessons.pending.length > 0 ? 
+                      action={(lessons.pending && lessons.pending.length > 0 ? 
                         () => this.props.openModal({type: 'PENDING_SWING'})
                         :
                         ()=>this.props.goToRedeem()
@@ -225,10 +232,10 @@ class LessonsPage extends Component {
                   <span>In Progress</span>
                 </div>
                 <div className="card_body">
-                  {(this.props.lessons.pending.length === 0 || loading) &&
+                  {(lessons.pending.length === 0 || loading) &&
                     <Placeholder message={loading?"Loading...":"No Lessons In Progress"} loading={loading}/>
                   }
-                  {this.props.lessons.pending.length > 0 && this.props.lessons.pending.map((lesson)=>
+                  {lessons.pending.length > 0 && lessons.pending.map((lesson)=>
                     <LessonRow key={lesson.request_id} title={formatDate(lesson.request_date)} id={lesson.request_url} extra={this.props.admin ? lesson.username : null}/>
                   )}
                 </div>
@@ -238,16 +245,26 @@ class LessonsPage extends Component {
                   <span>Completed</span>
                 </div>
                 <div className="card_body">
-                  {(this.props.lessons.closed.length === 0 || loading) &&
+                  {(lessons.closed.length === 0 || loading) &&
                     <Placeholder message={loading?"Loading...":"No Completed Lessons"} loading={loading}/>
                   }
-                  {this.props.lessons.closed.length > 0 && this.props.lessons.closed.map((lesson)=>
-                    <LessonRow key={lesson.request_id} title={formatDate(lesson.request_date)} new={parseInt(lesson.viewed,10)===0} extra={this.props.admin ? lesson.username : parseInt(lesson.viewed,10)===0 ? "NEW!" : ""} id={lesson.request_url}/>
+                  {lessons.closed.length > 0 && 
+                    lessons.closed.slice(start, start+this.perPage)
+                    .map((lesson)=>
+                      <LessonRow key={lesson.request_id} title={formatDate(lesson.request_date)} new={parseInt(lesson.viewed,10)===0} extra={this.props.admin ? lesson.username : parseInt(lesson.viewed,10)===0 ? "NEW!" : ""} id={lesson.request_url}/>
                   )}
                 </div>
               </div>
             </div>
           </section>
+          {lessons.closed.length > this.perPage && 
+            <section>
+              <Paginator 
+                pages={Math.ceil(lessons.closed.length/this.perPage)} 
+                current={start/this.perPage+1} 
+                navigate={(newPage) => {this.setState({start: (newPage-1)*this.perPage})}}/>
+            </section>
+          }
           <Footer/>
         </div>
       </div>

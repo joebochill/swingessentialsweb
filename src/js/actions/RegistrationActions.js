@@ -1,5 +1,5 @@
 /* Constants */
-import {BASEURL, AUTH, failure, success, checkTimeout} from './actions.js';
+import {BASEURL, failure, success, checkTimeout} from './actions.js';
 import {getUserData} from './UserDataActions.js';
 
 

@@ -110,15 +110,19 @@ class FreeLessonPage extends Component {
               <input 
                 placeholder="Youtube ID"
                 value={this.state.responseURL} 
+                maxlength={128}
                 onChange={(evt)=>this.setState({responseURL:evt.target.value})} 
               />
               <label style={{marginTop: '2rem'}}>Response Notes</label>
               <textarea 
                 placeholder="Add any comments here..."
                 value={this.state.responseNotes} 
+                maxlength={500}
                 onChange={(evt)=>this.setState({responseNotes:evt.target.value})} 
               />
-              
+              <span style={{display: 'block', color: '#231f61', fontSize: '.7rem', textAlign: 'right'}}>
+                Characters Left: <b style={{fontWeight: '600'}}>{500-this.state.responseNotes.length}</b>
+              </span>
 
               <div className="button se_button"  style={{marginTop: '1rem'}}
                 onClick={()=>this._sendUpdate()}
