@@ -35,6 +35,7 @@ class RegisterPage extends Component {
       email: '',
       password: '',
       passwordConfirm: '',
+      heard: '',
       passwordsMatch: true,
       validEmail: true,
       userFocus: false,
@@ -88,7 +89,8 @@ class RegisterPage extends Component {
       this.state.email && this.state.validEmail && this.props.emailAvailable &&
       (!this.state.phone || (this.state.phone && this.state.validPhone)) &&
       this.state.password && 
-      this.state.password === this.state.passwordConfirm);
+      this.state.password === this.state.passwordConfirm) &&
+      this.state.heard.length > 0
   }
 
   _checkPasswords(pass=null,conf=null){
@@ -116,7 +118,8 @@ class RegisterPage extends Component {
         lastName: this.state.lastName,
         email: this.state.email,
         phone: this.state.phone,
-        password: this.state.password
+        password: this.state.password,
+        heard: this.state.heard
       });
     }
   }
@@ -177,6 +180,22 @@ class RegisterPage extends Component {
                     <input type="password" value={this.state.passwordConfirm} placeholder={"Confirm Password"} className={(this.state.passwordsMatch ? "" : "error")}
                       onChange={(evt) => {this.setState({passwordConfirm: evt.target.value}); this._checkPasswords(this.state.password, evt.target.value);}}
                       onBlur={()=>this._checkPasswords()}/>
+                  }/>
+                  <CardRow alternate nohover title={"How'd you find us?"} extra={
+                    <select 
+                      value={this.state.heard}
+                      onChange={(evt) => this.setState({heard: evt.target.value})}  
+                    >
+                      <option value=''></option>
+                      <option value='In-Person Lesson'>In-Person Lesson</option>
+                      <option value='From a Friend'>From a Friend</option>
+                      <option value='Google Search'>Google Search</option>
+                      <option value='Online Ad'>Online Ad</option>
+                      <option value='Golf Course Ad'>Golf Course Ad</option>
+                      <option value='Social Media'>Social Media</option>
+                      <option value='Youtube'>Youtube</option>
+                      <option value='Other'>Other</option>
+                    </select>
                   }/>
                 </div>
               </div>
