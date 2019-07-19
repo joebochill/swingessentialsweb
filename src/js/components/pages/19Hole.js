@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
-import {replace, push} from 'react-router-redux';
+import { connect } from 'react-redux';
+import { replace, push } from 'connected-react-router';
 import Footer from '../footer/Footer.js';
 import Datestamp from '../datestamp/Datestamp.js';
-import {getToday, convertTextToP, convertLineToText, convertTextToLine, validatePageNumber} from '../../utils/utils.js';
+import { getToday, convertTextToP, convertLineToText, convertTextToLine, validatePageNumber } from '../../utils/utils.js';
 import Loader from '../loader/Loader.js';
-import {getBlogs, updateBlog, addBlog, removeBlog} from '../../actions/actions.js';
+import { getBlogs, updateBlog, addBlog, removeBlog } from '../../actions/actions.js';
 import Paginator from '../paginator/Paginator.js';
-import {openModal} from '../../actions/modalActions.js';
+import { openModal } from '../../actions/modalActions.js';
 
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
   return {
     token: state.login.token,
     admin: state.login.admin,
@@ -18,25 +18,25 @@ const mapStateToProps = (state)=>{
     loading: state.blogs.loading
   };
 }
-var mapDispatchToProps = function(dispatch){
+var mapDispatchToProps = function (dispatch) {
   return {
-    requestBlogs: (token) => {dispatch(getBlogs(token));},
-    goToBlogs: () => {dispatch(replace('/19th-hole'));},
-    goToBlogsPage: (page) => {dispatch(push('/19th-hole/'+page));},
-    updateBlog: (token, blog) => {dispatch(updateBlog(token, blog));},
-    addBlog: (token, blog) => {dispatch(addBlog(token, blog));},
-    removeBlog: (token, blog) => {dispatch(removeBlog(token, blog));},
-    openModal: (modal) => {dispatch(openModal(modal))}
+    requestBlogs: (token) => { dispatch(getBlogs(token)); },
+    goToBlogs: () => { dispatch(replace('/19th-hole')); },
+    goToBlogsPage: (page) => { dispatch(push('/19th-hole/' + page)); },
+    updateBlog: (token, blog) => { dispatch(updateBlog(token, blog)); },
+    addBlog: (token, blog) => { dispatch(addBlog(token, blog)); },
+    removeBlog: (token, blog) => { dispatch(removeBlog(token, blog)); },
+    openModal: (modal) => { dispatch(openModal(modal)) }
   }
 };
 
 class NineteenPage extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.start = 0;
     this.perPage = 3;
     this.localblogs = [];
-    this.state={
+    this.state = {
       editing: null,
       date: null,
       dateError: '',
@@ -46,63 +46,63 @@ class NineteenPage extends Component {
     }
   }
 
-  componentWillMount(){
-    window.scrollTo(0,0);
+  componentWillMount() {
+    window.scrollTo(0, 0);
 
     // make a request for updated blogs and use localstorage in the meantime if we have it
-    if(!this.props.blogs.length){
+    if (!this.props.blogs.length) {
       this.props.requestBlogs(this.props.token);
       let localblogs = JSON.parse(localStorage.getItem('blogs'));
-      if(localblogs){
-        this.localblogs= localblogs;
+      if (localblogs) {
+        this.localblogs = localblogs;
         this.start = validatePageNumber(localblogs, this.perPage, this.props.match.params.page, this.props.goToBlogs);
         return;
       }
     }
   }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.blogs.length){
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.blogs.length) {
       this.start = validatePageNumber(nextProps.blogs, this.perPage, nextProps.match.params.page, this.props.goToBlogs);
     }
-    if(nextProps.match.params.page !== this.props.match.params.page){
-      const header = 3*parseFloat(getComputedStyle(document.documentElement).fontSize);
+    if (nextProps.match.params.page !== this.props.match.params.page) {
+      const header = 3 * parseFloat(getComputedStyle(document.documentElement).fontSize);
       const landing = document.getElementsByClassName("landing_image")[0].offsetHeight || 0;
-      window.scrollTo(0,landing - header);
+      window.scrollTo(0, landing - header);
     }
-    if(this.props.loading && !nextProps.loading){
-      this.setState({saving: null});
+    if (this.props.loading && !nextProps.loading) {
+      this.setState({ saving: null });
     }
   }
 
-  _validateDate(date=this.state.date){
-    if(!date.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}/)){
-      this.setState({dateError: 'Please use the format YYYY-MM-DD'});
+  _validateDate(date = this.state.date) {
+    if (!date.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}/)) {
+      this.setState({ dateError: 'Please use the format YYYY-MM-DD' });
       return false;
     }
-    else if(isNaN(Date.parse(date))){
-      this.setState({dateError: 'Invalid Date'});
+    else if (isNaN(Date.parse(date))) {
+      this.setState({ dateError: 'Invalid Date' });
       return false;
     }
-    else{
-      this.setState({dateError: ''});
+    else {
+      this.setState({ dateError: '' });
       return true;
     }
   }
 
-  _changeEdit(newBlog, save){
-    if(this.state.editing && save){ // clicked save button
+  _changeEdit(newBlog, save) {
+    if (this.state.editing && save) { // clicked save button
       // push the changes
-      if(!this._validateDate() || !this.state.title || !this.state.body){return;}
-      
-      this.props.updateBlog(this.props.token,{
+      if (!this._validateDate() || !this.state.title || !this.state.body) { return; }
+
+      this.props.updateBlog(this.props.token, {
         id: this.state.editing,
         date: this.state.date,
         title: this.state.title,
         body: convertLineToText(this.state.body)
       });
     }
-    if(newBlog){ // clicked edit
+    if (newBlog) { // clicked edit
       this.setState({
         editing: newBlog.id,
         newPost: false,
@@ -111,10 +111,10 @@ class NineteenPage extends Component {
         title: newBlog.title,
         body: convertTextToLine(newBlog.body)
       });
-      
-      setTimeout(()=>window.scrollTo(0, document.getElementById('section_'+newBlog.id).offsetTop-(3*parseFloat(getComputedStyle(document.documentElement).fontSize))), 100);
+
+      setTimeout(() => window.scrollTo(0, document.getElementById('section_' + newBlog.id).offsetTop - (3 * parseFloat(getComputedStyle(document.documentElement).fontSize))), 100);
     }
-    else{ // clicked cancel or save
+    else { // clicked cancel or save
       this.setState({
         editing: null,
         newPost: false,
@@ -128,7 +128,7 @@ class NineteenPage extends Component {
   }
 
 
-  _createNewPost(){
+  _createNewPost() {
     this.setState({
       newPost: true,
       editing: -1,
@@ -140,10 +140,10 @@ class NineteenPage extends Component {
     });
   }
 
-  _addNewPost(){
-    if(!this._validateDate() || !this.state.title || !this.state.body){return;}
-    
-    this.props.addBlog(this.props.token,{
+  _addNewPost() {
+    if (!this._validateDate() || !this.state.title || !this.state.body) { return; }
+
+    this.props.addBlog(this.props.token, {
       date: this.state.date,
       title: this.state.title,
       body: convertLineToText(this.state.body)
@@ -159,8 +159,8 @@ class NineteenPage extends Component {
     });
   }
 
-  _removeBlog(id){
-    this.props.removeBlog(this.props.token, {id: id});
+  _removeBlog(id) {
+    this.props.removeBlog(this.props.token, { id: id });
   }
 
   render() {
@@ -179,135 +179,135 @@ class NineteenPage extends Component {
           {this.props.loading &&
             <section className="left">
               <div>
-                  <p>Loading 19th Hole...</p>
-                  <Loader/>
+                <p>Loading 19th Hole...</p>
+                <Loader />
               </div>
             </section>
           }
-          {this.props.admin && 
+          {this.props.admin &&
             <section className="left">
-              {!this.state.newPost && 
+              {!this.state.newPost &&
                 <div className="structured_panel wide">
-                  <div className="button se_button" style={{marginTop:'0rem'}} onClick={this._createNewPost.bind(this)}>
+                  <div className="button se_button" style={{ marginTop: '0rem' }} onClick={this._createNewPost.bind(this)}>
                     <span>New Post</span>
                   </div>
                 </div>
               }
               {this.state.newPost && <h1>New Post</h1>}
               {this.state.newPost &&
-                <div className="structured_panel wide" style={{marginTop:'2rem'}}>
-                  <label style={{marginTop:'2rem'}}>Date</label>
-                  <input type="text" 
+                <div className="structured_panel wide" style={{ marginTop: '2rem' }}>
+                  <label style={{ marginTop: '2rem' }}>Date</label>
+                  <input type="text"
                     value={this.state.date}
                     placeholder={'YYYY-MM-DD'}
-                    onChange={(evt) => {this.setState({date: evt.target.value}); this._validateDate(evt.target.value)}}
+                    onChange={(evt) => { this.setState({ date: evt.target.value }); this._validateDate(evt.target.value) }}
                   />
                   {this.state.dateError && (<span className="validation_error">{this.state.dateError}</span>)}
-                  <label style={{marginTop:'1rem'}}>Title</label>
-                  <input type="text" 
+                  <label style={{ marginTop: '1rem' }}>Title</label>
+                  <input type="text"
                     value={this.state.title}
-                    onChange={(evt) => this.setState({title: evt.target.value})}
+                    onChange={(evt) => this.setState({ title: evt.target.value })}
                   />
-                  <label style={{marginTop:'1rem'}}>Post</label>
+                  <label style={{ marginTop: '1rem' }}>Post</label>
                   <textarea value={this.state.body}
-                    onChange={(evt) => this.setState({body: evt.target.value})}
+                    onChange={(evt) => this.setState({ body: evt.target.value })}
                   />
                 </div>
               }
               {this.state.newPost &&
-                <span style={{marginTop: '2rem'}}>
-                  <a 
+                <span style={{ marginTop: '2rem' }}>
+                  <span
                     className="button_link"
-                    onClick={()=>this._addNewPost()}
+                    onClick={() => this._addNewPost()}
                     disabled={!this.state.title || !this.state.body || this.state.dateError || !this.state.date}
-                  >ADD</a>
-                  <a 
+                  >ADD</span>
+                  <span
                     className="button_link"
-                    style={{marginLeft:'1rem'}}
-                    onClick={()=>this.setState({newPost:false})}
-                  >CANCEL</a>
+                    style={{ marginLeft: '1rem' }}
+                    onClick={() => this.setState({ newPost: false })}
+                  >CANCEL</span>
                 </span>
               }
             </section>
           }
-          {blogs.length > 0 && blogs.slice(this.start, this.start+this.perPage).map((blog)=>
+          {blogs.length > 0 && blogs.slice(this.start, this.start + this.perPage).map((blog) =>
             <section key={blog.id} id={'section_' + blog.id} className="left">
-              <Datestamp datestamp={blog.date}/>
+              <Datestamp datestamp={blog.date} />
               {this.props.admin && this.state.editing !== blog.id &&
-                <span style={{marginBottom: '2rem'}}>
-                  <a 
+                <span style={{ marginBottom: '2rem' }}>
+                  <span
                     className="button_link"
                     onClick={this._changeEdit.bind(this, blog, false)}
-                  >EDIT</a>
+                  >EDIT</span>
                 </span>
               }
               {this.state.editing === blog.id &&
                 <div className="structured_panel wide">
                   <label>Date</label>
-                  <input type="text" 
+                  <input type="text"
                     value={this.state.date}
                     placeholder={'YYYY-MM-DD'}
-                    onChange={(evt) => {this.setState({date: evt.target.value}); this._validateDate(evt.target.value)}}
+                    onChange={(evt) => { this.setState({ date: evt.target.value }); this._validateDate(evt.target.value) }}
                   />
                   {this.state.dateError && (<span className="validation_error">{this.state.dateError}</span>)}
-                  <label style={{marginTop:'1rem'}}>Title</label>
-                  <input type="text" 
+                  <label style={{ marginTop: '1rem' }}>Title</label>
+                  <input type="text"
                     value={this.state.title}
-                    onChange={(evt) => this.setState({title: evt.target.value})}
+                    onChange={(evt) => this.setState({ title: evt.target.value })}
                   />
-                  <label style={{marginTop:'1rem'}}>Post</label>
+                  <label style={{ marginTop: '1rem' }}>Post</label>
                   <textarea value={this.state.body}
-                    onChange={(evt) => this.setState({body: evt.target.value})}
+                    onChange={(evt) => this.setState({ body: evt.target.value })}
                   />
                 </div>
               }
               {this.props.admin && this.state.editing === blog.id &&
-                <span style={{marginTop: '2rem'}}>
-                  <a 
+                <span style={{ marginTop: '2rem' }}>
+                  <span
                     className="button_link"
                     onClick={this._changeEdit.bind(this, null, true)}
                     disabled={!this.state.title || !this.state.body || this.state.dateError || !this.state.date}
-                  >SAVE</a>
-                  <a 
+                  >SAVE</span>
+                  <span
                     className="button_link"
-                    style={{marginLeft:'1rem'}}
+                    style={{ marginLeft: '1rem' }}
                     onClick={() => this.props.openModal({
                       type: 'CONFIRM',
-                      props:{
+                      props: {
                         title: 'Remove Post: ' + this.state.title,
                         body: ['Deleting this post will permanently remove it from the database. This action cannot be undone.',
-                                'Are you sure you want to delete this post?'],
+                          'Are you sure you want to delete this post?'],
                         buttons: [
-                          {name:'DELETE', action: () => this._removeBlog(blog.id)}
+                          { name: 'DELETE', action: () => this._removeBlog(blog.id) }
                         ]
                       }
                     })}
-                  >DELETE</a>
-                  <a 
+                  >DELETE</span>
+                  <span
                     className="button_link"
-                    style={{marginLeft:'1rem'}}
+                    style={{ marginLeft: '1rem' }}
                     onClick={this._changeEdit.bind(this, null, false)}
-                  >CANCEL</a>
-                  
+                  >CANCEL</span>
+
                 </span>
               }
-              {this.props.loading && this.state.saving === blog.id &&  <Loader/>}
-              {this.state.editing !== blog.id && this.state.saving !== blog.id && 
+              {this.props.loading && this.state.saving === blog.id && <Loader />}
+              {this.state.editing !== blog.id && this.state.saving !== blog.id &&
                 <h1>{blog.title}</h1>
               }
-              {this.state.editing !== blog.id && this.state.saving !== blog.id && 
+              {this.state.editing !== blog.id && this.state.saving !== blog.id &&
                 convertTextToP(blog.body)
               }
             </section>
           )}
           <section>
-            <Paginator pages={Math.ceil(blogs.length/this.perPage)} current={this.start/this.perPage+1} navigate={this.props.goToBlogsPage}/>
+            <Paginator pages={Math.ceil(blogs.length / this.perPage)} current={this.start / this.perPage + 1} navigate={this.props.goToBlogsPage} />
           </section>
-          <Footer/>
+          <Footer />
         </div>
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(NineteenPage);
+export default connect(mapStateToProps, mapDispatchToProps)(NineteenPage);

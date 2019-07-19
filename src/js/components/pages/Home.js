@@ -1,33 +1,33 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
-import {push} from 'react-router-redux';
+import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import Footer from '../footer/Footer.js';
-import {openModal} from '../../actions/modalActions.js';
+import { openModal } from '../../actions/modalActions.js';
 
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
   return {
     token: state.login.token
   };
 }
 
-const mapDispatchToProps = (dispatch)=>{
+const mapDispatchToProps = (dispatch) => {
   return {
-    goToSignin: () => {dispatch(push('/signin'))},
-    goTo: (path) => {dispatch(push(path))},
-    openModal: (modal) => {dispatch(openModal(modal))}    
+    goToSignin: () => { dispatch(push('/signin')) },
+    goTo: (path) => { dispatch(push(path)) },
+    openModal: (modal) => { dispatch(openModal(modal)) }
   }
 }
 
 class HomePage extends Component {
-  componentWillMount(){
-    window.scrollTo(0,0);
+  componentWillMount() {
+    window.scrollTo(0, 0);
   }
 
-  _showComingSoon(){
+  _showComingSoon() {
     this.props.openModal({
       type: 'CONFIRM',
-      props:{
+      props: {
         title: 'Coming Soon!',
         body: ['Keep an eye out for our app in the app store.'],
         cancel: 'OK'
@@ -39,14 +39,14 @@ class HomePage extends Component {
     return (
       <div>
         <section className="landing_image large image1">
-          <div className="pga_overlay"/>
+          <div className="pga_overlay" />
           <main className="page_title">
-            <h1>Swing<span className="hidden_space"> </span><br className="hidden_break"/>Essentials</h1>
+            <h1>Swing<span className="hidden_space"> </span><br className="hidden_break" />Essentials</h1>
             <h3>a PGA Pro in your pocket - on and off the course</h3>
           </main>
           <div>
-            <div className="button apple_store" onClick={()=>{window.open('https://itunes.apple.com/us/app/swing-essentials-golf-app/id1382453145?mt=8')}}/>
-            <div className="button google_store" onClick={()=>{window.open('https://play.google.com/store/apps/details?id=com.swingessentials.app')}}/>
+            <div className="button apple_store" onClick={() => { window.open('https://itunes.apple.com/us/app/swing-essentials-golf-app/id1382453145?mt=8') }} />
+            <div className="button google_store" onClick={() => { window.open('https://play.google.com/store/apps/details?id=com.swingessentials.app') }} />
           </div>
         </section>
         <div>
@@ -99,17 +99,17 @@ class HomePage extends Component {
               <div className="button apple_store" onClick={()=>this._showComingSoon()}/>
               <div className="button google_store" onClick={()=>this._showComingSoon()}/>
             </div> */}
-            <div className="button apple_store" onClick={()=>{window.open('https://itunes.apple.com/us/app/swing-essentials-golf-app/id1382453145?mt=8')}}/>
-            <div className="button google_store" onClick={()=>{window.open('https://play.google.com/store/apps/details?id=com.swingessentials.app')}}/>
-            {!this.props.token && <div className="button small se_button" onClick={()=>this.props.goToSignin()}><span>Sign In</span></div>}
-            {!this.props.token && <div className="button small se_button" onClick={()=>this.props.goTo('/register')}><span>Sign Up</span></div>}
-            {this.props.token && <div className="button small se_button" onClick={()=>this.props.goTo('/lessons')}><span>Lessons</span></div>}
+            <div className="button apple_store" onClick={() => { window.open('https://itunes.apple.com/us/app/swing-essentials-golf-app/id1382453145?mt=8') }} />
+            <div className="button google_store" onClick={() => { window.open('https://play.google.com/store/apps/details?id=com.swingessentials.app') }} />
+            {!this.props.token && <div className="button small se_button" onClick={() => this.props.goToSignin()}><span>Sign In</span></div>}
+            {!this.props.token && <div className="button small se_button" onClick={() => this.props.goTo('/register')}><span>Sign Up</span></div>}
+            {this.props.token && <div className="button small se_button" onClick={() => this.props.goTo('/lessons')}><span>Lessons</span></div>}
           </section>
-          <Footer/>
+          <Footer />
         </div>
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(HomePage);
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

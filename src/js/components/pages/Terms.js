@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Footer from '../footer/Footer.js';
-import {NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 class TermsPage extends Component {
-  componentWillMount(){
-    window.scrollTo(0,0);
+  componentWillMount() {
+    window.scrollTo(0, 0);
   }
 
   render() {
@@ -87,7 +87,7 @@ class TermsPage extends Component {
               <p>If you have any questions about the foregoing, please contact <a href="mailto:info@swingessentials.com">support</a>.</p>
             </div>
           </section>
-          <Footer/>
+          <Footer />
         </div>
       </div>
     );

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Footer from '../footer/Footer.js';
 
 class PrivacyPage extends Component {
-  componentWillMount(){
-    window.scrollTo(0,0);
+  componentWillMount() {
+    window.scrollTo(0, 0);
   }
 
   render() {
@@ -143,7 +143,7 @@ class PrivacyPage extends Component {
               <p>This Privacy Policy is subject to revision at any time in Our sole discretion. We will notify You of material changes to this Privacy Policy via the email address You provide Us, and will post on the Site any changes to this Privacy Policy. We do, however, recommend that You read this Privacy Policy each time You use Our website in case You missed Our notice of changes to the Privacy Policy. If You object to any such changes, You must cease using the Site and App immediately. Continued use of the Site and App following notice of any such changes shall indicate Your acknowledgement of such changes and agreement to be bound by the terms and conditions of such changes.</p>
             </div>
           </section>
-          <Footer/>
+          <Footer />
         </div>
       </div>
     );

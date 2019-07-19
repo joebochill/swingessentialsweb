@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 // import the modals that we will be using
 import confirmModal from './ConfirmModal.js';
@@ -14,12 +14,12 @@ const ModalComponents = {
   'TOKEN_EXPIRE': tokenExpire
 }
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
   return {
     modals: state.communication.modalList
   };
 }
-var mapDispatchToProps = function(dispatch){
+var mapDispatchToProps = function (dispatch) {
   return {
 
   };
@@ -27,16 +27,16 @@ var mapDispatchToProps = function(dispatch){
 
 class ModalConductor extends Component {
   render() {
-    
+
     // Don't render anything if the modal list is empty
-    if(!this.props.modals || this.props.modals.length < 1){ return null;}
+    if (!this.props.modals || this.props.modals.length < 1) { return null; }
 
     return (
       <div className="modal_conductor">
         {this.props.modals.map((modal, index) => {
           const Component = ModalComponents[modal.type];
           return (
-            <Component key={'modal_'+index} modalprops={modal.props} topModal={index === this.props.modals.length -1}/>
+            <Component key={'modal_' + index} modalprops={modal.props} topModal={index === this.props.modals.length - 1} />
           );
         })}
       </div>
@@ -44,4 +44,4 @@ class ModalConductor extends Component {
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(ModalConductor);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalConductor);

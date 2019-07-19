@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
-import {replace, push} from 'react-router-redux';
+import { connect } from 'react-redux';
+import { replace, push } from 'connected-react-router';
 // import Placeholder from '../rows/Placeholder.js';
 import PayPalButton from '../paypal/PayPalButton.js';
 import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
-import {setTargetRoute} from '../../actions/NavigationActions.js';
-import {purchaseLesson, checkCoupon, executePayment} from '../../actions/LessonActions.js';
+import { setTargetRoute } from '../../actions/NavigationActions.js';
+import { purchaseLesson, checkCoupon, executePayment } from '../../actions/LessonActions.js';
 import { getPackages } from '../../actions/PackageActions.js';
-import {roundNumber} from '../../utils/utils.js';
+import { roundNumber } from '../../utils/utils.js';
 import Loader from '../loader/Loader.js';
 import { checkToken } from '../../actions/LoginActions';
 
@@ -16,7 +16,7 @@ import { checkToken } from '../../actions/LoginActions';
 import '../../../css/Lessons.css';
 import '../../../css/Cards.css';
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
   return {
     token: state.login.token,
     loading: state.packages.loading,
@@ -27,129 +27,129 @@ const mapStateToProps = (state)=>{
     coupon: state.lessons.coupon
   };
 }
-var mapDispatchToProps = function(dispatch){
+var mapDispatchToProps = function (dispatch) {
   return {
-    goToSignIn: () => {dispatch(replace('/signin'));},
-    goToLessons: () => {dispatch(push('/lessons'))},
-    goToRedeem: () => {dispatch(push('/redeem'))},
-    setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
-    requestPackages: (token) => {dispatch(getPackages(token))},
-    purchaseLesson: (deal, token) => {dispatch(purchaseLesson(deal, token))},
-    checkCoupon: (code) => {dispatch(checkCoupon(code))},
-    executePayment: (data, token) => {dispatch(executePayment(data, token))},
-    checkToken: (token) => {dispatch(checkToken(token))}    
+    goToSignIn: () => { dispatch(replace('/signin')); },
+    goToLessons: () => { dispatch(push('/lessons')) },
+    goToRedeem: () => { dispatch(push('/redeem')) },
+    setTargetRoute: (route) => { dispatch(setTargetRoute(route)) },
+    requestPackages: (token) => { dispatch(getPackages(token)) },
+    purchaseLesson: (deal, token) => { dispatch(purchaseLesson(deal, token)) },
+    checkCoupon: (code) => { dispatch(checkCoupon(code)) },
+    executePayment: (data, token) => { dispatch(executePayment(data, token)) },
+    checkToken: (token) => { dispatch(checkToken(token)) }
   }
 };
 
 class PurchasePage extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       deal: null,
       code: '',
       role: 'pending',
       error: ''
     }
   }
-  componentWillMount(){
-    if(!this.props.token){
+  componentWillMount() {
+    if (!this.props.token) {
       this.props.setTargetRoute('/purchase');
       this.props.goToSignIn();
     }
-    else{
-      window.scrollTo(0,0);
+    else {
+      window.scrollTo(0, 0);
 
       // make a request for updated packages and use localstorage in the meantime if we have it
-      if(!this.props.packages.length){
+      if (!this.props.packages.length) {
 
         this.props.requestPackages(this.props.token);
         let localpackages = JSON.parse(localStorage.getItem('packages'));
-        if(localpackages){
-          this.localpackages= localpackages;
+        if (localpackages) {
+          this.localpackages = localpackages;
           return;
         }
       }
-      else{
-        this.setState({deal: this.props.packages[0]});
+      else {
+        this.setState({ deal: this.props.packages[0] });
       }
 
       // check if the user is allowed to purchase
       const role = JSON.parse(window.atob(this.props.token.split('.')[1])).role;
-      if(role === 'pending'){
-        this.tokenCheckTimer = setInterval(()=>{this.props.checkToken(this.props.token)}, 1000*60);        
-        this.setState({role: 'pending', error: 'You must validate your email address before you can purchase lessons'});
+      if (role === 'pending') {
+        this.tokenCheckTimer = setInterval(() => { this.props.checkToken(this.props.token) }, 1000 * 60);
+        this.setState({ role: 'pending', error: 'You must validate your email address before you can purchase lessons' });
       }
-      else{
-        this.setState({role: role, error:''});
+      else {
+        this.setState({ role: role, error: '' });
       }
     }
   }
-  componentWillReceiveProps(nextProps){
-    if(!nextProps.token){
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.token) {
       this.props.goToSignIn();
     }
 
     // If we get a new token, update the user role
-    if(nextProps.token && nextProps.token !== this.props.token){
+    if (nextProps.token && nextProps.token !== this.props.token) {
       const newrole = JSON.parse(window.atob(nextProps.token.split('.')[1])).role;
-      this.setState({role: newrole, error: newrole !== 'pending' ? '' : 'You must validate your email address before you can purchase lessons'});
-      if(this.tokenCheckTimer){clearInterval(this.tokenCheckTimer);}
+      this.setState({ role: newrole, error: newrole !== 'pending' ? '' : 'You must validate your email address before you can purchase lessons' });
+      if (this.tokenCheckTimer) { clearInterval(this.tokenCheckTimer); }
     }
 
-    if(nextProps.packages){
-      if(!this.state.deal){
-        this.setState({deal: nextProps.packages[0]});
+    if (nextProps.packages) {
+      if (!this.state.deal) {
+        this.setState({ deal: nextProps.packages[0] });
       }
     }
 
     // check if the user is allowed to purchase
     const role = JSON.parse(window.atob(this.props.token.split('.')[1])).role;
-    if(role === 'pending'){
-      this.setState({role: 'pending', error: 'You must validate your email address before you can purchase lessons'});
+    if (role === 'pending') {
+      this.setState({ role: 'pending', error: 'You must validate your email address before you can purchase lessons' });
     }
-    else{
-      this.setState({role: role, error:''});
-    }
-  }
-
-  _getTotal(){
-    if(this.props.coupon.value <= 0){
-      return this.state.deal.price;
-    }
-    else if(this.props.coupon.type === 'amount'){
-      return roundNumber(Math.max(this.state.deal.price-this.props.coupon.value, 0), 2).toFixed(2);
-    }
-    else if(this.props.coupon.type === 'percent'){
-      return roundNumber(Math.max(this.state.deal.price-(this.props.coupon.value/100)*this.state.deal.price, 0), 2).toFixed(2);
-    }
-    else{
-      return this.state.deal.price;
+    else {
+      this.setState({ role: role, error: '' });
     }
   }
 
-  _checkCoupon(){
-    if(!this.couponcode || !this.couponcode.value){return;}
+  _getTotal() {
+    if (this.props.coupon.value <= 0) {
+      return this.state.deal.price;
+    }
+    else if (this.props.coupon.type === 'amount') {
+      return roundNumber(Math.max(this.state.deal.price - this.props.coupon.value, 0), 2).toFixed(2);
+    }
+    else if (this.props.coupon.type === 'percent') {
+      return roundNumber(Math.max(this.state.deal.price - (this.props.coupon.value / 100) * this.state.deal.price, 0), 2).toFixed(2);
+    }
+    else {
+      return this.state.deal.price;
+    }
+  }
+
+  _checkCoupon() {
+    if (!this.couponcode || !this.couponcode.value) { return; }
     this.props.checkCoupon(this.couponcode.value);
-    this.setState({code: ''});
+    this.setState({ code: '' });
   }
 
-  _keyPress(evt){
-    if(evt.key === "Enter" && this.state.code){
+  _keyPress(evt) {
+    if (evt.key === "Enter" && this.state.code) {
       this._checkCoupon();
     }
   }
 
-  _purchaseLesson(data){
-    if(this.state.role === 'pending'){
+  _purchaseLesson(data) {
+    if (this.state.role === 'pending') {
       return;
     }
-    if(!data){ return;}
+    if (!data) { return; }
 
-    this.props.executePayment(data,this.props.token);
+    this.props.executePayment(data, this.props.token);
   }
 
   render() {
-    if(!this.state.deal){return null;}
+    if (!this.state.deal) { return null; }
     const packages = (!this.props.packages.length ? this.localpackages : this.props.packages);
 
     return (
@@ -169,13 +169,13 @@ class PurchasePage extends Component {
                     <span>Select a Package</span>
                   </div>
                   <div className="card_body">
-                    {packages && packages.map((deal,index) =>
-                      <CardRow key={'package_'+index} 
-                        title={deal.name} 
+                    {packages && packages.map((deal, index) =>
+                      <CardRow key={'package_' + index}
+                        title={deal.name}
                         subtitle={deal.description}
-                        extra={'$'+deal.price}
-                        className={"noflex " + (this.state.deal.shortcode === deal.shortcode ? 'selected' : '')} 
-                        action={this.props.purchaseInProgress ? null : () => {this.setState({deal: deal})}}
+                        extra={'$' + deal.price}
+                        className={"noflex " + (this.state.deal.shortcode === deal.shortcode ? 'selected' : '')}
+                        action={this.props.purchaseInProgress ? null : () => { this.setState({ deal: deal }) }}
                       />
                     )}
                   </div>
@@ -184,16 +184,16 @@ class PurchasePage extends Component {
                   <div className="card_header">
                     <span>Discount Code</span>
                   </div>
-                  <div className="flexboxH" style={{marginTop:'1rem'}}>
-                    <input 
+                  <div className="flexboxH" style={{ marginTop: '1rem' }}>
+                    <input
                       ref={(ref) => this.couponcode = ref}
                       value={this.state.code}
                       disabled={this.props.purchaseInProgress}
-                      onChange={(evt) => this.setState({code:evt.target.value})}
+                      onChange={(evt) => this.setState({ code: evt.target.value })}
                       onKeyPress={this._keyPress.bind(this)}
                     />
-                    <div className="button se_button" 
-                      onClick={()=>this._checkCoupon()}
+                    <div className="button se_button"
+                      onClick={() => this._checkCoupon()}
                       disabled={!this.state.code || this.props.purchaseInProgress}
                     >
                       <span>Apply</span>
@@ -206,46 +206,46 @@ class PurchasePage extends Component {
                     <span>Order Details</span>
                   </div>
                   <div className="card_body">
-                    <CardRow title={"Sub-total"} extra={'$'+this.state.deal.price} className={"noflex nohover"} />
+                    <CardRow title={"Sub-total"} extra={'$' + this.state.deal.price} className={"noflex nohover"} />
                     {this.props.coupon.value > 0 &&
-                      <CardRow title={"Discount"} 
+                      <CardRow title={"Discount"}
                         subtitle={(this.props.coupon.type === 'amount' ? '$' : '') + this.props.coupon.value +
-                            (this.props.coupon.type === 'percent' ? '% off' : ' off')} 
-                        extra={'-$'+roundNumber(this.state.deal.price - this._getTotal(), 2).toFixed(2)} className={"noflex nohover extraitalic"} />
+                          (this.props.coupon.type === 'percent' ? '% off' : ' off')}
+                        extra={'-$' + roundNumber(this.state.deal.price - this._getTotal(), 2).toFixed(2)} className={"noflex nohover extraitalic"} />
                     }
                     <CardRow title={"Tax"} extra={'$0.00'} className={"noflex nohover"} />
 
-                    <CardRow title={"Total"} extra={'$'+this._getTotal()} className={"noflex nohover"} />
+                    <CardRow title={"Total"} extra={'$' + this._getTotal()} className={"noflex nohover"} />
                   </div>
                 </div>
                 {this.state.error && <span className="validation_error">{this.state.error}</span>}
-                {this.props.purchaseInProgress && 
-                  <Loader/>
+                {this.props.purchaseInProgress &&
+                  <Loader />
                 }
-                {this.props.purchaseInProgress && 
+                {this.props.purchaseInProgress &&
                   <span>Processing Purchase...</span>
                 }
-                {!this.props.purchaseInProgress  &&
+                {!this.props.purchaseInProgress &&
                   (this._getTotal() > 0 ?
-                    <PayPalButton 
+                    <PayPalButton
                       disabled={this.state.role === 'pending'}
                       deal={this.state.deal}
-                      total={this._getTotal()} 
-                      authorized={(data,actions) => {
+                      total={this._getTotal()}
+                      authorized={(data, actions) => {
                         this._purchaseLesson({
-                            id: data.paymentID,
-                            payer: data.payerID,
-                            package: this.state.deal.shortcode,
-                            coupon: this.props.coupon.code,
-                            total: this._getTotal()
-                          });
-                        }
-                      }  
-                      canceled={(data, actions)=>{/*Do Nothing*/}}
-                      error={(err)=>{this.setState({error: 'There was an unexpected error processing your request. Please try again later.'})}}
+                          id: data.paymentID,
+                          payer: data.payerID,
+                          package: this.state.deal.shortcode,
+                          coupon: this.props.coupon.code,
+                          total: this._getTotal()
+                        });
+                      }
+                      }
+                      canceled={(data, actions) => {/*Do Nothing*/ }}
+                      error={(err) => { this.setState({ error: 'There was an unexpected error processing your request. Please try again later.' }) }}
                     />
                     :
-                    <div className="button se_button" style={{marginTop: '2rem'}}
+                    <div className="button se_button" style={{ marginTop: '2rem' }}
                       // onClick={() => this.props.purchaseLesson(this.state.deal.shortcode, this.props.token)}
                       disabled={this.state.role === 'pending'}
                       onClick={() => this._purchaseLesson({
@@ -279,11 +279,11 @@ class PurchasePage extends Component {
               </div>
             }
           </section>
-          <Footer/>
+          <Footer />
         </div>
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(PurchasePage);
+export default connect(mapStateToProps, mapDispatchToProps)(PurchasePage);

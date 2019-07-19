@@ -1,14 +1,15 @@
-import { createStore, applyMiddleware} from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import AppReducer from '../reducers/reducers.js'
 import thunk from 'redux-thunk';
-import {routerMiddleware} from 'react-router-redux'
-import createHistory from 'history/createBrowserHistory';
-export const history = createHistory({basename: '/'});
+import { routerMiddleware } from 'connected-react-router';
+import { createBrowserHistory } from 'history';
+export const history = createBrowserHistory();
+
 // The initial state of the store
 export const initialStore = {
-    
+
     // user personal information
-    userData:{
+    userData: {
         username: '',
         firstName: '',
         lastName: '',
@@ -19,11 +20,11 @@ export const initialStore = {
     },
 
     // user settings
-    settings:{
+    settings: {
         avatar: '',
         handedness: 'right',
         subbed: true,
-        camera:{
+        camera: {
             delay: 5,
             duration: 8,
             overlay: false
@@ -31,7 +32,7 @@ export const initialStore = {
     },
 
     // user's available credits
-    credits:{
+    credits: {
         count: 0,
         unlimited: false,
         unlimitedExpires: 0,
@@ -41,50 +42,50 @@ export const initialStore = {
     },
 
     // user's lesson history
-    lessons:{
+    lessons: {
         loading: false,
-        pending:[],
-        closed:[],
+        pending: [],
+        closed: [],
         // linking: false,
         // linked: false
         redeemPending: false,
         redeemFinished: false,
         redeemSuccess: false,
-        coupon: {type: '', value: 0}
+        coupon: { type: '', value: 0 }
     },
 
     // tips of the month
-    tips:{
+    tips: {
         loading: false,
         tipList: []
     },
 
     // 19th Hole
-    blogs:{
+    blogs: {
         loading: false,
         blogList: []
     },
 
     // Pro Bios
-    pros:{
+    pros: {
         loading: false,
         list: []
     },
 
     // swingessentials available lesson packages
-    packages:{
+    packages: {
         list: [],
         loading: false
     },
 
     // discount codes for swingessentials (can only be viewed by admin)
-    discounts:{
+    discounts: {
         list: [],
         loading: false
     },
 
     // api validation token/ authentication
-    login:{
+    login: {
         token: null,
         admin: false,
         failCount: 0,
@@ -92,7 +93,7 @@ export const initialStore = {
         pendingAuthentication: false
     },
 
-    registration:{
+    registration: {
         pendingRegistration: false,
         registrationActivated: false,
         registrationError: '',
@@ -107,24 +108,27 @@ export const initialStore = {
         registrationFailure: false
     },
 
-    header:{
+    header: {
         activeRoute: '',
         menuOpen: false,
         drawerOpen: false,
         targetRoute: ''
     },
 
-    communication:{
+    communication: {
         signInMessage: '',
         modalList: []
     },
-
-    router: null
 };
 
 
 export const store = createStore(
-    AppReducer,
+    AppReducer(history),
     initialStore,
-    applyMiddleware(thunk, routerMiddleware(history))
+    compose(
+        applyMiddleware(
+            routerMiddleware(history),
+            thunk
+        )
+    )
 );
