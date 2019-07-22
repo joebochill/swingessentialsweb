@@ -19,11 +19,17 @@
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0"
   },
+  "devDependencies": {
+    "ftp": "^0.3.10",
+    "ftp-deploy": "^2.3.3",
+    "glob": "^7.1.4"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "node ./deply.js"
   },
   "eslintConfig": {
     "extends": "react-app"
