@@ -1,30 +1,30 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Footer from '../footer/Footer.js';
 import Loader from '../loader/Loader.js';
-import {unsubscribe} from '../../actions/UserDataActions.js';
+import { unsubscribe } from '../../actions/UserDataActions.js';
 
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
   return {
     unsubscribePending: state.userData.unsubscribePending,
     unsubscribeSuccess: state.userData.unsubscribeSuccess
   };
 }
-var mapDispatchToProps = function(dispatch){
+var mapDispatchToProps = function (dispatch) {
   return {
-    unsubscribe: (uid, kid) => {dispatch(unsubscribe(uid,kid))}
+    unsubscribe: (uid, kid) => { dispatch(unsubscribe(uid, kid)) }
   }
 };
 
 class UnsubscribePage extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={};
+    this.state = {};
   }
-  componentWillMount(){
-    window.scrollTo(0,0);
-  
+  componentWillMount() {
+    window.scrollTo(0, 0);
+
     // Make the verification request to the database
     this.props.unsubscribe(this.props.match.params.uid, this.props.match.params.kid);
   }
@@ -33,15 +33,15 @@ class UnsubscribePage extends Component {
     return (
       <div>
         <section className="landing_image image5">
-          <main className="page_title">
+          <div className="page_title">
             <h1>Unsubscribe</h1>
             <h3>Stop Receiving Email Notifications</h3>
-          </main>
+          </div>
         </section>
         <div>
-          {this.props.unsubscribePending && 
+          {this.props.unsubscribePending &&
             <section>
-              <Loader/>
+              <Loader />
             </section>
           }
           {!this.props.unsubscribePending && !this.props.unsubscribeSuccess &&
@@ -56,11 +56,11 @@ class UnsubscribePage extends Component {
               <p>You have been successfully unsubscribed from these email notifications. To re-subscribe later, visit your Profile.</p>
             </section>
           }
-          <Footer/>
+          <Footer />
         </div>
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(UnsubscribePage);
+export default connect(mapStateToProps, mapDispatchToProps)(UnsubscribePage);

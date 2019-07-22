@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 
 class Banner extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       hidden: false
     }
   }
 
-  openLink(url){
-    if(!url){return;}
+  openLink(url) {
+    if (!url) { return; }
     window.open(url);
   }
 
   render() {
-    return (Date.now()/1000 > this.props.expires) ? null : (
-      <span className="banner" style={this.state.hidden?{display:'none'}:{}} onClick={this.props.link ? () => this.openLink(this.props.link) : null}>
+    return (Date.now() / 1000 > this.props.expires) ? null : (
+      <span className="banner" style={this.state.hidden ? { display: 'none' } : {}} onClick={this.props.link ? () => this.openLink(this.props.link) : null}>
         {this.props.message}
-        <svg viewBox="0 0 20 20" onClick={(evt)=>{this.setState({hidden:true}); evt.stopPropagation();}} style={{
+        <svg viewBox="0 0 20 20" onClick={(evt) => { this.setState({ hidden: true }); evt.stopPropagation(); }} style={{
           position: 'absolute',
           right: '1rem',
           top: '50%',
@@ -27,8 +27,8 @@ class Banner extends Component {
           cursor: 'pointer',
           fill: 'white'
         }}>
-                <polygon points="17.9,3.7 16.3,2.1 10,8.4 3.7,2.1 2.1,3.7 8.4,10 2.1,16.3 3.7,17.9 10,11.6 16.3,17.9 17.9,16.3 11.6,10 "/>
-            </svg>      
+          <polygon points="17.9,3.7 16.3,2.1 10,8.4 3.7,2.1 2.1,3.7 8.4,10 2.1,16.3 3.7,17.9 10,11.6 16.3,17.9 17.9,16.3 11.6,10 " />
+        </svg>
       </span>
     );
   }

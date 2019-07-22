@@ -4,3 +4,4 @@ npm-debug.*
 build/
 src/js/components/paypal/PayPalButton.js
 package-lock.json
+**/**/.DS_Store
