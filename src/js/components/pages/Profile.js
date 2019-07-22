@@ -189,10 +189,10 @@ class ProfilePage extends Component {
     return (
       <div>
         <section className="landing_image image5">
-          <main className="page_title">
+          <div className="page_title">
             <h1>Your Profile</h1>
             <h3>Manage Your Account</h3>
-          </main>
+          </div>
         </section>
         <div>
           <section className="left">

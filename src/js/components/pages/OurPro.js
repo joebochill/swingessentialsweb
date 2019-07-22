@@ -134,10 +134,10 @@ class OurProPage extends Component {
     return (
       <div>
         <section className="landing_image image6">
-          <main className="page_title">
+          <div className="page_title">
             <h1>{this.props.pros.list.length > 1 ? 'Meet Our Pros' : 'Meet Our Pro'}</h1>
             <h3>The {this.props.pros.list.length > 1 ? 'Ones' : 'Man'} Behind the Magic</h3>
-          </main>
+          </div>
         </section>
         {this.props.pros.loading &&
           <section className="left">

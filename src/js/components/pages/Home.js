@@ -40,10 +40,10 @@ class HomePage extends Component {
       <div>
         <section className="landing_image large image1">
           <div className="pga_overlay" />
-          <main className="page_title">
+          <div className="page_title">
             <h1>Swing<span className="hidden_space"> </span><br className="hidden_break" />Essentials</h1>
             <h3>a PGA Pro in your pocket - on and off the course</h3>
-          </main>
+          </div>
           <div>
             <div className="button apple_store" onClick={() => { window.open('https://itunes.apple.com/us/app/swing-essentials-golf-app/id1382453145?mt=8') }} />
             <div className="button google_store" onClick={() => { window.open('https://play.google.com/store/apps/details?id=com.swingessentials.app') }} />

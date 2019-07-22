@@ -131,10 +131,10 @@ class LessonsPage extends Component {
     return (
       <div>
         <section className="landing_image image2">
-          <main className="page_title">
+          <div className="page_title">
             <h1>Your Lessons</h1>
             <h3>See How Far You've Come</h3>
-          </main>
+          </div>
         </section>
         <div>
           {/* {(!this.props.admin && !loading && !lessons.closed.length && !lessons.pending.length) && 

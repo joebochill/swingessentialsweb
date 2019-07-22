@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "connected-react-router": "^6.5.2",
-    "element-closest": "^3.0.1",
+    "element-closest": "^2.0.2",
     "history": "^4.9.0",
     "paypal-checkout": "^4.0.281",
     "react": "^16.8.6",
@@ -31,13 +31,15 @@
   "browserslist": {
     "production": [
       ">0.2%",
+      "ie 11",
       "not dead",
       "not op_mini all"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "last 2 chrome versions",
+      "last 2 firefox versions",
+      "last 2 safari versions",
+      "ie 11"
     ]
   }
 }

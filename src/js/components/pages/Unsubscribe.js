@@ -33,10 +33,10 @@ class UnsubscribePage extends Component {
     return (
       <div>
         <section className="landing_image image5">
-          <main className="page_title">
+          <div className="page_title">
             <h1>Unsubscribe</h1>
             <h3>Stop Receiving Email Notifications</h3>
-          </main>
+          </div>
         </section>
         <div>
           {this.props.unsubscribePending &&

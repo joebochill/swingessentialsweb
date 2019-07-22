@@ -10,10 +10,10 @@ class PrivacyPage extends Component {
     return (
       <div>
         <section className="landing_image none">
-          <main className="page_title">
+          <div className="page_title">
             <h1>Privacy Policy</h1>
             <h3>Effective March 1, 2018</h3>
-          </main>
+          </div>
         </section>
         <div>
           <section className="left">

@@ -4,6 +4,7 @@ import se_logo from '../../../images/SE_horizontal.svg';
 import { push } from 'connected-react-router';
 import { NavLink } from 'react-router-dom';
 import Drawer from './Drawer.js';
+import 'element-closest';
 import { connect } from 'react-redux';
 import { openNavDrawer, closeNavDrawer, openNavMenu, closeNavMenu } from '../../actions/NavigationActions.js';
 import { requestLogout } from '../../actions/LoginActions.js';
@@ -95,6 +96,7 @@ class Header extends Component {
     if (this.props.menuOpen) { this.props.closeMenu(); }
   }
   _bodyAction(evt) {
+    console.log(evt.target.closest);
     if (!this.props.drawerOpen && !this.props.menuOpen) { return; }
     else if (!evt.target.closest('.se_drop_menu') && !evt.target.closest('.se_menu_button')) {
       this._closeMenus();

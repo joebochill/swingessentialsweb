@@ -84,10 +84,10 @@ class ResetPage extends Component {
     return (
       <div>
         <section className="landing_image image5">
-          <main className="page_title">
+          <div className="page_title">
             <h1>Password Reset</h1>
             <h3>Choose a New Password</h3>
-          </main>
+          </div>
         </section>
         <div>
           {this.props.checkingReset &&

@@ -176,10 +176,10 @@ class TipPage extends Component {
     return (
       <div>
         <section className="landing_image image4">
-          <main className="page_title">
+          <div className="page_title">
             <h1>Tip of the Month</h1>
             <h3>Small Adjustments, Big Difference</h3>
-          </main>
+          </div>
         </section>
         <div>
           {this.props.loading &&

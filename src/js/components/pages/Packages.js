@@ -174,10 +174,10 @@ class PackagesPage extends Component {
     return (
       <div>
         <section className="landing_image image5">
-          <main className="page_title">
+          <div className="page_title">
             <h1>Administrator Tools</h1>
             <h3>Manage Your Deals</h3>
-          </main>
+          </div>
         </section>
         <div>
           {this.props.packages.loading &&

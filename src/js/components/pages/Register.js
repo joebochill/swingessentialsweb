@@ -128,10 +128,10 @@ class RegisterPage extends Component {
     return (
       <div>
         <section className="landing_image image5">
-          <main className="page_title">
+          <div className="page_title">
             <h1>Sign Up</h1>
             <h3>Create an Account</h3>
-          </main>
+          </div>
         </section>
         <div>
           <section className="left">

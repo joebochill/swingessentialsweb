@@ -54,10 +54,10 @@ class ValidationPage extends Component {
     return (
       <div>
         <section className="landing_image image5">
-          <main className="page_title">
+          <div className="page_title">
             <h1>Account Verification</h1>
             <h3>Confirm Your Email</h3>
-          </main>
+          </div>
         </section>
         <div>
           {this.props.pendingRegistration &&

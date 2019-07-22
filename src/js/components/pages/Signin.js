@@ -105,10 +105,10 @@ class SigninPage extends Component {
     return (
       <div>
         <section className="landing_image image5">
-          <main className="page_title">
+          <div className="page_title">
             <h1>{this.state.reset ? "Forgot Password" : "Sign In"}</h1>
             <h3>{this.state.reset ? "Reset and Get Back to Golfing" : "Access Your Account"}</h3>
-          </main>
+          </div>
         </section>
         <div>
           <section>

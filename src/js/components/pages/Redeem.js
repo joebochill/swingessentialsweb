@@ -174,10 +174,10 @@ class RedeemPage extends Component {
     return (
       <div>
         <section className="landing_image image2">
-          <main className="page_title">
+          <div className="page_title">
             <h1>New Lesson</h1>
             <h3>Submit Your Swing</h3>
-          </main>
+          </div>
         </section>
         <div>
           <section>

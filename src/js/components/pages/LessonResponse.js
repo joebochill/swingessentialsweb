@@ -153,10 +153,10 @@ class LessonResponsePage extends Component {
     return (
       <div>
         <section className="landing_image image2">
-          <main className="page_title">
+          <div className="page_title">
             <h1>{formatDate(this.lesson.request_date)}</h1>
             <h3>Swing Analysis</h3>
-          </main>
+          </div>
         </section>
         <div>
           {this.lesson && this.lesson.response_status && this.lesson.response_status === "good" &&
