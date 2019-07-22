@@ -4,15 +4,18 @@ const fs = require('fs');
 const FtpClient = require('ftp');
 const glob = require('glob');
 
+var args = process.argv.slice(2);
+console.log('myArgs: ', args);
 const basePath = './build';
-const destinationPath = process.env.SE_STAGING_LOCATION;
+const destinationPath = args[0] === '--prod' ? process.env.SE_PROD_LOCATION : args[0] === '--dev' ? process.env.SE_STAGING_LOCATION : '';
 const config = {
     // We store the credentials for
     // our FTP server as environemnt
     // variables for security reasons.
     host: process.env.SE_FTP_HOST,
     password: process.env.SE_FTP_PASSWORD,
-    user: process.env.SE_FTP_USER
+    user: process.env.SE_FTP_USER,
+    isTest: (args[0] === '--test')
 };
 
 const ftpClient = new FtpClient();
@@ -102,4 +105,7 @@ ftpClient.on('ready', () => {
     cleanupRemoteDirectory(destinationPath);
 });
 
-ftpClient.connect(config);
+// In testing, we do nothing
+if (!config.isTest) {
+    ftpClient.connect(config);
+}

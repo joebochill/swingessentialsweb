@@ -42,9 +42,9 @@ jobs:
       - deploy:
           name: Deploy
           command: |
-            # if [ $CIRCLE_BRANCH == $MASTER_BRANCH ]; then
-
-            # fi 
+            if [ $CIRCLE_BRANCH == $MASTER_BRANCH ]; then
+              yarn deploy --prod
+            fi 
             if [ $CIRCLE_BRANCH == $DEV_BRANCH ]; then
-              yarn deploy
+              yarn deploy --dev
             fi 
