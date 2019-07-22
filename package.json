@@ -21,7 +21,6 @@
   },
   "devDependencies": {
     "ftp": "^0.3.10",
-    "ftp-deploy": "^2.3.3",
     "glob": "^7.1.4"
   },
   "scripts": {
@@ -29,7 +28,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "node ./deply.js"
+    "deploy": "node ./deploy.js"
   },
   "eslintConfig": {
     "extends": "react-app"
