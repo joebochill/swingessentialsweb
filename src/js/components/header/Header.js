@@ -96,7 +96,6 @@ class Header extends Component {
     if (this.props.menuOpen) { this.props.closeMenu(); }
   }
   _bodyAction(evt) {
-    console.log(evt.target.closest);
     if (!this.props.drawerOpen && !this.props.menuOpen) { return; }
     else if (!evt.target.closest('.se_drop_menu') && !evt.target.closest('.se_menu_button')) {
       this._closeMenus();

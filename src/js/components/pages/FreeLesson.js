@@ -123,7 +123,15 @@ class FreeLessonPage extends Component {
               <span style={{ display: 'block', color: '#231f61', fontSize: '.7rem', textAlign: 'right' }}>
                 Characters Left: <b style={{ fontWeight: '600' }}>{500 - this.state.responseNotes.length}</b>
               </span>
-
+              <label style={{ marginTop: '1rem' }}>Lesson Tip</label>
+                <select>
+                  <option value='tip1'>Avoid the Slice</option>
+                  <option value='tip2'>No More Chicken Wing</option>
+                  <option value='tip3'>Putting from the Ruff</option>
+                  <option value='tip4'>Chipping</option>
+                  <option value='tip5'>Transfering your weight</option>
+                  <option value='tip6'>The perfect Grip</option>
+                </select>
               <div className="button se_button" style={{ marginTop: '1rem' }}
                 onClick={() => this._sendUpdate()}
                 disabled={!this._checkFields()}

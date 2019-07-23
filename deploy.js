@@ -5,7 +5,6 @@ const FtpClient = require('ftp');
 const glob = require('glob');
 
 var args = process.argv.slice(2);
-console.log('myArgs: ', args);
 const basePath = './build';
 const destinationPath = args[0] === '--prod' ? process.env.SE_PROD_LOCATION : args[0] === '--dev' ? process.env.SE_STAGING_LOCATION : '';
 const config = {
