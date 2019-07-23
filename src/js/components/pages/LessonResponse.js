@@ -203,7 +203,7 @@ class LessonResponsePage extends Component {
                     />
                     <CardRow
                       go
-                      title={'Order More'}
+                      title={'Putting from the rough'}
                       action={() => null}
                     />
                   </div>
