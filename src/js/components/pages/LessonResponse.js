@@ -8,7 +8,6 @@ import { formatDate, convertTextToP, convertLineToText, convertTextToLine } from
 
 import { setTargetRoute } from '../../actions/NavigationActions.js';
 import { getLessons, putLessonResponse, markLessonViewed } from '../../actions/LessonActions.js';
-import CardRow from '../rows/CardRow.js';
 
 const mapStateToProps = (state) => {
   return {
