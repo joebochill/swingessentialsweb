@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
-import {replace} from 'react-router-redux';
+import { connect } from 'react-redux';
+import { replace } from 'connected-react-router';
 import YoutubeVideo from '../youtube/YoutubeVideo.js';
 import Footer from '../footer/Footer.js';
 import Loader from '../loader/Loader.js';
-import {formatDate, convertTextToP, convertLineToText, convertTextToLine} from '../../utils/utils.js';
+import { formatDate, convertTextToP, convertLineToText, convertTextToLine } from '../../utils/utils.js';
 
 import { setTargetRoute } from '../../actions/NavigationActions.js';
 import { getLessons, putLessonResponse, markLessonViewed } from '../../actions/LessonActions.js';
+import CardRow from '../rows/CardRow.js';
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
   return {
     username: state.userData.username,
     token: state.login.token,
@@ -17,21 +18,21 @@ const mapStateToProps = (state)=>{
     admin: state.login.admin
   };
 }
-var mapDispatchToProps = function(dispatch){
+var mapDispatchToProps = function (dispatch) {
   return {
-    goToSignIn: () => {dispatch(replace('/signin'));},
-    setTargetRoute: (route) => {dispatch(setTargetRoute(route))},
-    getLessons: (token) => {dispatch(getLessons(token))},
-    goToLessons: () => {dispatch(replace('/lessons'))},
-    putLessonResponse: (data,token) => {dispatch(putLessonResponse(data,token))},
-    markViewed: (id, token) => {dispatch(markLessonViewed(id, token))}
+    goToSignIn: () => { dispatch(replace('/signin')); },
+    setTargetRoute: (route) => { dispatch(setTargetRoute(route)) },
+    getLessons: (token) => { dispatch(getLessons(token)) },
+    goToLessons: () => { dispatch(replace('/lessons')) },
+    putLessonResponse: (data, token) => { dispatch(putLessonResponse(data, token)) },
+    markViewed: (id, token) => { dispatch(markLessonViewed(id, token)) }
   }
 };
 
 class LessonResponsePage extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       editingResponse: false,
       responseURL: '',
       responseNotes: '',
@@ -39,26 +40,26 @@ class LessonResponsePage extends Component {
     };
   }
 
-  componentWillMount(){
-    if(!this.props.token){
+  componentWillMount() {
+    if (!this.props.token) {
       // user is not logged in. store the request and send to signin screen
-      this.props.setTargetRoute('/lessons/'+this.props.match.params.lesson_id);
+      this.props.setTargetRoute('/lessons/' + this.props.match.params.lesson_id);
       this.props.goToSignIn();
     }
-    else{
+    else {
       // user is logged in, verify the requested lesson against their list
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
       this._verifyLesson();
       //this.props.getVideoLinks(this.props.token,this.props.match.params.lesson_id);
     }
   }
-  componentWillReceiveProps(nextProps){
-    if(!nextProps.token){
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.token) {
       // if user has logged out, send them to signin
       this.props.goToSignIn();
     }
-    else{
-      if(!nextProps.lessons.loading){
+    else {
+      if (!nextProps.lessons.loading) {
         // if we've received props and have finished loading, verify the lesson request
         // if we haven't finished loading, we will get another receiveProps when we have
         this._verifyLesson(nextProps.lessons);
@@ -66,55 +67,55 @@ class LessonResponsePage extends Component {
     }
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     //this.props.clearVideoLinks();
   }
 
   // checks if the requested lessons is in the user's list
-  _verifyLesson(less=null){
+  _verifyLesson(less = null) {
     const lid = this.props.match.params.lesson_id;
     let lessons;
 
     // list of lessons is being passed in (from a nextProps object)
-    if(less){
+    if (less) {
       lessons = less.closed.concat(less.pending);
     }
     // check if there are lessons in localstorage
-    else if(this.props.lessons.closed.length === 0 && this.props.lessons.pending.length === 0){
+    else if (this.props.lessons.closed.length === 0 && this.props.lessons.pending.length === 0) {
       const ls = JSON.parse(localStorage.getItem('lessons'));
-      if(ls === null){
-       // nothing in localstorage or current props, wait for another cycle
-       return;
+      if (ls === null) {
+        // nothing in localstorage or current props, wait for another cycle
+        return;
       }
-      else{
+      else {
         // lessons are available from localstorage
         lessons = (ls) ? ls.closed.concat(ls.pending) : [];
       }
     }
-    else{
+    else {
       // lessons are available in current props
       lessons = this.props.lessons.closed.concat(this.props.lessons.pending);
     }
 
     // loop through the lessons and look for the current request (lid)
-    for(let i = 0; i < lessons.length; i++){
-      if(lessons[i].request_url === lid){
-        this.lesson=lessons[i];
+    for (let i = 0; i < lessons.length; i++) {
+      if (lessons[i].request_url === lid) {
+        this.lesson = lessons[i];
         break;
       }
     }
 
     // if the user is not permitted to see this lesson (or it is not a valid lesson), send them to lessons page
-    if(!this.lesson){
+    if (!this.lesson) {
       this.props.goToLessons();
       return;
-    }  
-    else{
+    }
+    else {
       // If the user is viewing the lesson, mark it viewed
-      if(parseInt(this.lesson.viewed, 10) === 0 && !this.props.admin){
-        this.props.markViewed({id:this.lesson.request_id}, this.props.token);
+      if (parseInt(this.lesson.viewed, 10) === 0 && !this.props.admin) {
+        this.props.markViewed({ id: this.lesson.request_id }, this.props.token);
       }
-      
+
       this.setState({
         responseURL: (this.state.responseURL) ? this.state.responseURL : (this.lesson.response_video || ''),
         responseNotes: (this.state.responseNotes) ? this.state.responseNotes : (this.lesson.response_notes || ''),
@@ -123,9 +124,9 @@ class LessonResponsePage extends Component {
     }
   }
 
-  _sendUpdate(){
-    if(!this.lesson){return;}
-    
+  _sendUpdate() {
+    if (!this.lesson) { return; }
+
     const data = {
       lesson_id: this.lesson['request_id'],
       username: this.lesson['username'],
@@ -135,16 +136,16 @@ class LessonResponsePage extends Component {
     };
 
     this.props.putLessonResponse(data, this.props.token);
-    this.setState({editingResponse: false});
+    this.setState({ editingResponse: false });
   }
 
   render() {
-    if(!this.lesson){
+    if (!this.lesson) {
       return (
         <section className="left">
-          <div style={{marginTop:'3rem'}}>
-              <p>Loading Lessons...</p>
-              <Loader/>
+          <div style={{ marginTop: '3rem' }}>
+            <p>Loading Lessons...</p>
+            <Loader />
           </div>
         </section>
       )
@@ -153,23 +154,23 @@ class LessonResponsePage extends Component {
     return (
       <div>
         <section className="landing_image image2">
-          <main className="page_title">
+          <div className="page_title">
             <h1>{formatDate(this.lesson.request_date)}</h1>
             <h3>Swing Analysis</h3>
-          </main>
+          </div>
         </section>
         <div>
-          {this.lesson && this.lesson.response_status && this.lesson.response_status==="good" &&
+          {this.lesson && this.lesson.response_status && this.lesson.response_status === "good" &&
             <section className="left">
               <div className="structured_panel">
                 <h1>Video Response</h1>
-                <YoutubeVideo vid={this.lesson.response_video}/>
+                <YoutubeVideo vid={this.lesson.response_video} />
                 {this.lesson.response_notes !== '' && <h1>Comments</h1>}
                 {convertTextToP(this.lesson.response_notes)}
               </div>
             </section>
           }
-          {this.lesson && this.lesson.response_status && this.lesson.response_status==="rejected" &&
+          {this.lesson && this.lesson.response_status && this.lesson.response_status === "rejected" &&
             <section className="left">
               <div className="structured_panel">
                 <h1>Comments</h1>
@@ -177,24 +178,56 @@ class LessonResponsePage extends Component {
               </div>
             </section>
           }
-          {this.lesson.fo_swing && this.lesson.dtl_swing && 
+          {this.lesson && this.lesson.response_status && this.lesson.response_status === "good" &&
+            <section className="left">
+              <div className="structured_panel">
+                <h1>Helpful Tip</h1>
+                <YoutubeVideo vid={'99B6Ou-tiUE'} />
+                {convertTextToP(`Here's a great tip to help your swing. Follow these instructions and you'll be well on your way to shooting 60 in no time!`)}
+              </div>
+            </section>
+          }
+          {this.lesson && this.lesson.response_status && this.lesson.response_status === "good" &&
+            <section className="left">
+              <div className="structured_panel">
+                <h1>Helpful Tips</h1>
+                  <div className="card_body">
+                    <CardRow go
+                      title={'No More Chicken Wing'}
+                      action={() => null}
+                    />
+                    <CardRow
+                      go
+                      title={'The Perfect Golf Grip'}
+                      action={() => null}
+                    />
+                    <CardRow
+                      go
+                      title={'Putting from the rough'}
+                      action={() => null}
+                    />
+                  </div>
+              </div>
+            </section>
+          }
+          {this.lesson.fo_swing && this.lesson.dtl_swing &&
             <section className="left">
               <div className="structured_panel">
                 <h1>{this.props.admin ? "Swing Videos" : "Your Swing Videos"}</h1>
                 <div className="se_multi_video">
                   <div className="se_video_flex">
                     {/* {(!this.props.linking && this.props.linked) ? */}
-                      <video width="100%" controls src={'https://www.swingessentials.com/video_links/'+this.lesson.request_url+'/'+this.lesson.fo_swing}>
-                        Your browser does not support the video tag.
+                    <video width="100%" controls src={'https://www.swingessentials.com/video_links/' + this.lesson.request_url + '/' + this.lesson.fo_swing}>
+                      Your browser does not support the video tag.
                       </video>
-                      {/* : ((this.props.linking) ? */}
-                      {/* <Loader/> */}
-                      {/* : <span>Failed to load video. Try refreshing your browser.</span> */}
+                    {/* : ((this.props.linking) ? */}
+                    {/* <Loader/> */}
+                    {/* : <span>Failed to load video. Try refreshing your browser.</span> */}
                     {/* )} */}
                   </div>
                   <div className="se_video_flex">
-                  {/* {(!this.props.linking && this.props.linked) ? */}
-                    <video width="100%" controls src={'https://www.swingessentials.com/video_links/'+this.lesson.request_url+'/'+this.lesson.dtl_swing}>
+                    {/* {(!this.props.linking && this.props.linked) ? */}
+                    <video width="100%" controls src={'https://www.swingessentials.com/video_links/' + this.lesson.request_url + '/' + this.lesson.dtl_swing}>
                       Your browser does not support the video tag.
                     </video>
                     {/* : (this.props.linking) ? */}
@@ -204,7 +237,7 @@ class LessonResponsePage extends Component {
                   </div>
                 </div>
                 {this.lesson && this.lesson.request_notes &&
-                  <div style={{marginTop: '2rem'}}>
+                  <div style={{ marginTop: '2rem' }}>
                     <h1>Special Requests</h1>
                     {convertTextToP(this.lesson.request_notes)}
                   </div>
@@ -215,8 +248,8 @@ class LessonResponsePage extends Component {
           {this.props.admin && !this.state.editingResponse &&
             <section>
               <div className="structured_panel">
-                <div className="button se_button" 
-                      onClick={()=>this.setState({editingResponse: true, responseNotes: convertTextToLine(this.state.responseNotes)})}
+                <div className="button se_button"
+                  onClick={() => this.setState({ editingResponse: true, responseNotes: convertTextToLine(this.state.responseNotes) })}
                 >
                   <span>{this.lesson.response_status ? "EDIT RESPONSE" : "CREATE RESPONSE"}</span>
                 </div>
@@ -227,47 +260,56 @@ class LessonResponsePage extends Component {
             <section>
               <div className="structured_panel">
                 <label>Response Video ID</label>
-                <input 
+                <input
                   placeholder="Youtube ID"
-                  value={this.state.responseURL} 
-                  maxlength={128}
-                  onChange={(evt)=>this.setState({responseURL:evt.target.value})} 
+                  value={this.state.responseURL}
+                  maxLength={128}
+                  onChange={(evt) => this.setState({ responseURL: evt.target.value })}
                 />
-                <label style={{marginTop: '1rem'}}>Response Notes</label>
-                <textarea 
+                <label style={{ marginTop: '1rem' }}>Response Notes</label>
+                <textarea
                   placeholder="Add any comments here..."
-                  value={this.state.responseNotes} 
-                  maxlength={500}
-                  onChange={(evt)=>this.setState({responseNotes:evt.target.value})} 
+                  value={this.state.responseNotes}
+                  maxLength={500}
+                  onChange={(evt) => this.setState({ responseNotes: evt.target.value })}
                 />
-                <span style={{display: 'block', color: '#231f61', fontSize: '.7rem', textAlign: 'right'}}>
-                  Characters Left: <b style={{fontWeight: '600'}}>{500-this.state.responseNotes.length}</b>
+                <span style={{ display: 'block', color: '#231f61', fontSize: '.7rem', textAlign: 'right' }}>
+                  Characters Left: <b style={{ fontWeight: '600' }}>{500 - this.state.responseNotes.length}</b>
                 </span>
-                <label style={{marginTop: '1rem'}}>Response Status</label>
-                <select value={this.state.responseStatus} onChange={(evt)=>this.setState({responseStatus: evt.target.value})}>
+                <label style={{ marginTop: '1rem' }}>Lesson Tip</label>
+                <select>
+                  <option value='tip1'>Avoid the Slice</option>
+                  <option value='tip2'>No More Chicken Wing</option>
+                  <option value='tip3'>Putting from the Ruff</option>
+                  <option value='tip4'>Chipping</option>
+                  <option value='tip5'>Transfering your weight</option>
+                  <option value='tip6'>The perfect Grip</option>
+                </select>
+                <label style={{ marginTop: '1rem' }}>Response Status</label>
+                <select value={this.state.responseStatus} onChange={(evt) => this.setState({ responseStatus: evt.target.value })}>
                   <option value='good'>Accepted</option>
                   <option value='rejected'>Rejected</option>
                 </select>
-                <div className="button se_button"  style={{marginTop: '2rem'}}
-                  onClick={()=>this.setState({responseURL:'', response_status:'good', responseNotes:'', editingResponse: false})}
+                <div className="button se_button" style={{ marginTop: '2rem' }}
+                  onClick={() => this.setState({ responseURL: '', response_status: 'good', responseNotes: '', editingResponse: false })}
                 >
                   <span>CANCEL</span>
                 </div>
-                <div className="button se_button"  style={{marginTop: '1rem'}}
-                  onClick={()=>this._sendUpdate()}
+                <div className="button se_button" style={{ marginTop: '1rem' }}
+                  onClick={() => this._sendUpdate()}
                   disabled={!this.state.responseURL}
                 >
                   <span>SUBMIT</span>
                 </div>
-                
+
               </div>
             </section>
           }
-          <Footer/>
+          <Footer />
         </div>
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(LessonResponsePage);
+export default connect(mapStateToProps, mapDispatchToProps)(LessonResponsePage);

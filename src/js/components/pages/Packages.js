@@ -1,41 +1,41 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
-import {replace} from 'react-router-redux';
+import { connect } from 'react-redux';
+import { replace } from 'connected-react-router';
 
 import CardRow from '../rows/CardRow.js';
 import Footer from '../footer/Footer.js';
 import Loader from '../loader/Loader.js';
 
 import { getPackages, updatePackage, removePackage, addPackage } from '../../actions/PackageActions.js';
-import {openModal} from '../../actions/modalActions.js';
+import { openModal } from '../../actions/modalActions.js';
 
 import '../../../css/Cards.css';
 import '../../../css/Buttons.css';
 
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
   return {
     token: state.login.token,
     admin: state.login.admin,
     packages: state.packages
   };
 }
-var mapDispatchToProps = function(dispatch){
+var mapDispatchToProps = function (dispatch) {
   return {
-    goToSignIn: () => {dispatch(replace('/signin'));},
-    replace: (val) => {dispatch(replace(val));},
-    requestPackages: (token) => {dispatch(getPackages(token))},
-    updatePackage: (token, pack) => {dispatch(updatePackage(token, pack))},
-    removePackage: (token, pack) => {dispatch(removePackage(token, pack))},
-    addPackage: (token, pack) => {dispatch(addPackage(token, pack))},
-    openModal: (modal) => {dispatch(openModal(modal))} 
+    goToSignIn: () => { dispatch(replace('/signin')); },
+    replace: (val) => { dispatch(replace(val)); },
+    requestPackages: (token) => { dispatch(getPackages(token)) },
+    updatePackage: (token, pack) => { dispatch(updatePackage(token, pack)) },
+    removePackage: (token, pack) => { dispatch(removePackage(token, pack)) },
+    addPackage: (token, pack) => { dispatch(addPackage(token, pack)) },
+    openModal: (modal) => { dispatch(openModal(modal)) }
   }
 };
 
 class PackagesPage extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       editPackage: null,
       newPackage: false,
 
@@ -50,29 +50,29 @@ class PackagesPage extends Component {
       p_app_sku: ''
     };
   }
-  componentWillMount(){
-    if(!this.props.token || !this.props.admin){
+  componentWillMount() {
+    if (!this.props.token || !this.props.admin) {
       this.props.replace('/home');
     }
-    else{
+    else {
       // If we don't have packages, request them from the server
-      if(!this.props.packages.list.length){
+      if (!this.props.packages.list.length) {
         this.props.requestPackages(this.props.token);
       }
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
     }
   }
-  componentWillReceiveProps(nextProps){
-    if(!nextProps.token || !nextProps.admin){
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.token || !nextProps.admin) {
       this.props.goToSignIn();
     }
   }
 
-  _changeEditPackage(newPackage, save){
-    if(this.state.editPackage && save){ //clicked the save button
+  _changeEditPackage(newPackage, save) {
+    if (this.state.editPackage && save) { //clicked the save button
       // Push the updated package details to the server
-      if(!this._validatePackage()){return;}
-      this.props.updatePackage(this.props.token,{
+      if (!this._validatePackage()) { return; }
+      this.props.updatePackage(this.props.token, {
         id: this.state.editPackage,
         name: this.state.p_name,
         description: this.state.p_description,
@@ -83,7 +83,7 @@ class PackagesPage extends Component {
         app_sku: this.state.p_app_sku
       });
     }
-    if(newPackage){ // Clicked Edit Button
+    if (newPackage) { // Clicked Edit Button
       this.setState({
         editPackage: newPackage.id,
         p_name: newPackage.name,
@@ -94,9 +94,9 @@ class PackagesPage extends Component {
         p_duration: newPackage.duration,
         p_price: newPackage.price,
         p_app_sku: newPackage.app_sku
-      }); 
+      });
     }
-    else{ // Clicked cancel or save
+    else { // Clicked cancel or save
       this.setState({
         editPackage: null,
         newPackage: false,
@@ -109,11 +109,11 @@ class PackagesPage extends Component {
         p_duration: null,
         p_price: null,
         p_app_sku: null
-      }); 
+      });
     }
   }
 
-  _validatePackage(){
+  _validatePackage() {
     return !(
       !this.state.p_name ||
       !this.state.p_description ||
@@ -125,11 +125,11 @@ class PackagesPage extends Component {
     );
   }
 
-  _removePackage(id){
-    this.props.removePackage(this.props.token, {id:id});
+  _removePackage(id) {
+    this.props.removePackage(this.props.token, { id: id });
   }
 
-  _createNewPackage(){
+  _createNewPackage() {
     this.setState({
       newPackage: true,
       editPackage: -1,
@@ -143,10 +143,10 @@ class PackagesPage extends Component {
     });
   }
 
-  _addNewPackage(){
-    if(!this._validatePackage()){return;}
-    
-    this.props.addPackage(this.props.token,{
+  _addNewPackage() {
+    if (!this._validatePackage()) { return; }
+
+    this.props.addPackage(this.props.token, {
       name: this.state.p_name,
       description: this.state.p_description,
       shortcode: this.state.p_name.split(' ')[0].toLowerCase(),
@@ -159,7 +159,7 @@ class PackagesPage extends Component {
     this.setState({
       editPackage: null,
       newPackage: false,
-      
+
       p_name: '',
       p_description: '',
       p_count: '',
@@ -174,225 +174,225 @@ class PackagesPage extends Component {
     return (
       <div>
         <section className="landing_image image5">
-          <main className="page_title">
+          <div className="page_title">
             <h1>Administrator Tools</h1>
             <h3>Manage Your Deals</h3>
-          </main>
+          </div>
         </section>
         <div>
           {this.props.packages.loading &&
             <section className="left">
               <div>
-                  <p>Loading Packages...</p>
-                  <Loader/>
+                <p>Loading Packages...</p>
+                <Loader />
               </div>
             </section>
           }
           <section className="left">
             <div className="structured_panel">
               <h1>PACKAGES</h1>
-              {!this.state.newPackage && 
-                <div className="button se_button" style={{marginTop:'0rem'}} onClick={this._createNewPackage.bind(this)}>
+              {!this.state.newPackage &&
+                <div className="button se_button" style={{ marginTop: '0rem' }} onClick={this._createNewPackage.bind(this)}>
                   <span>New Package</span>
                 </div>
               }
               {this.state.newPackage &&
                 <div className="card">
-                <div className="card_header">
-                  <span>New Package</span>
-                  <span onClick={() => this._addNewPackage()} disabled={!this._validatePackage()}>ADD</span>
-                  <span onClick={this._changeEditPackage.bind(this, null, false)}>CANCEL</span>                    
-                </div>
-                <div className="card_body">
-                  <CardRow alternate nohover title={"Name"} extra={
-                    <input 
-                      value={this.state.p_name} 
-                      onChange={(evt) => this.setState({p_name: evt.target.value})}
-                      placeholder={"Package Name"}
-                    />
-                  }/>
-                  <CardRow alternate nohover title={"Description"} extra={
-                    <input 
-                      value={this.state.p_description} 
-                      onChange={(evt) => this.setState({p_description: evt.target.value})}
-                      placeholder={"Brief Description"}
-                    />
-                  }/>
-                  <CardRow alternate nohover title={"Lesson Count"} extra={
-                    <span>
-                      <input 
-                        ref={(me) => this.lessonCount = me}
-                        style={{marginRight: '1rem'}}
-                        value={(parseInt(this.state.p_count, 10) === -1 ? '' : this.state.p_count)} 
-                        disabled={this.state.p_unlimited}
-                        placeholder={'0'}
-                        onChange={(evt) => {
-                          let pos = this.lessonCount.selectionStart; 
-                          this.setState({p_count: evt.target.value.replace(/[^0-9]/gi,"")}); 
-                          this.lessonCount.selectionStart = pos;
-                        }}
-                      />
-                      <input 
-                        type="checkbox" 
-                        onChange={(evt) => this.setState({p_unlimited: evt.target.checked, p_count: ''})}
-                        checked={this.state.p_unlimited}
-                      />
-                      <span style={{marginLeft:'0.5rem'}}>Unlimited</span>
-                    </span>
-                  }/>
-                  {this.state.p_unlimited &&
-                    <CardRow alternate nohover title={"Duration (Days)"} extra={
-                      <input 
-                        ref={(me) => this.unlDur = me}
-                        value={this.state.p_duration} 
-                        placeholder={'0'}
-                        onChange={(evt) => {
-                          let pos = this.unlDur.selectionStart; 
-                          this.setState({p_duration: evt.target.value.replace(/[^0-9]/gi,"")}); 
-                          this.unlDur.selectionStart = pos;
-                        }}
-                      />
-                    }/>
-                  }
-                  <CardRow alternate nohover title={"Price"} extra={
-                    <input 
-                      ref={(me) => this.price = me}
-                      value={this.state.p_price} 
-                      placeholder={'XX.XX'}
-                      onChange={(evt) => {
-                        let pos = this.price.selectionStart; 
-                        this.setState({p_price: evt.target.value.replace(/[^0-9.]/gi,"")}); 
-                        this.price.selectionStart = pos;
-                      }}
-                    />
-                  }/>
-                  <CardRow alternate nohover title={"App SKU"} extra={
-                    <input 
-                      value={this.state.p_app_sku} 
-                      onChange={(evt) => this.setState({p_app_sku: evt.target.value.substr(0,32)})}
-                      placeholder={"e.g. com.swingessentials.package"}
-                    />
-                  }/>
-                </div>
-              </div>
-              }
-              {this.props.packages.list && this.props.packages.list.map((deal, index) =>
-                (this.state.editPackage === deal.id ? 
-                <div key={'package_' + index} className="card">
                   <div className="card_header">
-                    <span/>
-                    <span onClick={this._changeEditPackage.bind(this, null, true)} disabled={!this._validatePackage()}>SAVE</span>
-                    <span 
-                      onClick={() => this.props.openModal({
-                        type: 'CONFIRM',
-                        props:{
-                          title: 'Remove Package: ' + deal.name,
-                          body: ['Deleting this package will permanently remove it from the database. This action cannot be undone.',
-                                  'Are you sure you want to delete this package?'],
-                          buttons: [
-                            {name:'DELETE', action: () => this._removePackage(deal.id)}
-                          ]
-                        }
-                      })}
-                    >DELETE</span>
-                    <span onClick={this._changeEditPackage.bind(this, null, false)}>CANCEL</span>                    
+                    <span>New Package</span>
+                    <span onClick={() => this._addNewPackage()} disabled={!this._validatePackage()}>ADD</span>
+                    <span onClick={this._changeEditPackage.bind(this, null, false)}>CANCEL</span>
                   </div>
                   <div className="card_body">
                     <CardRow alternate nohover title={"Name"} extra={
-                      <input 
-                        value={this.state.p_name} 
-                        onChange={(evt) => this.setState({p_name: evt.target.value})}
+                      <input
+                        value={this.state.p_name}
+                        onChange={(evt) => this.setState({ p_name: evt.target.value })}
                         placeholder={"Package Name"}
                       />
-                    }/>
+                    } />
                     <CardRow alternate nohover title={"Description"} extra={
-                      <input 
-                        value={this.state.p_description} 
-                        onChange={(evt) => this.setState({p_description: evt.target.value})}
+                      <input
+                        value={this.state.p_description}
+                        onChange={(evt) => this.setState({ p_description: evt.target.value })}
                         placeholder={"Brief Description"}
                       />
-                    }/>
+                    } />
                     <CardRow alternate nohover title={"Lesson Count"} extra={
                       <span>
-                        <input 
+                        <input
                           ref={(me) => this.lessonCount = me}
-                          style={{marginRight: '1rem'}}
-                          value={(parseInt(this.state.p_count, 10) === -1 ? '' : this.state.p_count)} 
+                          style={{ marginRight: '1rem' }}
+                          value={(parseInt(this.state.p_count, 10) === -1 ? '' : this.state.p_count)}
                           disabled={this.state.p_unlimited}
                           placeholder={'0'}
                           onChange={(evt) => {
-                            let pos = this.lessonCount.selectionStart; 
-                            this.setState({p_count: evt.target.value.replace(/[^0-9]/gi,"")}); 
+                            let pos = this.lessonCount.selectionStart;
+                            this.setState({ p_count: evt.target.value.replace(/[^0-9]/gi, "") });
                             this.lessonCount.selectionStart = pos;
                           }}
                         />
-                        <input 
-                          type="checkbox" 
-                          onChange={(evt) => this.setState({p_unlimited: evt.target.checked, p_count: ''})}
+                        <input
+                          type="checkbox"
+                          onChange={(evt) => this.setState({ p_unlimited: evt.target.checked, p_count: '' })}
                           checked={this.state.p_unlimited}
                         />
-                        <span style={{marginLeft:'0.5rem'}}>Unlimited</span>
+                        <span style={{ marginLeft: '0.5rem' }}>Unlimited</span>
                       </span>
-                    }/>
+                    } />
                     {this.state.p_unlimited &&
                       <CardRow alternate nohover title={"Duration (Days)"} extra={
-                        <input 
+                        <input
                           ref={(me) => this.unlDur = me}
-                          value={this.state.p_duration} 
+                          value={this.state.p_duration}
                           placeholder={'0'}
                           onChange={(evt) => {
-                            let pos = this.unlDur.selectionStart; 
-                            this.setState({p_duration: evt.target.value.replace(/[^0-9]/gi,"")}); 
+                            let pos = this.unlDur.selectionStart;
+                            this.setState({ p_duration: evt.target.value.replace(/[^0-9]/gi, "") });
                             this.unlDur.selectionStart = pos;
                           }}
                         />
-                      }/>
+                      } />
                     }
                     <CardRow alternate nohover title={"Price"} extra={
-                      <input 
+                      <input
                         ref={(me) => this.price = me}
-                        value={this.state.p_price} 
+                        value={this.state.p_price}
                         placeholder={'XX.XX'}
                         onChange={(evt) => {
-                          let pos = this.price.selectionStart; 
-                          this.setState({p_price: evt.target.value.replace(/[^0-9.]/gi,"")}); 
+                          let pos = this.price.selectionStart;
+                          this.setState({ p_price: evt.target.value.replace(/[^0-9.]/gi, "") });
                           this.price.selectionStart = pos;
                         }}
                       />
-                    }/>
+                    } />
                     <CardRow alternate nohover title={"App SKU"} extra={
-                      <input 
-                        value={this.state.p_app_sku} 
-                        onChange={(evt) => this.setState({p_app_sku: evt.target.value.substr(0,32)})}
+                      <input
+                        value={this.state.p_app_sku}
+                        onChange={(evt) => this.setState({ p_app_sku: evt.target.value.substr(0, 32) })}
                         placeholder={"e.g. com.swingessentials.package"}
                       />
-                    }/>
+                    } />
                   </div>
                 </div>
-                :
-                <div key={'package_' + index} className="card">
-                  <div className="card_header">
-                    <span>{deal.name}</span>
-                    <span onClick={this._changeEditPackage.bind(this, deal, false)}>EDIT</span>
+              }
+              {this.props.packages.list && this.props.packages.list.map((deal, index) =>
+                (this.state.editPackage === deal.id ?
+                  <div key={'package_' + index} className="card">
+                    <div className="card_header">
+                      <span />
+                      <span onClick={this._changeEditPackage.bind(this, null, true)} disabled={!this._validatePackage()}>SAVE</span>
+                      <span
+                        onClick={() => this.props.openModal({
+                          type: 'CONFIRM',
+                          props: {
+                            title: 'Remove Package: ' + deal.name,
+                            body: ['Deleting this package will permanently remove it from the database. This action cannot be undone.',
+                              'Are you sure you want to delete this package?'],
+                            buttons: [
+                              { name: 'DELETE', action: () => this._removePackage(deal.id) }
+                            ]
+                          }
+                        })}
+                      >DELETE</span>
+                      <span onClick={this._changeEditPackage.bind(this, null, false)}>CANCEL</span>
+                    </div>
+                    <div className="card_body">
+                      <CardRow alternate nohover title={"Name"} extra={
+                        <input
+                          value={this.state.p_name}
+                          onChange={(evt) => this.setState({ p_name: evt.target.value })}
+                          placeholder={"Package Name"}
+                        />
+                      } />
+                      <CardRow alternate nohover title={"Description"} extra={
+                        <input
+                          value={this.state.p_description}
+                          onChange={(evt) => this.setState({ p_description: evt.target.value })}
+                          placeholder={"Brief Description"}
+                        />
+                      } />
+                      <CardRow alternate nohover title={"Lesson Count"} extra={
+                        <span>
+                          <input
+                            ref={(me) => this.lessonCount = me}
+                            style={{ marginRight: '1rem' }}
+                            value={(parseInt(this.state.p_count, 10) === -1 ? '' : this.state.p_count)}
+                            disabled={this.state.p_unlimited}
+                            placeholder={'0'}
+                            onChange={(evt) => {
+                              let pos = this.lessonCount.selectionStart;
+                              this.setState({ p_count: evt.target.value.replace(/[^0-9]/gi, "") });
+                              this.lessonCount.selectionStart = pos;
+                            }}
+                          />
+                          <input
+                            type="checkbox"
+                            onChange={(evt) => this.setState({ p_unlimited: evt.target.checked, p_count: '' })}
+                            checked={this.state.p_unlimited}
+                          />
+                          <span style={{ marginLeft: '0.5rem' }}>Unlimited</span>
+                        </span>
+                      } />
+                      {this.state.p_unlimited &&
+                        <CardRow alternate nohover title={"Duration (Days)"} extra={
+                          <input
+                            ref={(me) => this.unlDur = me}
+                            value={this.state.p_duration}
+                            placeholder={'0'}
+                            onChange={(evt) => {
+                              let pos = this.unlDur.selectionStart;
+                              this.setState({ p_duration: evt.target.value.replace(/[^0-9]/gi, "") });
+                              this.unlDur.selectionStart = pos;
+                            }}
+                          />
+                        } />
+                      }
+                      <CardRow alternate nohover title={"Price"} extra={
+                        <input
+                          ref={(me) => this.price = me}
+                          value={this.state.p_price}
+                          placeholder={'XX.XX'}
+                          onChange={(evt) => {
+                            let pos = this.price.selectionStart;
+                            this.setState({ p_price: evt.target.value.replace(/[^0-9.]/gi, "") });
+                            this.price.selectionStart = pos;
+                          }}
+                        />
+                      } />
+                      <CardRow alternate nohover title={"App SKU"} extra={
+                        <input
+                          value={this.state.p_app_sku}
+                          onChange={(evt) => this.setState({ p_app_sku: evt.target.value.substr(0, 32) })}
+                          placeholder={"e.g. com.swingessentials.package"}
+                        />
+                      } />
+                    </div>
                   </div>
-                  <div className="card_body">
-                    <CardRow alternate nohover title={"Description"} extra={deal.description}/>
-                    <CardRow alternate nohover title={"Lesson Count"} extra={parseInt(deal.count,10) === -1 ? "Unlimited" : deal.count}/>
-                    {parseInt(deal.count, 10) === -1 && 
-                      <CardRow alternate nohover title={"Duration (Days)"} extra={deal.duration}/>
-                    }
-                    <CardRow alternate nohover title={"Price"} extra={"$" + deal.price}/>
-                    <CardRow alternate nohover title={"App SKU"} extra={deal.app_sku}/>
+                  :
+                  <div key={'package_' + index} className="card">
+                    <div className="card_header">
+                      <span>{deal.name}</span>
+                      <span onClick={this._changeEditPackage.bind(this, deal, false)}>EDIT</span>
+                    </div>
+                    <div className="card_body">
+                      <CardRow alternate nohover title={"Description"} extra={deal.description} />
+                      <CardRow alternate nohover title={"Lesson Count"} extra={parseInt(deal.count, 10) === -1 ? "Unlimited" : deal.count} />
+                      {parseInt(deal.count, 10) === -1 &&
+                        <CardRow alternate nohover title={"Duration (Days)"} extra={deal.duration} />
+                      }
+                      <CardRow alternate nohover title={"Price"} extra={"$" + deal.price} />
+                      <CardRow alternate nohover title={"App SKU"} extra={deal.app_sku} />
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </section>
-          <Footer/>
+          <Footer />
         </div>
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(PackagesPage);
+export default connect(mapStateToProps, mapDispatchToProps)(PackagesPage);

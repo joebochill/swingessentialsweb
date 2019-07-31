@@ -1,34 +1,34 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { getBios, updateBio, removeBio, addBio } from '../../actions/BioActions.js';
-import {convertTextToP, convertLineToText, convertTextToLine} from '../../utils/utils.js';
+import { convertTextToP, convertLineToText, convertTextToLine } from '../../utils/utils.js';
 
-import {openModal} from '../../actions/modalActions.js';
+import { openModal } from '../../actions/modalActions.js';
 
 
 import Footer from '../footer/Footer.js';
 import Loader from '../loader/Loader.js';
 
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
   return {
     token: state.login.token,
     admin: state.login.admin,
     pros: state.pros
   };
 }
-var mapDispatchToProps = function(dispatch){
+var mapDispatchToProps = function (dispatch) {
   return {
-    requestBios: (token) => {dispatch(getBios(token))},
-    updateBio: (token, bio) => {dispatch(updateBio(token, bio))},
-    removeBio: (token, bio) => {dispatch(removeBio(token, bio))},
-    addBio: (token, bio) => {dispatch(addBio(token, bio))},
-    openModal: (modal) => {dispatch(openModal(modal))}    
+    requestBios: (token) => { dispatch(getBios(token)) },
+    updateBio: (token, bio) => { dispatch(updateBio(token, bio)) },
+    removeBio: (token, bio) => { dispatch(removeBio(token, bio)) },
+    addBio: (token, bio) => { dispatch(addBio(token, bio)) },
+    openModal: (modal) => { dispatch(openModal(modal)) }
   }
 };
 
 class OurProPage extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       editPro: null,
@@ -41,40 +41,40 @@ class OurProPage extends Component {
       saving: null
     };
   }
-  
-  componentWillMount(){
-    if(!this.props.pros.list.length){
+
+  componentWillMount() {
+    if (!this.props.pros.list.length) {
       this.props.requestBios(this.props.token);
     }
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   }
 
-  componentWillReceiveProps(nextProps){
-    if(this.props.pros.loading && !nextProps.pros.loading){
-      this.setState({saving: null});
+  componentWillReceiveProps(nextProps) {
+    if (this.props.pros.loading && !nextProps.pros.loading) {
+      this.setState({ saving: null });
     }
   }
 
-  _changeEditPro(newPro, save){
-    if(this.state.editPro && save){ //clicked the save button
+  _changeEditPro(newPro, save) {
+    if (this.state.editPro && save) { //clicked the save button
       // Push the updated pro details to the server
-      if(!this._validatePro()){return;}
-      this.props.updateBio(this.props.token,{
+      if (!this._validatePro()) { return; }
+      this.props.updateBio(this.props.token, {
         id: this.state.editPro,
         name: this.state.pro_name,
         bio: convertLineToText(this.state.pro_bio),
         image: this.state.pro_image
       });
     }
-    if(newPro){ // Clicked Edit Button
+    if (newPro) { // Clicked Edit Button
       this.setState({
         editPro: newPro.id,
         pro_name: newPro.name,
         pro_bio: convertTextToLine(newPro.bio),
         pro_image: newPro.image
-      }); 
+      });
     }
-    else{ // Clicked cancel or save
+    else { // Clicked cancel or save
       this.setState({
         editPro: null,
         newPro: false,
@@ -83,11 +83,11 @@ class OurProPage extends Component {
         pro_bio: null,
         pro_image: null,
         saving: save ? this.state.editPro : null
-      }); 
+      });
     }
   }
 
-  _validatePro(){
+  _validatePro() {
     return !(
       !this.state.pro_name ||
       !this.state.pro_bio ||
@@ -95,11 +95,11 @@ class OurProPage extends Component {
     );
   }
 
-  _removePro(id){
-    this.props.removeBio(this.props.token, {id:id});
+  _removePro(id) {
+    this.props.removeBio(this.props.token, { id: id });
   }
 
-  _createNewPro(){
+  _createNewPro() {
     this.setState({
       newPro: true,
       editPro: -1,
@@ -110,10 +110,10 @@ class OurProPage extends Component {
     });
   }
 
-  _addNewPro(){
-    if(!this._validatePro()){return;}
-    
-    this.props.addBio(this.props.token,{
+  _addNewPro() {
+    if (!this._validatePro()) { return; }
+
+    this.props.addBio(this.props.token, {
       name: this.state.pro_name,
       bio: convertLineToText(this.state.pro_bio),
       image: this.state.pro_image
@@ -122,7 +122,7 @@ class OurProPage extends Component {
     this.setState({
       editPro: null,
       newPro: false,
-      
+
       pro_name: '',
       pro_bio: '',
       pro_image: '',
@@ -134,24 +134,24 @@ class OurProPage extends Component {
     return (
       <div>
         <section className="landing_image image6">
-          <main className="page_title">
+          <div className="page_title">
             <h1>{this.props.pros.list.length > 1 ? 'Meet Our Pros' : 'Meet Our Pro'}</h1>
             <h3>The {this.props.pros.list.length > 1 ? 'Ones' : 'Man'} Behind the Magic</h3>
-          </main>
+          </div>
         </section>
         {this.props.pros.loading &&
           <section className="left">
             <div>
-                <p>Loading Bios...</p>
-                <Loader/>
+              <p>Loading Bios...</p>
+              <Loader />
             </div>
           </section>
         }
-        {this.props.admin && 
+        {this.props.admin &&
           <section className="left">
-            {!this.state.newPro && 
+            {!this.state.newPro &&
               <div className="structured_panel">
-                <div className="button se_button" style={{marginTop:'0rem'}} onClick={this._createNewPro.bind(this)}>
+                <div className="button se_button" style={{ marginTop: '0rem' }} onClick={this._createNewPro.bind(this)}>
                   <span>New Pro</span>
                 </div>
               </div>
@@ -159,35 +159,35 @@ class OurProPage extends Component {
             {this.state.newPro && <h1>New Pro</h1>}
             {this.state.newPro &&
               <div className="structured_panel">
-                <label style={{marginTop:'2rem'}}>Name</label>
-                <input type="text" 
+                <label style={{ marginTop: '2rem' }}>Name</label>
+                <input type="text"
                   value={this.state.pro_name}
                   placeholder={'Tiger Woods'}
-                  onChange={(evt) => {this.setState({pro_name: evt.target.value})}}
+                  onChange={(evt) => { this.setState({ pro_name: evt.target.value }) }}
                 />
-                <label style={{marginTop:'1rem'}}>Picture</label>
-                <input type="text" 
+                <label style={{ marginTop: '1rem' }}>Picture</label>
+                <input type="text"
                   value={this.state.image}
-                  onChange={(evt) => this.setState({pro_image: evt.target.value})}
+                  onChange={(evt) => this.setState({ pro_image: evt.target.value })}
                 />
-                <label style={{marginTop:'1rem'}}>Bio</label>
+                <label style={{ marginTop: '1rem' }}>Bio</label>
                 <textarea value={this.state.pro_bio}
-                  onChange={(evt) => this.setState({pro_bio: evt.target.value})}
+                  onChange={(evt) => this.setState({ pro_bio: evt.target.value })}
                 />
               </div>
             }
-            {this.state.newPro && 
-              <span style={{marginTop:'2rem'}}>
-                <a 
+            {this.state.newPro &&
+              <span style={{ marginTop: '2rem' }}>
+                <span
                   className="button_link"
-                  onClick={()=>this._addNewPro()}
+                  onClick={() => this._addNewPro()}
                   disabled={!this.state.pro_name || !this.state.pro_image || !this.state.pro_bio}
-                >ADD</a>
-                <a 
+                >ADD</span>
+                <span
                   className="button_link"
-                  style={{marginLeft:'1rem'}}
-                  onClick={()=>this.setState({newPro:false})}
-                >CANCEL</a>
+                  style={{ marginLeft: '1rem' }}
+                  onClick={() => this.setState({ newPro: false })}
+                >CANCEL</span>
               </span>
             }
           </section>
@@ -201,66 +201,66 @@ class OurProPage extends Component {
             <p>My strengths lie in teaching, club fitting, and player development. I look forward to bringing you my expertise in golf and feel extremely privileged to have the opportunity to work with you.</p>
           </section> */}
           {this.props.pros.list && this.props.pros.list.map((pro, index) => (
-            <section key={'bio_'+index} className="left">
-              <img className="headshot" alt="Headshot" src={"https://www.swingessentials.com/images/pros/"+ pro.image}/>
+            <section key={'bio_' + index} className="left">
+              <img className="headshot" alt="Headshot" src={"https://www.swingessentials.com/images/pros/" + pro.image} />
               {this.props.admin && this.state.editPro !== pro.id &&
-                <span style={{marginBottom: '2rem'}}>
-                  <a 
+                <span style={{ marginBottom: '2rem' }}>
+                  <span
                     className="button_link"
                     onClick={this._changeEditPro.bind(this, pro, false)}
-                  >EDIT</a>
+                  >EDIT</span>
                 </span>
               }
               {this.state.editPro === pro.id &&
                 <div className="structured_panel">
                   <label>Name</label>
-                  <input type="text" 
+                  <input type="text"
                     value={this.state.pro_name}
                     placeholder={'Tiger Woods'}
-                    onChange={(evt) => {this.setState({pro_name: evt.target.value});}}
+                    onChange={(evt) => { this.setState({ pro_name: evt.target.value }); }}
                   />
-                  <label style={{marginTop:'1rem'}}>Image</label>
-                  <input type="text" 
+                  <label style={{ marginTop: '1rem' }}>Image</label>
+                  <input type="text"
                     value={this.state.pro_image}
-                    onChange={(evt) => this.setState({pro_image: evt.target.value})}
+                    onChange={(evt) => this.setState({ pro_image: evt.target.value })}
                   />
-                  <label style={{marginTop:'1rem'}}>Bio</label>
+                  <label style={{ marginTop: '1rem' }}>Bio</label>
                   <textarea value={this.state.pro_bio}
-                    onChange={(evt) => this.setState({pro_bio: evt.target.value})}
+                    onChange={(evt) => this.setState({ pro_bio: evt.target.value })}
                   />
                 </div>
               }
               {this.props.admin && this.state.editPro === pro.id &&
-                <span style={{marginTop:'2rem'}}>
-                  <a 
+                <span style={{ marginTop: '2rem' }}>
+                  <span
                     className="button_link"
                     onClick={this._changeEditPro.bind(this, null, true)}
                     disabled={!this.state.pro_name || !this.state.pro_image || !this.state.pro_bio}
-                  >SAVE</a>
-                  <a 
+                  >SAVE</span>
+                  <span
                     className="button_link"
-                    style={{marginLeft:'1rem'}}
+                    style={{ marginLeft: '1rem' }}
                     onClick={() => this.props.openModal({
                       type: 'CONFIRM',
-                      props:{
+                      props: {
                         title: 'Remove Pro: ' + this.state.pro_name,
                         body: ['Deleting this pro will permanently remove them from the database. This action cannot be undone.',
-                                'Are you sure you want to delete this pro?'],
+                          'Are you sure you want to delete this pro?'],
                         buttons: [
-                          {name:'DELETE', action: () => this._removePro(pro.id)}
+                          { name: 'DELETE', action: () => this._removePro(pro.id) }
                         ]
                       }
                     })}
-                  >DELETE</a>
-                  <a 
+                  >DELETE</span>
+                  <span
                     className="button_link"
-                    style={{marginLeft:'1rem'}}
+                    style={{ marginLeft: '1rem' }}
                     onClick={this._changeEditPro.bind(this, null, false)}
-                  >CANCEL</a>
-                  
+                  >CANCEL</span>
+
                 </span>
               }
-              {this.props.pros.loading && this.state.saving === pro.id &&  <Loader/>}
+              {this.props.pros.loading && this.state.saving === pro.id && <Loader />}
               {this.state.editPro !== pro.id && this.state.saving !== pro.id &&
                 <div className="structured_panel wide bold">
                   <h1>{pro.name}</h1>
@@ -269,11 +269,11 @@ class OurProPage extends Component {
               }
             </section>
           ))}
-          <Footer/>
+          <Footer />
         </div>
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(OurProPage);
+export default connect(mapStateToProps, mapDispatchToProps)(OurProPage);
