@@ -8,7 +8,6 @@ import { formatDate, convertTextToP, convertLineToText, convertTextToLine } from
 
 import { setTargetRoute } from '../../actions/NavigationActions.js';
 import { getLessons, putLessonResponse, markLessonViewed } from '../../actions/LessonActions.js';
-import CardRow from '../rows/CardRow.js';
 
 const mapStateToProps = (state) => {
   return {
@@ -178,38 +177,6 @@ class LessonResponsePage extends Component {
               </div>
             </section>
           }
-          {this.lesson && this.lesson.response_status && this.lesson.response_status === "good" &&
-            <section className="left">
-              <div className="structured_panel">
-                <h1>Helpful Tip</h1>
-                <YoutubeVideo vid={'99B6Ou-tiUE'} />
-                {convertTextToP(`Here's a great tip to help your swing. Follow these instructions and you'll be well on your way to shooting 60 in no time!`)}
-              </div>
-            </section>
-          }
-          {this.lesson && this.lesson.response_status && this.lesson.response_status === "good" &&
-            <section className="left">
-              <div className="structured_panel">
-                <h1>Helpful Tips</h1>
-                  <div className="card_body">
-                    <CardRow go
-                      title={'No More Chicken Wing'}
-                      action={() => null}
-                    />
-                    <CardRow
-                      go
-                      title={'The Perfect Golf Grip'}
-                      action={() => null}
-                    />
-                    <CardRow
-                      go
-                      title={'Putting from the rough'}
-                      action={() => null}
-                    />
-                  </div>
-              </div>
-            </section>
-          }
           {this.lesson.fo_swing && this.lesson.dtl_swing &&
             <section className="left">
               <div className="structured_panel">
@@ -276,15 +243,6 @@ class LessonResponsePage extends Component {
                 <span style={{ display: 'block', color: '#231f61', fontSize: '.7rem', textAlign: 'right' }}>
                   Characters Left: <b style={{ fontWeight: '600' }}>{500 - this.state.responseNotes.length}</b>
                 </span>
-                <label style={{ marginTop: '1rem' }}>Lesson Tip</label>
-                <select>
-                  <option value='tip1'>Avoid the Slice</option>
-                  <option value='tip2'>No More Chicken Wing</option>
-                  <option value='tip3'>Putting from the Ruff</option>
-                  <option value='tip4'>Chipping</option>
-                  <option value='tip5'>Transfering your weight</option>
-                  <option value='tip6'>The perfect Grip</option>
-                </select>
                 <label style={{ marginTop: '1rem' }}>Response Status</label>
                 <select value={this.state.responseStatus} onChange={(evt) => this.setState({ responseStatus: evt.target.value })}>
                   <option value='good'>Accepted</option>
