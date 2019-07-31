@@ -16,14 +16,8 @@ export const REMOVE_BLOG = { REQUEST: 'REMOVE_BLOG', SUCCESS: 'REMOVE_BLOG_SUCCE
 // export const PING = {REQUEST: 'PING_REQUEST', SUCCESS: 'PING_SUCCESS', FAIL: 'PING_FAIL'};
 
 /* Base URL for fetch commands */
-// export const BASEURL = 'http://www.josephpboyle.com/api/swingessentials2.php/';
 export const BASEURL = 'https://www.swingessentials.com/apis/swingessentials.php/';
-// export const BASEURL = 'http://www.josephpboyle.com/apis/swingessentials.php/';
 export const AUTH = 'Message'; //The HTTP Header to use to pass authorization info
-
-
-//const API_KEY = 'AIzaSyAzvggwVpvJ1pngsjQKJ84FcY8v07C8dNA';
-//const googleURL = 'https://www.googleapis.com/upload/storage/v1/b/www.joebochill.com/';
 
 /* Retrieves List of Tips-of-the-month */
 export function getTips(token = null) {

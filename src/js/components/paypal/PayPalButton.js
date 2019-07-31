@@ -20,7 +20,7 @@ class PaypalButton extends Component {
         document.getElementById('ppbutton').innerHTML = "";
 
         paypal.Button.render({
-            env: 'sandbox',
+            env: process.env.REACT_APP_PAYPAL_MODE, // 'sandbox' or 'production',
             style: {
                 size: 'responsive',
                 color: 'blue',
@@ -30,8 +30,8 @@ class PaypalButton extends Component {
             },
             client: {
                 // from https://developer.paypal.com/developer/applications/
-                sandbox: 'SANDBOX-CREDENTIAL',
-                production: 'PRODUCTION-CREDENTIAL'
+                sandbox: process.env.REACT_APP_PAYPAL_SANDBOX,
+                production: process.env.REACT_APP_PAYPAL_PRODUCTION
             },
             validate: (actions) => {
                 if (this.props.disabled) { actions.disable(); }
