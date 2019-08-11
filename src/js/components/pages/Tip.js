@@ -212,17 +212,23 @@ class TipPage extends Component {
                   <label style={{ marginTop: '1rem' }}>Title</label>
                   <input type="text"
                     value={this.state.title}
+                    maxLength={128}
                     onChange={(evt) => this.setState({ title: evt.target.value })}
                   />
                   <label style={{ marginTop: '1rem' }}>Youtube ID</label>
                   <input type="text"
                     value={this.state.video}
+                    maxLength={16}
                     onChange={(evt) => this.setState({ video: evt.target.value })}
                   />
                   <label style={{ marginTop: '1rem' }}>Comments</label>
                   <textarea value={this.state.comments}
+                    maxLength={500}
                     onChange={(evt) => this.setState({ comments: evt.target.value })}
                   />
+                  <span style={{ display: 'block', color: '#231f61', fontSize: '.7rem', textAlign: 'right' }}>
+                    Characters Left: <b style={{ fontWeight: '600' }}>{500 - this.state.comments.length}</b>
+                  </span>
                 </div>
               }
               {this.state.newPost &&
@@ -266,17 +272,23 @@ class TipPage extends Component {
                   <label style={{ marginTop: '1rem' }}>Title</label>
                   <input type="text"
                     value={this.state.title}
+                    maxLength={128}
                     onChange={(evt) => this.setState({ title: evt.target.value })}
                   />
                   <label style={{ marginTop: '1rem' }}>Youtube ID</label>
                   <input type="text"
                     value={this.state.video}
+                    maxLength={16}
                     onChange={(evt) => this.setState({ video: evt.target.value })}
                   />
                   <label style={{ marginTop: '1rem' }}>Comments</label>
                   <textarea value={this.state.comments}
+                    maxLength={500}
                     onChange={(evt) => this.setState({ comments: evt.target.value })}
                   />
+                  <span style={{ display: 'block', color: '#231f61', fontSize: '.7rem', textAlign: 'right' }}>
+                    Characters Left: <b style={{ fontWeight: '600' }}>{500 - this.state.comments.length}</b>
+                  </span>
                 </div>
               }
               {this.props.admin && this.state.editing === tip.id &&

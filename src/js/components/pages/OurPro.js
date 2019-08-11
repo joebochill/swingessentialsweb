@@ -162,16 +162,19 @@ class OurProPage extends Component {
                 <label style={{ marginTop: '2rem' }}>Name</label>
                 <input type="text"
                   value={this.state.pro_name}
+                  maxLength={64}
                   placeholder={'Tiger Woods'}
                   onChange={(evt) => { this.setState({ pro_name: evt.target.value }) }}
                 />
                 <label style={{ marginTop: '1rem' }}>Picture</label>
                 <input type="text"
                   value={this.state.image}
+                  maxLength={64}
                   onChange={(evt) => this.setState({ pro_image: evt.target.value })}
                 />
                 <label style={{ marginTop: '1rem' }}>Bio</label>
                 <textarea value={this.state.pro_bio}
+                  maxLength={65000}
                   onChange={(evt) => this.setState({ pro_bio: evt.target.value })}
                 />
               </div>
@@ -217,15 +220,18 @@ class OurProPage extends Component {
                   <input type="text"
                     value={this.state.pro_name}
                     placeholder={'Tiger Woods'}
+                    maxLength={64}
                     onChange={(evt) => { this.setState({ pro_name: evt.target.value }); }}
                   />
                   <label style={{ marginTop: '1rem' }}>Image</label>
                   <input type="text"
                     value={this.state.pro_image}
+                    maxLength={64}
                     onChange={(evt) => this.setState({ pro_image: evt.target.value })}
                   />
                   <label style={{ marginTop: '1rem' }}>Bio</label>
                   <textarea value={this.state.pro_bio}
+                    maxLength={65000}
                     onChange={(evt) => this.setState({ pro_bio: evt.target.value })}
                   />
                 </div>

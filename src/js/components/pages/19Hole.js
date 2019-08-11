@@ -206,10 +206,12 @@ class NineteenPage extends Component {
                   <label style={{ marginTop: '1rem' }}>Title</label>
                   <input type="text"
                     value={this.state.title}
+                    maxLength={128}
                     onChange={(evt) => this.setState({ title: evt.target.value })}
                   />
                   <label style={{ marginTop: '1rem' }}>Post</label>
                   <textarea value={this.state.body}
+                    maxLength={65000}
                     onChange={(evt) => this.setState({ body: evt.target.value })}
                   />
                 </div>
@@ -253,10 +255,12 @@ class NineteenPage extends Component {
                   <label style={{ marginTop: '1rem' }}>Title</label>
                   <input type="text"
                     value={this.state.title}
+                    maxLength={128}
                     onChange={(evt) => this.setState({ title: evt.target.value })}
                   />
                   <label style={{ marginTop: '1rem' }}>Post</label>
                   <textarea value={this.state.body}
+                    maxLength={65000}
                     onChange={(evt) => this.setState({ body: evt.target.value })}
                   />
                 </div>
