@@ -10,6 +10,7 @@ import Paginator from '../paginator/Paginator.js';
 
 import { setTargetRoute } from '../../actions/NavigationActions.js';
 import { getLessons, getCredits } from '../../actions/LessonActions.js';
+import { getUsers } from '../../actions/UserDataActions.js';
 import { formatDate } from '../../utils/utils.js';
 import { openModal } from '../../actions/modalActions.js';
 
@@ -20,7 +21,8 @@ const mapStateToProps = (state) => {
     token: state.login.token,
     lessons: state.lessons,
     credits: state.credits,
-    admin: state.login.admin
+    admin: state.login.admin,
+    users: state.userData.users
   };
 }
 var mapDispatchToProps = function (dispatch) {
@@ -32,7 +34,8 @@ var mapDispatchToProps = function (dispatch) {
     goToOrder: () => { dispatch(push('/purchase')) },
     goToRedeem: () => { dispatch(push('/redeem')) },
     openModal: (modal) => { dispatch(openModal(modal)) },
-    goToFree: () => { dispatch(push('/newlesson')); }
+    goToFree: () => { dispatch(push('/newlesson')); },
+    getUsers: (token) => { dispatch(getUsers(token)); },
     // redeemCredit: (type, data, token) => {dispatch(redeemCredit(type, data, token))}
   }
 };
@@ -43,7 +46,8 @@ class LessonsPage extends Component {
     this.perPage = 10;
     this.state = {
       start: 0,
-      timer: ''
+      timer: '',
+      username: ''
     }
   }
   componentWillMount() {
@@ -52,6 +56,7 @@ class LessonsPage extends Component {
       this.props.goToSignIn();
     }
     else {
+      this.props.getUsers(this.props.token);
       window.scrollTo(0, 0);
 
       // if both lesson arrays are empty, do a fetch for new lessons
@@ -98,6 +103,12 @@ class LessonsPage extends Component {
     }
   }
 
+  _sortUsers(prop){
+    return (userA, userB) => {
+      return (userA[prop].toLowerCase() < userB[prop].toLowerCase() ? -1 : 1);
+    }
+  }
+
   /* Format the time remaining string for unlimited lesson */
   _formatUnlimited() {
     let unlimitedRemaining = (this.props.credits.unlimitedExpires - (Date.now() / 1000));
@@ -124,9 +135,17 @@ class LessonsPage extends Component {
 
 
   render() {
-    const { lessons } = this.props;
+    const { lessons, users } = this.props;
     const { start } = this.state;
     const loading = lessons.loading;
+
+    const usersByName = users ? [...users].sort(this._sortUsers('last')) : [];
+    const usersByUsername = users ? [...users].sort(this._sortUsers('username')) : [];
+    const filteredLessons = this.state.username ? {
+      pending: lessons.pending.filter((user) => user.username === this.state.username),
+      closed: lessons.closed.filter((user) => user.username === this.state.username)
+    } : lessons;
+
 
     return (
       <div>
@@ -137,16 +156,6 @@ class LessonsPage extends Component {
           </div>
         </section>
         <div>
-          {/* {(!this.props.admin && !loading && !lessons.closed.length && !lessons.pending.length) && 
-            <section>
-              <h1>You haven't submitted any lessons!</h1>
-              <p>Download our app today. Your first lesson is free!</p>
-              <div className="multi_col">
-                <div className="button apple_store" onClick={()=>alert('Coming Soon!')}/>
-                <div className="button google_store" onClick={()=>alert('Coming Soon!')}/>
-              </div>
-            </section>
-          } */}
           {this.props.admin &&
             <section>
               <div className="structured_panel">
@@ -158,6 +167,24 @@ class LessonsPage extends Component {
           }
           <section>
             <div className="structured_panel">
+              {this.props.admin &&
+                <>
+                  <label>Filter by username:</label>
+                  <select value={this.state.username} onChange={(evt) => this.setState({ username: evt.target.value })}>
+                    <option value=''>Choose a User</option>
+                    {this.props.users && this.props.users.length > 0 && usersByUsername.map((user) =>
+                      <option key={user.username} value={user.username}>{`${user.username} (${user.last}, ${user.first})`}</option>
+                    )}
+                  </select>
+                  <label style={{marginTop: '2rem'}}>Filter by human name:</label>
+                  <select value={this.state.username} onChange={(evt) => this.setState({ username: evt.target.value })}>
+                    <option value=''>Choose a User</option>
+                    {this.props.users && this.props.users.length > 0 && usersByName.map((user) =>
+                      <option key={user.username} value={user.username}>{`${user.last}, ${user.first} (${user.username})`}</option>
+                    )}
+                  </select>
+                </>
+              }
               {!this.props.admin && this.props.credits.unlimitedExpires > Date.now() / 1000 &&
                 <div className="card">
                   <div className="card_header infinity">
@@ -168,7 +195,7 @@ class LessonsPage extends Component {
                     <CardRow go
                       title={'Submit a Swing'}
                       className={"noflex"}
-                      action={(lessons.pending && lessons.pending.length > 0 ?
+                      action={(filteredLessons.pending && filteredLessons.pending.length > 0 ?
                         () => this.props.openModal({ type: 'PENDING_SWING' })
                         :
                         () => this.props.goToRedeem()
@@ -232,10 +259,10 @@ class LessonsPage extends Component {
                   <span>In Progress</span>
                 </div>
                 <div className="card_body">
-                  {(lessons.pending.length === 0 || loading) &&
+                  {(filteredLessons.pending.length === 0 || loading) &&
                     <Placeholder message={loading ? "Loading..." : "No Lessons In Progress"} loading={loading} />
                   }
-                  {lessons.pending.length > 0 && lessons.pending.map((lesson) =>
+                  {filteredLessons.pending.length > 0 && filteredLessons.pending.map((lesson) =>
                     <LessonRow key={lesson.request_id} title={formatDate(lesson.request_date)} id={lesson.request_url} extra={this.props.admin ? lesson.username : null} />
                   )}
                 </div>
@@ -245,11 +272,11 @@ class LessonsPage extends Component {
                   <span>Completed</span>
                 </div>
                 <div className="card_body">
-                  {(lessons.closed.length === 0 || loading) &&
+                  {(filteredLessons.closed.length === 0 || loading) &&
                     <Placeholder message={loading ? "Loading..." : "No Completed Lessons"} loading={loading} />
                   }
-                  {lessons.closed.length > 0 &&
-                    lessons.closed.slice(start, start + this.perPage)
+                  {filteredLessons.closed.length > 0 &&
+                    filteredLessons.closed.slice(start, start + this.perPage)
                       .map((lesson) =>
                         <LessonRow key={lesson.request_id} title={formatDate(lesson.request_date)} new={parseInt(lesson.viewed, 10) === 0} extra={this.props.admin ? lesson.username : parseInt(lesson.viewed, 10) === 0 ? "NEW!" : ""} id={lesson.request_url} />
                       )}
@@ -257,10 +284,10 @@ class LessonsPage extends Component {
               </div>
             </div>
           </section>
-          {lessons.closed.length > this.perPage &&
+          {filteredLessons.closed.length > this.perPage &&
             <section>
               <Paginator
-                pages={Math.ceil(lessons.closed.length / this.perPage)}
+                pages={Math.ceil(filteredLessons.closed.length / this.perPage)}
                 current={start / this.perPage + 1}
                 navigate={(newPage) => { this.setState({ start: (newPage - 1) * this.perPage }) }} />
             </section>
