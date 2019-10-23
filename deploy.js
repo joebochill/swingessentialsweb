@@ -51,43 +51,44 @@ function handlePath(path) {
     return uploadFile(path, destination);
 }
 
-function isExpired(date) {
-    const oneDayInMilliseconds = 86400000;
-    const timestamp = new Date(date).getTime();
-    const expirationTimestamp = Date.now() - (oneDayInMilliseconds * EXPIRATION_DATE_IN_DAYS);
+// function isExpired(date) {
+//     return false; // files never expire
+//     // const oneDayInMilliseconds = 86400000;
+//     // const timestamp = new Date(date).getTime();
+//     // const expirationTimestamp = Date.now() - (oneDayInMilliseconds * EXPIRATION_DATE_IN_DAYS);
 
-    return timestamp < expirationTimestamp;
-}
+//     // return timestamp < expirationTimestamp;
+// }
 
-function cleanup(pathObject, directory) {
-    if (pathObject.name === '.' || pathObject.name === '..') return;
+// function cleanup(pathObject, directory) {
+//     if (pathObject.name === '.' || pathObject.name === '..') return;
 
-    const path = `${directory}/${pathObject.name}`;
+//     const path = `${directory}/${pathObject.name}`;
 
-    // If the current path is a directory
-    // we recursively check the files in it.
-    if (pathObject.type === 'd') {
-        return cleanupRemoteDirectory(path);
-    }
+//     // If the current path is a directory
+//     // we recursively check the files in it.
+//     if (pathObject.type === 'd') {
+//         return cleanupRemoteDirectory(path);
+//     }
 
-    if (isExpired(pathObject.date)) {
-        ftpClient.delete(path, (error) => {
-            if (error) throw error;
+//     if (isExpired(pathObject.date)) {
+//         ftpClient.delete(path, (error) => {
+//             if (error) throw error;
 
-            console.log(`Removed: ${path}`);
-            ftpClient.end();
-        });
-    }
-}
+//             console.log(`Removed: ${path}`);
+//             ftpClient.end();
+//         });
+//     }
+// }
 
-function cleanupRemoteDirectory(directory) {
-    return ftpClient.list(directory, (error, pathObjects) => {
-        if (error) throw error;
+// function cleanupRemoteDirectory(directory) {
+//     return ftpClient.list(directory, (error, pathObjects) => {
+//         if (error) throw error;
 
-        pathObjects.forEach(pathObject => cleanup(pathObject, directory));
-        ftpClient.end();
-    });
-}
+//         pathObjects.forEach(pathObject => cleanup(pathObject, directory));
+//         ftpClient.end();
+//     });
+// }
 
 ftpClient.on('ready', () => {
     // Get an array of all files and directories
@@ -101,7 +102,7 @@ ftpClient.on('ready', () => {
     // days. Keep in mind that this only makes sense
     // if you've deployed at least once since the
     // given amount of days.
-    cleanupRemoteDirectory(destinationPath);
+    // cleanupRemoteDirectory(destinationPath); //don't clean up old files
 });
 
 // In testing, we do nothing
