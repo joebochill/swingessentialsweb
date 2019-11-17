@@ -16,7 +16,7 @@ class Footer extends Component {
             fontSize: '0.65rem',
             lineHeight: 1,
             opacity: 0.5
-          }}>{`v 2.1.2`}</p>
+          }}>{`v 2.1.3`}</p>
       </section>
     );
   }
