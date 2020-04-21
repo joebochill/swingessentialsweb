@@ -118,7 +118,7 @@ class SigninPage extends Component {
                 <input
                   ref={(ref) => this.un = ref}
                   value={this.state.username}
-                  onChange={(evt) => this.setState({ username: evt.target.value.replace(/[^A-Z0-9-_.$#@!+]/gi, "").substr(0, 32) })}
+                  onChange={(evt) => this.setState({ username: evt.target.value.replace(/[^A-Z0-9-_.$#@!+]/gi, "").substr(0, 128) })}
                 />
                 <label style={{ marginTop: '1rem' }}>Password</label>
                 <input
