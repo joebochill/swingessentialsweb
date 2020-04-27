@@ -24,7 +24,8 @@ class LessonRow extends Component {
         disabled={this.props.disabled}
         title={this.props.title}
         extra={this.props.extra}
-        action={() => this.props.push('/lessons/' + this.props.id)}
+        href={'/lessons/' + this.props.id}
+        action={(e) => this.props.push('/lessons/' + this.props.id)}
         specialColor={this.props.new ? "#F30000" : null}
         go
       />
