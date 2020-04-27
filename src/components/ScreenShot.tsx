@@ -6,7 +6,7 @@ const useStyles = makeStyles(() =>
     createStyles({
         wrapper: {
             position: 'relative',
-            width: 280,
+            width: 260,
             height: 511.03,
             overflow: 'hidden',
         },

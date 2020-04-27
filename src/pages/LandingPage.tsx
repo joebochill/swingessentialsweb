@@ -272,6 +272,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
                 </div>
 
                 <Spacer flex={0} width={100} />
+                <Spacer flex={0} height={64} />
                 <ScreenShot src={screenshot} alt={'Swing Essentials app screenshot'} style={{ flex: '0 0 auto' }} />
             </div>
             <div className={classes.section} style={{ display: 'block', textAlign: 'center' }}>
