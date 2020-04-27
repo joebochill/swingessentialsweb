@@ -22,13 +22,14 @@ const mapDispatchToProps = (dispatch) => {
 class CardRow extends Component {
   render() {
     return (
-      <div className={"card_row " +
+      <a className={"card_row " +
         (this.props.slide ? "slide " : "") +
         (this.props.nohover ? "nohover " : "") +
         (this.props.alternate ? "alternate " : "") +
         (this.props.className ? this.props.className : "")}
         disabled={this.props.disabled}
-        onClick={this.props.action ? () => this.props.action() : null}
+        href={this.props.href}
+        onClick={this.props.action ? (e) => {e.preventDefault(); this.props.action()} : null}
         style={this.props.style}
       >
         {this.props.subtitle ?
@@ -53,7 +54,7 @@ class CardRow extends Component {
             </svg>
           </div>
         }
-      </div>
+      </a>
     );
   }
 }
