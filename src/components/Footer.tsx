@@ -8,6 +8,11 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: 100,
             background: theme.palette.primary.main,
             color: 'white',
+            [theme.breakpoints.down('sm')]: {
+                padding: `100px 5%`,
+                flexDirection: 'column',
+                textAlign: 'center',
+            },
         },
         toolbar: {
             display: 'block',

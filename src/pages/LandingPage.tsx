@@ -229,6 +229,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
                         backgroundImage: `url(${cart})`,
                         backgroundSize: 'cover',
                         backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center center',
                         opacity: 0.3,
                     }}
                 />
