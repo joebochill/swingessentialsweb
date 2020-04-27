@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, useLocation } from 'react-route
 import { NavigationDrawer } from './drawer';
 import { LandingPage } from '../pages/LandingPage';
 import { Toolbar } from '../components/Toolbar';
+import { Footer } from '../components/Footer';
 
 const ScrollToTop = (): any => {
     const { pathname } = useLocation();
@@ -27,6 +28,7 @@ export const MainRouter = (): JSX.Element => (
                 <h1>Hello</h1>
             </Route>
         </Switch>
+        <Footer />
         <NavigationDrawer />
     </Router>
 );

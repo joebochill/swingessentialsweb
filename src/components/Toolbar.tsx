@@ -50,7 +50,7 @@ type NavLinkProps = LinkProps & {
     title: string;
     to: string;
 };
-const NavLink: React.FC<NavLinkProps> = (props) => {
+export const NavLink: React.FC<NavLinkProps> = (props) => {
     const classes = useStyles();
     return (
         <Link component={RouterLink} to={props.to} color={'inherit'} className={clsx(classes.navLink, props.className)}>
