@@ -41,8 +41,8 @@ class HomePage extends Component {
         <section className="landing_image large image1">
           <div className="pga_overlay" />
           <div className="page_title">
-            <h1>Swing<span className="hidden_space"> </span><br className="hidden_break" />Essentials™</h1>
-            <h3>a pro in your pocket™<br/>on and off the course</h3>
+            <h1>Swing<span className="hidden_space"> </span><br className="hidden_break" />Essentials<sup>®</sup></h1>
+            <h3>the pro in your pocket<br/>on and off the course</h3>
           </div>
           <div>
             <div className="button apple_store" onClick={() => { window.open('https://itunes.apple.com/us/app/swing-essentials-golf-app/id1382453145?mt=8') }} />
@@ -52,7 +52,7 @@ class HomePage extends Component {
         <div>
           <section>
             <h1>Lessons On Your Schedule</h1>
-            <p>Swing Essentials™ provides you with affordable, individualized one-on-one lessons from a PGA-certified golf pro from the comfort and convenience of your home.</p>
+            <p>Swing Essentials<sup>®</sup> provides you with affordable, individualized one-on-one lessons from a PGA-certified golf pro from the comfort and convenience of your home.</p>
           </section>
           <section>
             <h1>How It Works</h1>
@@ -72,8 +72,8 @@ class HomePage extends Component {
             </div>
           </section>
           <section>
-            <h1>Why Swing Essentials™?</h1>
-            <p>Swing Essentials™ offers a true one-on-one experience. Our PGA-certified professional puts a personal touch on each and every lesson, giving you the confidence to know that your lesson is just for you. But don’t take our word for it - hear what our customers have to say.</p>
+            <h1>Why Swing Essentials<sup>®</sup>?</h1>
+            <p>Swing Essentials<sup>®</sup> offers a true one-on-one experience. Our PGA-certified professional puts a personal touch on each and every lesson, giving you the confidence to know that your lesson is just for you. But don’t take our word for it - hear what our customers have to say.</p>
           </section>
           <section>
             <h1>Testimonials</h1>
@@ -84,7 +84,7 @@ class HomePage extends Component {
               </div>
               <div>
                 <h3>DEAN L.</h3>
-                <p>"I sent my swing in to Swing Essentials™ and I'm playing so much better - it's easily taken four to five shots off my game. I strongly recommend it!"</p>
+                <p>"I sent my swing in to Swing Essentials<sup>®</sup> and I'm playing so much better - it's easily taken four to five shots off my game. I strongly recommend it!"</p>
               </div>
               <div>
                 <h3>Will M.</h3>

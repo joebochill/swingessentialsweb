@@ -151,6 +151,10 @@ body {
   --bodyFontLineHeight: 1.6rem;
   --miniFontSize: 0.9rem;
 }
+sup {
+  vertical-align: super;
+  font-size: small;
+}
 .noScroll {
   overflow: hidden;
 }
