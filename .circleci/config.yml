@@ -35,8 +35,8 @@ jobs:
 
       # Lint
       - run: 
-        name: Lint
-        command: yarn lint
+          name: Lint
+          command: yarn lint
 
       # Build
       - run: 

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Drawer, Divider, Avatar, Typography, makeStyles, Theme, createStyles } from '@material-ui/core';
+import { Drawer, Divider, Avatar, Typography, makeStyles, Theme, createStyles, useTheme } from '@material-ui/core';
 import { MenuListItem } from '../components/UserMenu';
 import { ShoppingCart, ExitToApp, Person, Videocam, Subscriptions, Today, LocalBar } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
@@ -16,33 +16,40 @@ const useStyles = makeStyles((theme: Theme) =>
             fontWeight: 600,
             fontFamily: 'Roboto Mono',
         },
-        drawerPaper:{
+        drawerPaper: {
             minWidth: 250,
             maxWidth: '90%',
-        }
+            color: theme.palette.primary.main,
+        },
     })
 );
 
 export const NavigationDrawer = (): JSX.Element => {
     const history = useHistory();
     const classes = useStyles();
+    const theme = useTheme();
     const drawerOpen = useSelector((state: AppState) => state.app.drawerOpen);
     const dispatch = useDispatch();
     const clickMenuItem = useCallback(
         (route) => {
             history.push(route);
-            dispatch({type: 'CLOSE_DRAWER'});
+            dispatch({ type: 'CLOSE_DRAWER' });
         },
         [history, dispatch]
     );
 
     return (
-        <Drawer open={drawerOpen} anchor={'right'} onBackdropClick={() => dispatch({type: 'CLOSE_DRAWER'})} classes={{paper: classes.drawerPaper}}>
-            <div style={{ display: 'flex', padding: 16 }}>
-                <Avatar
-                    aria-controls={'user-menu'}
-                    className={classes.avatarInside}
-                >
+        <Drawer
+            open={drawerOpen}
+            anchor={'right'}
+            onBackdropClick={(): void => {
+                dispatch({ type: 'CLOSE_DRAWER' });
+            }}
+            classes={{ paper: classes.drawerPaper }}
+            style={{ color: 'red' }}
+        >
+            <div style={{ display: 'flex', padding: 16, color: theme.palette.text.primary }}>
+                <Avatar aria-controls={'user-menu'} className={classes.avatarInside}>
                     JB
                 </Avatar>
                 <div style={{ marginLeft: 16 }}>
@@ -109,7 +116,7 @@ export const NavigationDrawer = (): JSX.Element => {
                 divider
                 onClick={(): void => {
                     history.push('/logout');
-                    dispatch('CLOSE_DRAWER');
+                    dispatch({ type: 'CLOSE_DRAWER' });
                 }}
             />
         </Drawer>

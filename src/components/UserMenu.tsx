@@ -7,6 +7,11 @@ import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        menuHeader: {
+            display: 'flex',
+            padding: 16,
+            color: theme.palette.text.primary,
+        },
         avatar: {
             cursor: 'pointer',
             color: theme.palette.primary.main,
@@ -46,6 +51,9 @@ const useStyles = makeStyles((theme: Theme) =>
         header: {
             width: '100%',
             userSelect: 'none',
+        },
+        paper: {
+            color: theme.palette.primary.main,
         },
     })
 );
@@ -101,10 +109,13 @@ export const UserMenu: React.FC = () => {
     const openMenu = useCallback((event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     }, []);
-    const clickMenuItem = useCallback((route) => {
-        history.push(route);
-        setAnchorEl(null);
-    }, [history]);
+    const clickMenuItem = useCallback(
+        (route) => {
+            history.push(route);
+            setAnchorEl(null);
+        },
+        [history]
+    );
 
     return (
         <>
@@ -119,8 +130,9 @@ export const UserMenu: React.FC = () => {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 MenuListProps={{ style: { padding: 0, minWidth: 200 } }}
+                classes={{ paper: classes.paper }}
             >
-                <div style={{ display: 'flex', padding: 16 }}>
+                <div className={classes.menuHeader}>
                     <Avatar aria-controls={'user-menu'} className={classes.avatarInside}>
                         JB
                     </Avatar>

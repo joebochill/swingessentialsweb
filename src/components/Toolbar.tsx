@@ -88,7 +88,7 @@ export const Toolbar: React.FC = (): JSX.Element => {
                     <IconButton
                         style={{ color: 'inherit', marginRight: theme.spacing(-2) }}
                         onClick={(): void => {
-                            dispatch({type: 'OPEN_DRAWER'});
+                            dispatch({ type: 'OPEN_DRAWER' });
                         }}
                     >
                         <Menu />

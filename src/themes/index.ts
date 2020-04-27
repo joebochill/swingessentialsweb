@@ -43,8 +43,8 @@ export const SETheme: ThemeOptions = {
             paper: ThemeColors.white['50'],
         },
         text: {
-            primary: purple['400'],
-            secondary: ThemeColors.black['300'],
+            primary: purple['500'],
+            secondary: ThemeColors.black['400'],
             hint: ThemeColors.gray['500'],
         },
         action: {
