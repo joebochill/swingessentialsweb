@@ -17,8 +17,7 @@ import './index.css';
 import 'typeface-open-sans';
 import 'typeface-roboto-mono';
 
-import { createStore, applyMiddleware } from 'redux';
-const store = createStore(rootReducer(), applyMiddleware(thunk));
+import { store } from './redux/store';
 
 ReactDOM.render(
     // <React.StrictMode>
