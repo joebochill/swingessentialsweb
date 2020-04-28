@@ -1,6 +1,7 @@
 import React, { HTMLAttributes } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core';
-import { Headline, SubHeading, Body } from './Typography';
+import { Body } from './Typography';
+import { FancyHeadline } from './FancyHeadline';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -10,14 +11,6 @@ const useStyles = makeStyles((theme: Theme) =>
                 marginBottom: 48,
                 maxWidth: 'initial',
             },
-        },
-        headline: {
-            display: 'inline-flex',
-            alignItems: 'center',
-        },
-        headlineIcon: {
-            marginRight: 16,
-            fontSize: 48,
         },
     })
 );
@@ -34,13 +27,7 @@ export const SectionBlurb: React.FC<SectionBlurbProps> = (props) => {
 
     return (
         <div className={classes.blurb} {...other}>
-            <div className={classes.headline}>
-                {icon && <div className={classes.headlineIcon}>{icon}</div>}
-                <div style={{ marginBottom: 16 }}>
-                    <Headline>{headline}</Headline>
-                    {subheading && <SubHeading>{subheading}</SubHeading>}
-                </div>
-            </div>
+            <FancyHeadline icon={icon} headline={headline} subheading={subheading} />
             <Body>{body}</Body>
         </div>
     );

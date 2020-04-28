@@ -1,14 +1,28 @@
 import React, { useState } from 'react';
 import bg from '../assets/images/banners/tips.jpg';
-import { makeStyles, Theme, createStyles, Toolbar, AppBar, Button, List, ListItemText, ListItem, ExpansionPanel, Divider, ExpansionPanelDetails, ExpansionPanelSummary, Typography, useTheme, ListItemIcon, ListItemSecondaryAction } from '@material-ui/core';
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+    Toolbar,
+    AppBar,
+    Button,
+    Typography,
+    useTheme,
+    Card,
+    CardHeader,
+    IconButton,
+    useMediaQuery,
+} from '@material-ui/core';
 import { SectionBlurb } from '../components/SectionBlurb';
-import { AddCircle, Today, ExpandMore, ChevronRight } from '@material-ui/icons';
+import { AddCircle, Today, Create, ChevronRight, ChevronLeft } from '@material-ui/icons';
 import YouTube from 'react-youtube';
 
 import { MockTips } from '../__mock-data__';
 import { Spacer, InfoListItem } from '@pxblue/react-components';
 import { prettyDate } from '../utilities/date';
 import { splitParagraphText } from '../utilities/text';
+import { FancyHeadline } from '../components/FancyHeadline';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -37,9 +51,24 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             [theme.breakpoints.down('sm')]: {
                 padding: `100px 10%`,
-                // flexDirection: 'column',
-                // textAlign: 'center',
             },
+        },
+        tipSection: {
+            width: '100%',
+            display: 'flex',
+            alignItems: 'flex-start',
+            [theme.breakpoints.down('sm')]: {
+                flexDirection: 'column',
+                alignItems: 'center',
+            },
+        },
+        listCard: {
+            flex: '1 1 0px',
+            maxWidth: '40%',
+            // [theme.breakpoints.down('sm')]: {
+            //     flex: '1 1 auto',
+            //     display: 'none'
+            // },
         },
         youtube: {
             position: 'absolute',
@@ -48,21 +77,41 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%',
             height: '100%',
         },
-        noMargin: {
-            overflow: 'hidden',
-            margin: '0 !important',
-            '&$expanded': {
-                minHeight: theme.spacing(6),
-            },
+        // noMargin: {
+        //     overflow: 'hidden',
+        //     margin: '0 !important',
+        //     '&$expanded': {
+        //         minHeight: theme.spacing(6),
+        //     },
+        // },
+        // expanded: {},
+        actionPanel: {
+            alignSelf: 'center',
+            marginTop: 0,
         },
-        expanded: {},
+        chevron: {
+            cursor: 'pointer',
+        },
+        disabled: {
+            cursor: 'default',
+            opacity: 0.5,
+        },
     })
 );
 
 export const TipsPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const theme = useTheme();
-    const [activeTip, setActiveTip] = useState(MockTips[1]);
+    const [activeYear, setActiveYear] = useState(parseInt(MockTips[0].date.substr(0, 4), 10));
+    const [activeTip, setActiveTip] = useState(MockTips[0]);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const isSmall = useMediaQuery('(max-width:959px)');
+
+    const firstYear = parseInt(MockTips[MockTips.length - 1].date.substr(0, 4), 10);
+    const lastYear = parseInt(MockTips[0].date.substr(0, 4), 10);
+
+    const isFirstYear = activeYear === firstYear;
+    const isLastYear = activeYear === lastYear;
 
     const description = splitParagraphText(activeTip.comments);
     return (
@@ -109,9 +158,61 @@ export const TipsPage: React.FC = (): JSX.Element => {
                 </Toolbar>
             </AppBar>
             <div className={classes.section}>
-                <div style={{ width: '100%', display: 'flex' }}>
-                    <div style={{ flex: '0 0 auto', maxWidth: '40%' }}>
-                        <ExpansionPanel defaultExpanded square>
+                <div className={classes.tipSection}>
+                    {/* <div style={{ flex: '1 1 0px', maxWidth: '40%' }}> */}
+                    {!isSmall && (
+                        <Card className={classes.listCard}>
+                            <CardHeader
+                                title={activeYear}
+                                titleTypographyProps={{ variant: 'subtitle2' }}
+                                action={
+                                    <>
+                                        <ChevronLeft
+                                            className={!isLastYear ? classes.chevron : classes.disabled}
+                                            onClick={
+                                                !isLastYear ? (): void => setActiveYear(activeYear + 1) : undefined
+                                            }
+                                        />
+                                        <ChevronRight
+                                            className={!isFirstYear ? classes.chevron : classes.disabled}
+                                            style={{ marginLeft: 8 }}
+                                            onClick={
+                                                !isFirstYear ? (): void => setActiveYear(activeYear - 1) : undefined
+                                            }
+                                        />
+                                    </>
+                                }
+                                classes={{ action: classes.actionPanel }}
+                                style={{ background: theme.palette.primary.main, color: 'white' }}
+                            />
+                            {MockTips.map((tip, index) => {
+                                if (!tip.date.startsWith(activeYear.toString())) {
+                                    return null;
+                                }
+                                return (
+                                    <InfoListItem
+                                        key={`tip_${tip.id}`}
+                                        dense
+                                        chevron
+                                        hidePadding
+                                        wrapTitle
+                                        divider={'full'}
+                                        title={tip.title}
+                                        subtitle={prettyDate(tip.date)}
+                                        onClick={(): void => {
+                                            setActiveTip(tip);
+                                            setActiveIndex(index);
+                                        }}
+                                        statusColor={tip.id === activeTip.id ? theme.palette.primary.main : ''}
+                                        backgroundColor={
+                                            tip.id === activeTip.id ? theme.palette.primary.light : undefined
+                                        }
+                                    />
+                                );
+                            })}
+                        </Card>
+                    )}
+                    {/* <ExpansionPanel defaultExpanded square>
                             <ExpansionPanelSummary
                                 expandIcon={<ExpandMore />}
                                 IconButtonProps={{ color: 'inherit' }}
@@ -123,51 +224,107 @@ export const TipsPage: React.FC = (): JSX.Element => {
                                 }}
                             >
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Typography variant={'subtitle2'}>2020</Typography>
+                                    <Typography variant={'subtitle2'}>{activeYear}</Typography>
                                 </div>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails style={{ display: 'block', padding: 0 }}>
-                                <Divider />
-                                {MockTips.filter((tip) => tip.date.startsWith('2020')).map((tip) => (
-                                    <InfoListItem key={`tip_${tip.id}`} 
-                                        dense 
-                                        chevron 
-                                        hidePadding 
-                                        wrapTitle 
+                                {MockTips.filter((tip) => tip.date.startsWith(activeYear.toString())).map((tip) => (
+                                    <InfoListItem key={`tip_${tip.id}`}
+                                        dense
+                                        chevron
+                                        hidePadding
+                                        wrapTitle
                                         divider={'full'}
                                         title={tip.title}
                                         subtitle={prettyDate(tip.date)}
-                                        onClick={():void => setActiveTip(tip)}
+                                        onClick={(): void => setActiveTip(tip)}
                                         statusColor={tip.id === activeTip.id ? theme.palette.primary.main : ''}
                                         backgroundColor={tip.id === activeTip.id ? theme.palette.primary.light : undefined}
                                     />
                                 ))}
 
                             </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                        </ExpansionPanel> */}
 
-                    </div>
+                    {/* </div> */}
                     <Spacer flex={0} width={100} />
-                    <Spacer flex={0} height={32} />
                     <div style={{ flex: '1 1 0px' }}>
-                        <div style={{ width: '100%', background: 'black', paddingTop: '56.25%', position: 'relative', marginBottom: 32 }}>
+                        <div
+                            style={{
+                                width: '100%',
+                                background: 'black',
+                                paddingTop: '56.25%',
+                                position: 'relative',
+                                marginBottom: 32,
+                            }}
+                        >
                             <YouTube
                                 videoId={activeTip.video}
                                 // id={"se_response_video"}
                                 className={classes.youtube}
                                 opts={{
                                     playerVars: {
-                                        "showinfo": 0,
-                                        "origin": "www.swingessentials.com",
-                                        "playsinline": 1,
-                                        "rel": 0
-                                    }
+                                        showinfo: 0,
+                                        origin: 'www.swingessentials.com',
+                                        playsinline: 1,
+                                        rel: 0,
+                                    },
                                 }}
                             />
+                            {isSmall && (
+                                <>
+                                    <IconButton
+                                        disabled={activeIndex <= 0}
+                                        style={{
+                                            position: 'absolute',
+                                            top: '50%',
+                                            transform: 'translateY(-50%)',
+                                            left: -32,
+                                            padding: 0,
+                                            fontSize: 32,
+                                        }}
+                                        onClick={(): void => {
+                                            setActiveIndex(activeIndex - 1);
+                                            setActiveTip(MockTips[activeIndex - 1]);
+                                        }}
+                                    >
+                                        <ChevronLeft fontSize={'inherit'} />
+                                    </IconButton>
+                                    <IconButton
+                                        disabled={activeIndex >= MockTips.length - 1}
+                                        style={{
+                                            position: 'absolute',
+                                            top: '50%',
+                                            transform: 'translateY(-50%)',
+                                            right: -32,
+                                            padding: 0,
+                                            fontSize: 32,
+                                        }}
+                                        onClick={(): void => {
+                                            setActiveIndex(activeIndex + 1);
+                                            setActiveTip(MockTips[activeIndex + 1]);
+                                        }}
+                                    >
+                                        <ChevronRight fontSize={'inherit'} />
+                                    </IconButton>
+                                </>
+                            )}
                         </div>
-                        <Typography variant={'h6'}>{activeTip.title}</Typography>
-                        {description.map((par) => (
-                            <Typography paragraph style={{lineHeight: 1.8}}>{par}</Typography>
+                        <FancyHeadline
+                            small
+                            icon={<Create fontSize={'inherit'} />}
+                            headline={activeTip.title}
+                            subheading={prettyDate(activeTip.date)}
+                            style={{ cursor: 'pointer' }}
+                            onClick={(): void => {
+                                /* do nothing */
+                            }}
+                        />
+
+                        {description.map((par, pInd) => (
+                            <Typography key={`par_${pInd}`} paragraph style={{ lineHeight: 1.8 }}>
+                                {par}
+                            </Typography>
                         ))}
                     </div>
                 </div>

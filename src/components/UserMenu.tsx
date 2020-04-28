@@ -119,12 +119,7 @@ export const UserMenu: React.FC = () => {
                     </div>
                 </div>
                 <Divider />
-                <MenuListItem
-                    title={'Home'}
-                    icon={<Home />}
-                    divider
-                    onClick={(): void => clickMenuItem(ROUTES.HOME)}
-                />
+                <MenuListItem title={'Home'} icon={<Home />} divider onClick={(): void => clickMenuItem(ROUTES.HOME)} />
                 <MenuListItem
                     title={'Your Lessons'}
                     icon={<Subscriptions />}

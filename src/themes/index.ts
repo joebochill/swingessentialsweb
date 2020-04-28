@@ -33,6 +33,9 @@ const createSimplePalette = (color: PXBlueColor): SimplePaletteColorOptions => (
 export const SETheme: ThemeOptions = {
     direction: 'ltr',
     typography: typography,
+    shape: {
+        borderRadius: 0,
+    },
     palette: {
         type: 'light',
         primary: createSimplePalette(purple),

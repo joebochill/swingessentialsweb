@@ -2,7 +2,7 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, makeStyles, Theme, createStyles, IconButton } from '@material-ui/core';
 import { NavLink } from './Toolbar';
 import { ROUTES } from '../constants/routes';
-import { Twitter, Instagram, Facebook } from '@material-ui/icons';
+import { Twitter, Instagram, Facebook, Email } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -37,28 +37,40 @@ export const Footer: React.FC = () => {
                 </Typography>
                 <div>
                     <IconButton
+                        title={'@swingessentials'}
                         color={'inherit'}
-                        onClick={():void => {
+                        onClick={(): void => {
                             window.open('https://twitter.com/SwingEssentials', '_blank');
                         }}
                     >
                         <Twitter />
                     </IconButton>
                     <IconButton
+                        title={'swingessentials'}
                         color={'inherit'}
-                        onClick={():void => {
+                        onClick={(): void => {
                             window.open('https://www.facebook.com/swingessentials/', '_blank');
                         }}
                     >
                         <Facebook />
                     </IconButton>
                     <IconButton
+                        title={'@swingessentials'}
                         color={'inherit'}
-                        onClick={():void => {
+                        onClick={(): void => {
                             window.open('https://www.instagram.com/swingessentials/', '_blank');
                         }}
                     >
                         <Instagram />
+                    </IconButton>
+                    <IconButton
+                        title={'info@swingessentials.com'}
+                        color={'inherit'}
+                        onClick={(): void => {
+                            window.open('mailto: info@swingessentials.com', '_blank');
+                        }}
+                    >
+                        <Email />
                     </IconButton>
                 </div>
                 <NavLink to={ROUTES.PRIVACY} title={'Privacy Policy'}></NavLink>
