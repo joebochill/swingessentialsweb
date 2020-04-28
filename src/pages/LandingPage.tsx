@@ -23,6 +23,7 @@ import { ScreenShot } from '../components/ScreenShot';
 import { Spacer } from '@pxblue/react-components';
 import { Headline } from '../components/Typography';
 import { Testimonial } from '../components/Testimonial';
+import { ROUTES } from '../constants/routes';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -176,13 +177,13 @@ export const LandingPage: React.FC = (): JSX.Element => {
                         <InfoCard
                             spacing={10}
                             source={tips}
-                            title={'Tips of the Month'}
+                            title={'Tip of the Month'}
                             aspectRatio={'16x9'}
                             description={
                                 'Each month we bring you a new video top to help you bring your golf game to the next level.'
                             }
                             onClick={(): void => {
-                                history.push('/tips-of-the-month');
+                                history.push(ROUTES.TIPS);
                             }}
                         />
                     </Grid>
@@ -196,7 +197,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
                                 'Check out our golf blog where we share stories from the field and talk about all things golf.'
                             }
                             onClick={(): void => {
-                                history.push('/19th-hole');
+                                history.push(ROUTES.BLOG);
                             }}
                         />
                     </Grid>
@@ -211,7 +212,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
                                 'Get to know the folks behind the lessons and the experience they bring to the table.'
                             }
                             onClick={(): void => {
-                                history.push('/our-pros');
+                                history.push(ROUTES.PROS);
                             }}
                         />
                     </Grid>

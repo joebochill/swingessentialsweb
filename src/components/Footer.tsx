@@ -1,6 +1,8 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, makeStyles, Theme, createStyles } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, makeStyles, Theme, createStyles, IconButton } from '@material-ui/core';
 import { NavLink } from './Toolbar';
+import { ROUTES } from '../constants/routes';
+import { Twitter, Instagram, Facebook } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -20,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         copyright: {
             flex: '1 1 0px',
-            marginBottom: 16,
+            // marginBottom: 16,
         },
     })
 );
@@ -33,8 +35,34 @@ export const Footer: React.FC = () => {
                 <Typography variant={'subtitle1'} align={'center'} className={classes.copyright}>
                     {`Copyright © ${new Date().getFullYear()} Swing Essentials, LLC.`}
                 </Typography>
-                <NavLink to={'/privacy'} title={'Privacy Policy'}></NavLink>
-                <NavLink to={'/terms'} title={'Terms of Use'}></NavLink>
+                <div>
+                    <IconButton
+                        color={'inherit'}
+                        onClick={():void => {
+                            window.open('https://twitter.com/SwingEssentials', '_blank');
+                        }}
+                    >
+                        <Twitter />
+                    </IconButton>
+                    <IconButton
+                        color={'inherit'}
+                        onClick={():void => {
+                            window.open('https://www.facebook.com/swingessentials/', '_blank');
+                        }}
+                    >
+                        <Facebook />
+                    </IconButton>
+                    <IconButton
+                        color={'inherit'}
+                        onClick={():void => {
+                            window.open('https://www.instagram.com/swingessentials/', '_blank');
+                        }}
+                    >
+                        <Instagram />
+                    </IconButton>
+                </div>
+                <NavLink to={ROUTES.PRIVACY} title={'Privacy Policy'}></NavLink>
+                <NavLink to={ROUTES.TERMS} title={'Terms of Use'}></NavLink>
             </Toolbar>
         </AppBar>
     );

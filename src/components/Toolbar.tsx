@@ -18,6 +18,7 @@ import { Link as RouterLink, useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 import { Menu } from '@material-ui/icons';
 import { useDispatch } from 'react-redux';
+import { ROUTES } from '../constants/routes';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -72,15 +73,15 @@ export const Toolbar: React.FC = (): JSX.Element => {
                     src={logo}
                     alt={'Swing Essentials Logo'}
                     onClick={(): void => {
-                        history.push('/');
+                        history.push(ROUTES.HOME);
                     }}
                     style={{ cursor: 'pointer' }}
                 />
                 <Spacer />
                 <Hidden smDown>
-                    <NavLink to={'our-pros'} title={'Meet Our Pros'} />
-                    <NavLink to={'tips-of-the-month'} title={'Tips of the Month'} />
-                    <NavLink to={'19th-hole'} title={'The 19th Hole'} />
+                    <NavLink to={ROUTES.PROS} title={'Meet Our Pros'} />
+                    <NavLink to={ROUTES.TIPS} title={'Tip of the Month'} />
+                    <NavLink to={ROUTES.BLOG} title={'The 19th Hole'} />
                     <Spacer flex={0} width={theme.spacing(2)} />
                     <UserMenu />
                 </Hidden>

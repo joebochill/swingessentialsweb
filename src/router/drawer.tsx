@@ -5,6 +5,7 @@ import { ShoppingCart, ExitToApp, Person, Videocam, Subscriptions, Today, LocalB
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../redux/reducers';
+import { ROUTES } from '../constants/routes';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -67,7 +68,7 @@ export const NavigationDrawer = (): JSX.Element => {
                 icon={<Subscriptions />}
                 divider
                 onClick={(): void => {
-                    clickMenuItem('/lessons');
+                    clickMenuItem(ROUTES.LESSONS);
                 }}
             />
             <MenuListItem
@@ -75,7 +76,7 @@ export const NavigationDrawer = (): JSX.Element => {
                 icon={<Videocam />}
                 divider
                 onClick={(): void => {
-                    clickMenuItem('/lessons');
+                    clickMenuItem(ROUTES.SUBMIT);
                 }}
             />
             <MenuListItem
@@ -83,15 +84,15 @@ export const NavigationDrawer = (): JSX.Element => {
                 icon={<ShoppingCart />}
                 divider
                 onClick={(): void => {
-                    clickMenuItem('/lessons');
+                    clickMenuItem(ROUTES.ORDER);
                 }}
             />
             <MenuListItem
-                title={'Tips of the Month'}
+                title={'Tip of the Month'}
                 icon={<Today />}
                 divider
                 onClick={(): void => {
-                    clickMenuItem('/lessons');
+                    clickMenuItem(ROUTES.TIPS);
                 }}
             />
             <MenuListItem
@@ -99,7 +100,7 @@ export const NavigationDrawer = (): JSX.Element => {
                 icon={<LocalBar />}
                 divider
                 onClick={(): void => {
-                    clickMenuItem('/lessons');
+                    clickMenuItem(ROUTES.BLOG);
                 }}
             />
             <MenuListItem
@@ -107,7 +108,7 @@ export const NavigationDrawer = (): JSX.Element => {
                 icon={<Person />}
                 divider
                 onClick={(): void => {
-                    clickMenuItem('/lessons');
+                    clickMenuItem(ROUTES.PROFILE);
                 }}
             />
             <MenuListItem
@@ -115,7 +116,8 @@ export const NavigationDrawer = (): JSX.Element => {
                 icon={<ExitToApp />}
                 divider
                 onClick={(): void => {
-                    history.push('/logout');
+                    // TODO Log Out
+                    history.push(ROUTES.LOGIN);
                     dispatch({ type: 'CLOSE_DRAWER' });
                 }}
             />

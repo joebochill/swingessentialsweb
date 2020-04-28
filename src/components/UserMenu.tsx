@@ -4,6 +4,7 @@ import React, { useCallback, useState } from 'react';
 import { Spacer } from '@pxblue/react-components';
 import { ShoppingCart, Subscriptions, Videocam, Person, ExitToApp } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -154,33 +155,34 @@ export const UserMenu: React.FC = () => {
                     title={'Your Lessons'}
                     icon={<Subscriptions />}
                     divider
-                    onClick={(): void => clickMenuItem('/lessons')}
+                    onClick={(): void => clickMenuItem(ROUTES.LESSONS)}
                 />
                 <MenuListItem
                     title={'Submit Your Swing'}
                     icon={<Videocam />}
                     divider
-                    onClick={(): void => clickMenuItem('/submit')}
+                    onClick={(): void => clickMenuItem(ROUTES.SUBMIT)}
                 />
                 {/* <MenuGroupHeader title={'Credits'} subtitle={'5 Remaining'} /> */}
                 <MenuListItem
                     title={'Order More'}
                     icon={<ShoppingCart />}
                     divider
-                    onClick={(): void => clickMenuItem('/order')}
+                    onClick={(): void => clickMenuItem(ROUTES.ORDER)}
                 />
                 {/* <MenuGroupHeader title={'Account'} /> */}
                 <MenuListItem
                     title={'Your Profile'}
                     icon={<Person />}
                     divider
-                    onClick={(): void => clickMenuItem('/profile')}
+                    onClick={(): void => clickMenuItem(ROUTES.PROFILE)}
                 />
                 <MenuListItem
                     title={'Sign Out'}
                     icon={<ExitToApp />}
                     onClick={(): void => {
-                        history.push('/logout');
+                        // TODO Actually log out
+                        history.push(ROUTES.LOGIN);
                         closeMenu();
                     }}
                 />

@@ -6,7 +6,7 @@ Swing Essentials is an online platform that allows golfers the opportunity to re
 ### The 19th Hole
 Our golfing blog. Stories and Q&A from the golf world.
 
-### Tips of the Month
+### Tip of the Month
 Each month, Swing Essentials publishes a video tip highlighting some common problems golfers face along with some tricks and suggestions for how to avoid them.
 
 ### Lessons
