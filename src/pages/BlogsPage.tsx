@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import bg from '../assets/images/banners/tips.jpg';
+import bg from '../assets/images/banners/19th.jpg';
 import {
     makeStyles,
     Theme,
@@ -15,10 +15,9 @@ import {
     useMediaQuery,
 } from '@material-ui/core';
 import { SectionBlurb } from '../components/SectionBlurb';
-import { AddCircle, Today, Create, ChevronRight, ChevronLeft } from '@material-ui/icons';
-import YouTube from 'react-youtube';
+import { AddCircle, Create, ChevronRight, ChevronLeft, LocalBar } from '@material-ui/icons';
 
-import { MockTips } from '../__mock-data__';
+import { MockBlogs } from '../__mock-data__';
 import { Spacer, InfoListItem } from '@pxblue/react-components';
 import { prettyDate } from '../utilities/date';
 import { splitParagraphText } from '../utilities/text';
@@ -53,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 padding: `100px 10%`,
             },
         },
-        tipSection: {
+        blogSection: {
             width: '100%',
             display: 'flex',
             alignItems: 'flex-start',
@@ -87,21 +86,21 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export const TipsPage: React.FC = (): JSX.Element => {
+export const BlogsPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const theme = useTheme();
-    const [activeYear, setActiveYear] = useState(parseInt(MockTips[0].date.substr(0, 4), 10));
-    const [activeTip, setActiveTip] = useState(MockTips[0]);
+    const [activeYear, setActiveYear] = useState(parseInt(MockBlogs[0].date.substr(0, 4), 10));
+    const [activeBlog, setActiveBlog] = useState(MockBlogs[0]);
     const [activeIndex, setActiveIndex] = useState(0);
     const isSmall = useMediaQuery('(max-width:959px)');
 
-    const firstYear = parseInt(MockTips[MockTips.length - 1].date.substr(0, 4), 10);
-    const lastYear = parseInt(MockTips[0].date.substr(0, 4), 10);
+    const firstYear = parseInt(MockBlogs[MockBlogs.length - 1].date.substr(0, 4), 10);
+    const lastYear = parseInt(MockBlogs[0].date.substr(0, 4), 10);
 
     const isFirstYear = activeYear === firstYear;
     const isLastYear = activeYear === lastYear;
 
-    const description = splitParagraphText(activeTip.comments);
+    const description = splitParagraphText(activeBlog.body);
     return (
         <>
             <div className={classes.bannerWrapper}>
@@ -124,17 +123,17 @@ export const TipsPage: React.FC = (): JSX.Element => {
                         left: 0,
                         backgroundImage: `url(${bg})`,
                         backgroundSize: 'cover',
-                        backgroundPosition: 'center right',
+                        backgroundPosition: 'right 30%',
                         backgroundRepeat: 'no-repeat',
                         opacity: 0.5,
                     }}
                 />
                 <SectionBlurb
                     jumbo
-                    icon={<Today fontSize={'inherit'} />}
-                    headline={'Tip of the Month'}
-                    subheading={'Keep your game sharp'}
-                    body={`Every month, Swing Essentials brings you new video tips to help you solve common problems in your golf game. If you have an idea for a future tip, let us know!`}
+                    icon={<LocalBar fontSize={'inherit'} />}
+                    headline={'The 19th Hole'}
+                    subheading={'Stories from the field'}
+                    body={`The 19th Hole is where we talk shop about all things golf. We talk about stories from our adventures on the golf course, tips and tricks for maximizing your performance, and opportunities for you to get more involved in the golfing community. We’d love to hear from you as well! If you have ideas for a post,send us an email. Or better yet, if you'd like to be featured here, send a post!`}
                     style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
                 />
             </div>
@@ -142,12 +141,12 @@ export const TipsPage: React.FC = (): JSX.Element => {
                 <Toolbar style={{ justifyContent: 'center' }}>
                     <Button variant={'text'}>
                         <AddCircle style={{ marginRight: 4 }} />
-                        New Tip
+                        New Post
                     </Button>
                 </Toolbar>
             </AppBar>
             <div className={classes.section}>
-                <div className={classes.tipSection}>
+                <div className={classes.blogSection}>
                     {!isSmall && (
                         <Card className={classes.listCard}>
                             <CardHeader
@@ -173,27 +172,27 @@ export const TipsPage: React.FC = (): JSX.Element => {
                                 classes={{ action: classes.actionPanel }}
                                 style={{ background: theme.palette.primary.main, color: 'white' }}
                             />
-                            {MockTips.map((tip, index) => {
-                                if (!tip.date.startsWith(activeYear.toString())) {
+                            {MockBlogs.map((blog, index) => {
+                                if (!blog.date.startsWith(activeYear.toString())) {
                                     return null;
                                 }
                                 return (
                                     <InfoListItem
-                                        key={`tip_${tip.id}`}
+                                        key={`blog_${blog.id}`}
                                         dense
                                         chevron
                                         hidePadding
                                         wrapTitle
                                         divider={'full'}
-                                        title={tip.title}
-                                        subtitle={prettyDate(tip.date)}
+                                        title={blog.title}
+                                        subtitle={prettyDate(blog.date)}
                                         onClick={(): void => {
-                                            setActiveTip(tip);
+                                            setActiveBlog(blog);
                                             setActiveIndex(index);
                                         }}
-                                        statusColor={tip.id === activeTip.id ? theme.palette.primary.main : ''}
+                                        statusColor={blog.id === activeBlog.id ? theme.palette.primary.main : ''}
                                         backgroundColor={
-                                            tip.id === activeTip.id ? theme.palette.primary.light : undefined
+                                            blog.id === activeBlog.id ? theme.palette.primary.light : undefined
                                         }
                                     />
                                 );
@@ -201,72 +200,49 @@ export const TipsPage: React.FC = (): JSX.Element => {
                         </Card>
                     )}
                     <Spacer flex={0} width={100} />
-                    <div style={{ flex: '1 1 0px' }}>
-                        <div
-                            style={{
-                                width: '100%',
-                                background: 'black',
-                                paddingTop: '56.25%',
-                                position: 'relative',
-                                marginBottom: 32,
-                            }}
-                        >
-                            <YouTube
-                                videoId={activeTip.video}
-                                // id={"se_response_video"}
-                                className={classes.youtube}
-                                opts={{
-                                    playerVars: {
-                                        showinfo: 0,
-                                        origin: 'www.swingessentials.com',
-                                        playsinline: 1,
-                                        rel: 0,
-                                    },
-                                }}
-                            />
-                            {isSmall && (
-                                <>
-                                    <IconButton
-                                        disabled={activeIndex <= 0}
-                                        style={{
-                                            position: 'absolute',
-                                            top: '50%',
-                                            transform: 'translateY(-50%)',
-                                            left: -32,
-                                            padding: 0,
-                                            fontSize: 32,
-                                        }}
-                                        onClick={(): void => {
-                                            setActiveIndex(activeIndex - 1);
-                                            setActiveTip(MockTips[activeIndex - 1]);
-                                        }}
-                                    >
-                                        <ChevronLeft fontSize={'inherit'} />
-                                    </IconButton>
-                                    <IconButton
-                                        disabled={activeIndex >= MockTips.length - 1}
-                                        style={{
-                                            position: 'absolute',
-                                            top: '50%',
-                                            transform: 'translateY(-50%)',
-                                            right: -32,
-                                            padding: 0,
-                                            fontSize: 32,
-                                        }}
-                                        onClick={(): void => {
-                                            setActiveIndex(activeIndex + 1);
-                                            setActiveTip(MockTips[activeIndex + 1]);
-                                        }}
-                                    >
-                                        <ChevronRight fontSize={'inherit'} />
-                                    </IconButton>
-                                </>
-                            )}
-                        </div>
+                    <div style={{ flex: '1 1 0px', position: 'relative' }}>
+                        {isSmall && (
+                            <>
+                                <IconButton
+                                    disabled={activeIndex <= 0}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        left: -32,
+                                        padding: 0,
+                                        fontSize: 32,
+                                    }}
+                                    onClick={(): void => {
+                                        setActiveIndex(activeIndex - 1);
+                                        setActiveBlog(MockBlogs[activeIndex - 1]);
+                                    }}
+                                >
+                                    <ChevronLeft fontSize={'inherit'} />
+                                </IconButton>
+                                <IconButton
+                                    disabled={activeIndex >= MockBlogs.length - 1}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        right: -32,
+                                        padding: 0,
+                                        fontSize: 32,
+                                    }}
+                                    onClick={(): void => {
+                                        setActiveIndex(activeIndex + 1);
+                                        setActiveBlog(MockBlogs[activeIndex + 1]);
+                                    }}
+                                >
+                                    <ChevronRight fontSize={'inherit'} />
+                                </IconButton>
+                            </>
+                        )}
                         <FancyHeadline
                             icon={<Create fontSize={'inherit'} />}
-                            headline={activeTip.title}
-                            subheading={prettyDate(activeTip.date)}
+                            headline={activeBlog.title}
+                            subheading={prettyDate(activeBlog.date)}
                             style={{ cursor: 'pointer' }}
                             onClick={(): void => {
                                 /* do nothing */

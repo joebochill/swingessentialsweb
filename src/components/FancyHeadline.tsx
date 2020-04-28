@@ -24,13 +24,13 @@ type FancyHeadlineProps = HTMLAttributes<HTMLDivElement> & {
     headline: string;
     subheading?: string;
     icon?: JSX.Element;
-    small?: boolean;
+    jumbo?: boolean;
 };
 export const FancyHeadline: React.FC<FancyHeadlineProps> = (props) => {
-    const { small, headline, subheading, icon, ...other } = props;
+    const { jumbo, headline, subheading, icon, ...other } = props;
     const classes = useStyles();
 
-    return small ? (
+    return !jumbo ? (
         <div className={classes.headline} {...other}>
             {icon && <div className={classes.smallHeadlineIcon}>{icon}</div>}
             <div style={{ marginBottom: 16 }}>

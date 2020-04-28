@@ -72,11 +72,12 @@ export const ProsPage: React.FC = (): JSX.Element => {
                     }}
                 />
                 <SectionBlurb
+                    jumbo
                     icon={<Face fontSize={'inherit'} />}
                     headline={'Meet Our Pros'}
                     subheading={'The folks behind the magic'}
                     body={`At Swing Essentials, all of our lessons are crafted by PGA-certified golf professionals with years of playing and coaching experience. Rest assured that you are in good hands when you submit your videos for analysis. If you are interested in joining our team of professionals, please contact us!`}
-                    style={{ color: 'white', zIndex: 100 }}
+                    style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
                 />
             </div>
             <AppBar position={'static'} color={'default'}>

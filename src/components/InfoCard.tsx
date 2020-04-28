@@ -1,7 +1,6 @@
 import React, { MouseEvent } from 'react';
-import { useTheme, makeStyles, Theme, createStyles } from '@material-ui/core';
+import { useTheme, makeStyles, Theme, createStyles, Typography } from '@material-ui/core';
 import * as Colors from '@pxblue/colors';
-import { Headline, Body } from './Typography';
 import { ChevronRight } from '@material-ui/icons';
 
 const getTopPaddingForAspectRatio = (ratio: AspectRatio | undefined): string => {
@@ -79,8 +78,12 @@ export const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
             >
                 <ChevronRight className={classes.chevron} fontSize={'inherit'} />
             </div>
-            <Headline noWrap>{props.title}</Headline>
-            <Body style={{ marginTop: theme.spacing(1) }}>{props.description}</Body>
+            <Typography variant={'h5'} style={{ fontWeight: 600 }} noWrap>
+                {props.title}
+            </Typography>
+            <Typography variant={'h6'} style={{ fontWeight: 400, marginTop: theme.spacing(1) }}>
+                {props.description}
+            </Typography>
         </div>
     );
 };

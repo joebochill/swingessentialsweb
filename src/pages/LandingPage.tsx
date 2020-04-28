@@ -81,6 +81,7 @@ const useStyles = makeStyles((theme: Theme) =>
         testimonialWrapper: {
             display: 'flex',
             alignItems: 'stretch',
+            justifyContent: 'center',
             marginTop: 32,
             [theme.breakpoints.down('sm')]: {
                 flexDirection: 'column',
@@ -141,6 +142,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
             </div>
             <div className={classes.section}>
                 <SectionBlurb
+                    jumbo
                     headline={'Lessons On Your Schedule'}
                     body={
                         <span>
@@ -236,6 +238,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
                 />
                 <div style={{ zIndex: 100 }}>
                     <SectionBlurb
+                        jumbo
                         icon={<GetApp fontSize={'inherit'} />}
                         headline={'Download Our App!'}
                         subheading={'Available in the App Store and Google Play'}
