@@ -68,20 +68,20 @@ export const SETheme: ThemeOptions = {
         },
 
         // BUTTON OVERRIDES
-        MuiButton: {
-            root: {
-                textTransform: 'none',
-            },
-            outlined: {
-                borderColor: ThemeColors.black[500],
-            },
-            outlinedPrimary: {
-                borderColor: purple[500],
-            },
-            outlinedSecondary: {
-                borderColor: ThemeColors.green[500],
-            },
-        },
+        // MuiButton: {
+        //     root: {
+        //         textTransform: 'none',
+        //     },
+        //     outlined: {
+        //         borderColor: ThemeColors.black[500],
+        //     },
+        //     outlinedPrimary: {
+        //         borderColor: purple[500],
+        //     },
+        //     outlinedSecondary: {
+        //         borderColor: ThemeColors.green[500],
+        //     },
+        // },
 
         // BUTTON OVERRIDES
         MuiFab: {

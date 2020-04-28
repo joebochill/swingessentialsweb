@@ -1,10 +1,12 @@
-import { Menu, Avatar, Typography, Divider } from '@material-ui/core';
+import { Menu, Avatar, Typography, Divider, Button } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useCallback, useState } from 'react';
 import { Spacer } from '@pxblue/react-components';
 import { ShoppingCart, Subscriptions, Videocam, Person, ExitToApp, Home } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
+import { useSelector } from 'react-redux';
+import { AppState } from '../__types__';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -72,6 +74,7 @@ export const UserMenu: React.FC = () => {
     const history = useHistory();
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+    const token = useSelector((state: AppState) => state.auth.token);
 
     const closeMenu = useCallback(() => {
         setAnchorEl(null);
@@ -87,7 +90,7 @@ export const UserMenu: React.FC = () => {
         [history]
     );
 
-    return (
+    return token ? (
         <>
             <Avatar aria-controls={'user-menu'} className={classes.avatar} onClick={openMenu}>
                 JB
@@ -155,6 +158,9 @@ export const UserMenu: React.FC = () => {
                 />
             </Menu>
         </>
+    ) : 
+    (
+        <Button variant={'outlined'} color={'inherit'} onClick={():void => history.push(ROUTES.LOGIN)}>SIGN IN</Button>
     );
 };
 

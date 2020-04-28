@@ -1,5 +1,8 @@
 export type UserRole = 'administrator' | 'anonymous' | 'customer' | 'pending';
-
+export type Credentials = {
+    username: string;
+    password: string;
+};
 
 export type GeneralState = {
     drawerOpen: boolean;

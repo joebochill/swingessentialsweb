@@ -10,6 +10,7 @@ import { PlaceholderPage } from '../pages/Placeholder';
 import { ProsPage } from '../pages/ProsPage';
 import { TipsPage } from '../pages/TipsPage';
 import { BlogsPage } from '../pages/BlogsPage';
+import { LoginPage } from '../pages/LoginPage';
 
 const ScrollToTop = (): any => {
     const { pathname } = useLocation();
@@ -27,7 +28,7 @@ export const MainRouter = (): JSX.Element => (
         <Toolbar />
         <Switch>
             <Route exact path={`${ROUTES.HOME}`} component={LandingPage} />
-            <Route exact path={`${ROUTES.LOGIN}`} component={PlaceholderPage} />
+            <Route exact path={`${ROUTES.LOGIN}`} component={LoginPage} />
             <Route exact path={`${ROUTES.PROS}`} component={ProsPage} />
             <Route exact path={`${ROUTES.BLOG}`} component={BlogsPage} />
             <Route exact path={`${ROUTES.TIPS}`} component={TipsPage} />

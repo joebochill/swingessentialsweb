@@ -4,7 +4,7 @@ import { MenuListItem } from '../components/UserMenu';
 import { ShoppingCart, ExitToApp, Person, Videocam, Subscriptions, Today, LocalBar, Home } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from '../redux/reducers';
+import { AppState } from '../__types__';
 import { ROUTES } from '../constants/routes';
 
 const useStyles = makeStyles((theme: Theme) =>
