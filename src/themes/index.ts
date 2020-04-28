@@ -88,11 +88,11 @@ export const SETheme: ThemeOptions = {
         },
 
         // LIST ITEM OVERRIDES
-        MuiListItem: {
-            root: {
-                color: ThemeColors.black['500'],
-            },
-        },
+        // MuiListItem: {
+        //     root: {
+        //         color: ThemeColors.black['500'],
+        //     },
+        // },
 
         // TABS OVERRIDES
         MuiTabs: {

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Drawer, Divider, Avatar, Typography, makeStyles, Theme, createStyles, useTheme } from '@material-ui/core';
 import { MenuListItem } from '../components/UserMenu';
-import { ShoppingCart, ExitToApp, Person, Videocam, Subscriptions, Today, LocalBar } from '@material-ui/icons';
+import { ShoppingCart, ExitToApp, Person, Videocam, Subscriptions, Today, LocalBar, Home } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../redux/reducers';
@@ -63,6 +63,14 @@ export const NavigationDrawer = (): JSX.Element => {
                 </div>
             </div>
             <Divider />
+            <MenuListItem
+                title={'Home'}
+                icon={<Home />}
+                divider
+                onClick={(): void => {
+                    clickMenuItem(ROUTES.HOME);
+                }}
+            />
             <MenuListItem
                 title={'Your Lessons'}
                 icon={<Subscriptions />}

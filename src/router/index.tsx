@@ -8,6 +8,7 @@ import { Footer } from '../components/Footer';
 import { ROUTES } from '../constants/routes';
 import { PlaceholderPage } from '../pages/Placeholder';
 import { ProsPage } from '../pages/ProsPage';
+import { TipsPage } from '../pages/TipsPage';
 
 const ScrollToTop = (): any => {
     const { pathname } = useLocation();
@@ -29,7 +30,7 @@ export const MainRouter = (): JSX.Element => (
             <Route exact path={`${ROUTES.PROS}`} component={ProsPage} />
             <Route exact path={`${ROUTES.BLOG}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.BLOG}/:id`} component={PlaceholderPage} />
-            <Route exact path={`${ROUTES.TIPS}`} component={PlaceholderPage} />
+            <Route exact path={`${ROUTES.TIPS}`} component={TipsPage} />
             <Route exact path={`${ROUTES.TIPS}/:id`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.LESSONS}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.LESSONS}/:id`} component={PlaceholderPage} />

@@ -2,7 +2,7 @@ import { Menu, Avatar, Typography, Divider } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useCallback, useState } from 'react';
 import { Spacer } from '@pxblue/react-components';
-import { ShoppingCart, Subscriptions, Videocam, Person, ExitToApp } from '@material-ui/icons';
+import { ShoppingCart, Subscriptions, Videocam, Person, ExitToApp, Home } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 
@@ -42,17 +42,6 @@ const useStyles = makeStyles((theme: Theme) =>
                 backgroundColor: theme.palette.primary.light,
             },
         },
-        groupHeader: {
-            userSelect: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '4px 16px',
-        },
-        header: {
-            width: '100%',
-            userSelect: 'none',
-        },
         paper: {
             color: theme.palette.primary.main,
         },
@@ -75,26 +64,6 @@ export const MenuListItem: React.FC<MenuListItemProps> = (props) => {
                 <Typography>{props.title}</Typography>
             </div>
             {props.divider && <Divider />}
-        </>
-    );
-};
-type MenuGroupHeaderProps = {
-    title: string;
-    subtitle?: string;
-    topDivider?: boolean;
-    bottomDivider?: boolean;
-};
-export const MenuGroupHeader: React.FC<MenuGroupHeaderProps> = (props) => {
-    const { title, subtitle, topDivider = true, bottomDivider = true } = props;
-    const classes = useStyles();
-    return (
-        <>
-            {topDivider && <Divider />}
-            <div className={classes.groupHeader}>
-                <Typography variant={'subtitle2'}>{title}</Typography>
-                {props.subtitle !== undefined && <Typography variant={'caption'}>{subtitle}</Typography>}
-            </div>
-            {bottomDivider && <Divider />}
         </>
     );
 };
@@ -150,7 +119,12 @@ export const UserMenu: React.FC = () => {
                     </div>
                 </div>
                 <Divider />
-                {/* <MenuGroupHeader title={'Lessons'} /> */}
+                <MenuListItem
+                    title={'Home'}
+                    icon={<Home />}
+                    divider
+                    onClick={(): void => clickMenuItem(ROUTES.HOME)}
+                />
                 <MenuListItem
                     title={'Your Lessons'}
                     icon={<Subscriptions />}
@@ -163,14 +137,12 @@ export const UserMenu: React.FC = () => {
                     divider
                     onClick={(): void => clickMenuItem(ROUTES.SUBMIT)}
                 />
-                {/* <MenuGroupHeader title={'Credits'} subtitle={'5 Remaining'} /> */}
                 <MenuListItem
                     title={'Order More'}
                     icon={<ShoppingCart />}
                     divider
                     onClick={(): void => clickMenuItem(ROUTES.ORDER)}
                 />
-                {/* <MenuGroupHeader title={'Account'} /> */}
                 <MenuListItem
                     title={'Your Profile'}
                     icon={<Person />}
