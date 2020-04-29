@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route, useLocation, Redirect } from 'r
 import { NavigationDrawer } from '../components/navigation/drawer';
 import { LandingPage } from '../pages/LandingPage';
 import { Toolbar } from '../components/navigation/Toolbar';
-import { Footer } from '../components/Footer';
+import { Footer } from '../components/navigation/Footer';
 import { ROUTES } from '../constants/routes';
 import { PlaceholderPage } from '../pages/Placeholder';
 import { ProsPage } from '../pages/ProsPage';

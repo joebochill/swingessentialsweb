@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from 'react';
 import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core';
 import { Create } from '@material-ui/icons';
 import { Spacer } from '@pxblue/react-components';
-import { splitParagraphText } from '../utilities/text';
+import { splitParagraphText } from '../../utilities/text';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

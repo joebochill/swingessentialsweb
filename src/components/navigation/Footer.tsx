@@ -1,9 +1,9 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, makeStyles, Theme, createStyles, IconButton } from '@material-ui/core';
-import { NavLink } from './navigation/Toolbar';
-import { ROUTES } from '../constants/routes';
+import { NavLink } from './Toolbar';
+import { ROUTES } from '../../constants/routes';
 import { Twitter, Instagram, Facebook, Email } from '@material-ui/icons';
-import { APP_VERSION } from '../constants';
+import { APP_VERSION } from '../../constants';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

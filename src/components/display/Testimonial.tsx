@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Avatar, makeStyles, Theme, createStyles } from '@material-ui/core';
-import { Headline, SubHeading } from './Typography';
+import { Headline, SubHeading } from '../text/Typography';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
