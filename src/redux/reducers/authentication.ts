@@ -22,15 +22,18 @@ export const AuthReducer = (state = initialState, action: any): AuthState => {
         case LOGIN.SUCCESS:
         case CREATE_ACCOUNT.SUCCESS:
         case SET_TOKEN.REQUEST:
-        case REFRESH_TOKEN.SUCCESS:
+        case REFRESH_TOKEN.SUCCESS: {
+            const role = getUserRole(action.payload.token);
             return {
                 ...state,
                 modalWarning: false,
                 failCount: 0,
                 token: action.payload.token,
                 pending: false,
-                role: getUserRole(action.payload.token),
+                role: role,
+                admin: role === 'administrator',
             };
+        }
         case LOGIN.FAILURE:
             return {
                 ...state,

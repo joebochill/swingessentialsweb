@@ -95,6 +95,7 @@ export const TipsPage: React.FC = (): JSX.Element => {
     const theme = useTheme();
     const tips = useSelector((state: AppState) => state.tips.tipList);
     const loading = useSelector((state: AppState) => state.tips.loading);
+    const admin = useSelector((state: AppState) => state.auth.admin);
     const [activeYear, setActiveYear] = useState(currentYear);
     const [activeTip, setActiveTip] = useState<Tip | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -157,14 +158,16 @@ export const TipsPage: React.FC = (): JSX.Element => {
                     style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
                 />
             </div>
-            <AppBar position={'static'} color={'default'}>
-                <Toolbar style={{ justifyContent: 'center' }}>
-                    <Button variant={'text'}>
-                        <AddCircle style={{ marginRight: 4 }} />
-                        New Tip
-                    </Button>
-                </Toolbar>
-            </AppBar>
+            {admin && (
+                <AppBar position={'static'} color={'default'}>
+                    <Toolbar style={{ justifyContent: 'center' }}>
+                        <Button variant={'text'}>
+                            <AddCircle style={{ marginRight: 4 }} />
+                            New Tip
+                        </Button>
+                    </Toolbar>
+                </AppBar>
+            )}
             {loading && (
                 <div className={classes.section}>
                     <CircularProgress />

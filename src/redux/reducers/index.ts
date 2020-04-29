@@ -9,6 +9,7 @@ import { GeneralReducer } from './general';
 import { UserDataReducer } from './userData';
 import { BlogsReducer } from './blogs';
 import { TipsReducer } from './tips';
+import { ProsReducer } from './pros';
 
 export const rootReducer = (): any =>
     combineReducers<AppState>({
@@ -17,4 +18,5 @@ export const rootReducer = (): any =>
         user: UserDataReducer,
         blogs: BlogsReducer,
         tips: TipsReducer,
+        pros: ProsReducer,
     });

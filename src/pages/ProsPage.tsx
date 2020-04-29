@@ -1,11 +1,11 @@
 import React from 'react';
 import bg from '../assets/images/banners/pros.jpg';
-import { makeStyles, Theme, createStyles, Toolbar, AppBar, Button } from '@material-ui/core';
+import { makeStyles, Theme, createStyles, Toolbar, AppBar, Button, CircularProgress } from '@material-ui/core';
 import { SectionBlurb } from '../components/SectionBlurb';
 import { Face, AddCircle } from '@material-ui/icons';
 import { ProBio } from '../components/ProBio';
-
-import { MockBios } from '../__mock-data__';
+import { AppState } from '../__types__';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -43,6 +43,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const ProsPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
+    const pros = useSelector((state: AppState) => state.pros.prosList);
+    const loading = useSelector((state: AppState) => state.pros.loading);
+    const admin = useSelector((state: AppState) => state.auth.admin);
 
     return (
         <>
@@ -80,21 +83,28 @@ export const ProsPage: React.FC = (): JSX.Element => {
                     style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
                 />
             </div>
-            <AppBar position={'static'} color={'default'}>
-                <Toolbar style={{ justifyContent: 'center' }}>
-                    <Button variant={'text'}>
-                        <AddCircle style={{ marginRight: 4 }} />
-                        New Pro
-                    </Button>
-                </Toolbar>
-            </AppBar>
-            {MockBios.map((bio) => (
+            {admin && (
+                <AppBar position={'static'} color={'default'}>
+                    <Toolbar style={{ justifyContent: 'center' }}>
+                        <Button variant={'text'}>
+                            <AddCircle style={{ marginRight: 4 }} />
+                            New Pro
+                        </Button>
+                    </Toolbar>
+                </AppBar>
+            )}
+            {loading && (
+                <div className={classes.section}>
+                    <CircularProgress />
+                </div>
+            )}
+            {pros.map((bio) => (
                 <div key={`bio_${bio.id}`} className={classes.section}>
                     <ProBio
                         image={bio.image}
-                        background={{ size: bio.imageSize }}
+                        background={{ size: bio.imageSize, position: bio.imagePosition }}
                         name={bio.name}
-                        title={bio.title}
+                        title={bio.title || 'Lead Instructor'}
                         description={bio.bio}
                     />
                 </div>

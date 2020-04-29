@@ -59,7 +59,9 @@ export const ProBio: React.FC<ProBioProps> = (props) => {
                 <div
                     className={classes.avatar}
                     style={{
-                        backgroundImage: `url(${image})`,
+                        backgroundImage: `url(${
+                            image.startsWith('http') ? image : `https://www.swingessentials.com/images/pros/${image}`
+                        })`,
                         backgroundPosition: background.position,
                         backgroundSize: background.size,
                     }}

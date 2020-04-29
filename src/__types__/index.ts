@@ -45,6 +45,15 @@ export type Tip = {
     video: string;
     comments: string;
 };
+export type Pro = {
+    id: string;
+    name: string;
+    title?: string;
+    bio: string;
+    image: string;
+    imageSize?: string;
+    imagePosition?: string;
+};
 
 // Redux State Types
 export type GeneralState = {
@@ -88,6 +97,10 @@ export type CreditsState = {
 export type BlogsState = {
     loading: boolean;
     blogList: Blog[];
+};
+export type ProsState = {
+    loading: boolean;
+    prosList: Pro[];
 };
 export type PackagesState = {
     list: Package[];
@@ -141,4 +154,5 @@ export type AppState = {
     user: UserDataState;
     blogs: BlogsState;
     tips: TipsState;
+    pros: ProsState;
 };

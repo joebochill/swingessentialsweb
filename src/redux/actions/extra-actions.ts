@@ -5,6 +5,7 @@ import { loadBlogs } from './blog-actions';
 // import { loadPackages } from './PackageActions';
 import { ASYNC_PREFIX } from '../../constants';
 import { setToken } from './auth-actions';
+import { loadPros } from './pro-actions';
 // import { loadTutorials } from './TutorialsActions';
 
 export function loadInitialData(): Function {
@@ -15,6 +16,7 @@ export function loadInitialData(): Function {
         dispatch({ type: ACTIONS.INITIAL_LOAD });
         dispatch(loadTips());
         dispatch(loadBlogs());
+        dispatch(loadPros());
         // dispatch(loadPackages());
         // dispatch(loadFAQ());
         // dispatch(loadTutorials());
