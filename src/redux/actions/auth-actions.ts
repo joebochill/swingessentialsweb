@@ -14,40 +14,42 @@ import { HttpRequest } from '../../api/http';
 // import * as Keychain from 'react-native-keychain';
 
 export function requestLogin(userCredentials: Credentials) {
-    return (dispatch: ThunkDispatch<any, void, any>) => {
+    return (dispatch: ThunkDispatch<any, void, any>): Promise<void> => {
         dispatch({ type: ACTIONS.LOGIN.REQUEST });
-        return fetch(BASEURL + '/' + ACTIONS.LOGIN.API, {
+        return fetch(`${BASEURL}/${ACTIONS.LOGIN.API}`, {
             headers: {
-                [AUTH]: 'Basic ' + btoa(userCredentials.username) + '.' + btoa(userCredentials.password),
+                [AUTH]: `Basic ${btoa(userCredentials.username)}.${btoa(userCredentials.password)}`,
             },
         })
-            .then(response => {
+            .then((response) => {
                 switch (response.status) {
-                    case 200:
+                    case 200: {
                         const token = response.headers.get('Token');
                         response
                             .json()
-                            .then(json => {
+                            .then((json) => {
                                 dispatch(success(ACTIONS.LOGIN.SUCCESS, { ...json, token: token }));
                             })
                             .then(() => {
                                 // dispatch(loadUserContent());
                             });
                         break;
+                    }
                     default:
                         dispatch(failure(ACTIONS.LOGIN.FAILURE, response, 'Login'));
                         break;
                 }
             })
-            .catch(error => {
+            .catch((error: Error) => {
                 // TODO Log an error
+                console.error('Encountered an error', error.message);
                 dispatch(failure(ACTIONS.LOGIN.FAILURE, null, 'Login'));
             });
     };
 }
 /* clears the current authentication token */
 export function requestLogout() {
-    return (dispatch: ThunkDispatch<any, void, any>) => {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.LOGOUT.REQUEST });
         HttpRequest.get(ACTIONS.LOGOUT.API)
             .withFullResponse()
@@ -63,7 +65,7 @@ export function requestLogout() {
 }
 
 export function refreshToken() {
-    return (dispatch: ThunkDispatch<any, void, any>) => {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.REFRESH_TOKEN.REQUEST });
         HttpRequest.get(ACTIONS.REFRESH_TOKEN.API)
             .withFullResponse()
@@ -79,7 +81,7 @@ export function refreshToken() {
 }
 
 export function setToken(token: string) {
-    return (dispatch: ThunkDispatch<any, void, any>) => {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
         const exp = JSON.parse(atob(token.split('.')[1])).exp;
         const expired = exp < Date.now() / 1000;
         if (expired) {
@@ -91,13 +93,13 @@ export function setToken(token: string) {
 }
 
 export function checkToken() {
-    return (dispatch: ThunkDispatch<any, void, any>) => {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.CHECK_TOKEN.REQUEST });
         HttpRequest.get(ACTIONS.CHECK_TOKEN.API)
             .withFullResponse()
             .onSuccess((response: any) => {
                 const token = response.headers.get('Token');
-                if(token){
+                if (token) {
                     dispatch({ type: ACTIONS.SET_TOKEN.REQUEST, payload: { token } });
                     // dispatch(loadUserContent());
                 }

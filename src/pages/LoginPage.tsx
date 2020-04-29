@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
             zIndex: 100,
             width: '80%',
             maxWidth: 512,
-            color: 'white'
+            color: 'white',
         },
         input: {
             background: 'rgba(255,255,255,0.6)',
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             '&$focused': {
                 background: 'rgba(255,255,255,1)',
-            }
+            },
         },
         focused: {
             background: 'rgba(255,255,255,1)',
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             '&$focused': {
                 background: 'rgba(255,255,255,1)',
-            }
+            },
         },
     })
 );
@@ -66,8 +66,7 @@ export const LoginPage: React.FC = (): JSX.Element => {
         }
     }, [failCount, setPassword]);
 
-
-    if (token) return <Redirect to={ROUTES.PROFILE} />
+    if (token) return <Redirect to={ROUTES.PROFILE} />;
     return (
         <>
             <div className={classes.bannerWrapper}>
@@ -103,12 +102,14 @@ export const LoginPage: React.FC = (): JSX.Element => {
                         placeholder={'Username or Email'}
                         name={'username'}
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e): void => {
+                            setUsername(e.target.value);
+                        }}
                         InputProps={{
                             classes: {
                                 root: username ? classes.focused : classes.input,
                                 focused: classes.focused,
-                            }
+                            },
                         }}
                         style={{ marginBottom: 16 }}
                     />
@@ -119,26 +120,38 @@ export const LoginPage: React.FC = (): JSX.Element => {
                         label={'Password'}
                         name={'password'}
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e): void => {
+                            setPassword(e.target.value);
+                        }}
                         InputProps={{
                             classes: {
                                 root: password ? classes.focused : classes.input,
                                 focused: classes.focused,
-                            }
+                            },
                         }}
                         style={{ marginBottom: 16 }}
                     />
-                    {failCount > 0 &&
-                        <div style={{padding: 20, background: '#ca3c3d', color: 'white', textAlign: 'center', marginBottom: 16}}>
+                    {failCount > 0 && (
+                        <div
+                            style={{
+                                padding: 20,
+                                background: '#ca3c3d',
+                                color: 'white',
+                                textAlign: 'center',
+                                marginBottom: 16,
+                            }}
+                        >
                             <Typography>Your username/password was not correct. Please try again.</Typography>
                         </div>
-                    }
+                    )}
                     <Button
                         fullWidth
                         variant={'contained'}
                         color={!username || !password ? 'default' : 'primary'}
                         disabled={!username || !password}
-                        onClick={() => dispatch(requestLogin({ username, password }))}
+                        onClick={(): void => {
+                            dispatch(requestLogin({ username, password }));
+                        }}
                     >
                         Sign In
                     </Button>

@@ -14,8 +14,6 @@ const initialState: AuthState = {
 export const AuthReducer = (state = initialState, action: any): AuthState => {
     switch (action.type) {
         case LOGIN.REQUEST:
-            console.log('logging in request');
-            return state;
         case REFRESH_TOKEN.REQUEST:
             return {
                 ...state,
@@ -25,8 +23,6 @@ export const AuthReducer = (state = initialState, action: any): AuthState => {
         case CREATE_ACCOUNT.SUCCESS:
         case SET_TOKEN.REQUEST:
         case REFRESH_TOKEN.SUCCESS:
-            console.log('logging in success');
-            console.log(action.payload);
             return {
                 ...state,
                 modalWarning: false,
@@ -36,8 +32,6 @@ export const AuthReducer = (state = initialState, action: any): AuthState => {
                 role: getUserRole(action.payload.token),
             };
         case LOGIN.FAILURE:
-            console.log('logging in failure');
-            console.log(action.payload);
             return {
                 ...state,
                 token: null,

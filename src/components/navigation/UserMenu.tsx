@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-const ForwardMenuContent = React.forwardRef((props:{onClose: Function}, ref) => (
-    <MenuContent {...props}/>
-))
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ForwardMenuContent = React.forwardRef((props: { onClose: Function }, ref) => <MenuContent {...props} />);
+ForwardMenuContent.displayName = 'ForwardRefMenuContent';
 
 export const UserMenu: React.FC = () => {
     const history = useHistory();
@@ -46,7 +46,9 @@ export const UserMenu: React.FC = () => {
 
     return token ? (
         <>
-            <Avatar className={classes.avatar} onClick={openMenu}>{initials}</Avatar>
+            <Avatar className={classes.avatar} onClick={openMenu}>
+                {initials}
+            </Avatar>
             <Menu
                 open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
@@ -57,12 +59,13 @@ export const UserMenu: React.FC = () => {
                 MenuListProps={{ style: { padding: 0, minWidth: 200 } }}
                 classes={{ paper: classes.paper }}
             >
-                <ForwardMenuContent onClose={closeMenu}/>
+                <ForwardMenuContent onClose={closeMenu} />
             </Menu>
         </>
-    ) : 
-    (
-        <Button variant={'outlined'} color={'inherit'} onClick={():void => history.push(ROUTES.LOGIN)}>SIGN IN</Button>
+    ) : (
+        <Button variant={'outlined'} color={'inherit'} onClick={(): void => history.push(ROUTES.LOGIN)}>
+            SIGN IN
+        </Button>
     );
 };
 

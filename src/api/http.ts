@@ -14,17 +14,17 @@ type Optionals = Partial<{
     autoRefresh: boolean;
 }>;
 type GeneralResponseMapping = {
-    [key: number]: (...args: Array<any>) => any;
+    [key: number]: (...args: any[]) => any;
 };
 
 export class HttpRequest<TResponses extends GeneralResponseMapping = {}> {
-    public static get(endpoint: string) {
+    public static get(endpoint: string): HttpRequest {
         return new HttpRequest(HttpMethod.GET, endpoint);
     }
-    public static post(endpoint: string) {
+    public static post(endpoint: string): HttpRequest {
         return new HttpRequest(HttpMethod.POST, endpoint);
     }
-    public static put(endpoint: string) {
+    public static put(endpoint: string): HttpRequest {
         return new HttpRequest(HttpMethod.PUT, endpoint);
     }
     private readonly method: HttpMethod;
@@ -42,35 +42,32 @@ export class HttpRequest<TResponses extends GeneralResponseMapping = {}> {
             this.body = optionals.body;
         }
     }
-    public withBody<TBody>(body: TBody, stringify: boolean = true): HttpRequest<TResponses> {
+    public withBody<TBody>(body: TBody, stringify = true): HttpRequest<TResponses> {
         this.body = stringify ? JSON.stringify(body) : body;
         return this;
     }
-    public onSuccess(callback: Function) {
+    public onSuccess(callback: Function): HttpRequest<TResponses> {
         this.successCallback = callback;
         return this;
     }
-    public onFailure(callback: Function) {
+    public onFailure(callback: Function): HttpRequest<TResponses> {
         this.failureCallback = callback;
         return this;
     }
-    public withFullResponse() {
+    public withFullResponse(): HttpRequest<TResponses> {
         this.parseResponse = false;
         return this;
     }
-    public request() {
+    public request(): Promise<void> {
         return fetch(`${BASEURL}/${this.endpoint}`, {
             method: this.method,
             // @ts-ignore
-            headers: Object.assign(
-                { 'Content-Type': 'application/json' },
-                TOKEN ? { [AUTH]: `Bearer ${TOKEN}` } : {}
-            ),
+            headers: Object.assign({ 'Content-Type': 'application/json' }, TOKEN ? { [AUTH]: `Bearer ${TOKEN}` } : {}),
             body: this.body,
         })
             .then(async (response: Response) => {
                 switch (response.status) {
-                    case 200:
+                    case 200: {
                         let reply = {};
                         if (this.method === HttpMethod.PUT || this.parseResponse === false) {
                             reply = response;
@@ -79,6 +76,7 @@ export class HttpRequest<TResponses extends GeneralResponseMapping = {}> {
                         }
                         if (this.successCallback) this.successCallback(reply);
                         break;
+                    }
                     default:
                         if (this.failureCallback) this.failureCallback(response);
                         break;
@@ -86,39 +84,44 @@ export class HttpRequest<TResponses extends GeneralResponseMapping = {}> {
             })
             .catch((error: Error) => {
                 // TODO: Log an error
+                console.error('Encountered an error:', error.message);
                 if (this.failureCallback) this.failureCallback(null);
             });
     }
-    public requestWithProgress(onProgress: (this: XMLHttpRequest, ev: ProgressEvent) => any) {
+    public requestWithProgress(onProgress: (this: XMLHttpRequest, ev: ProgressEvent) => any): Promise<void> {
         return new Promise<XMLHttpRequest>((res, rej) => {
-            var xhr = new XMLHttpRequest();
+            const xhr = new XMLHttpRequest();
             xhr.open(this.method, `${BASEURL}/${this.endpoint}`);
             if (TOKEN) {
                 xhr.setRequestHeader(AUTH, `Bearer ${TOKEN}`);
             }
-            xhr.onload = e => res(xhr);
+            xhr.onload = (): void => res(xhr);
             xhr.onerror = rej;
             if (xhr.upload && onProgress) xhr.upload.onprogress = onProgress; // event.loaded / event.total * 100 ; //event.lengthComputable
             xhr.send(this.body);
         })
-            .then(async (response:XMLHttpRequest):Promise<any> => {
-                switch (response.status) {
-                    case 200:
-                        let reply = {};
-                        if (this.method === HttpMethod.PUT) {
-                            reply = response;
-                        } else if (this.method === HttpMethod.GET) {
-                            reply = await JSON.parse(response.response);
+            .then(
+                async (response: XMLHttpRequest): Promise<any> => {
+                    switch (response.status) {
+                        case 200: {
+                            let reply = {};
+                            if (this.method === HttpMethod.PUT) {
+                                reply = response;
+                            } else if (this.method === HttpMethod.GET) {
+                                reply = await JSON.parse(response.response);
+                            }
+                            if (this.successCallback) this.successCallback(reply);
+                            break;
                         }
-                        if (this.successCallback) this.successCallback(reply);
-                        break;
-                    default:
-                        if (this.failureCallback) this.failureCallback(response);
-                        break;
+                        default:
+                            if (this.failureCallback) this.failureCallback(response);
+                            break;
+                    }
                 }
-            })
+            )
             .catch((error: Error) => {
                 // TODO: Log an error
+                console.error('Encountered an error', error.message);
             });
     }
 }

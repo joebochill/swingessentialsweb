@@ -2,7 +2,18 @@ import { Avatar, Typography, Divider, Hidden } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useCallback } from 'react';
 import { Spacer } from '@pxblue/react-components';
-import { ShoppingCart, Subscriptions, Videocam, Person, ExitToApp, Home, Face, Today, LocalBar, Security } from '@material-ui/icons';
+import {
+    ShoppingCart,
+    Subscriptions,
+    Videocam,
+    Person,
+    ExitToApp,
+    Home,
+    Face,
+    Today,
+    LocalBar,
+    Security,
+} from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
 import { useSelector } from 'react-redux';
@@ -60,7 +71,7 @@ export const MenuListItem: React.FC<MenuListItemProps> = (props) => {
 
 type MenuContentProps = {
     onClose: Function;
-}
+};
 export const MenuContent: React.FC<MenuContentProps> = (props) => {
     const { onClose } = props;
     const history = useHistory();
@@ -81,7 +92,7 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
 
     return (
         <>
-            {token &&
+            {token && (
                 <>
                     <div className={classes.menuHeader}>
                         <Avatar className={classes.avatarInside}>{initials}</Avatar>
@@ -99,12 +110,17 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
                     </div>
                     <Divider />
                 </>
-            }
+            )}
             <MenuListItem title={'Home'} icon={<Home />} divider onClick={(): void => clickMenuItem(ROUTES.HOME)} />
-            {isAdmin &&
-                <MenuListItem title={'Admin'} icon={<Security />} divider onClick={(): void => clickMenuItem(ROUTES.ADMIN)} />
-            }
-            {token &&
+            {isAdmin && (
+                <MenuListItem
+                    title={'Admin'}
+                    icon={<Security />}
+                    divider
+                    onClick={(): void => clickMenuItem(ROUTES.ADMIN)}
+                />
+            )}
+            {token && (
                 <>
                     <MenuListItem
                         title={'Your Lessons'}
@@ -125,7 +141,7 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
                         onClick={(): void => clickMenuItem(ROUTES.ORDER)}
                     />
                 </>
-            }
+            )}
             <Hidden mdUp>
                 <MenuListItem
                     title={'Meet Our Pros'}
@@ -152,15 +168,15 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
                     }}
                 />
             </Hidden>
-            {token &&
+            {token && (
                 <MenuListItem
                     title={'Your Profile'}
                     icon={<Person />}
                     divider
                     onClick={(): void => clickMenuItem(ROUTES.PROFILE)}
                 />
-            }
-            {token ?
+            )}
+            {token ? (
                 <MenuListItem
                     title={'Sign Out'}
                     icon={<ExitToApp />}
@@ -170,19 +186,19 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
                         onClose();
                     }}
                 />
-                :
+            ) : (
                 <MenuListItem
                     title={'Sign In'}
                     icon={<Person />}
                     divider
                     onClick={(): void => {
                         history.push(ROUTES.LOGIN);
-                        onClose()
+                        onClose();
                     }}
                 />
-            }
+            )}
         </>
     );
-}
+};
 
 MenuContent.displayName = 'MenuContent';

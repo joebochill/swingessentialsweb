@@ -1,6 +1,6 @@
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-export const btoa = (input = '') => {
-    let str = input;
+export const btoa = (input = ''): string => {
+    const str = input;
     let output = '';
 
     for (
@@ -19,8 +19,8 @@ export const btoa = (input = '') => {
 
     return output;
 };
-export const atob = (input: string = '') => {
-    let str = input.replace(/=+$/, '');
+export const atob = (input = ''): string => {
+    const str = input.replace(/=+$/, '');
     let output = '';
 
     if (str.length % 4 === 1) {

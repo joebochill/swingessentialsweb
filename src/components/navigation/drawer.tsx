@@ -28,7 +28,11 @@ export const NavigationDrawer = (): JSX.Element => {
             }}
             classes={{ paper: classes.drawerPaper }}
         >
-            <MenuContent onClose={() => dispatch({ type: 'CLOSE_DRAWER' })} />
+            <MenuContent
+                onClose={(): void => {
+                    dispatch({ type: 'CLOSE_DRAWER' });
+                }}
+            />
         </Drawer>
     );
 };

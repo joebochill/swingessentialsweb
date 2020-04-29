@@ -90,8 +90,17 @@ export const Toolbar: React.FC = (): JSX.Element => {
                 </Hidden>
                 <Hidden mdUp>
                     <Hidden xsDown>
-                        {!token && <Button variant={'outlined'} color={'inherit'} onClick={(): void => history.push(ROUTES.LOGIN)}>SIGN IN</Button>}
-                    </Hidden><IconButton
+                        {!token && (
+                            <Button
+                                variant={'outlined'}
+                                color={'inherit'}
+                                onClick={(): void => history.push(ROUTES.LOGIN)}
+                            >
+                                SIGN IN
+                            </Button>
+                        )}
+                    </Hidden>
+                    <IconButton
                         style={{ color: 'inherit', marginRight: theme.spacing(-2) }}
                         onClick={(): void => {
                             dispatch({ type: 'OPEN_DRAWER' });

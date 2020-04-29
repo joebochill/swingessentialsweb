@@ -46,7 +46,6 @@ export type Tip = {
     comments: string;
 };
 
-
 // Redux State Types
 export type GeneralState = {
     drawerOpen: boolean;
@@ -58,7 +57,7 @@ export type AuthState = {
     modalWarning: boolean;
     failCount: number;
     pending: boolean;
-}; 
+};
 export type LessonsState = {
     loading: boolean;
     pending: Lesson[];

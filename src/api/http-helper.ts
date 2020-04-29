@@ -3,20 +3,31 @@
 // import { loadUserContent } from '../redux/actions/auth-actions';
 // import { Dispatch } from 'redux';
 
+type FailureAction = {
+    type: string;
+    response: Response | null;
+    error: string | null;
+};
 /* Dispatch a failure action for the supplied action type */
-export function failure(type: string, response: Response | null, api: string) {
+export const failure = (type: string, response: Response | null, api: string): FailureAction => {
     if (response && response.headers && response.headers.get) {
         // TODO Log an error
+        console.error(`Request failed to ${api}`);
     }
     return {
         type: type,
         response: response,
         error: response && response.headers && response.headers.get ? response.headers.get('Error') : 'N/A',
     };
-}
+};
 
+type XHRFailureAction = {
+    type: string;
+    response: XMLHttpRequest | null;
+    error: number | null;
+};
 /* Dispatch a failure action for the supplied action type, XMLHTTPRequest variant */
-export function xhrfailure(type: string, response: XMLHttpRequest) {
+export const xhrfailure = (type: string, response: XMLHttpRequest): XHRFailureAction => {
     if (response && response.getResponseHeader) {
         // TODO Log an error
     }
@@ -25,15 +36,17 @@ export function xhrfailure(type: string, response: XMLHttpRequest) {
         response: response,
         error: response && response.getResponseHeader ? parseInt(response.getResponseHeader('Error') || '', 10) : -1,
     };
-}
+};
 
+type SuccessAction = {
+    type: string;
+    payload: any;
+};
 /* Dispatch a success action for the supplied action type */
-export function success(type: string, data: any = null) {
-    return {
-        type: type,
-        payload: data,
-    };
-}
+export const success = (type: string, data: any = null): SuccessAction => ({
+    type: type,
+    payload: data,
+});
 
 // export function checkTimeout(response: Response, dispatch: Dispatch) {
 //     // If we get a failed API call, check if our authentication needs to be re-upped
