@@ -1,13 +1,19 @@
 import React, { HTMLAttributes } from 'react';
-import { makeStyles, createStyles, Typography } from '@material-ui/core';
+import { makeStyles, createStyles, Typography, Theme } from '@material-ui/core';
 import { Headline, SubHeading } from './Typography';
+import clsx from 'clsx';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         headline: {
             display: 'inline-flex',
             alignItems: 'center',
             textAlign: 'left',
+            '&$jumbo':{
+                [theme.breakpoints.down('sm')]: {
+                    textAlign: 'center',
+                },
+            }
         },
         headlineIcon: {
             marginRight: 16,
@@ -17,6 +23,7 @@ const useStyles = makeStyles(() =>
             marginRight: 4,
             fontSize: 24,
         },
+        jumbo:{},
     })
 );
 
@@ -39,7 +46,7 @@ export const FancyHeadline: React.FC<FancyHeadlineProps> = (props) => {
             </div>
         </div>
     ) : (
-        <div className={classes.headline} {...other}>
+        <div className={clsx(classes.headline, {[classes.jumbo]:!icon})} {...other}>
             {icon && <div className={classes.headlineIcon}>{icon}</div>}
             <div style={{ marginBottom: 16 }}>
                 <Headline>{headline}</Headline>
