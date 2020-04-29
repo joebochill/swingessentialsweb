@@ -3,10 +3,12 @@ import { AppBar, Toolbar, Typography, makeStyles, Theme, createStyles, IconButto
 import { NavLink } from './navigation/Toolbar';
 import { ROUTES } from '../constants/routes';
 import { Twitter, Instagram, Facebook, Email } from '@material-ui/icons';
+import { APP_VERSION } from '../constants';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         footer: {
+            position: 'relative',
             padding: 100,
             background: theme.palette.primary.main,
             color: 'white',
@@ -17,12 +19,20 @@ const useStyles = makeStyles((theme: Theme) =>
             },
         },
         toolbar: {
+            position: 'static',
             display: 'block',
             textAlign: 'center',
         },
         copyright: {
             flex: '1 1 0px',
             // marginBottom: 16,
+        },
+        version: {
+            position: 'absolute',
+            bottom: 16,
+            left: 0,
+            width: '100%',
+            fontSize: 10,
         },
     })
 );
@@ -75,6 +85,7 @@ export const Footer: React.FC = () => {
                 </div>
                 <NavLink to={ROUTES.PRIVACY} title={'Privacy Policy'}></NavLink>
                 <NavLink to={ROUTES.TERMS} title={'Terms of Use'}></NavLink>
+                <Typography variant={'caption'} className={classes.version}>{`v${APP_VERSION}`}</Typography>
             </Toolbar>
         </AppBar>
     );

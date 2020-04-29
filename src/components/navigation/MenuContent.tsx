@@ -16,8 +16,9 @@ import {
 } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../../__types__';
+import { requestLogout } from '../../redux/actions/auth-actions';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -76,6 +77,7 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
     const { onClose } = props;
     const history = useHistory();
     const classes = useStyles();
+    const dispatch = useDispatch();
     const user = useSelector((state: AppState) => state.user);
     const token = useSelector((state: AppState) => state.auth.token);
     const isAdmin = useSelector((state: AppState) => state.auth.admin);
@@ -181,8 +183,7 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
                     title={'Sign Out'}
                     icon={<ExitToApp />}
                     onClick={(): void => {
-                        // TODO Actually log out
-                        history.push(ROUTES.LOGIN);
+                        dispatch(requestLogout());
                         onClose();
                     }}
                 />

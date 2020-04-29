@@ -107,6 +107,13 @@ export const TipsPage: React.FC = (): JSX.Element => {
         }
     }, [tips, activeTip, setActiveTip, setActiveIndex]);
 
+    useEffect(() => {
+        if (activeTip && tips.findIndex((tip) => tip.id === activeTip.id) < 0) {
+            setActiveIndex(0);
+            if (tips.length > 0) setActiveTip(tips[0]);
+        }
+    }, [tips, activeTip, setActiveIndex, setActiveTip]);
+
     const firstYear = tips && tips.length > 0 ? parseInt(tips[tips.length - 1].date.substr(0, 4), 10) : currentYear;
     const lastYear = tips && tips.length > 0 ? parseInt(tips[0].date.substr(0, 4), 10) : currentYear;
 

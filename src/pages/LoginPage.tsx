@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import bg from '../assets/images/banners/landing.jpg';
 
 import { makeStyles, Theme, createStyles, Typography, TextField, Button } from '@material-ui/core';
-import { Redirect } from 'react-router-dom';
-import { ROUTES } from '../constants/routes';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../__types__';
 import { requestLogin } from '../redux/actions/auth-actions';
@@ -52,13 +51,14 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export const LoginPage: React.FC = (): JSX.Element => {
+export const LoginPage: React.FC = (): JSX.Element | null => {
     const classes = useStyles();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const token = useSelector((state: AppState) => state.auth.token);
     const failCount = useSelector((state: AppState) => state.auth.failCount);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     useEffect(() => {
         if (failCount > 0) {
@@ -66,7 +66,10 @@ export const LoginPage: React.FC = (): JSX.Element => {
         }
     }, [failCount, setPassword]);
 
-    if (token) return <Redirect to={ROUTES.PROFILE} />;
+    if (token) {
+        history.goBack();
+        return null;
+    }
     return (
         <>
             <div className={classes.bannerWrapper}>
