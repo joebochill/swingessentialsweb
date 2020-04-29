@@ -3,15 +3,40 @@ import { btoa, atob } from '../../utilities/base64';
 import * as ACTIONS from './types';
 import { AUTH, BASEURL } from '../../constants';
 // import { loadLessons } from './LessonActions';
-// import { loadTips } from './TipActions';
+import { loadTips } from './tip-actions';
 // import { loadCredits } from './CreditActions';
-// import { loadBlogs } from './BlogActions';
+import { loadBlogs } from './blog-actions';
 // import { loadSettings } from './SettingsActions';
 import { ThunkDispatch } from 'redux-thunk';
 import { Credentials } from '../../__types__';
 import { HttpRequest } from '../../api/http';
 // import { Logger } from '../../utilities/logging';
 // import * as Keychain from 'react-native-keychain';
+
+export function loadUserInfo() {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
+        dispatch({ type: ACTIONS.GET_BLOGS.REQUEST });
+
+        HttpRequest.get(ACTIONS.GET_USER_DATA.API)
+            .onSuccess((body: any) => {
+                dispatch(success(ACTIONS.GET_USER_DATA.SUCCESS, body));
+            })
+            .onFailure((response: Response) => {
+                dispatch(failure(ACTIONS.GET_USER_DATA.FAILURE, response, 'userData'));
+            })
+            .request();
+    };
+}
+
+export function loadUserContent() {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
+        // dispatch(loadLessons());
+        // dispatch(loadCredits());
+        // dispatch(loadSettings());
+        dispatch(loadTips());
+        dispatch(loadBlogs());
+    };
+}
 
 export function requestLogin(userCredentials: Credentials) {
     return (dispatch: ThunkDispatch<any, void, any>): Promise<void> => {
@@ -31,7 +56,7 @@ export function requestLogin(userCredentials: Credentials) {
                                 dispatch(success(ACTIONS.LOGIN.SUCCESS, { ...json, token: token }));
                             })
                             .then(() => {
-                                // dispatch(loadUserContent());
+                                dispatch(loadUserContent());
                             });
                         break;
                     }
@@ -55,7 +80,8 @@ export function requestLogout() {
             .withFullResponse()
             .onSuccess(() => {
                 dispatch(success(ACTIONS.LOGOUT.SUCCESS));
-                // dispatch(loadTips());
+                dispatch(loadTips());
+                dispatch(loadBlogs());
             })
             .onFailure((response: Response) => {
                 dispatch(failure(ACTIONS.LOGOUT.FAILURE, response, 'Logout'));
@@ -88,7 +114,8 @@ export function setToken(token: string) {
             // TODO: Log an error
         }
         dispatch({ type: ACTIONS.SET_TOKEN.REQUEST, payload: { token: expired ? null : token } });
-        // dispatch(loadUserContent());
+        dispatch(loadUserContent());
+        dispatch(loadUserInfo());
     };
 }
 
@@ -101,7 +128,7 @@ export function checkToken() {
                 const token = response.headers.get('Token');
                 if (token) {
                     dispatch({ type: ACTIONS.SET_TOKEN.REQUEST, payload: { token } });
-                    // dispatch(loadUserContent());
+                    dispatch(loadUserContent());
                 }
             })
             .onFailure((response: Response) => {
@@ -110,39 +137,3 @@ export function checkToken() {
             .request();
     };
 }
-
-// export function checkToken(token){
-//     return (dispatch) => {
-//         fetch(BASEURL+'checkToken', {
-//             headers: {
-//                 [AUTH]: 'Bearer ' + token
-//             }
-//         })
-//         .then((response) => {
-//             switch(response.status){
-//                 case 200:
-//                     const token = response.headers.get('Token');
-//                     if(token){
-//                         dispatch(success(CHECK_TOKEN.SUCCESS, {token: token}));
-//                     }
-//                     break;
-//                 default:
-//                     checkTimeout(response, dispatch);
-//             }
-//         })
-//         .catch((error) => {
-//             logLocalError('116: Promise Error: checking token');
-//         });
-//     }
-// }
-
-// export function loadUserContent() {
-//     return (dispatch: ThunkDispatch<any, void, any>) => {
-//         // dispatch({type:DATA_FROM_TOKEN.REQUEST});
-//         dispatch(loadLessons());
-//         dispatch(loadCredits());
-//         dispatch(loadSettings());
-//         dispatch(loadTips());
-//         dispatch(loadBlogs());
-//     };
-// }

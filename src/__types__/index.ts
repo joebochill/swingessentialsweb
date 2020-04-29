@@ -139,4 +139,6 @@ export type AppState = {
     app: GeneralState;
     auth: AuthState;
     user: UserDataState;
+    blogs: BlogsState;
+    tips: TipsState;
 };

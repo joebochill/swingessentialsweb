@@ -7,10 +7,14 @@ import { AuthReducer } from './authentication';
 import { AppState } from '../../__types__';
 import { GeneralReducer } from './general';
 import { UserDataReducer } from './userData';
+import { BlogsReducer } from './blogs';
+import { TipsReducer } from './tips';
 
 export const rootReducer = (): any =>
     combineReducers<AppState>({
         app: GeneralReducer,
         auth: AuthReducer,
         user: UserDataReducer,
+        blogs: BlogsReducer,
+        tips: TipsReducer,
     });

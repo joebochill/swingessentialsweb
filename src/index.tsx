@@ -1,7 +1,7 @@
 import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
@@ -15,14 +15,26 @@ import 'typeface-open-sans';
 import 'typeface-roboto-mono';
 
 import { store } from './redux/store';
+import { loadInitialData } from './redux/actions/extra-actions';
+
+const App: React.FC = () => {
+    useEffect(() => {
+        // @ts-ignore
+        store.dispatch(loadInitialData());
+    }, []);
+
+    return (
+        <Provider store={store}>
+            <MainRouter />
+        </Provider>
+    );
+};
 
 ReactDOM.render(
     // <React.StrictMode>
     <ThemeProvider theme={createMuiTheme(SETheme)}>
         <CssBaseline />
-        <Provider store={store}>
-            <MainRouter />
-        </Provider>
+        <App />
     </ThemeProvider>,
     // </React.StrictMode>,
     document.getElementById('root')
