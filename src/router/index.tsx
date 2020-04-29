@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, useLocation, Redirect } from 'react-router-dom';
 // import { DrawerLayout } from '@pxblue/react-components';
-import { NavigationDrawer } from './drawer';
+import { NavigationDrawer } from '../components/navigation/drawer';
 import { LandingPage } from '../pages/LandingPage';
-import { Toolbar } from '../components/Toolbar';
+import { Toolbar } from '../components/navigation/Toolbar';
 import { Footer } from '../components/Footer';
 import { ROUTES } from '../constants/routes';
 import { PlaceholderPage } from '../pages/Placeholder';

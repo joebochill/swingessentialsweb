@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     AppBar,
+    Button,
     Toolbar as MuiToolbar,
     Link,
     LinkProps,
@@ -11,14 +12,15 @@ import {
     Hidden,
     IconButton,
 } from '@material-ui/core';
-import logo from '../assets/icons/logo-full-white.svg';
+import logo from '../../assets/icons/logo-full-white.svg';
 import { Spacer } from '@pxblue/react-components';
-import { UserMenu } from '../components/UserMenu';
+import { UserMenu } from './UserMenu';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 import { Menu } from '@material-ui/icons';
-import { useDispatch } from 'react-redux';
-import { ROUTES } from '../constants/routes';
+import { useDispatch, useSelector } from 'react-redux';
+import { ROUTES } from '../../constants/routes';
+import { AppState } from '../../__types__';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -65,6 +67,7 @@ export const Toolbar: React.FC = (): JSX.Element => {
     const theme = useTheme();
     const history = useHistory();
     const dispatch = useDispatch();
+    const token = useSelector((state: AppState) => state.auth.token);
 
     return (
         <AppBar position={'sticky'}>
@@ -86,7 +89,9 @@ export const Toolbar: React.FC = (): JSX.Element => {
                     <UserMenu />
                 </Hidden>
                 <Hidden mdUp>
-                    <IconButton
+                    <Hidden xsDown>
+                        {!token && <Button variant={'outlined'} color={'inherit'} onClick={(): void => history.push(ROUTES.LOGIN)}>SIGN IN</Button>}
+                    </Hidden><IconButton
                         style={{ color: 'inherit', marginRight: theme.spacing(-2) }}
                         onClick={(): void => {
                             dispatch({ type: 'OPEN_DRAWER' });

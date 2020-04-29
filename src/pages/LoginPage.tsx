@@ -1,33 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import bg from '../assets/images/banners/landing.jpg';
-import fullLogo from '../assets/images/fullLogo-06.svg';
-import pga from '../assets/images/pga_p.svg';
-import post1 from '../assets/icons/post-01.svg';
-import post2 from '../assets/icons/post-02.svg';
-import post3 from '../assets/icons/post-03.svg';
-import tips from '../assets/images/banners/tips.jpg';
-import nineteen from '../assets/images/banners/19th.jpg';
-import pros from '../assets/images/banners/nelson.jpeg';
-import cart from '../assets/images/banners/download.jpg';
 
-import screenshot from '../assets/images/screenshot.png';
-import appstore from '../assets/images/app-store.svg';
-import playstore from '../assets/images/google-play.svg';
-
-import { makeStyles, Theme, createStyles, Grid, Typography, TextField, Button } from '@material-ui/core';
-import { SectionBlurb } from '../components/SectionBlurb';
-import { InfoCard } from '../components/InfoCard';
-import { useHistory, Redirect } from 'react-router-dom';
-import { GetApp } from '@material-ui/icons';
-import { ScreenShot } from '../components/ScreenShot';
-import { Spacer } from '@pxblue/react-components';
-import { Headline } from '../components/Typography';
-import { Testimonial } from '../components/Testimonial';
+import { makeStyles, Theme, createStyles, Typography, TextField, Button } from '@material-ui/core';
+import { Redirect } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../__types__';
 import { requestLogin } from '../redux/actions/auth-actions';
-import { useCompare } from '../hooks';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -75,12 +54,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const LoginPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
-    const history = useHistory();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const token = useSelector((state: AppState) => state.auth.token);
     const failCount = useSelector((state: AppState) => state.auth.failCount);
-    const failuresChanged = useCompare(failCount);
     const dispatch = useDispatch();
 
     useEffect(() => {
