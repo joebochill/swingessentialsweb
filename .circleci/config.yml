@@ -32,7 +32,12 @@ jobs:
       # - run: 
       #     name: Run Tests
       #     command: yarn test
-      
+
+      # Lint
+      - run: 
+          name: Lint
+          command: yarn lint
+
       # Build
       - run: 
           name: Build
