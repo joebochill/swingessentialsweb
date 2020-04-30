@@ -4,7 +4,7 @@ import { Section } from './Section';
 
 type LoadingIndicatorProps = {
     show: boolean;
-}
+};
 export const LoadingIndicator: React.FC<LoadingIndicatorProps> = (props) => {
     if (!props.show) return null;
     return (

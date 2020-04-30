@@ -64,7 +64,7 @@ export const LessonsReducer = (state = initialState, action: any): LessonsState 
             return {
                 ...state,
                 selected: action.payload,
-            }
+            };
         default:
             return state;
     }

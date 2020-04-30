@@ -31,10 +31,10 @@ export const ProsPage: React.FC = (): JSX.Element => {
             <ActionToolbar show={admin}>
                 <Button variant={'text'}>
                     <AddCircle style={{ marginRight: 4 }} />
-                            New Pro
-                        </Button>
+                    New Pro
+                </Button>
             </ActionToolbar>
-            <LoadingIndicator show={loading}/>
+            <LoadingIndicator show={loading} />
             {pros.map((bio) => (
                 <Section key={`bio_${bio.id}`}>
                     <ProBio

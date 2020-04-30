@@ -96,7 +96,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                     New Post
                 </Button>
             </ActionToolbar>
-            <LoadingIndicator show={loading}/>
+            <LoadingIndicator show={loading} />
             {blogs.length > 0 && (
                 <Section align={'flex-start'}>
                     {!isSmall && (
