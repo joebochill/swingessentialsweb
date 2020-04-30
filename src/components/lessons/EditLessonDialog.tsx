@@ -44,7 +44,7 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
 
     useEffect(() => {
         resetLesson();
-    }, [lesson]);
+    }, [lesson, resetLesson]);
 
     if (!lesson) return null;
     return (

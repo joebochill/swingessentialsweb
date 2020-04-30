@@ -84,6 +84,7 @@ export const TipsPage: React.FC = (): JSX.Element => {
                 setActiveIndex(0);
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tips, activeTip, setActiveTip, setActiveIndex]);
 
     useEffect(() => {
