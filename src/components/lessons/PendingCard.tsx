@@ -11,9 +11,10 @@ import { useHistory } from 'react-router-dom';
 type PendingLessonsCardProps = CardProps & {
     onSelected: (item: Lesson, index: number) => void;
     selected: number | null;
+    hidden?: boolean;
 };
 export const PendingLessonsCard: React.FC<PendingLessonsCardProps> = (props) => {
-    const { onSelected, selected, ...cardProps } = props;
+    const { onSelected, hidden, selected, ...cardProps } = props;
     const theme = useTheme();
     const history = useHistory();
     const lessons = useSelector((state: AppState) => state.lessons.pending);
@@ -22,6 +23,8 @@ export const PendingLessonsCard: React.FC<PendingLessonsCardProps> = (props) => 
 
     if (role === 'anonymous') return null;
 
+    if(hidden) return null;
+    
     return (
         <Card {...cardProps}>
             <CardHeader

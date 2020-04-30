@@ -79,6 +79,7 @@ export type LessonsState = {
     redeemPending: boolean;
     redeemSuccess: boolean;
     redeemError: number | null;
+    selected: Lesson | null;
 };
 export type TipsState = {
     loading: boolean;

@@ -37,13 +37,13 @@ const useStyles = makeStyles<Theme, BannerProps>((theme: Theme) =>
         },
         contentWrapper: {
             position: 'absolute',
-            padding: (props): number => (props.noPadding ? 0 : 100),
+            padding: (props): number => (props.noPadding ? 0 : 64),
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
             [theme.breakpoints.down('sm')]: {
-                padding: (props): number | string => (props.noPadding ? 0 : `100px 10%`),
+                padding: (props): number | string => (props.noPadding ? 0 : `64px 10%`),
                 textAlign: 'center',
             },
         },

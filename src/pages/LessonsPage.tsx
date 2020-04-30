@@ -3,13 +3,10 @@ import bg from '../assets/images/banners/lessons.jpg';
 import {
     makeStyles,
     createStyles,
-    Toolbar,
-    AppBar,
     Button,
     Typography,
     IconButton,
     useMediaQuery,
-    CircularProgress,
     DialogProps,
     Dialog,
     Select,
@@ -21,9 +18,10 @@ import {
     FormControl,
     InputLabel,
     capitalize,
+    Theme,
 } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
-import { AddCircle, Edit, ChevronRight, ChevronLeft, Subscriptions, FilterList, Warning } from '@material-ui/icons';
+import { AddCircle, Edit, ChevronRight, ChevronLeft, Subscriptions, FilterList, Warning, Update } from '@material-ui/icons';
 import YouTube from 'react-youtube';
 
 import { Spacer, EmptyState } from '@pxblue/react-components';
@@ -39,12 +37,29 @@ import { CompletedLessonsCard } from '../components/lessons/CompletedCard';
 import { PlaceholderLesson } from '../constants/lessons';
 import { getUsers } from '../redux/actions/user-data-actions';
 import { sortUsers } from '../utilities/user';
+import { Redirect } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
+import { ActionToolbar } from '../components/actions/ActionToolbar';
+import { LoadingIndicator } from '../components/display/LoadingIndicator';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        actionBar: {
+            top: 64,
+            [theme.breakpoints.down('xs')]: {
+                top: 56
+            },
+        },
         cardContainer: {
             flex: '1 1 0px',
             maxWidth: '40%',
+        },
+        videoWrapper: {
+            width: '100%',
+            background: 'black',
+            paddingTop: '56.25%',
+            position: 'relative',
+            marginBottom: 32,
         },
         youtube: {
             position: 'absolute',
@@ -70,24 +85,40 @@ const useStyles = makeStyles(() =>
 export const LessonsPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const lessons = useSelector((state: AppState) => state.lessons);
+    const token = useSelector((state: AppState) => state.auth.token);
     const admin = useSelector((state: AppState) => state.auth.admin);
 
     const [activeLesson, setActiveLesson] = useState<Lesson | null>(PlaceholderLesson);
     const [activeIndex, setActiveIndex] = useState(-1);
     const [activePanel, setActivePanel] = useState<'pending' | 'completed'>('completed');
     const [showFilterDialog, setShowFilterDialog] = useState(false);
+    
     const [filter, setFilter] = useState('');
 
     const isSmall = useMediaQuery('(max-width:959px)');
 
     useEffect(() => {
         if (activeLesson && activeLesson.request_id === -1) {
+            console.log('setting active index', lessons.closed.length);
             setActiveLesson(lessons.closed.length > 0 ? lessons.closed[0] : PlaceholderLesson);
             setActiveIndex(lessons.closed.length > 0 ? 0 : -1);
         }
     }, [lessons, activeLesson, setActiveLesson, setActiveIndex]);
 
-    const description = activeLesson ? splitParagraphText(activeLesson.response_notes) : [];
+    useEffect(() => {
+        if (!token) {
+            setActiveIndex(-1);
+            setActiveLesson(PlaceholderLesson);
+        }
+        else{
+
+        }
+    }, [token]);
+
+    const description = activeLesson && activeLesson.response_notes ? splitParagraphText(activeLesson.response_notes) : [];
+
+    // if (!token) return <Redirect to={ROUTES.HOME} />
+    console.log(activeLesson);
     return (
         <>
             <Banner background={{ src: bg, position: 'center right' }}>
@@ -100,48 +131,42 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                     style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
                 />
             </Banner>
-            {admin && (
-                <AppBar position={'static'} color={'default'}>
-                    <Toolbar style={{ justifyContent: 'center' }}>
-                        <Button variant={'text'}>
-                            <AddCircle style={{ marginRight: 4 }} />
-                            New In-Person Lesson
-                        </Button>
-                        <Button variant={'text'} onClick={(): void => setShowFilterDialog(true)}>
-                            <FilterList style={{ marginRight: 4 }} />
-                            Filter By User
-                        </Button>
-                    </Toolbar>
-                </AppBar>
-            )}
-            {lessons.pending.length < 1 && lessons.closed.length < 1 && lessons.loading && (
-                <Section>
-                    <CircularProgress />
-                </Section>
-            )}
-            <Section align={'flex-start'}>
-                {!isSmall && (
-                    <div className={classes.cardContainer}>
-                        <PendingLessonsCard
-                            style={{ marginBottom: 32 }}
-                            onSelected={(item, index): void => {
-                                setActivePanel('pending');
-                                setActiveIndex(index);
-                                setActiveLesson(item);
-                            }}
-                            selected={activePanel === 'pending' ? activeIndex : null}
-                        />
-                        <CompletedLessonsCard
-                            onSelected={(item, index): void => {
-                                setActivePanel('completed');
-                                setActiveIndex(index);
-                                setActiveLesson(item);
-                            }}
-                            selected={activePanel === 'completed' ? activeIndex : null}
-                            filter={filter}
-                        />
-                    </div>
-                )}
+            <ActionToolbar show={admin}>
+                <Button variant={'text'}>
+                    <AddCircle style={{ marginRight: 4 }} />
+                        New In-Person Lesson
+                    </Button>
+                <Button variant={'text'} onClick={(): void => setShowFilterDialog(true)}>
+                    <FilterList style={{ marginRight: 4 }} />
+                        Filter By User
+                    </Button>
+            </ActionToolbar>
+
+            <LoadingIndicator show={lessons.pending.length < 1 && lessons.closed.length < 1 && lessons.loading} />
+
+            <Section align={isSmall ? 'stretch' : 'flex-start'}>
+                <div className={classes.cardContainer}>
+                    <PendingLessonsCard
+                        style={{ marginBottom: 32 }}
+                        onSelected={(item, index): void => {
+                            setActivePanel('pending');
+                            setActiveIndex(index);
+                            setActiveLesson(item);
+                        }}
+                        selected={activePanel === 'pending' ? activeIndex : null}
+                        hidden={isSmall}
+                    />
+                    <CompletedLessonsCard
+                        onSelected={(item, index): void => {
+                            setActivePanel('completed');
+                            setActiveIndex(index);
+                            setActiveLesson(item);
+                        }}
+                        selected={activePanel === 'completed' ? activeIndex : null}
+                        filter={filter}
+                        hidden={isSmall}
+                    />
+                </div>
                 <UserFilterDialog
                     open={showFilterDialog}
                     onFilterChange={(username): void => {
@@ -149,152 +174,174 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                     }}
                     onClose={(): void => setShowFilterDialog(false)}
                 />
-                <Spacer flex={0} width={100} />
+                <Spacer flex={0} width={64} />
                 {activeLesson && (
                     <div style={{ flex: '1 1 0px' }}>
-                        <div
-                            style={{
-                                width: '100%',
-                                background: 'black',
-                                paddingTop: '56.25%',
-                                position: 'relative',
-                                marginBottom: 32,
-                            }}
-                        >
-                            <YouTube
-                                videoId={activeLesson.response_video}
-                                // id={"se_response_video"}
-                                className={classes.youtube}
-                                opts={{
-                                    playerVars: {
-                                        showinfo: 0,
-                                        origin: 'www.swingessentials.com',
-                                        playsinline: 1,
-                                        rel: 0,
-                                    },
+                        {/* {activeLesson.response_video && */}
+                        <div style={{ marginBottom: 32 }}>
+                            <div className={classes.videoWrapper}
+                                style={{
+                                    background: activeLesson.response_video ? 'black' : 'rgba(0,0,0,0.05)',
                                 }}
-                            />
-                            {isSmall && (
-                                <>
-                                    <IconButton
-                                        disabled={
-                                            (activePanel === 'pending' && activeIndex < 1) ||
-                                            (activePanel === 'completed' &&
-                                                activeIndex < 1 &&
-                                                lessons.pending.length < 1)
-                                        }
-                                        style={{
-                                            position: 'absolute',
-                                            top: '50%',
-                                            transform: 'translateY(-50%)',
-                                            left: -32,
-                                            padding: 0,
-                                            fontSize: 32,
+                            >
+                                {activeLesson.response_video &&
+                                    <YouTube
+                                        videoId={activeLesson.response_video}
+                                        // id={"se_response_video"}
+                                        className={classes.youtube}
+                                        opts={{
+                                            playerVars: {
+                                                showinfo: 0,
+                                                origin: 'www.swingessentials.com',
+                                                playsinline: 1,
+                                                rel: 0,
+                                            },
                                         }}
-                                        onClick={(): void => {
-                                            if (activeIndex < 1) {
-                                                if (activePanel === 'completed' && lessons.pending.length > 0) {
-                                                    setActivePanel('pending');
-                                                    setActiveIndex(lessons.pending.length - 1);
-                                                    setActiveLesson(lessons.pending[lessons.pending.length - 1]);
+                                    />
+                                }
+                                {!activeLesson.response_video &&
+                                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+                                        <EmptyState
+                                            icon={<Update fontSize={'inherit'} />}
+                                            title={'Swing Analysis In Progress'}
+                                            description={`We're working on your lesson now. Check back soon!`}
+                                        />
+                                    </div>
+                                }
+                                {isSmall && (
+                                    <>
+                                        <IconButton
+                                            disabled={
+                                                (activePanel === 'pending' && activeIndex < 1) ||
+                                                (activePanel === 'completed' &&
+                                                    activeIndex < 1 &&
+                                                    lessons.pending.length < 1)
+                                            }
+                                            style={{
+                                                position: 'absolute',
+                                                top: '50%',
+                                                transform: 'translateY(-50%)',
+                                                left: -32,
+                                                padding: 0,
+                                                fontSize: 32,
+                                            }}
+                                            onClick={(): void => {
+                                                if (activeIndex < 1) {
+                                                    if (activePanel === 'completed' && lessons.pending.length > 0) {
+                                                        setActivePanel('pending');
+                                                        setActiveIndex(lessons.pending.length - 1);
+                                                        setActiveLesson(lessons.pending[lessons.pending.length - 1]);
+                                                    }
+                                                } else {
+                                                    setActiveIndex(activeIndex - 1);
+                                                    setActiveLesson(
+                                                        activePanel === 'pending'
+                                                            ? lessons.pending[activeIndex - 1]
+                                                            : lessons.closed[activeIndex - 1]
+                                                    );
                                                 }
-                                            } else {
-                                                setActiveIndex(activeIndex - 1);
-                                                setActiveLesson(
-                                                    activePanel === 'pending'
-                                                        ? lessons.pending[activeIndex - 1]
-                                                        : lessons.closed[activeIndex - 1]
-                                                );
+                                            }}
+                                        >
+                                            <ChevronLeft fontSize={'inherit'} />
+                                        </IconButton>
+                                        <IconButton
+                                            disabled={
+                                                activePanel === 'completed' && activeIndex >= lessons.closed.length - 1
                                             }
-                                        }}
-                                    >
-                                        <ChevronLeft fontSize={'inherit'} />
-                                    </IconButton>
-                                    <IconButton
-                                        disabled={
-                                            activePanel === 'completed' && activeIndex >= lessons.closed.length - 1
+                                            style={{
+                                                position: 'absolute',
+                                                top: '50%',
+                                                transform: 'translateY(-50%)',
+                                                right: -32,
+                                                padding: 0,
+                                                fontSize: 32,
+                                            }}
+                                            onClick={(): void => {
+                                                if (
+                                                    activePanel === 'pending' &&
+                                                    activeIndex >= lessons.pending.length - 1
+                                                ) {
+                                                    setActivePanel('completed');
+                                                    setActiveIndex(lessons.closed.length > 0 ? 0 : -1);
+                                                    setActiveLesson(
+                                                        lessons.closed.length > 0 ? lessons.closed[0] : PlaceholderLesson
+                                                    );
+                                                } else {
+                                                    setActiveIndex(activeIndex + 1);
+                                                    setActiveLesson(
+                                                        activePanel === 'pending'
+                                                            ? lessons.pending[activeIndex + 1]
+                                                            : lessons.closed[activeIndex + 1]
+                                                    );
+                                                }
+                                            }}
+                                        >
+                                            <ChevronRight fontSize={'inherit'} />
+                                        </IconButton>
+                                    </>
+                                )}
+                            </div>
+                            {activeLesson.response_video &&
+                                <>
+                                    <FancyHeadline
+                                        icon={admin ? <Edit fontSize={'inherit'} /> : undefined}
+                                        headline={admin ? activeLesson.username || '' : prettyDate(activeLesson.request_date)}
+                                        subheading={admin ? prettyDate(activeLesson.request_date) : activeLesson.type === 'in-person' ? 'In-Person Lesson' : 'Remote Lesson'}
+                                        style={admin ? { cursor: 'pointer' } : {}}
+                                        onClick={
+                                            admin
+                                                ? (): void => {
+                                                    /* do nothing */
+                                                }
+                                                : undefined
                                         }
-                                        style={{
-                                            position: 'absolute',
-                                            top: '50%',
-                                            transform: 'translateY(-50%)',
-                                            right: -32,
-                                            padding: 0,
-                                            fontSize: 32,
-                                        }}
-                                        onClick={(): void => {
-                                            if (
-                                                activePanel === 'pending' &&
-                                                activeIndex >= lessons.pending.length - 1
-                                            ) {
-                                                setActivePanel('completed');
-                                                setActiveIndex(lessons.closed.length > 0 ? 0 : -1);
-                                                setActiveLesson(
-                                                    lessons.closed.length > 0 ? lessons.closed[0] : PlaceholderLesson
-                                                );
-                                            } else {
-                                                setActiveIndex(activeIndex + 1);
-                                                setActiveLesson(
-                                                    activePanel === 'pending'
-                                                        ? lessons.pending[activeIndex + 1]
-                                                        : lessons.closed[activeIndex + 1]
-                                                );
-                                            }
-                                        }}
-                                    >
-                                        <ChevronRight fontSize={'inherit'} />
-                                    </IconButton>
-                                </>
-                            )}
+                                    />
+                                    {description.map((par, pInd) => (
+                                        <Typography key={`par_${pInd}`} paragraph style={{ lineHeight: 1.8 }}>
+                                            {par}
+                                        </Typography>
+                                    ))}
+                                </>}
                         </div>
-                        <FancyHeadline
-                            icon={admin ? <Edit fontSize={'inherit'} /> : undefined}
-                            headline={prettyDate(activeLesson.request_date)}
-                            subheading={activeLesson.type === 'in-person' ? 'In-Person Lesson' : 'Remote Lesson'}
-                            style={admin ? { cursor: 'pointer' } : {}}
-                            onClick={
-                                admin
-                                    ? (): void => {
-                                          /* do nothing */
-                                      }
-                                    : undefined
-                            }
-                        />
-                        {description.map((par, pInd) => (
-                            <Typography key={`par_${pInd}`} paragraph style={{ lineHeight: 1.8 }}>
-                                {par}
-                            </Typography>
-                        ))}
-                        <Typography variant={'h6'} style={{ marginBottom: 16, marginTop: 32, lineHeight: 1.2 }}>
-                            Your Submission
-                        </Typography>
-                        <div style={{ width: '100%', display: 'flex' }}>
-                            <div style={{ flex: '1 1 0px', background: 'black' }}>
-                                <video
-                                    width="100%"
-                                    controls
-                                    src={`https://www.swingessentials.com/video_links/${activeLesson.request_url}/${activeLesson.fo_swing}`}
-                                >
-                                    Your browser does not support the video tag.
-                                </video>
-                            </div>
-                            <Spacer flex={0} width={16} height={16} />
-                            <div style={{ flex: '1 1 0px', background: 'black' }}>
-                                <video
-                                    width="100%"
-                                    controls
-                                    src={`https://www.swingessentials.com/video_links/${activeLesson.request_url}/${activeLesson.dtl_swing}`}
-                                >
-                                    Your browser does not support the video tag.
-                                </video>
-                            </div>
-                        </div>
-                        <Spacer flex={0} height={16} />
-                        {splitParagraphText(activeLesson.request_notes).map((par, pInd) => (
-                            <Typography key={`par_${pInd}`} paragraph style={{ lineHeight: 1.8 }}>
-                                {par}
-                            </Typography>
-                        ))}
+                        {/* } */}
+                        {activeIndex !== -1 &&
+                            <>
+                                <Typography variant={'h6'} style={{ marginBottom: 16, lineHeight: 1.2 }}>
+                                    Your Submission
+                                </Typography>
+                                {activeLesson.fo_swing !== '' && activeLesson.dtl_swing !== '' &&
+                                    <>
+                                        <div style={{ width: '100%', display: 'flex' }}>
+                                            <div style={{ flex: '1 1 0px', background: 'black' }}>
+                                                <video
+                                                    width="100%"
+                                                    controls
+                                                    src={`https://www.swingessentials.com/video_links/${activeLesson.request_url}/${activeLesson.fo_swing}`}
+                                                >
+                                                    Your browser does not support the video tag.
+                                        </video>
+                                            </div>
+                                            <Spacer flex={0} width={16} height={16} />
+                                            <div style={{ flex: '1 1 0px', background: 'black' }}>
+                                                <video
+                                                    width="100%"
+                                                    controls
+                                                    src={`https://www.swingessentials.com/video_links/${activeLesson.request_url}/${activeLesson.dtl_swing}`}
+                                                >
+                                                    Your browser does not support the video tag.
+                                        </video>
+                                            </div>
+                                        </div>
+                                        <Spacer flex={0} height={16} />
+                                    </>
+                                }
+                                {splitParagraphText(activeLesson.request_notes).map((par, pInd) => (
+                                    <Typography key={`par_${pInd}`} paragraph style={{ lineHeight: 1.8 }}>
+                                        {par}
+                                    </Typography>
+                                ))}
+                            </>
+                        }
                     </div>
                 )}
                 {!activeLesson && (

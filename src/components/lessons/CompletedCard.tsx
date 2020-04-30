@@ -1,40 +1,101 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState, Lesson } from '../../__types__';
-import { Card, CardHeader, CardProps, useTheme } from '@material-ui/core';
+import { Card, CardHeader, CardProps, useTheme, Button, makeStyles, createStyles, Typography } from '@material-ui/core';
 import { InfoListItem, ListItemTag } from '@pxblue/react-components';
 import { prettyDate } from '../../utilities/date';
 import { PlaceholderLesson } from '../../constants/lessons';
-import { ChevronRight } from '@material-ui/icons';
+import { ChevronRight, ChevronLeft } from '@material-ui/icons';
 import { markLessonViewed } from '../../redux/actions/lesons-actions';
 import { useCompare } from '../../hooks';
+
+const useStyles = makeStyles(() =>
+    createStyles({
+        actionPanel: {
+            alignSelf: 'center',
+            marginTop: 0,
+            display: 'flex',
+            alignItems: 'center',
+        },
+        chevron: {
+            cursor: 'pointer',
+        },
+        disabled: {
+            cursor: 'default',
+            opacity: 0.5,
+        },
+    })
+);
 
 type CompletedLessonsCardProps = CardProps & {
     onSelected: (item: Lesson | null, index: number) => void;
     selected: number | null;
     filter?: string;
+    hidden?: boolean;
 };
 export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props) => {
-    const { onSelected, selected, filter, ...cardProps } = props;
+    const { onSelected, selected, filter, hidden, ...cardProps } = props;
+    const classes = useStyles();
     const theme = useTheme();
     const dispatch = useDispatch();
     const completedLessons = useSelector((state: AppState) => state.lessons.closed);
     const admin = useSelector((state: AppState) => state.auth.admin);
     const filterChanged = useCompare(filter);
+    const [page, setPage] = useState(3);
+    const lessonsPerPage = 10;
 
-    let lessons = completedLessons;
-    if (admin && filter) lessons = lessons.filter((lesson) => lesson.username === filter);
+    let filteredLessons = completedLessons;
+    if (admin && filter) filteredLessons = completedLessons.filter((lesson) => lesson.username === filter);
+
+    let lessons = filteredLessons;
+    if (lessons.length > lessonsPerPage) {
+        lessons = filteredLessons.slice(page * lessonsPerPage, (page + 1) * lessonsPerPage);
+    }
+
+    const numPages = Math.ceil(filteredLessons.length / lessonsPerPage);
+    const canGoForward = page < numPages - 1;
+    const canGoBack = page > 0;
 
     if (filterChanged) {
         onSelected(lessons.length > 0 ? lessons[0] : null, 0);
+        // setPage(0);
     }
 
+    useEffect(() => {
+        setPage(0);
+    }, [filter, setPage]);
+
+    useEffect(() => {
+        onSelected(lessons[0], 0);
+    }, [page]);
+
+    if (hidden) return null;
     return (
         <Card {...cardProps}>
             <CardHeader
                 title={'Completed Lessons'}
                 titleTypographyProps={{ variant: 'subtitle2' }}
+                classes={{ action: classes.actionPanel }}
                 style={{ background: theme.palette.primary.main, color: 'white' }}
+                action={ numPages > 1 ?
+                    <>
+                        <ChevronLeft
+                            className={canGoBack ? classes.chevron : classes.disabled}
+                            onClick={canGoBack ? () => {
+                                setPage(page - 1);
+                                // onSelected(lessons[0], 0);
+                            }: undefined}
+                        />
+                        <Typography variant={'caption'}>{`${page + 1} of ${numPages}`}</Typography>
+                        <ChevronRight
+                            className={canGoForward ? classes.chevron : classes.disabled}
+                            onClick={canGoForward ? (): void => {
+                                setPage(page + 1);
+                                // onSelected(lessons[0], 0);
+                            }: undefined}
+                        />
+                    </> : undefined
+                }
             />
             {lessons.map((lesson, index) => (
                 <InfoListItem
@@ -49,8 +110,8 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
                         admin
                             ? prettyDate(lesson.request_date)
                             : lesson.type === 'in-person'
-                            ? 'In-Person Lesson'
-                            : 'Remote Lesson'
+                                ? 'In-Person Lesson'
+                                : 'Remote Lesson'
                     }
                     onClick={(): void => {
                         props.onSelected(lesson, index);

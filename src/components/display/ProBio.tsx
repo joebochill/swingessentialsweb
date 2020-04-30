@@ -76,7 +76,7 @@ export const ProBio: React.FC<ProBioProps> = (props) => {
                     {title}
                 </Typography>
             </div>
-            <Spacer flex={0} width={100} />
+            <Spacer flex={0} width={64} />
             <Spacer flex={0} height={32} />
             <div className={classes.bio}>
                 {descriptionParagraphs.map((paragraph: string, index: number) => (

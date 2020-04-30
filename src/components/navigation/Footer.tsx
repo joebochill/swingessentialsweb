@@ -9,11 +9,11 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         footer: {
             position: 'relative',
-            padding: 100,
+            padding: 64,
             background: theme.palette.primary.main,
             color: 'white',
             [theme.breakpoints.down('sm')]: {
-                padding: `100px 5%`,
+                padding: `64px 5%`,
                 flexDirection: 'column',
                 textAlign: 'center',
             },

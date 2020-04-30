@@ -1,6 +1,6 @@
 import React from 'react';
 import bg from '../assets/images/banners/pros.jpg';
-import { Toolbar, AppBar, Button, CircularProgress } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
 import { Face, AddCircle } from '@material-ui/icons';
 import { ProBio } from '../components/display/ProBio';
@@ -8,6 +8,8 @@ import { AppState } from '../__types__';
 import { useSelector } from 'react-redux';
 import { Banner } from '../components/display/Banner';
 import { Section } from '../components/display/Section';
+import { ActionToolbar } from '../components/actions/ActionToolbar';
+import { LoadingIndicator } from '../components/display/LoadingIndicator';
 
 export const ProsPage: React.FC = (): JSX.Element => {
     const pros = useSelector((state: AppState) => state.pros.prosList);
@@ -26,21 +28,13 @@ export const ProsPage: React.FC = (): JSX.Element => {
                     style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
                 />
             </Banner>
-            {admin && (
-                <AppBar position={'static'} color={'default'}>
-                    <Toolbar style={{ justifyContent: 'center' }}>
-                        <Button variant={'text'}>
-                            <AddCircle style={{ marginRight: 4 }} />
+            <ActionToolbar show={admin}>
+                <Button variant={'text'}>
+                    <AddCircle style={{ marginRight: 4 }} />
                             New Pro
                         </Button>
-                    </Toolbar>
-                </AppBar>
-            )}
-            {loading && (
-                <Section>
-                    <CircularProgress />
-                </Section>
-            )}
+            </ActionToolbar>
+            <LoadingIndicator show={loading}/>
             {pros.map((bio) => (
                 <Section key={`bio_${bio.id}`}>
                     <ProBio

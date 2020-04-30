@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '15%',
         },
         stepsWrapper: {
-            marginLeft: 100,
+            marginLeft: 64,
             maxWidth: 512,
             [theme.breakpoints.down('sm')]: {
                 marginLeft: 0,
@@ -229,8 +229,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
                     </div>
                 </div>
 
-                <Spacer flex={0} width={100} />
-                <Spacer flex={0} height={64} />
+                <Spacer flex={0} width={64} height={64} />
                 <ScreenShot src={screenshot} alt={'Swing Essentials app screenshot'} style={{ flex: '0 0 auto' }} />
             </Section>
             <Section style={{ display: 'block', textAlign: 'center' }}>

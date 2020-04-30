@@ -3,8 +3,6 @@ import bg from '../assets/images/banners/19th.jpg';
 import {
     makeStyles,
     createStyles,
-    Toolbar,
-    AppBar,
     Button,
     Typography,
     useTheme,
@@ -12,7 +10,6 @@ import {
     CardHeader,
     IconButton,
     useMediaQuery,
-    CircularProgress,
 } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
 import { AddCircle, Edit, ChevronRight, ChevronLeft, LocalBar } from '@material-ui/icons';
@@ -25,6 +22,8 @@ import { useSelector } from 'react-redux';
 import { AppState, Blog } from '../__types__';
 import { Banner } from '../components/display/Banner';
 import { Section } from '../components/display/Section';
+import { ActionToolbar } from '../components/actions/ActionToolbar';
+import { LoadingIndicator } from '../components/display/LoadingIndicator';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -91,21 +90,13 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                     style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
                 />
             </Banner>
-            {admin && (
-                <AppBar position={'static'} color={'default'}>
-                    <Toolbar style={{ justifyContent: 'center' }}>
-                        <Button variant={'text'}>
-                            <AddCircle style={{ marginRight: 4 }} />
-                            New Post
-                        </Button>
-                    </Toolbar>
-                </AppBar>
-            )}
-            {loading && (
-                <Section>
-                    <CircularProgress />
-                </Section>
-            )}
+            <ActionToolbar show={admin}>
+                <Button variant={'text'}>
+                    <AddCircle style={{ marginRight: 4 }} />
+                    New Post
+                </Button>
+            </ActionToolbar>
+            <LoadingIndicator show={loading}/>
             {blogs.length > 0 && (
                 <Section align={'flex-start'}>
                     {!isSmall && (
@@ -164,7 +155,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                             })}
                         </Card>
                     )}
-                    <Spacer flex={0} width={100} />
+                    <Spacer flex={0} width={64} />
                     {activeBlog && (
                         <div style={{ flex: '1 1 0px', position: 'relative' }}>
                             {isSmall && (
