@@ -54,3 +54,30 @@ export function markLessonViewed(lessonID: number) {
             .request();
     };
 }
+
+/* Allows an administrator to reply to a lesson */
+type LessonUpdate = {
+    lesson_id: number;
+    username: string;
+    date?: string;
+    response_video: string;
+    response_notes: string;
+    response_status: 'good' | 'bad';
+};
+
+export function putLessonResponse(data: LessonUpdate) {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
+        dispatch({ type: ACTIONS.PUT_LESSON.REQUEST });
+
+        HttpRequest.put(ACTIONS.PUT_LESSON.API)
+            .withBody(data)
+            .onSuccess((body: any) => {
+                dispatch(success(ACTIONS.PUT_LESSON.SUCCESS, body));
+                dispatch(loadLessons());
+            })
+            .onFailure((response: Response) => {
+                dispatch(failure(ACTIONS.PUT_LESSON.FAILURE, response, 'markViewed'));
+            })
+            .request();
+    };
+}

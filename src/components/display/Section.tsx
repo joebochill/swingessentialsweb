@@ -6,7 +6,7 @@ const useStyles = makeStyles<Theme, SectionProps>((theme: Theme) =>
     createStyles({
         section: {
             background: theme.palette.background.paper,
-            padding: 100,
+            padding: 64,
             display: 'flex',
             alignItems: (props): string => props.align || 'center',
             justifyContent: (props): string => props.justify || 'center',
@@ -14,7 +14,8 @@ const useStyles = makeStyles<Theme, SectionProps>((theme: Theme) =>
                 background: theme.palette.background.default,
             },
             [theme.breakpoints.down('sm')]: {
-                padding: `100px 10%`,
+                padding: `64px 10%`,
+                justifyContent: 'stretch',
                 flexDirection: 'column',
                 textAlign: 'center',
             },

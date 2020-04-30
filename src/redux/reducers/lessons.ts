@@ -8,6 +8,7 @@ const initialState: LessonsState = {
     redeemPending: false,
     redeemSuccess: false,
     redeemError: null,
+    selected: null,
 };
 
 export const LessonsReducer = (state = initialState, action: any): LessonsState => {
@@ -58,6 +59,11 @@ export const LessonsReducer = (state = initialState, action: any): LessonsState 
                 redeemPending: false,
                 redeemSuccess: false,
                 redeemError: parseInt(action.error, 10),
+            };
+        case 'SET_SELECTED_LESSON':
+            return {
+                ...state,
+                selected: action.payload,
             };
         default:
             return state;

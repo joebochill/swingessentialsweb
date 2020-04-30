@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from 'react';
 import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core';
 import { Edit } from '@material-ui/icons';
 import { Spacer } from '@pxblue/react-components';
-import { splitParagraphText } from '../../utilities/text';
+import { splitDatabaseText } from '../../utilities/text';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -51,7 +51,7 @@ type ProBioProps = HTMLAttributes<HTMLDivElement> & {
 };
 export const ProBio: React.FC<ProBioProps> = (props) => {
     const { image, name, title, background = {}, description } = props;
-    const descriptionParagraphs = splitParagraphText(description);
+    const descriptionParagraphs = splitDatabaseText(description);
     const classes = useStyles();
     return (
         <div className={classes.root}>
@@ -76,7 +76,7 @@ export const ProBio: React.FC<ProBioProps> = (props) => {
                     {title}
                 </Typography>
             </div>
-            <Spacer flex={0} width={100} />
+            <Spacer flex={0} width={64} />
             <Spacer flex={0} height={32} />
             <div className={classes.bio}>
                 {descriptionParagraphs.map((paragraph: string, index: number) => (

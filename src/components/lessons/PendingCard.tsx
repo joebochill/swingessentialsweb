@@ -1,6 +1,6 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { AppState, Lesson } from '../../__types__';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState } from '../../__types__';
 import { Card, CardHeader, CardProps, useTheme } from '@material-ui/core';
 import { InfoListItem } from '@pxblue/react-components';
 import { prettyDate } from '../../utilities/date';
@@ -9,18 +9,23 @@ import { ROUTES } from '../../constants/routes';
 import { useHistory } from 'react-router-dom';
 
 type PendingLessonsCardProps = CardProps & {
-    onSelected: (item: Lesson, index: number) => void;
-    selected: number | null;
+    hidden?: boolean;
 };
 export const PendingLessonsCard: React.FC<PendingLessonsCardProps> = (props) => {
-    const { onSelected, selected, ...cardProps } = props;
+    const { hidden, ...cardProps } = props;
+
     const theme = useTheme();
     const history = useHistory();
+    const dispatch = useDispatch();
     const lessons = useSelector((state: AppState) => state.lessons.pending);
+    const selected = useSelector((state: AppState) => state.lessons.selected);
+
     const admin = useSelector((state: AppState) => state.auth.admin);
     const role = useSelector((state: AppState) => state.auth.role);
 
     if (role === 'anonymous') return null;
+
+    if (hidden) return null;
 
     return (
         <Card {...cardProps}>
@@ -45,9 +50,15 @@ export const PendingLessonsCard: React.FC<PendingLessonsCardProps> = (props) => 
                             ? 'In-Person Lesson'
                             : 'Remote Lesson'
                     }
-                    onClick={(): void => onSelected(lesson, index)}
-                    statusColor={selected === index ? theme.palette.primary.main : ''}
-                    backgroundColor={selected === index ? theme.palette.primary.light : undefined}
+                    onClick={(): void => {
+                        dispatch({ type: 'SET_SELECTED_LESSON', payload: lesson });
+                    }}
+                    statusColor={
+                        selected && selected.request_id === lesson.request_id ? theme.palette.primary.main : ''
+                    }
+                    backgroundColor={
+                        selected && selected.request_id === lesson.request_id ? theme.palette.primary.light : undefined
+                    }
                 />
             ))}
             {admin && lessons.length === 0 && (

@@ -13,6 +13,6 @@ export const PlaceholderLesson: Lesson = {
     fo_swing: '',
     dtl_swing: '',
     response_status: 'good',
-    type: 'single',
+    type: 'in-person',
     viewed: 0,
 };
