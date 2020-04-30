@@ -71,12 +71,10 @@ export const BlogsPage: React.FC = (): JSX.Element => {
             if (id !== undefined && paramIndex >= 0) {
                 setActiveBlog(blogs[paramIndex]);
                 setActiveIndex(paramIndex);
-            }
-            else {
+            } else {
                 setActiveBlog(blogs[0]);
                 setActiveIndex(0);
             }
-
         }
     }, [blogs, activeBlog, setActiveBlog, setActiveIndex]);
 
@@ -95,7 +93,9 @@ export const BlogsPage: React.FC = (): JSX.Element => {
 
     const description = activeBlog ? splitDatabaseText(activeBlog.body) : [];
 
-    if (id !== undefined && paramIndex < 0 && blogs.length > 0) { return <Redirect to={ROUTES.BLOG} /> }
+    if (id !== undefined && paramIndex < 0 && blogs.length > 0) {
+        return <Redirect to={ROUTES.BLOG} />;
+    }
 
     return (
         <>
