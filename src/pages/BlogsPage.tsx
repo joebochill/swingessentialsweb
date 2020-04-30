@@ -24,6 +24,7 @@ import { Banner } from '../components/display/Banner';
 import { Section } from '../components/display/Section';
 import { ActionToolbar } from '../components/actions/ActionToolbar';
 import { LoadingIndicator } from '../components/display/LoadingIndicator';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -49,12 +50,17 @@ export const BlogsPage: React.FC = (): JSX.Element => {
     const currentYear = new Date().getFullYear();
     const classes = useStyles();
     const theme = useTheme();
+
     const blogs = useSelector((state: AppState) => state.blogs.blogList);
     const loading = useSelector((state: AppState) => state.blogs.loading);
     const admin = useSelector((state: AppState) => state.auth.admin);
+    const { id } = useParams();
+
     const [activeYear, setActiveYear] = useState(currentYear);
     const [activeBlog, setActiveBlog] = useState<Blog | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
+    const paramIndex = id ? blogs.findIndex((blog) => blog.id === id) : -1;
+
     const isSmall = useMediaQuery('(max-width:959px)');
 
     useEffect(() => {
@@ -78,6 +84,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
     const isLastYear = activeYear === lastYear;
 
     const description = activeBlog ? splitDatabaseText(activeBlog.body) : [];
+    
     return (
         <>
             <Banner background={{ src: bg, position: 'right 30%' }}>

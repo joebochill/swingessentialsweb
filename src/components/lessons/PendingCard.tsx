@@ -51,6 +51,7 @@ export const PendingLessonsCard: React.FC<PendingLessonsCardProps> = (props) => 
                             : 'Remote Lesson'
                     }
                     onClick={(): void => {
+                        history.replace(`${ROUTES.LESSONS}/${lesson.request_url}`);
                         dispatch({ type: 'SET_SELECTED_LESSON', payload: lesson });
                     }}
                     statusColor={
