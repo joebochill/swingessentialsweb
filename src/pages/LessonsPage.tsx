@@ -25,7 +25,7 @@ import { Section } from '../components/display/Section';
 import { PendingLessonsCard } from '../components/lessons/PendingCard';
 import { CompletedLessonsCard } from '../components/lessons/CompletedCard';
 import { PlaceholderLesson } from '../constants/lessons';
-import { Redirect, useParams } from 'react-router-dom';
+import { Redirect, useParams, useHistory } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 import { ActionToolbar } from '../components/actions/ActionToolbar';
 import { LoadingIndicator } from '../components/display/LoadingIndicator';
@@ -81,6 +81,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export const LessonsPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const { id } = useParams();
 
@@ -243,6 +244,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                                         ? pendingLessons[pendingLessons.length - 1]
                                                         : filteredLessons[completeIndex - 1];
                                                 dispatch({ type: 'SET_SELECTED_LESSON', payload: next });
+                                                history.replace(`${ROUTES.LESSONS}/${next.request_url}`);
                                             }}
                                         >
                                             <ChevronLeft fontSize={'inherit'} />
@@ -269,6 +271,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                                     next = filteredLessons[completeIndex + 1];
                                                 }
                                                 dispatch({ type: 'SET_SELECTED_LESSON', payload: next });
+                                                history.replace(`${ROUTES.LESSONS}/${next.request_url}`);
                                             }}
                                         >
                                             <ChevronRight fontSize={'inherit'} />

@@ -25,6 +25,8 @@ import { Banner } from '../components/display/Banner';
 import { Section } from '../components/display/Section';
 import { ActionToolbar } from '../components/actions/ActionToolbar';
 import { LoadingIndicator } from '../components/display/LoadingIndicator';
+import { useHistory, useParams, Redirect } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -57,18 +59,32 @@ export const TipsPage: React.FC = (): JSX.Element => {
     const currentYear = new Date().getFullYear();
     const classes = useStyles();
     const theme = useTheme();
+    const history = useHistory();
+
     const tips = useSelector((state: AppState) => state.tips.tipList);
     const loading = useSelector((state: AppState) => state.tips.loading);
     const admin = useSelector((state: AppState) => state.auth.admin);
+    const { id } = useParams();
+
     const [activeYear, setActiveYear] = useState(currentYear);
     const [activeTip, setActiveTip] = useState<Tip | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
+
+    const paramIndex = id !== undefined ? tips.findIndex((tip) => tip.id === id) : -1;
+
     const isSmall = useMediaQuery('(max-width:959px)');
 
     useEffect(() => {
         if (!activeTip) {
-            setActiveTip(tips[0]);
-            setActiveIndex(0);
+            if (id !== undefined && paramIndex >= 0) {
+                setActiveTip(tips[paramIndex]);
+                setActiveIndex(paramIndex);
+            }
+            else {
+                setActiveTip(tips[0]);
+                setActiveIndex(0);
+            }
+
         }
     }, [tips, activeTip, setActiveTip, setActiveIndex]);
 
@@ -86,6 +102,9 @@ export const TipsPage: React.FC = (): JSX.Element => {
     const isLastYear = activeYear === lastYear;
 
     const description = activeTip ? splitDatabaseText(activeTip.comments) : [];
+    
+    if (id !== undefined && paramIndex < 0 && tips.length > 0) { return <Redirect to={ROUTES.TIPS} /> }
+
     return (
         <>
             <Banner background={{ src: bg, position: 'center right' }}>
@@ -151,6 +170,7 @@ export const TipsPage: React.FC = (): JSX.Element => {
                                         onClick={(): void => {
                                             setActiveTip(tip);
                                             setActiveIndex(index);
+                                            history.replace(`${ROUTES.TIPS}/${tip.id}`);
                                         }}
                                         statusColor={
                                             activeTip && tip.id === activeTip.id ? theme.palette.primary.main : ''
@@ -205,6 +225,7 @@ export const TipsPage: React.FC = (): JSX.Element => {
                                             onClick={(): void => {
                                                 setActiveIndex(activeIndex - 1);
                                                 setActiveTip(tips[activeIndex - 1]);
+                                                history.replace(`${ROUTES.TIPS}/${tips[activeIndex - 1].id}`);
                                             }}
                                         >
                                             <ChevronLeft fontSize={'inherit'} />
@@ -222,6 +243,7 @@ export const TipsPage: React.FC = (): JSX.Element => {
                                             onClick={(): void => {
                                                 setActiveIndex(activeIndex + 1);
                                                 setActiveTip(tips[activeIndex + 1]);
+                                                history.replace(`${ROUTES.TIPS}/${tips[activeIndex + 1].id}`);
                                             }}
                                         >
                                             <ChevronRight fontSize={'inherit'} />
