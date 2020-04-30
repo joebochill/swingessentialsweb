@@ -79,7 +79,7 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
                                 className={canGoBack ? classes.chevron : classes.disabled}
                                 onClick={
                                     canGoBack
-                                        ? () => {
+                                        ? (): void => {
                                               setPage(page - 1);
                                               dispatch({
                                                   type: 'SET_SELECTED_LESSON',

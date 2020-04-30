@@ -1,25 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import bg from '../assets/images/banners/lessons.jpg';
-import {
-    makeStyles,
-    createStyles,
-    Button,
-    Typography,
-    IconButton,
-    useMediaQuery,
-    DialogProps,
-    Dialog,
-    Select,
-    MenuItem,
-    DialogTitle,
-    DialogContent,
-    DialogContentText,
-    DialogActions,
-    FormControl,
-    InputLabel,
-    capitalize,
-    Theme,
-} from '@material-ui/core';
+import { makeStyles, createStyles, Button, Typography, IconButton, useMediaQuery, Theme } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
 import {
     AddCircle,
@@ -35,7 +16,7 @@ import YouTube from 'react-youtube';
 
 import { Spacer, EmptyState } from '@pxblue/react-components';
 import { prettyDate } from '../utilities/date';
-import { splitParagraphText } from '../utilities/text';
+import { splitDatabaseText } from '../utilities/text';
 import { FancyHeadline } from '../components/text/FancyHeadline';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState, Lesson } from '../__types__';
@@ -44,12 +25,13 @@ import { Section } from '../components/display/Section';
 import { PendingLessonsCard } from '../components/lessons/PendingCard';
 import { CompletedLessonsCard } from '../components/lessons/CompletedCard';
 import { PlaceholderLesson } from '../constants/lessons';
-import { getUsers } from '../redux/actions/user-data-actions';
-import { sortUsers } from '../utilities/user';
 import { Redirect } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 import { ActionToolbar } from '../components/actions/ActionToolbar';
 import { LoadingIndicator } from '../components/display/LoadingIndicator';
+import { FilterLessonsDialog } from '../components/lessons/FilterLessonsDialog';
+import { EditLessonDialog } from '../components/lessons/EditLessonDialog';
+import { NewLessonDialog } from '../components/lessons/NewLessonDialog';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -117,6 +99,8 @@ export const LessonsPage: React.FC = (): JSX.Element => {
 
     const [filter, setFilter] = useState('');
     const [showFilterDialog, setShowFilterDialog] = useState(false);
+    const [showEditDialog, setShowEditDialog] = useState(false);
+    const [showNewDialog, setShowNewDialog] = useState(false);
 
     const isSmall = useMediaQuery('(max-width:959px)');
 
@@ -129,13 +113,19 @@ export const LessonsPage: React.FC = (): JSX.Element => {
             dispatch({ type: 'SET_SELECTED_LESSON', payload: closedLessons[0] });
         } else if (activeLesson && closedLessons.length < 1) {
             dispatch({ type: 'SET_SELECTED_LESSON', payload: PlaceholderLesson });
+        } else if (activeLesson && completeIndex >= 0) {
+            dispatch({
+                type: 'SET_SELECTED_LESSON',
+                payload: closedLessons.find((lesson) => lesson.request_id === activeLesson.request_id),
+            });
         }
     }, [closedLessons]);
 
     const description =
-        activeLesson && activeLesson.response_notes ? splitParagraphText(activeLesson.response_notes) : [];
+        activeLesson && activeLesson.response_notes ? splitDatabaseText(activeLesson.response_notes) : [];
 
-    // if (!token) return <Redirect to={ROUTES.HOME} />
+    if (!token) return <Redirect to={ROUTES.HOME} />
+
     return (
         <>
             <Banner background={{ src: bg, position: 'center right' }}>
@@ -149,7 +139,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                 />
             </Banner>
             <ActionToolbar show={admin}>
-                <Button variant={'text'}>
+                <Button variant={'text'} onClick={(): void => setShowNewDialog(true)}>
                     <AddCircle style={{ marginRight: 4 }} />
                     New In-Person Lesson
                 </Button>
@@ -160,19 +150,31 @@ export const LessonsPage: React.FC = (): JSX.Element => {
             </ActionToolbar>
 
             <LoadingIndicator show={pendingLessons.length < 1 && closedLessons.length < 1 && lessons.loading} />
-
+            {admin && (
+                <>
+                    <FilterLessonsDialog
+                        open={showFilterDialog}
+                        onFilterChange={(username): void => {
+                            setFilter(username);
+                        }}
+                        onClose={(): void => setShowFilterDialog(false)}
+                    />
+                    {activeLesson && (
+                        <EditLessonDialog
+                            open={showEditDialog}
+                            onClose={(): void => setShowEditDialog(false)}
+                            lesson={activeLesson}
+                        />
+                    )}
+                    <NewLessonDialog open={showNewDialog} onClose={(): void => setShowNewDialog(false)} />
+                </>
+            )}
             <Section align={isSmall ? 'stretch' : 'flex-start'}>
                 <div className={classes.cardContainer}>
                     <PendingLessonsCard style={{ marginBottom: 32 }} hidden={isSmall} />
                     <CompletedLessonsCard filter={filter} hidden={isSmall} />
                 </div>
-                <UserFilterDialog
-                    open={showFilterDialog}
-                    onFilterChange={(username): void => {
-                        setFilter(username);
-                    }}
-                    onClose={(): void => setShowFilterDialog(false)}
-                />
+
                 <Spacer flex={0} width={64} />
                 {activeLesson && (
                     <div style={{ flex: '1 1 0px' }}>
@@ -273,7 +275,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                         onClick={
                                             admin
                                                 ? (): void => {
-                                                      /* do nothing */
+                                                      setShowEditDialog(true);
                                                   }
                                                 : undefined
                                         }
@@ -286,7 +288,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                 </>
                             )}
                         </div>
-                        {activeLesson && activeLesson.request_id !== -1 && (
+                        {activeLesson && activeLesson.type !== 'in-person' && (
                             <>
                                 <Typography variant={'h6'} style={{ marginBottom: 16, lineHeight: 1.2 }}>
                                     Your Submission
@@ -317,7 +319,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                         <Spacer flex={0} height={16} />
                                     </>
                                 )}
-                                {splitParagraphText(activeLesson.request_notes).map((par, pInd) => (
+                                {splitDatabaseText(activeLesson.request_notes).map((par, pInd) => (
                                     <Typography key={`par_${pInd}`} paragraph style={{ lineHeight: 1.8 }}>
                                         {par}
                                     </Typography>
@@ -337,79 +339,5 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                 )}
             </Section>
         </>
-    );
-};
-
-type UserFilterDialogProps = DialogProps & {
-    onFilterChange: (username: string) => void;
-};
-const UserFilterDialog: React.FC<UserFilterDialogProps> = (props) => {
-    const { onFilterChange, ...dialogProps } = props;
-    const {
-        onClose = (): void => {
-            /* do nothing */
-        },
-    } = dialogProps;
-    const users = useSelector((state: AppState) => state.users.list);
-    const dispatch = useDispatch();
-    const [selected, setSelected] = useState<string>('-');
-
-    useEffect(() => {
-        dispatch(getUsers());
-    }, [props.open, dispatch]);
-
-    const usersByName = [...users].sort(sortUsers('last'));
-    const usersByUsername = [...users].sort(sortUsers('username'));
-
-    return (
-        <Dialog {...dialogProps}>
-            <DialogTitle>Filter Lessons</DialogTitle>
-            <DialogContent>
-                <DialogContentText>Select the user you want to filter by:</DialogContentText>
-                <FormControl variant="filled" fullWidth>
-                    <InputLabel id="username-label">{`Username`}</InputLabel>
-                    <Select
-                        labelId="username-label"
-                        value={selected}
-                        onChange={(e): void => setSelected(e.target.value as string)}
-                    >
-                        <MenuItem value="-">All Users</MenuItem>
-                        {usersByUsername.map((user) => (
-                            <MenuItem key={user.username} value={user.username}>{`${user.username}`}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <FormControl variant="filled" fullWidth style={{ marginTop: 16 }}>
-                    <InputLabel id="fullname-label">{`Human Name`}</InputLabel>
-                    <Select
-                        labelId="fullname-label"
-                        value={selected}
-                        onChange={(e): void => setSelected(e.target.value as string)}
-                    >
-                        <MenuItem value="-">All Users</MenuItem>
-                        {usersByName.map((user) => (
-                            <MenuItem key={user.username} value={user.username}>{`${capitalize(
-                                user.last
-                            )}, ${capitalize(user.first)}`}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </DialogContent>
-            <DialogActions>
-                <Button color="primary" variant={'outlined'} onClick={(e): void => onClose(e, 'backdropClick')}>
-                    Cancel
-                </Button>
-                <Button
-                    color="primary"
-                    variant={'contained'}
-                    onClick={(e): void => {
-                        onFilterChange(selected === '-' ? '' : selected);
-                        onClose(e, 'backdropClick');
-                    }}
-                >
-                    Done
-                </Button>
-            </DialogActions>
-        </Dialog>
     );
 };

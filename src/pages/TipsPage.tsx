@@ -17,7 +17,7 @@ import YouTube from 'react-youtube';
 
 import { Spacer, InfoListItem } from '@pxblue/react-components';
 import { prettyDate } from '../utilities/date';
-import { splitParagraphText } from '../utilities/text';
+import { splitDatabaseText } from '../utilities/text';
 import { FancyHeadline } from '../components/text/FancyHeadline';
 import { useSelector } from 'react-redux';
 import { AppState, Tip } from '../__types__';
@@ -85,7 +85,7 @@ export const TipsPage: React.FC = (): JSX.Element => {
     const isFirstYear = activeYear === firstYear;
     const isLastYear = activeYear === lastYear;
 
-    const description = activeTip ? splitParagraphText(activeTip.comments) : [];
+    const description = activeTip ? splitDatabaseText(activeTip.comments) : [];
     return (
         <>
             <Banner background={{ src: bg, position: 'center right' }}>

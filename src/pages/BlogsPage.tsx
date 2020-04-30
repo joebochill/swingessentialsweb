@@ -16,7 +16,7 @@ import { AddCircle, Edit, ChevronRight, ChevronLeft, LocalBar } from '@material-
 
 import { Spacer, InfoListItem } from '@pxblue/react-components';
 import { prettyDate } from '../utilities/date';
-import { splitParagraphText } from '../utilities/text';
+import { splitDatabaseText } from '../utilities/text';
 import { FancyHeadline } from '../components/text/FancyHeadline';
 import { useSelector } from 'react-redux';
 import { AppState, Blog } from '../__types__';
@@ -77,7 +77,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
     const isFirstYear = activeYear === firstYear;
     const isLastYear = activeYear === lastYear;
 
-    const description = activeBlog ? splitParagraphText(activeBlog.body) : [];
+    const description = activeBlog ? splitDatabaseText(activeBlog.body) : [];
     return (
         <>
             <Banner background={{ src: bg, position: 'right 30%' }}>
