@@ -79,12 +79,10 @@ export const TipsPage: React.FC = (): JSX.Element => {
             if (id !== undefined && paramIndex >= 0) {
                 setActiveTip(tips[paramIndex]);
                 setActiveIndex(paramIndex);
-            }
-            else {
+            } else {
                 setActiveTip(tips[0]);
                 setActiveIndex(0);
             }
-
         }
     }, [tips, activeTip, setActiveTip, setActiveIndex]);
 
@@ -102,8 +100,10 @@ export const TipsPage: React.FC = (): JSX.Element => {
     const isLastYear = activeYear === lastYear;
 
     const description = activeTip ? splitDatabaseText(activeTip.comments) : [];
-    
-    if (id !== undefined && paramIndex < 0 && tips.length > 0) { return <Redirect to={ROUTES.TIPS} /> }
+
+    if (id !== undefined && paramIndex < 0 && tips.length > 0) {
+        return <Redirect to={ROUTES.TIPS} />;
+    }
 
     return (
         <>

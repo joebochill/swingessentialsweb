@@ -90,7 +90,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
     const pendingLessons = lessons.pending;
     const activeLesson = lessons.selected;
 
-    const token = useSelector((state: AppState) => state.auth.token);
+    // const token = useSelector((state: AppState) => state.auth.token);
     const admin = useSelector((state: AppState) => state.auth.admin);
 
     const [filter, setFilter] = useState('');
@@ -110,12 +110,15 @@ export const LessonsPage: React.FC = (): JSX.Element => {
     const completeIndex = !activeLesson
         ? -1
         : filteredLessons.findIndex((lesson) => lesson.request_id === activeLesson.request_id);
-    const paramIndex = id ? filteredLessons.findIndex((lesson) => lesson.request_url === id) : -1;
+    const paramIndexPending = id ? pendingLessons.findIndex((lesson) => lesson.request_url === id) : -1;
+    const paramIndexComplete = id ? filteredLessons.findIndex((lesson) => lesson.request_url === id) : -1;
 
     // Initialize the active lesson when we load the lessons
     useEffect(() => {
-        if (paramIndex >= 0) {
-            dispatch({ type: 'SET_SELECTED_LESSON', payload: filteredLessons[paramIndex] });
+        if (paramIndexComplete >= 0) {
+            dispatch({ type: 'SET_SELECTED_LESSON', payload: filteredLessons[paramIndexComplete] });
+        } else if (paramIndexPending >= 0) {
+            dispatch({ type: 'SET_SELECTED_LESSON', payload: pendingLessons[paramIndexPending] });
         } else if (!activeLesson) {
             const active = filteredLessons.length > 0 ? filteredLessons[0] : PlaceholderLesson;
             dispatch({ type: 'SET_SELECTED_LESSON', payload: active });
@@ -143,8 +146,8 @@ export const LessonsPage: React.FC = (): JSX.Element => {
         activeLesson && activeLesson.response_notes ? splitDatabaseText(activeLesson.response_notes) : [];
 
     // If we don't belong
-    if (!token) return <Redirect to={ROUTES.HOME} />;
-    if (id && paramIndex === -1 && closedLessons.length > 0) return <Redirect to={ROUTES.LESSONS} />;
+    // if (!token) return <Redirect to={ROUTES.HOME} />;
+    if (id && paramIndexComplete === -1 && paramIndexPending === -1 && closedLessons.length > 0) return <Redirect to={ROUTES.LESSONS} />;
 
     return (
         <>

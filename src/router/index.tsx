@@ -13,7 +13,7 @@ const ScrollToTop = (): any => {
     const previousPath = usePrevious(pathname);
 
     useEffect(() => {
-        if(pathname.split('/')[1] !== previousPath?.split('/')[1]){
+        if (pathname.split('/')[1] !== previousPath?.split('/')[1]) {
             window.scrollTo(0, 0);
         }
     }, [pathname, previousPath]);

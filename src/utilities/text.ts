@@ -1,5 +1,5 @@
 export const splitDatabaseText = (string: string): string[] => {
-    if (!string.length) {
+    if (!string || string.length < 1) {
         return [];
     }
     return string.split('|:::|');
