@@ -6,13 +6,17 @@ import { Toolbar } from '../components/navigation/Toolbar';
 import { Footer } from '../components/navigation/Footer';
 import { ROUTES } from '../constants/routes';
 import { LessonsPage, LandingPage, PlaceholderPage, ProsPage, TipsPage, BlogsPage, LoginPage } from '../pages';
+import { usePrevious } from '../hooks';
 
 const ScrollToTop = (): any => {
     const { pathname } = useLocation();
+    const previousPath = usePrevious(pathname);
 
     useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [pathname]);
+        if(pathname.split('/')[1] !== previousPath?.split('/')[1]){
+            window.scrollTo(0, 0);
+        }
+    }, [pathname, previousPath]);
 
     return null;
 };
@@ -29,10 +33,11 @@ export const MainRouter = (): JSX.Element => (
             <Route exact path={`${ROUTES.TIPS}`} component={TipsPage} />
             <Route exact path={`${ROUTES.LESSONS}`} component={LessonsPage} />
 
-            <Route exact path={`${ROUTES.BLOG}/:id`} component={PlaceholderPage} />
-            <Route exact path={`${ROUTES.TIPS}/:id`} component={PlaceholderPage} />
+            {/* Deep Links */}
+            <Route exact path={`${ROUTES.BLOG}/:id`} component={BlogsPage} />
+            <Route exact path={`${ROUTES.TIPS}/:id`} component={TipsPage} />
+            <Route exact path={`${ROUTES.LESSONS}/:id`} component={LessonsPage} />
 
-            <Route exact path={`${ROUTES.LESSONS}/:id`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.ORDER}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.SUBMIT}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.PROFILE}`} component={PlaceholderPage} />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from '../../__types__';
+import { AppState, Lesson } from '../../__types__';
 import { Card, CardHeader, CardProps, useTheme } from '@material-ui/core';
 import { InfoListItem } from '@pxblue/react-components';
 import { prettyDate } from '../../utilities/date';
@@ -10,14 +10,14 @@ import { useHistory } from 'react-router-dom';
 
 type PendingLessonsCardProps = CardProps & {
     hidden?: boolean;
+    lessons: Lesson[];
 };
 export const PendingLessonsCard: React.FC<PendingLessonsCardProps> = (props) => {
-    const { hidden, ...cardProps } = props;
+    const { hidden, lessons, ...cardProps } = props;
 
     const theme = useTheme();
     const history = useHistory();
     const dispatch = useDispatch();
-    const lessons = useSelector((state: AppState) => state.lessons.pending);
     const selected = useSelector((state: AppState) => state.lessons.selected);
 
     const admin = useSelector((state: AppState) => state.auth.admin);
@@ -51,6 +51,7 @@ export const PendingLessonsCard: React.FC<PendingLessonsCardProps> = (props) => 
                             : 'Remote Lesson'
                     }
                     onClick={(): void => {
+                        history.replace(`${ROUTES.LESSONS}/${lesson.request_url}`);
                         dispatch({ type: 'SET_SELECTED_LESSON', payload: lesson });
                     }}
                     statusColor={

@@ -25,7 +25,7 @@ import { Section } from '../components/display/Section';
 import { PendingLessonsCard } from '../components/lessons/PendingCard';
 import { CompletedLessonsCard } from '../components/lessons/CompletedCard';
 import { PlaceholderLesson } from '../constants/lessons';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useParams, useHistory } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 import { ActionToolbar } from '../components/actions/ActionToolbar';
 import { LoadingIndicator } from '../components/display/LoadingIndicator';
@@ -81,18 +81,14 @@ const useStyles = makeStyles((theme: Theme) =>
 export const LessonsPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const history = useHistory();
+
+    const { id } = useParams();
 
     const lessons = useSelector((state: AppState) => state.lessons);
     const closedLessons = lessons.closed;
     const pendingLessons = lessons.pending;
     const activeLesson = lessons.selected;
-
-    const pendingIndex = !activeLesson
-        ? -1
-        : pendingLessons.findIndex((lesson) => lesson.request_id === activeLesson.request_id);
-    const completeIndex = !activeLesson
-        ? -1
-        : closedLessons.findIndex((lesson) => lesson.request_id === activeLesson.request_id);
 
     const token = useSelector((state: AppState) => state.auth.token);
     const admin = useSelector((state: AppState) => state.auth.admin);
@@ -104,27 +100,51 @@ export const LessonsPage: React.FC = (): JSX.Element => {
 
     const isSmall = useMediaQuery('(max-width:959px)');
 
+    // Filter the lessons by user
+    let filteredLessons = closedLessons;
+    if (admin && filter) filteredLessons = closedLessons.filter((lesson) => lesson.username === filter);
+
+    const pendingIndex = !activeLesson
+        ? -1
+        : pendingLessons.findIndex((lesson) => lesson.request_id === activeLesson.request_id);
+    const completeIndex = !activeLesson
+        ? -1
+        : filteredLessons.findIndex((lesson) => lesson.request_id === activeLesson.request_id);
+    const paramIndex = id ? filteredLessons.findIndex((lesson) => lesson.request_url === id) : -1;
+
     // Initialize the active lesson when we load the lessons
     useEffect(() => {
-        if (!activeLesson) {
-            const active = closedLessons.length > 0 ? closedLessons[0] : PlaceholderLesson;
+        if (paramIndex >= 0) {
+            dispatch({ type: 'SET_SELECTED_LESSON', payload: filteredLessons[paramIndex] });
+        } else if (!activeLesson) {
+            const active = filteredLessons.length > 0 ? filteredLessons[0] : PlaceholderLesson;
             dispatch({ type: 'SET_SELECTED_LESSON', payload: active });
-        } else if (activeLesson.request_id === -1 && closedLessons.length > 0) {
-            dispatch({ type: 'SET_SELECTED_LESSON', payload: closedLessons[0] });
-        } else if (activeLesson && closedLessons.length < 1) {
+        } else if (activeLesson.request_id === -1 && filteredLessons.length > 0) {
+            dispatch({ type: 'SET_SELECTED_LESSON', payload: filteredLessons[0] });
+        } else if (activeLesson && filteredLessons.length < 1) {
             dispatch({ type: 'SET_SELECTED_LESSON', payload: PlaceholderLesson });
         } else if (activeLesson && completeIndex >= 0) {
             dispatch({
                 type: 'SET_SELECTED_LESSON',
-                payload: closedLessons.find((lesson) => lesson.request_id === activeLesson.request_id),
+                payload: filteredLessons.find((lesson) => lesson.request_id === activeLesson.request_id),
             });
         }
     }, [closedLessons]);
 
+    // Update selection if it's no longer part of filtered list
+    useEffect(() => {
+        if (activeLesson && completeIndex < 0 && pendingIndex < 0) {
+            const active = filteredLessons.length > 0 ? filteredLessons[0] : null;
+            dispatch({ type: 'SET_SELECTED_LESSON', payload: active });
+        }
+    }, [filter]);
+
     const description =
         activeLesson && activeLesson.response_notes ? splitDatabaseText(activeLesson.response_notes) : [];
 
-    if (!token) return <Redirect to={ROUTES.HOME} />
+    // If we don't belong
+    if (!token) return <Redirect to={ROUTES.HOME} />;
+    if (id && paramIndex === -1 && closedLessons.length > 0) return <Redirect to={ROUTES.LESSONS} />;
 
     return (
         <>
@@ -171,8 +191,8 @@ export const LessonsPage: React.FC = (): JSX.Element => {
             )}
             <Section align={isSmall ? 'stretch' : 'flex-start'}>
                 <div className={classes.cardContainer}>
-                    <PendingLessonsCard style={{ marginBottom: 32 }} hidden={isSmall} />
-                    <CompletedLessonsCard filter={filter} hidden={isSmall} />
+                    <PendingLessonsCard lessons={pendingLessons} hidden={isSmall} style={{ marginBottom: 32 }} />
+                    <CompletedLessonsCard lessons={filteredLessons} hidden={isSmall} />
                 </div>
 
                 <Spacer flex={0} width={64} />
@@ -222,15 +242,16 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                                         ? pendingLessons[pendingIndex - 1]
                                                         : completeIndex === 0
                                                         ? pendingLessons[pendingLessons.length - 1]
-                                                        : closedLessons[completeIndex - 1];
+                                                        : filteredLessons[completeIndex - 1];
                                                 dispatch({ type: 'SET_SELECTED_LESSON', payload: next });
+                                                history.replace(`${ROUTES.LESSONS}/${next.request_url}`);
                                             }}
                                         >
                                             <ChevronLeft fontSize={'inherit'} />
                                         </IconButton>
                                         <IconButton
                                             className={classes.nextButton}
-                                            disabled={completeIndex >= closedLessons.length - 1}
+                                            disabled={completeIndex >= filteredLessons.length - 1}
                                             onClick={(): void => {
                                                 let next: Lesson = PlaceholderLesson;
                                                 // Next pending lesson
@@ -241,15 +262,16 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                                 else if (
                                                     pendingIndex >= 0 &&
                                                     pendingIndex === pendingLessons.length - 1 &&
-                                                    closedLessons.length > 0
+                                                    filteredLessons.length > 0
                                                 ) {
-                                                    next = closedLessons[0];
+                                                    next = filteredLessons[0];
                                                 }
                                                 // Next complete lesson
                                                 else if (completeIndex >= 0) {
-                                                    next = closedLessons[completeIndex + 1];
+                                                    next = filteredLessons[completeIndex + 1];
                                                 }
                                                 dispatch({ type: 'SET_SELECTED_LESSON', payload: next });
+                                                history.replace(`${ROUTES.LESSONS}/${next.request_url}`);
                                             }}
                                         >
                                             <ChevronRight fontSize={'inherit'} />

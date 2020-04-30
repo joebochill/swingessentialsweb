@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from '../../__types__';
+import { AppState, Lesson } from '../../__types__';
 import { Card, CardHeader, CardProps, useTheme, makeStyles, createStyles, Typography } from '@material-ui/core';
 import { InfoListItem, ListItemTag } from '@pxblue/react-components';
 import { prettyDate } from '../../utilities/date';
 import { PlaceholderLesson } from '../../constants/lessons';
 import { ChevronRight, ChevronLeft } from '@material-ui/icons';
 import { markLessonViewed } from '../../redux/actions/lesons-actions';
+import { useHistory } from 'react-router-dom';
+import { ROUTES } from '../../constants/routes';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -29,33 +31,29 @@ const useStyles = makeStyles(() =>
 type CompletedLessonsCardProps = CardProps & {
     filter?: string;
     hidden?: boolean;
+    lessons: Lesson[];
 };
 export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props) => {
-    const { filter, hidden, ...cardProps } = props;
+    const { filter, hidden, lessons: _lessons, ...cardProps } = props;
 
     const classes = useStyles();
     const theme = useTheme();
+    const history = useHistory();
     const dispatch = useDispatch();
     const admin = useSelector((state: AppState) => state.auth.admin);
     const [page, setPage] = useState(3);
 
-    // Get Full Lessons Object
-    const closedLessons = useSelector((state: AppState) => state.lessons.closed);
     const selected = useSelector((state: AppState) => state.lessons.selected);
     const lessonsPerPage = 10;
 
-    // Filter the lessons by user
-    let filteredLessons = closedLessons;
-    if (admin && filter) filteredLessons = closedLessons.filter((lesson) => lesson.username === filter);
-
     // Paginate the final lessons list
-    let lessons = filteredLessons;
+    let lessons = _lessons;
     if (lessons.length > lessonsPerPage) {
-        lessons = filteredLessons.slice(page * lessonsPerPage, (page + 1) * lessonsPerPage);
+        lessons = _lessons.slice(page * lessonsPerPage, (page + 1) * lessonsPerPage);
     }
 
     // Determine page navigation capabilities
-    const numPages = Math.ceil(filteredLessons.length / lessonsPerPage);
+    const numPages = Math.ceil(_lessons.length / lessonsPerPage);
     const canGoForward = page < numPages - 1;
     const canGoBack = page > 0;
 
@@ -83,7 +81,7 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
                                               setPage(page - 1);
                                               dispatch({
                                                   type: 'SET_SELECTED_LESSON',
-                                                  payload: filteredLessons[(page - 1) * lessonsPerPage],
+                                                  payload: _lessons[(page - 1) * lessonsPerPage],
                                               });
                                           }
                                         : undefined
@@ -98,7 +96,7 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
                                               setPage(page + 1);
                                               dispatch({
                                                   type: 'SET_SELECTED_LESSON',
-                                                  payload: filteredLessons[(page + 1) * lessonsPerPage],
+                                                  payload: _lessons[(page + 1) * lessonsPerPage],
                                               });
                                           }
                                         : undefined
@@ -125,6 +123,7 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
                             : 'Remote Lesson'
                     }
                     onClick={(): void => {
+                        history.replace(`${ROUTES.LESSONS}/${lesson.request_url}`);
                         dispatch({ type: 'SET_SELECTED_LESSON', payload: lesson });
                         if (!admin && selected !== null && !selected.viewed) {
                             dispatch(markLessonViewed(selected.request_id));
@@ -163,6 +162,7 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
                     title={'Welcome to Swing Essentials'}
                     subtitle={'Introduction'}
                     onClick={(): void => {
+                        history.replace(`${ROUTES.LESSONS}/${PlaceholderLesson.request_url}`);
                         dispatch({ type: 'SET_SELECTED_LESSON', payload: PlaceholderLesson });
                     }}
                     statusColor={selected && selected.request_id === -1 ? theme.palette.primary.main : ''}

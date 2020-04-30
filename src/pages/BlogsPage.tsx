@@ -24,6 +24,8 @@ import { Banner } from '../components/display/Banner';
 import { Section } from '../components/display/Section';
 import { ActionToolbar } from '../components/actions/ActionToolbar';
 import { LoadingIndicator } from '../components/display/LoadingIndicator';
+import { useParams, Redirect, useHistory } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -49,18 +51,32 @@ export const BlogsPage: React.FC = (): JSX.Element => {
     const currentYear = new Date().getFullYear();
     const classes = useStyles();
     const theme = useTheme();
+    const history = useHistory();
+
     const blogs = useSelector((state: AppState) => state.blogs.blogList);
     const loading = useSelector((state: AppState) => state.blogs.loading);
     const admin = useSelector((state: AppState) => state.auth.admin);
+    const { id } = useParams();
+
     const [activeYear, setActiveYear] = useState(currentYear);
     const [activeBlog, setActiveBlog] = useState<Blog | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
+
+    const paramIndex = id !== undefined ? blogs.findIndex((blog) => blog.id === id) : -1;
+
     const isSmall = useMediaQuery('(max-width:959px)');
 
     useEffect(() => {
         if (!activeBlog) {
-            setActiveBlog(blogs[0]);
-            setActiveIndex(0);
+            if (id !== undefined && paramIndex >= 0) {
+                setActiveBlog(blogs[paramIndex]);
+                setActiveIndex(paramIndex);
+            }
+            else {
+                setActiveBlog(blogs[0]);
+                setActiveIndex(0);
+            }
+
         }
     }, [blogs, activeBlog, setActiveBlog, setActiveIndex]);
 
@@ -78,6 +94,9 @@ export const BlogsPage: React.FC = (): JSX.Element => {
     const isLastYear = activeYear === lastYear;
 
     const description = activeBlog ? splitDatabaseText(activeBlog.body) : [];
+
+    if (id !== undefined && paramIndex < 0 && blogs.length > 0) { return <Redirect to={ROUTES.BLOG} /> }
+
     return (
         <>
             <Banner background={{ src: bg, position: 'right 30%' }}>
@@ -141,6 +160,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                                         onClick={(): void => {
                                             setActiveBlog(blog);
                                             setActiveIndex(index);
+                                            history.replace(`${ROUTES.BLOG}/${blog.id}`);
                                         }}
                                         statusColor={
                                             activeBlog && blog.id === activeBlog.id ? theme.palette.primary.main : ''
@@ -173,6 +193,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                                         onClick={(): void => {
                                             setActiveIndex(activeIndex - 1);
                                             setActiveBlog(blogs[activeIndex - 1]);
+                                            history.replace(`${ROUTES.BLOG}/${blogs[activeIndex - 1].id}`);
                                         }}
                                     >
                                         <ChevronLeft fontSize={'inherit'} />
@@ -190,6 +211,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                                         onClick={(): void => {
                                             setActiveIndex(activeIndex + 1);
                                             setActiveBlog(blogs[activeIndex + 1]);
+                                            history.replace(`${ROUTES.BLOG}/${blogs[activeIndex + 1].id}`);
                                         }}
                                     >
                                         <ChevronRight fontSize={'inherit'} />
