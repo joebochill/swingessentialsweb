@@ -132,6 +132,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                 payload: filteredLessons.find((lesson) => lesson.request_id === activeLesson.request_id),
             });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [closedLessons]);
 
     // Update selection if it's no longer part of filtered list
@@ -140,6 +141,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
             const active = filteredLessons.length > 0 ? filteredLessons[0] : null;
             dispatch({ type: 'SET_SELECTED_LESSON', payload: active });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter]);
 
     const description =
@@ -147,7 +149,9 @@ export const LessonsPage: React.FC = (): JSX.Element => {
 
     // If we don't belong
     // if (!token) return <Redirect to={ROUTES.HOME} />;
-    if (id && paramIndexComplete === -1 && paramIndexPending === -1 && closedLessons.length > 0) return <Redirect to={ROUTES.LESSONS} />;
+    if (id && paramIndexComplete === -1 && paramIndexPending === -1 && closedLessons.length > 0){
+        return <Redirect to={ROUTES.LESSONS} />;
+    }
 
     return (
         <>

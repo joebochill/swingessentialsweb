@@ -61,6 +61,7 @@ export const TokenModal: React.FC<TokenModalProps> = (props) => {
             }, 20 * 1000);
             return (): void => clearInterval(interval);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token]);
 
     useEffect(() => {

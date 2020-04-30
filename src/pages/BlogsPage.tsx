@@ -76,6 +76,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                 setActiveIndex(0);
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [blogs, activeBlog, setActiveBlog, setActiveIndex]);
 
     useEffect(() => {
