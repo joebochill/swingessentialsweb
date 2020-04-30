@@ -15,7 +15,7 @@ import {
     CircularProgress,
 } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
-import { AddCircle, Today, Create, ChevronRight, ChevronLeft } from '@material-ui/icons';
+import { AddCircle, Today, Edit, ChevronRight, ChevronLeft } from '@material-ui/icons';
 import YouTube from 'react-youtube';
 
 import { Spacer, InfoListItem } from '@pxblue/react-components';
@@ -237,7 +237,7 @@ export const TipsPage: React.FC = (): JSX.Element => {
                                 )}
                             </div>
                             <FancyHeadline
-                                icon={<Create fontSize={'inherit'} />}
+                                icon={<Edit fontSize={'inherit'} />}
                                 headline={activeTip.title}
                                 subheading={prettyDate(activeTip.date)}
                                 style={{ cursor: 'pointer' }}

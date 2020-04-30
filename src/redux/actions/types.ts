@@ -14,6 +14,7 @@ export const REFRESH_TOKEN = createAction('REFRESH_TOKEN', 'refresh');
 
 /* User Actions */
 export const GET_USER_DATA = createAction('GET_USER_DATA', 'user');
+export const GET_USERS = createAction('GET_USERS', 'users');
 
 /* Settings Actions */
 export const GET_SETTINGS = createAction('GET_SETTINGS', 'settings');

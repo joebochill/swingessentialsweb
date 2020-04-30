@@ -1,4 +1,4 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+This project was bootstrapped with [Edit React App](https://github.com/facebookincubator/create-react-app).
 
 # [Swing Essentials<sup>®</sup>](https://www.swingessentials.com)
 Swing Essentials is an online platform that allows golfers the opportunity to receive custom one-on-one swing analysis from a PGA-certified golf professional.

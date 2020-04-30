@@ -54,6 +54,11 @@ export type Pro = {
     imageSize?: string;
     imagePosition?: string;
 };
+export type User = {
+    username: string;
+    first: string;
+    last: string;
+};
 
 // Redux State Types
 export type GeneralState = {
@@ -85,6 +90,9 @@ export type UserDataState = {
     lastName: string;
     email: string;
     joined: number;
+};
+export type UsersState = {
+    list: User[];
 };
 export type CreditsState = {
     count: number;
@@ -152,7 +160,9 @@ export type AppState = {
     app: GeneralState;
     auth: AuthState;
     user: UserDataState;
+    users: UsersState;
     blogs: BlogsState;
     tips: TipsState;
     pros: ProsState;
+    lessons: LessonsState;
 };

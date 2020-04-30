@@ -1,6 +1,6 @@
 import React, { HTMLAttributes } from 'react';
 import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core';
-import { Create } from '@material-ui/icons';
+import { Edit } from '@material-ui/icons';
 import { Spacer } from '@pxblue/react-components';
 import { splitParagraphText } from '../../utilities/text';
 
@@ -67,7 +67,7 @@ export const ProBio: React.FC<ProBioProps> = (props) => {
                     }}
                 />
                 <div className={classes.name}>
-                    <Create style={{ marginRight: 4 }} />
+                    <Edit style={{ marginRight: 4 }} />
                     <Typography variant={'h6'} style={{ lineHeight: 1 }}>
                         {name}
                     </Typography>

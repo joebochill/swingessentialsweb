@@ -92,6 +92,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
                 <img src={fullLogo} alt={'Swing Essentials banner logo'} className={classes.seLogo} />
                 <img src={pga} alt={'PGA Logo'} className={classes.pgaLogo} />
             </Banner>
+            <div />
             <Section>
                 <SectionBlurb
                     jumbo

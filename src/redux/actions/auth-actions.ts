@@ -2,7 +2,7 @@ import { success, failure } from '../../api/http-helper';
 import { btoa, atob } from '../../utilities/base64';
 import * as ACTIONS from './types';
 import { AUTH, BASEURL } from '../../constants';
-// import { loadLessons } from './LessonActions';
+import { loadLessons } from './lesons-actions';
 import { loadTips } from './tip-actions';
 // import { loadCredits } from './CreditActions';
 import { loadBlogs } from './blog-actions';
@@ -10,27 +10,13 @@ import { loadBlogs } from './blog-actions';
 import { ThunkDispatch } from 'redux-thunk';
 import { Credentials } from '../../__types__';
 import { HttpRequest } from '../../api/http';
+import { loadUserInfo } from './user-data-actions';
 // import { Logger } from '../../utilities/logging';
 // import * as Keychain from 'react-native-keychain';
 
-export function loadUserInfo() {
-    return (dispatch: ThunkDispatch<any, void, any>): void => {
-        dispatch({ type: ACTIONS.GET_BLOGS.REQUEST });
-
-        HttpRequest.get(ACTIONS.GET_USER_DATA.API)
-            .onSuccess((body: any) => {
-                dispatch(success(ACTIONS.GET_USER_DATA.SUCCESS, body));
-            })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.GET_USER_DATA.FAILURE, response, 'userData'));
-            })
-            .request();
-    };
-}
-
 export function loadUserContent() {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
-        // dispatch(loadLessons());
+        dispatch(loadLessons());
         // dispatch(loadCredits());
         // dispatch(loadSettings());
         dispatch(loadTips());

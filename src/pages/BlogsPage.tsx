@@ -15,7 +15,7 @@ import {
     CircularProgress,
 } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
-import { AddCircle, Create, ChevronRight, ChevronLeft, LocalBar } from '@material-ui/icons';
+import { AddCircle, Edit, ChevronRight, ChevronLeft, LocalBar } from '@material-ui/icons';
 
 import { Spacer, InfoListItem } from '@pxblue/react-components';
 import { prettyDate } from '../utilities/date';
@@ -206,7 +206,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                                 </>
                             )}
                             <FancyHeadline
-                                icon={<Create fontSize={'inherit'} />}
+                                icon={<Edit fontSize={'inherit'} />}
                                 headline={activeBlog.title}
                                 subheading={prettyDate(activeBlog.date)}
                                 style={{ cursor: 'pointer' }}

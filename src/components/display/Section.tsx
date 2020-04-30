@@ -10,7 +10,7 @@ const useStyles = makeStyles<Theme, SectionProps>((theme: Theme) =>
             display: 'flex',
             alignItems: (props): string => props.align || 'center',
             justifyContent: (props): string => props.justify || 'center',
-            '&:nth-child(even)': {
+            '&:nth-of-type(even)': {
                 background: theme.palette.background.default,
             },
             [theme.breakpoints.down('sm')]: {
@@ -28,6 +28,8 @@ type SectionProps = HTMLAttributes<HTMLDivElement> & {
     };
     justify?: 'flex-start' | 'center' | 'stretch';
     align?: 'flex-start' | 'center' | 'stretch';
+    dark?: boolean;
+    light?: boolean;
 };
 export const Section: React.FC<SectionProps> = (props): JSX.Element => {
     const { background = {}, style, ...other } = props;
