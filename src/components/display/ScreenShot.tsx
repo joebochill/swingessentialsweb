@@ -1,6 +1,6 @@
 import React, { HTMLAttributes } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core';
-import iphone from '../assets/images/iphone.png';
+import iphone from '../../assets/images/iphone.png';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -31,10 +31,11 @@ type ScreenShotProps = HTMLAttributes<HTMLDivElement> & {
     alt: string;
 };
 export const ScreenShot: React.FC<ScreenShotProps> = (props) => {
+    const { src, alt, ...other } = props;
     const classes = useStyles();
     return (
-        <div className={classes.wrapper}>
-            <img src={props.src} alt={props.alt} className={classes.image} />
+        <div className={classes.wrapper} {...other}>
+            <img src={src} alt={alt} className={classes.image} />
             <img src={iphone} alt={'Iphone device frame'} className={classes.frame} width={260} />
         </div>
     );

@@ -21,3 +21,17 @@ export const prettyDate = (string: string): string => {
     const date = string.split('-');
     return `${months[parseInt(date[1], 10) - 1]} ${parseInt(date[2])}, ${date[0]}`;
 };
+
+export function getDate(unix: number): string {
+    const day = new Date(unix);
+    let dd: string | number = day.getUTCDate();
+    let mm: string | number = day.getUTCMonth() + 1;
+    const yyyy = day.getUTCFullYear();
+    if (dd < 10) {
+        dd = `0${dd}`;
+    }
+    if (mm < 10) {
+        mm = `0${mm}`;
+    }
+    return `${yyyy}-${mm}-${dd}`;
+}

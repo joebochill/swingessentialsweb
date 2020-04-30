@@ -15,43 +15,30 @@ import appstore from '../assets/images/app-store.svg';
 import playstore from '../assets/images/google-play.svg';
 
 import { makeStyles, Theme, createStyles, Grid, Typography } from '@material-ui/core';
-import { SectionBlurb } from '../components/SectionBlurb';
-import { InfoCard } from '../components/InfoCard';
+import { SectionBlurb } from '../components/text/SectionBlurb';
+import { InfoCard } from '../components/display/InfoCard';
 import { useHistory } from 'react-router-dom';
 import { GetApp } from '@material-ui/icons';
-import { ScreenShot } from '../components/ScreenShot';
+import { ScreenShot } from '../components/display/ScreenShot';
 import { Spacer } from '@pxblue/react-components';
-import { Headline } from '../components/Typography';
-import { Testimonial } from '../components/Testimonial';
+import { Headline } from '../components/text/Typography';
+import { Testimonial } from '../components/display/Testimonial';
 import { ROUTES } from '../constants/routes';
+import { Banner } from '../components/display/Banner';
+import { Section } from '../components/display/Section';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        bannerWrapper: {
-            height: 540,
-            width: '100%',
-            position: 'relative',
-            display: 'flex',
-            justifyContent: 'center',
-            [theme.breakpoints.down('sm')]: {
-                height: 'initial',
-                paddingTop: '56.25%',
-            },
+        seLogo: {
+            width: '60%',
+            maxWidth: 600,
         },
-        section: {
-            background: theme.palette.background.paper,
-            padding: 100,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            '&:nth-child(even)': {
-                background: theme.palette.background.default,
-            },
-            [theme.breakpoints.down('sm')]: {
-                padding: `100px 10%`,
-                flexDirection: 'column',
-                textAlign: 'center',
-            },
+        pgaLogo: {
+            position: 'absolute',
+            top: 20,
+            right: 20,
+            maxWidth: 150,
+            width: '15%',
         },
         stepsWrapper: {
             marginLeft: 100,
@@ -97,50 +84,16 @@ export const LandingPage: React.FC = (): JSX.Element => {
 
     return (
         <>
-            <div className={classes.bannerWrapper}>
-                <div
-                    style={{
-                        height: '100%',
-                        width: '100%',
-                        top: 0,
-                        left: 0,
-                        position: 'absolute',
-                        backgroundColor: '#4f4c81',
-                    }}
-                />
-                <div
-                    style={{
-                        height: '100%',
-                        width: '100%',
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        backgroundImage: `url(${bg})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center 70%',
-                        backgroundRepeat: 'no-repeat',
-                        opacity: 0.5,
-                    }}
-                />
-                <img
-                    src={fullLogo}
-                    alt={'Swing Essentials banner logo'}
-                    style={{
-                        position: 'absolute',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        zIndex: 100,
-                        width: '60%',
-                        maxWidth: 600,
-                    }}
-                />
-                <img
-                    src={pga}
-                    alt={'PGA Logo'}
-                    style={{ position: 'absolute', top: 20, right: 20, maxWidth: 150, width: '15%' }}
-                />
-            </div>
-            <div className={classes.section}>
+            <Banner
+                background={{ src: bg, position: 'center 70%', maintainAspectRatio: true }}
+                noPadding
+                justify={'center'}
+            >
+                <img src={fullLogo} alt={'Swing Essentials banner logo'} className={classes.seLogo} />
+                <img src={pga} alt={'PGA Logo'} className={classes.pgaLogo} />
+            </Banner>
+            <div />
+            <Section>
                 <SectionBlurb
                     jumbo
                     headline={'Lessons On Your Schedule'}
@@ -172,8 +125,8 @@ export const LandingPage: React.FC = (): JSX.Element => {
                         </Typography>
                     </div>
                 </div>
-            </div>
-            <div className={classes.section}>
+            </Section>
+            <Section>
                 <Grid container spacing={10} justify={'center'}>
                     <Grid item xs={12} md={4}>
                         <InfoCard
@@ -219,8 +172,8 @@ export const LandingPage: React.FC = (): JSX.Element => {
                         />
                     </Grid>
                 </Grid>
-            </div>
-            <div className={classes.section} style={{ background: 'black', position: 'relative' }}>
+            </Section>
+            <Section background={{ color: 'black' }} style={{ position: 'relative' }}>
                 <div
                     style={{
                         position: 'absolute',
@@ -279,8 +232,8 @@ export const LandingPage: React.FC = (): JSX.Element => {
                 <Spacer flex={0} width={100} />
                 <Spacer flex={0} height={64} />
                 <ScreenShot src={screenshot} alt={'Swing Essentials app screenshot'} style={{ flex: '0 0 auto' }} />
-            </div>
-            <div className={classes.section} style={{ display: 'block', textAlign: 'center' }}>
+            </Section>
+            <Section style={{ display: 'block', textAlign: 'center' }}>
                 <Headline>{`Here's What Our Fans Are Saying`}</Headline>
                 <div className={classes.testimonialWrapper}>
                     <Testimonial
@@ -305,7 +258,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
                         testimonial={`Thanks to you, I have been playing my best golf. It's all finally clicking now!`}
                     />
                 </div>
-            </div>
+            </Section>
         </>
     );
 };

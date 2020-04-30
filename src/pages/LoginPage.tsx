@@ -1,26 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import bg from '../assets/images/banners/landing.jpg';
 
-import { makeStyles, Theme, createStyles, Typography, TextField, Button } from '@material-ui/core';
+import { makeStyles, createStyles, Typography, TextField, Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../__types__';
 import { requestLogin } from '../redux/actions/auth-actions';
+import { Banner } from '../components/display/Banner';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
     createStyles({
-        bannerWrapper: {
-            height: 540,
-            width: '100%',
-            position: 'relative',
-            display: 'flex',
-            justifyContent: 'center',
-            [theme.breakpoints.down('sm')]: {
-                height: 'initial',
-                minHeight: 372,
-                paddingTop: '56.25%',
-            },
-        },
         form: {
             position: 'absolute',
             top: '50%',
@@ -72,31 +61,7 @@ export const LoginPage: React.FC = (): JSX.Element | null => {
     }
     return (
         <>
-            <div className={classes.bannerWrapper}>
-                <div
-                    style={{
-                        height: '100%',
-                        width: '100%',
-                        top: 0,
-                        left: 0,
-                        position: 'absolute',
-                        backgroundColor: '#4f4c81',
-                    }}
-                />
-                <div
-                    style={{
-                        height: '100%',
-                        width: '100%',
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        backgroundImage: `url(${bg})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center 70%',
-                        backgroundRepeat: 'no-repeat',
-                        opacity: 0.5,
-                    }}
-                />
+            <Banner background={{ src: bg, position: 'center 70%' }} justify={'center'}>
                 <div className={classes.form}>
                     <TextField
                         fullWidth
@@ -144,7 +109,7 @@ export const LoginPage: React.FC = (): JSX.Element | null => {
                                 marginBottom: 16,
                             }}
                         >
-                            <Typography>Your username/password was not correct. Please try again.</Typography>
+                            <Typography>Your username / password was not correct. Please try again.</Typography>
                         </div>
                     )}
                     <Button
@@ -159,7 +124,7 @@ export const LoginPage: React.FC = (): JSX.Element | null => {
                         Sign In
                     </Button>
                 </div>
-            </div>
+            </Banner>
         </>
     );
 };

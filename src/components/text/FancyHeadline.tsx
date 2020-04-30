@@ -9,11 +9,11 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'inline-flex',
             alignItems: 'center',
             textAlign: 'left',
-            '&$jumbo':{
+            '&$jumbo': {
                 [theme.breakpoints.down('sm')]: {
                     textAlign: 'center',
                 },
-            }
+            },
         },
         headlineIcon: {
             marginRight: 16,
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
             marginRight: 4,
             fontSize: 24,
         },
-        jumbo:{},
+        jumbo: {},
     })
 );
 
@@ -46,7 +46,7 @@ export const FancyHeadline: React.FC<FancyHeadlineProps> = (props) => {
             </div>
         </div>
     ) : (
-        <div className={clsx(classes.headline, {[classes.jumbo]:!icon})} {...other}>
+        <div className={clsx(classes.headline, { [classes.jumbo]: !icon })} {...other}>
             {icon && <div className={classes.headlineIcon}>{icon}</div>}
             <div style={{ marginBottom: 16 }}>
                 <Headline>{headline}</Headline>
