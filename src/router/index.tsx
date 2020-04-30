@@ -32,7 +32,7 @@ export const MainRouter = (): JSX.Element => (
             <Route exact path={`${ROUTES.BLOG}/:id`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.TIPS}/:id`} component={PlaceholderPage} />
 
-            <Route exact path={`${ROUTES.LESSONS}/:id`} component={PlaceholderPage} />
+            <Route exact path={`${ROUTES.LESSONS}/:id`} component={LessonsPage} />
             <Route exact path={`${ROUTES.ORDER}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.SUBMIT}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.PROFILE}`} component={PlaceholderPage} />

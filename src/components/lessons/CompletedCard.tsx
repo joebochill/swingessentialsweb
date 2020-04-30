@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from '../../__types__';
+import { AppState, Lesson } from '../../__types__';
 import { Card, CardHeader, CardProps, useTheme, makeStyles, createStyles, Typography } from '@material-ui/core';
 import { InfoListItem, ListItemTag } from '@pxblue/react-components';
 import { prettyDate } from '../../utilities/date';
@@ -29,9 +29,10 @@ const useStyles = makeStyles(() =>
 type CompletedLessonsCardProps = CardProps & {
     filter?: string;
     hidden?: boolean;
+    lessons: Lesson[];
 };
 export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props) => {
-    const { filter, hidden, ...cardProps } = props;
+    const { filter, hidden, lessons: _lessons, ...cardProps } = props;
 
     const classes = useStyles();
     const theme = useTheme();
@@ -40,22 +41,22 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
     const [page, setPage] = useState(3);
 
     // Get Full Lessons Object
-    const closedLessons = useSelector((state: AppState) => state.lessons.closed);
+    // const closedLessons = useSelector((state: AppState) => state.lessons.closed);
     const selected = useSelector((state: AppState) => state.lessons.selected);
     const lessonsPerPage = 10;
 
     // Filter the lessons by user
-    let filteredLessons = closedLessons;
-    if (admin && filter) filteredLessons = closedLessons.filter((lesson) => lesson.username === filter);
+    // let filteredLessons = closedLessons;
+    // if (admin && filter) filteredLessons = closedLessons.filter((lesson) => lesson.username === filter);
 
     // Paginate the final lessons list
-    let lessons = filteredLessons;
+    let lessons = _lessons;
     if (lessons.length > lessonsPerPage) {
-        lessons = filteredLessons.slice(page * lessonsPerPage, (page + 1) * lessonsPerPage);
+        lessons = _lessons.slice(page * lessonsPerPage, (page + 1) * lessonsPerPage);
     }
 
     // Determine page navigation capabilities
-    const numPages = Math.ceil(filteredLessons.length / lessonsPerPage);
+    const numPages = Math.ceil(_lessons.length / lessonsPerPage);
     const canGoForward = page < numPages - 1;
     const canGoBack = page > 0;
 
@@ -83,7 +84,7 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
                                               setPage(page - 1);
                                               dispatch({
                                                   type: 'SET_SELECTED_LESSON',
-                                                  payload: filteredLessons[(page - 1) * lessonsPerPage],
+                                                  payload: _lessons[(page - 1) * lessonsPerPage],
                                               });
                                           }
                                         : undefined
@@ -98,7 +99,7 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
                                               setPage(page + 1);
                                               dispatch({
                                                   type: 'SET_SELECTED_LESSON',
-                                                  payload: filteredLessons[(page + 1) * lessonsPerPage],
+                                                  payload: _lessons[(page + 1) * lessonsPerPage],
                                               });
                                           }
                                         : undefined
