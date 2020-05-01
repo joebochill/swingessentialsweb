@@ -28,9 +28,15 @@ export const PUT_LESSON = createAction('PUT_LESSON', 'lesson');
 
 /* Tips Actions */
 export const GET_TIPS = createAction('GET_TIPS', 'tips');
+export const UPDATE_TIP = createAction('UPDATE_TIP', 'tip');
+export const ADD_TIP = createAction('ADD_TIP', 'tip');
+export const REMOVE_TIP = createAction('REMOVE_TIP', 'removetip');
 
 /* Blogs Actions */
 export const GET_BLOGS = createAction('GET_BLOGS', 'blogs');
+export const UPDATE_BLOG = createAction('UPDATE_BLOG', 'blog');
+export const ADD_BLOG = createAction('ADD_BLOG', 'blog');
+export const REMOVE_BLOG = createAction('REMOVE_BLOG', 'removeblog');
 
 /* Pros Actions */
 export const GET_PROS = createAction('GET_PROS', 'bios');

@@ -21,8 +21,7 @@ import { convertMultilineToDatabaseText } from '../../utilities/text';
 import { putLessonResponse } from '../../redux/actions/lesons-actions';
 import { getDate } from '../../utilities/date';
 import { sortUsers } from '../../utilities/user';
-
-const DateRegex = new RegExp(/^[0-9]{4}-[0-9]{2}-[0-9]{2}/);
+import { DateRegex } from '../../constants';
 
 type NewLessonDialogProps = DialogProps & {};
 export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {

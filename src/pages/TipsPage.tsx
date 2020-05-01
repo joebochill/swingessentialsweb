@@ -27,6 +27,15 @@ import { ActionToolbar } from '../components/actions/ActionToolbar';
 import { LoadingIndicator } from '../components/display/LoadingIndicator';
 import { useHistory, useParams, Redirect } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
+import { EditTipDialog } from '../components/tips/EditTipDialog';
+
+const BlankTip: Tip = {
+    id: -1,
+    title: '',
+    date: '',
+    video: '',
+    comments: '',
+};
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -69,6 +78,8 @@ export const TipsPage: React.FC = (): JSX.Element => {
     const [activeYear, setActiveYear] = useState(currentYear);
     const [activeTip, setActiveTip] = useState<Tip | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [showEditDialog, setShowEditDialog] = useState(false);
+    const [showNewDialog, setShowNewDialog] = useState(false);
 
     const paramIndex = id !== undefined ? tips.findIndex((tip) => tip.id === id) : -1;
 
@@ -93,6 +104,14 @@ export const TipsPage: React.FC = (): JSX.Element => {
             if (tips.length > 0) setActiveTip(tips[0]);
         }
     }, [tips, activeTip, setActiveIndex, setActiveTip]);
+
+    useEffect(() => {
+        if (activeTip) {
+            const ind = tips.findIndex((tip) => tip.id === activeTip.id);
+            setActiveTip(ind >= 0 ? tips[ind] : tips[0]);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tips]);
 
     const firstYear = tips && tips.length > 0 ? parseInt(tips[tips.length - 1].date.substr(0, 4), 10) : currentYear;
     const lastYear = tips && tips.length > 0 ? parseInt(tips[0].date.substr(0, 4), 10) : currentYear;
@@ -119,13 +138,25 @@ export const TipsPage: React.FC = (): JSX.Element => {
                 />
             </Banner>
             <ActionToolbar show={admin}>
-                <Button variant={'text'}>
+                <Button variant={'text'} onClick={(): void => setShowNewDialog(true)}>
                     <AddCircle style={{ marginRight: 4 }} />
                     New Tip
                 </Button>
             </ActionToolbar>
 
-            <LoadingIndicator show={loading} />
+            <LoadingIndicator show={loading && tips.length < 1} />
+
+            {admin && (
+                <EditTipDialog
+                    isNew={showNewDialog}
+                    tip={showNewDialog ? BlankTip : activeTip ? activeTip : BlankTip}
+                    open={showNewDialog || showEditDialog}
+                    onClose={(): void => {
+                        setShowNewDialog(false);
+                        setShowEditDialog(false);
+                    }}
+                />
+            )}
 
             {tips.length > 0 && (
                 <Section align={'flex-start'}>
@@ -253,13 +284,17 @@ export const TipsPage: React.FC = (): JSX.Element => {
                                 )}
                             </div>
                             <FancyHeadline
-                                icon={<Edit fontSize={'inherit'} />}
+                                icon={admin ? <Edit fontSize={'inherit'} /> : undefined}
                                 headline={activeTip.title}
                                 subheading={prettyDate(activeTip.date)}
-                                style={{ cursor: 'pointer' }}
-                                onClick={(): void => {
-                                    /* do nothing */
-                                }}
+                                style={admin ? { cursor: 'pointer' } : {}}
+                                onClick={
+                                    admin
+                                        ? (): void => {
+                                              setShowEditDialog(true);
+                                          }
+                                        : undefined
+                                }
                             />
 
                             {description.map((par, pInd) => (
