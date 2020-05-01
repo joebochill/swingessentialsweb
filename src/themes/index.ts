@@ -39,7 +39,7 @@ export const SETheme: ThemeOptions = {
     palette: {
         type: 'light',
         primary: createSimplePalette(purple),
-        secondary: createSimplePalette(ThemeColors.green),
+        secondary: createSimplePalette(ThemeColors.red),
         error: createSimplePalette(ThemeColors.red),
         background: {
             default: ThemeColors.gray['50'],

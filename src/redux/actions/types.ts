@@ -28,6 +28,9 @@ export const PUT_LESSON = createAction('PUT_LESSON', 'lesson');
 
 /* Tips Actions */
 export const GET_TIPS = createAction('GET_TIPS', 'tips');
+export const UPDATE_TIP = createAction('UPDATE_TIP', 'tip');
+export const ADD_TIP = createAction('ADD_TIP', 'tip');
+export const REMOVE_TIP = createAction('REMOVE_TIP', 'removetip');
 
 /* Blogs Actions */
 export const GET_BLOGS = createAction('GET_BLOGS', 'blogs');

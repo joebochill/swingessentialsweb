@@ -60,7 +60,7 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
     useEffect(() => {
         setPage(0);
         dispatch({ type: 'SET_SELECTED_LESSON', payload: lessons.length > 0 ? lessons[0] : PlaceholderLesson });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter, setPage]);
 
     if (hidden) return null;

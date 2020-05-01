@@ -149,7 +149,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
 
     // If we don't belong
     // if (!token) return <Redirect to={ROUTES.HOME} />;
-    if (id && paramIndexComplete === -1 && paramIndexPending === -1 && closedLessons.length > 0){
+    if (id && paramIndexComplete === -1 && paramIndexPending === -1 && closedLessons.length > 0) {
         return <Redirect to={ROUTES.LESSONS} />;
     }
 
