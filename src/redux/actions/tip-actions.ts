@@ -48,7 +48,7 @@ export function addTip(tip: Omit<Tip, 'id'>) {
                 dispatch(loadTips());
             })
             .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.ADD_TIP.FAILURE, response, 'UpdateTip'));
+                dispatch(failure(ACTIONS.ADD_TIP.FAILURE, response, 'AddTip'));
             })
             .request();
     };
@@ -65,7 +65,7 @@ export function removeTip(tip: Tip) {
                 dispatch(loadTips());
             })
             .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.REMOVE_TIP.FAILURE, response, 'UpdateTip'));
+                dispatch(failure(ACTIONS.REMOVE_TIP.FAILURE, response, 'RemoveTip'));
             })
             .request();
     };

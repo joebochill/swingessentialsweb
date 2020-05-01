@@ -26,6 +26,14 @@ import { ActionToolbar } from '../components/actions/ActionToolbar';
 import { LoadingIndicator } from '../components/display/LoadingIndicator';
 import { useParams, Redirect, useHistory } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
+import { EditBlogDialog } from '../components/blogs/EditBlogDialog';
+
+const BlankBlog: Blog = {
+    id: -1,
+    title: '',
+    date: '',
+    body: '',
+};
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -61,6 +69,8 @@ export const BlogsPage: React.FC = (): JSX.Element => {
     const [activeYear, setActiveYear] = useState(currentYear);
     const [activeBlog, setActiveBlog] = useState<Blog | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [showEditDialog, setShowEditDialog] = useState(false);
+    const [showNewDialog, setShowNewDialog] = useState(false);
 
     const paramIndex = id !== undefined ? blogs.findIndex((blog) => blog.id === id) : -1;
 
@@ -86,6 +96,14 @@ export const BlogsPage: React.FC = (): JSX.Element => {
         }
     }, [blogs, activeBlog, setActiveIndex, setActiveBlog]);
 
+    useEffect(() => {
+        if (activeBlog) {
+            const ind = blogs.findIndex((blog) => blog.id === activeBlog.id);
+            setActiveBlog(ind >= 0 ? blogs[ind] : blogs[0]);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [blogs]);
+
     const firstYear = blogs && blogs.length > 0 ? parseInt(blogs[blogs.length - 1].date.substr(0, 4), 10) : currentYear;
     const lastYear = blogs && blogs.length > 0 ? parseInt(blogs[0].date.substr(0, 4), 10) : currentYear;
 
@@ -110,13 +128,27 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                     style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
                 />
             </Banner>
-            <ActionToolbar show={admin}>
+            <ActionToolbar show={admin} onClick={(): void => setShowNewDialog(true)}>
                 <Button variant={'text'}>
                     <AddCircle style={{ marginRight: 4 }} />
                     New Post
                 </Button>
             </ActionToolbar>
-            <LoadingIndicator show={loading} />
+
+            <LoadingIndicator show={loading && blogs.length < 1} />
+
+            {admin && (
+                <EditBlogDialog
+                    isNew={showNewDialog}
+                    blog={showNewDialog ? BlankBlog : activeBlog ? activeBlog : BlankBlog}
+                    open={showNewDialog || showEditDialog}
+                    onClose={(): void => {
+                        setShowNewDialog(false);
+                        setShowEditDialog(false);
+                    }}
+                />
+            )}
+
             {blogs.length > 0 && (
                 <Section align={'flex-start'}>
                     {!isSmall && (
@@ -220,13 +252,17 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                                 </>
                             )}
                             <FancyHeadline
-                                icon={<Edit fontSize={'inherit'} />}
+                                icon={admin ? <Edit fontSize={'inherit'} /> : undefined}
                                 headline={activeBlog.title}
                                 subheading={prettyDate(activeBlog.date)}
-                                style={{ cursor: 'pointer' }}
-                                onClick={(): void => {
-                                    /* do nothing */
-                                }}
+                                style={admin ? { cursor: 'pointer' } : {}}
+                                onClick={
+                                    admin
+                                        ? (): void => {
+                                              setShowEditDialog(true);
+                                          }
+                                        : undefined
+                                }
                             />
 
                             {description.map((par, pInd) => (

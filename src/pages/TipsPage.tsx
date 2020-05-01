@@ -284,7 +284,7 @@ export const TipsPage: React.FC = (): JSX.Element => {
                                 )}
                             </div>
                             <FancyHeadline
-                                icon={<Edit fontSize={'inherit'} />}
+                                icon={admin ? <Edit fontSize={'inherit'} /> : undefined}
                                 headline={activeTip.title}
                                 subheading={prettyDate(activeTip.date)}
                                 style={admin ? { cursor: 'pointer' } : {}}

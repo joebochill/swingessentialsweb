@@ -34,6 +34,9 @@ export const REMOVE_TIP = createAction('REMOVE_TIP', 'removetip');
 
 /* Blogs Actions */
 export const GET_BLOGS = createAction('GET_BLOGS', 'blogs');
+export const UPDATE_BLOG = createAction('UPDATE_BLOG', 'blog');
+export const ADD_BLOG = createAction('ADD_BLOG', 'blog');
+export const REMOVE_BLOG = createAction('REMOVE_BLOG', 'removeblog');
 
 /* Pros Actions */
 export const GET_PROS = createAction('GET_PROS', 'bios');
