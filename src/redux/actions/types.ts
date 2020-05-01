@@ -40,6 +40,9 @@ export const REMOVE_BLOG = createAction('REMOVE_BLOG', 'removeblog');
 
 /* Pros Actions */
 export const GET_PROS = createAction('GET_PROS', 'bios');
+export const UPDATE_PRO = createAction('UPDATE_PRO', 'bio');
+export const ADD_PRO = createAction('ADD_PRO', 'bio');
+export const REMOVE_PRO = createAction('REMOVE_PRO', 'removebio');
 
 /* Package Actions */
 export const GET_PACKAGES = createAction('GET_PACKAGES', 'packages');
