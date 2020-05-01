@@ -1,20 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import bg from '../assets/images/banners/pros.jpg';
 import { Button } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
 import { Face, AddCircle } from '@material-ui/icons';
 import { ProBio } from '../components/display/ProBio';
-import { AppState } from '../__types__';
+import { AppState, Pro } from '../__types__';
 import { useSelector } from 'react-redux';
 import { Banner } from '../components/display/Banner';
 import { Section } from '../components/display/Section';
 import { ActionToolbar } from '../components/actions/ActionToolbar';
 import { LoadingIndicator } from '../components/display/LoadingIndicator';
+import { EditProDialog } from '../components/pros/EditProDialog';
+
+const BlankPro: Pro = {
+    id: '-1',
+    name: '',
+    title: '',
+    image: '',
+    bio: '',
+};
 
 export const ProsPage: React.FC = (): JSX.Element => {
     const pros = useSelector((state: AppState) => state.pros.prosList);
     const loading = useSelector((state: AppState) => state.pros.loading);
     const admin = useSelector((state: AppState) => state.auth.admin);
+
+    const [showNewDialog, setShowNewDialog] = useState(false);
 
     return (
         <>
@@ -29,20 +40,31 @@ export const ProsPage: React.FC = (): JSX.Element => {
                 />
             </Banner>
             <ActionToolbar show={admin}>
-                <Button variant={'text'}>
+                <Button variant={'text'} onClick={(): void => setShowNewDialog(true)}>
                     <AddCircle style={{ marginRight: 4 }} />
                     New Pro
                 </Button>
             </ActionToolbar>
-            <LoadingIndicator show={loading} />
+
+            <LoadingIndicator show={loading && pros.length < 1} />
+
+            {admin && (
+                <EditProDialog
+                    isNew={true}
+                    pro={BlankPro}
+                    open={showNewDialog}
+                    onClose={(): void => {
+                        setShowNewDialog(false);
+                    }}
+                />
+            )}
+
             {pros.map((bio) => (
                 <Section key={`bio_${bio.id}`}>
                     <ProBio
-                        image={bio.image}
+                        {...bio}
                         background={{ size: bio.imageSize, position: bio.imagePosition }}
-                        name={bio.name}
                         title={bio.title || 'Lead Instructor'}
-                        description={bio.bio}
                     />
                 </Section>
             ))}
