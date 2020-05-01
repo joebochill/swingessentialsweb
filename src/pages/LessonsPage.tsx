@@ -27,11 +27,11 @@ import { CompletedLessonsCard } from '../components/lessons/CompletedCard';
 import { PlaceholderLesson } from '../constants/lessons';
 import { Redirect, useParams, useHistory } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
-import { ActionToolbar } from '../components/actions/ActionToolbar';
+import { ActionToolbar } from '../components/toolbars/ActionToolbar';
 import { LoadingIndicator } from '../components/display/LoadingIndicator';
-import { FilterLessonsDialog } from '../components/lessons/FilterLessonsDialog';
-import { EditLessonDialog } from '../components/lessons/EditLessonDialog';
-import { NewLessonDialog } from '../components/lessons/NewLessonDialog';
+import { FilterLessonsDialog } from '../components/dialogs/FilterLessonsDialog';
+import { EditLessonDialog } from '../components/dialogs/EditLessonDialog';
+import { NewLessonDialog } from '../components/dialogs/NewLessonDialog';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

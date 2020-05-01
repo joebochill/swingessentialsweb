@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core';
 import logo from '../../assets/icons/logo-full-white.svg';
 import { Spacer } from '@pxblue/react-components';
-import { UserMenu } from './UserMenu';
+import { UserMenu } from '../navigation/UserMenu';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 import { Menu } from '@material-ui/icons';

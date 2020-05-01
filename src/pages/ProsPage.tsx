@@ -8,9 +8,9 @@ import { AppState, Pro } from '../__types__';
 import { useSelector } from 'react-redux';
 import { Banner } from '../components/display/Banner';
 import { Section } from '../components/display/Section';
-import { ActionToolbar } from '../components/actions/ActionToolbar';
+import { ActionToolbar } from '../components/toolbars/ActionToolbar';
 import { LoadingIndicator } from '../components/display/LoadingIndicator';
-import { EditProDialog } from '../components/pros/EditProDialog';
+import { EditProDialog } from '../components/dialogs/EditProDialog';
 
 const BlankPro: Pro = {
     id: '-1',

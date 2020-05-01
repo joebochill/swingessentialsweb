@@ -23,11 +23,11 @@ import { useSelector } from 'react-redux';
 import { AppState, Tip } from '../__types__';
 import { Banner } from '../components/display/Banner';
 import { Section } from '../components/display/Section';
-import { ActionToolbar } from '../components/actions/ActionToolbar';
+import { ActionToolbar } from '../components/toolbars/ActionToolbar';
 import { LoadingIndicator } from '../components/display/LoadingIndicator';
 import { useHistory, useParams, Redirect } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
-import { EditTipDialog } from '../components/tips/EditTipDialog';
+import { EditTipDialog } from '../components/dialogs/EditTipDialog';
 
 const BlankTip: Tip = {
     id: -1,

@@ -5,7 +5,7 @@ import { Spacer } from '@pxblue/react-components';
 import { splitDatabaseText } from '../../utilities/text';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../__types__';
-import { EditProDialog } from '../pros/EditProDialog';
+import { EditProDialog } from '../dialogs/EditProDialog';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

@@ -15,7 +15,7 @@ import { Blog } from '../../__types__';
 import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
 import { DateRegex } from '../../constants';
 import { Spacer } from '@pxblue/react-components';
-import { ConfirmationDialog } from '../display/ConfirmationDialog';
+import { ConfirmationDialog } from './ConfirmationDialog';
 import { addBlog, updateBlog, removeBlog } from '../../redux/actions/blog-actions';
 
 type EditBlogDialogProps = DialogProps & {

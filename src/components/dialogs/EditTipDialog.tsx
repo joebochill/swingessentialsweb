@@ -16,7 +16,7 @@ import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '
 import { DateRegex } from '../../constants';
 import { updateTip, addTip, removeTip } from '../../redux/actions/tip-actions';
 import { Spacer } from '@pxblue/react-components';
-import { ConfirmationDialog } from '../display/ConfirmationDialog';
+import { ConfirmationDialog } from './ConfirmationDialog';
 
 type EditTipDialogProps = DialogProps & {
     tip: Tip;

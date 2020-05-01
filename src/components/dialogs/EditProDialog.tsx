@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import { Pro } from '../../__types__';
 import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
 import { Spacer } from '@pxblue/react-components';
-import { ConfirmationDialog } from '../display/ConfirmationDialog';
+import { ConfirmationDialog } from './ConfirmationDialog';
 import { addPro, updatePro, removePro } from '../../redux/actions/pro-actions';
 
 type EditProDialogProps = DialogProps & {

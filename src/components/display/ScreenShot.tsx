@@ -1,6 +1,6 @@
 import React, { HTMLAttributes } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core';
-import iphone from '../../assets/images/iphone.png';
+import iphone from '../../assets/images/screenshot/iphone.png';
 
 const useStyles = makeStyles(() =>
     createStyles({
