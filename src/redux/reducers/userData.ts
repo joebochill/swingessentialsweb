@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, GET_USER_DATA, TOKEN_TIMEOUT } from '../actions/types';
+import { LOGIN, LOGOUT, GET_USER_DATA, TOKEN_TIMEOUT, CREATE_ACCOUNT } from '../actions/types';
 import { UserDataState } from '../../__types__';
 
 const initialState: UserDataState = {
@@ -19,6 +19,13 @@ export const UserDataReducer = (state = initialState, action: any): UserDataStat
                 lastName: action.payload.personal.last_name,
                 email: action.payload.personal.email,
                 joined: action.payload.personal.joined,
+            };
+        case CREATE_ACCOUNT.SUCCESS:
+            return {
+                ...state,
+                username: action.payload.personal.username,
+                email: action.payload.personal.email,
+                joined: Date.now(), //TODO is this right or *1000?
             };
         case GET_USER_DATA.FAILURE:
         case LOGOUT.SUCCESS:

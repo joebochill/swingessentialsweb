@@ -21,7 +21,7 @@ import { convertMultilineToDatabaseText } from '../../utilities/text';
 import { putLessonResponse } from '../../redux/actions/lesons-actions';
 import { getDate } from '../../utilities/date';
 import { sortUsers } from '../../utilities/user';
-import { DateRegex } from '../../constants';
+import { DATE_REGEX } from '../../constants';
 
 type NewLessonDialogProps = DialogProps & {};
 export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
@@ -82,7 +82,7 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                     label={'Date'}
                     placeholder={'YYYY-MM-DD'}
                     name={'date'}
-                    error={!DateRegex.test(date)}
+                    error={!DATE_REGEX.test(date)}
                     value={date}
                     onChange={(e): void => {
                         setDate(e.target.value);
@@ -131,7 +131,7 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                 <Button
                     color="primary"
                     variant={'contained'}
-                    disabled={!user || !date || !video || !comments || !DateRegex.test(date)}
+                    disabled={!user || !date || !video || !comments || !DATE_REGEX.test(date)}
                     onClick={(e): void => {
                         dispatch(
                             putLessonResponse({

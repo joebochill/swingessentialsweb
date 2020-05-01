@@ -66,6 +66,19 @@ export const SETheme: ThemeOptions = {
                 backgroundColor: purple['700'],
             },
         },
+        MuiFormHelperText: {
+            root: {
+                color: ThemeColors.white[50],
+                '&$error': {
+                    color: ThemeColors.white[50],
+                    margin: 0,
+                    paddingLeft: 14,
+                    paddingRight: 14,
+                    // background: 'rgba(255,255,255,0.4)'
+                    background: '#d2595a',
+                },
+            },
+        },
 
         // BUTTON OVERRIDES
         // MuiButton: {

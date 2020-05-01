@@ -57,3 +57,4 @@ export const CHECK_EMAIL = createAction('CHECK_EMAIL', 'checkEmail');
 export const CREATE_ACCOUNT = createAction('CREATE_ACCOUNT', 'user');
 export const RESET_PASSWORD_EMAIL = createAction('RESET_PASSWORD_EMAIL', 'reset');
 export const VERIFY_EMAIL = createAction('VERIFY_EMAIL', 'verify');
+export const RESET_REGISTRATION_CHECKS = 'RESET_REGISTRATION_CHECKS';

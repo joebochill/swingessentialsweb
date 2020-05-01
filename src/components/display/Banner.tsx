@@ -5,12 +5,12 @@ import clsx from 'clsx';
 const useStyles = makeStyles<Theme, BannerProps>((theme: Theme) =>
     createStyles({
         bannerWrapper: {
-            height: 540,
+            minHeight: 540,
             width: '100%',
             position: 'relative',
             '&$maintainRatio': {
                 [theme.breakpoints.down('sm')]: {
-                    height: 'initial',
+                    minHeight: 'initial',
                     paddingTop: '56.25%',
                 },
             },

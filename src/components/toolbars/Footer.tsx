@@ -1,9 +1,9 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, makeStyles, Theme, createStyles, IconButton } from '@material-ui/core';
-import { NavLink } from './Toolbar';
 import { ROUTES } from '../../constants/routes';
 import { Twitter, Instagram, Facebook, Email } from '@material-ui/icons';
 import { APP_VERSION } from '../../constants';
+import { SimpleRouterLink } from '../navigation/SimpleLink';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -83,8 +83,8 @@ export const Footer: React.FC = () => {
                         <Email />
                     </IconButton>
                 </div>
-                <NavLink to={ROUTES.PRIVACY} title={'Privacy Policy'}></NavLink>
-                <NavLink to={ROUTES.TERMS} title={'Terms of Use'}></NavLink>
+                <SimpleRouterLink to={ROUTES.PRIVACY} label={'Privacy Policy'}></SimpleRouterLink>
+                <SimpleRouterLink to={ROUTES.TERMS} label={'Terms of Use'}></SimpleRouterLink>
                 <Typography variant={'caption'} className={classes.version}>{`v${APP_VERSION}`}</Typography>
             </Toolbar>
         </AppBar>

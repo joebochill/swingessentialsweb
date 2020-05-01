@@ -12,6 +12,7 @@ import { TipsReducer } from './tips';
 import { ProsReducer } from './pros';
 import { LessonsReducer } from './lessons';
 import { UsersReducer } from './users';
+import { RegistrationReducer } from './registration';
 
 export const rootReducer = (): any =>
     combineReducers<AppState>({
@@ -23,4 +24,5 @@ export const rootReducer = (): any =>
         tips: TipsReducer,
         pros: ProsReducer,
         lessons: LessonsReducer,
+        registration: RegistrationReducer,
     });
