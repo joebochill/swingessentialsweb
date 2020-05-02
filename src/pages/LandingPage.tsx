@@ -1,7 +1,7 @@
 import React from 'react';
 import bg from '../assets/images/banners/landing.jpg';
-import fullLogo from '../assets/images/fullLogo-06.svg';
-import pga from '../assets/images/pga_p.svg';
+import fullLogo from '../assets/images/logos/fullLogo-06.svg';
+import pga from '../assets/images/logos/pga_p.svg';
 import post1 from '../assets/icons/post-01.svg';
 import post2 from '../assets/icons/post-02.svg';
 import post3 from '../assets/icons/post-03.svg';
@@ -10,9 +10,9 @@ import nineteen from '../assets/images/banners/19th.jpg';
 import pros from '../assets/images/banners/nelson.jpeg';
 import cart from '../assets/images/banners/download.jpg';
 
-import screenshot from '../assets/images/screenshot.png';
-import appstore from '../assets/images/app-store.svg';
-import playstore from '../assets/images/google-play.svg';
+import screenshot from '../assets/images/screenshot/screenshot.png';
+import appstore from '../assets/images/logos/app-store.svg';
+import playstore from '../assets/images/logos/google-play.svg';
 
 import { makeStyles, Theme, createStyles, Grid, Typography } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';

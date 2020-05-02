@@ -13,10 +13,10 @@ import {
 import { useDispatch } from 'react-redux';
 import { Tip } from '../../__types__';
 import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
-import { DateRegex } from '../../constants';
+import { DATE_REGEX } from '../../constants';
 import { updateTip, addTip, removeTip } from '../../redux/actions/tip-actions';
 import { Spacer } from '@pxblue/react-components';
-import { ConfirmationDialog } from '../display/ConfirmationDialog';
+import { ConfirmationDialog } from './ConfirmationDialog';
 
 type EditTipDialogProps = DialogProps & {
     tip: Tip;
@@ -69,7 +69,7 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                         label={'Date'}
                         placeholder={'YYYY-MM-DD'}
                         name={'date'}
-                        error={!DateRegex.test(date)}
+                        error={!DATE_REGEX.test(date)}
                         value={date}
                         onChange={(e): void => {
                             setDate(e.target.value);
@@ -141,7 +141,7 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                     <Button
                         color="primary"
                         variant={'contained'}
-                        disabled={!title || !date || !video || !comments || !DateRegex.test(date)}
+                        disabled={!title || !date || !video || !comments || !DATE_REGEX.test(date)}
                         onClick={(e): void => {
                             if (isNew) {
                                 dispatch(

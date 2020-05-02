@@ -3,8 +3,6 @@ import {
     AppBar,
     Button,
     Toolbar as MuiToolbar,
-    Link,
-    LinkProps,
     makeStyles,
     createStyles,
     Theme,
@@ -14,13 +12,13 @@ import {
 } from '@material-ui/core';
 import logo from '../../assets/icons/logo-full-white.svg';
 import { Spacer } from '@pxblue/react-components';
-import { UserMenu } from './UserMenu';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
-import clsx from 'clsx';
+import { UserMenu } from '../navigation/UserMenu';
+import { useHistory } from 'react-router-dom';
 import { Menu } from '@material-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROUTES } from '../../constants/routes';
 import { AppState } from '../../__types__';
+import { SimpleRouterLink } from '../navigation/SimpleLink';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -33,34 +31,11 @@ const useStyles = makeStyles((theme: Theme) =>
             fontWeight: 600,
             fontFamily: 'Roboto Mono',
         },
-        navLink: {
-            fontWeight: 400,
-            textDecoration: 'none',
-            color: '#ffffff',
-            marginLeft: theme.spacing(2),
-            userSelect: 'none',
-            '&:hover': {
-                // textDecoration: 'none',
-                // fontWeight: 600,
-            },
-        },
         toolbar: {
             padding: `0 ${theme.spacing(2)}px`,
         },
     })
 );
-type NavLinkProps = LinkProps & {
-    title: string;
-    to: string;
-};
-export const NavLink: React.FC<NavLinkProps> = (props) => {
-    const classes = useStyles();
-    return (
-        <Link component={RouterLink} to={props.to} color={'inherit'} className={clsx(classes.navLink, props.className)}>
-            {props.title}
-        </Link>
-    );
-};
 
 export const Toolbar: React.FC = (): JSX.Element => {
     const classes = useStyles();
@@ -82,9 +57,9 @@ export const Toolbar: React.FC = (): JSX.Element => {
                 />
                 <Spacer />
                 <Hidden smDown>
-                    <NavLink to={ROUTES.PROS} title={'Meet Our Pros'} />
-                    <NavLink to={ROUTES.TIPS} title={'Tip of the Month'} />
-                    <NavLink to={ROUTES.BLOG} title={'The 19th Hole'} />
+                    <SimpleRouterLink to={ROUTES.PROS} label={'Meet Our Pros'} />
+                    <SimpleRouterLink to={ROUTES.TIPS} label={'Tip of the Month'} />
+                    <SimpleRouterLink to={ROUTES.BLOG} label={'The 19th Hole'} />
                     <Spacer flex={0} width={theme.spacing(2)} />
                     <UserMenu />
                 </Hidden>

@@ -2,7 +2,7 @@ import { success, failure } from '../../api/http-helper';
 import { btoa, atob } from '../../utilities/base64';
 import * as ACTIONS from './types';
 import { AUTH, BASEURL } from '../../constants';
-import { loadLessons } from './lesons-actions';
+import { loadLessons } from './lessons-actions';
 import { loadTips } from './tip-actions';
 // import { loadCredits } from './CreditActions';
 import { loadBlogs } from './blog-actions';

@@ -97,7 +97,9 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
             {token && (
                 <>
                     <div className={classes.menuHeader}>
-                        <Avatar className={classes.avatarInside}>{initials}</Avatar>
+                        <Avatar className={classes.avatarInside}>
+                            {initials ? initials : <Person fontSize={'inherit'} />}
+                        </Avatar>
                         <div style={{ marginLeft: 16 }}>
                             <Typography variant={'h6'} style={{ lineHeight: 1.2 }}>
                                 {user.username}
@@ -107,6 +109,7 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
                                 style={{ lineHeight: 1, fontSize: '0.875rem', fontWeight: 300 }}
                             >
                                 {`${user.firstName} ${user.lastName}`}
+                                {!user.firstName && !user.lastName ? 'Welcome User' : ''}
                             </Typography>
                         </div>
                     </div>

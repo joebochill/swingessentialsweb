@@ -66,41 +66,17 @@ export const SETheme: ThemeOptions = {
                 backgroundColor: purple['700'],
             },
         },
-
-        // BUTTON OVERRIDES
-        // MuiButton: {
-        //     root: {
-        //         textTransform: 'none',
-        //     },
-        //     outlined: {
-        //         borderColor: ThemeColors.black[500],
-        //     },
-        //     outlinedPrimary: {
-        //         borderColor: purple[500],
-        //     },
-        //     outlinedSecondary: {
-        //         borderColor: ThemeColors.green[500],
-        //     },
-        // },
-
-        // BUTTON OVERRIDES
-        MuiFab: {
+        MuiFormHelperText: {
             root: {
-                textTransform: 'none',
-            },
-        },
-
-        // LIST ITEM OVERRIDES
-        // MuiListItem: {
-        //     root: {
-        //         color: ThemeColors.black['500'],
-        //     },
-        // },
-
-        // TABS OVERRIDES
-        MuiTabs: {
-            indicator: {
-                backgroundColor: ThemeColors.white['50'],
+                color: ThemeColors.white[50],
+                '&$error': {
+                    color: ThemeColors.white[50],
+                    margin: 0,
+                    paddingLeft: 14,
+                    paddingRight: 14,
+                    // background: 'rgba(255,255,255,0.4)'
+                    background: '#d2595a',
+                },
             },
         },
     },

@@ -1,4 +1,12 @@
-import { LOGIN, LOGOUT, SET_TOKEN, TOKEN_TIMEOUT, REFRESH_TOKEN } from '../redux/actions/types';
+import {
+    LOGIN,
+    LOGOUT,
+    SET_TOKEN,
+    TOKEN_TIMEOUT,
+    REFRESH_TOKEN,
+    CREATE_ACCOUNT,
+    RESET_USER_PASSWORD,
+} from '../redux/actions/types';
 import { ASYNC_PREFIX } from '../constants';
 
 export let TOKEN: string | null = null;
@@ -8,7 +16,13 @@ const _setToken = (newToken: string | null): void => {
 
 // eslint-disable-next-line
 export const saveAuthToken = (store: any) => (next: any) => (action: any) => {
-    if (action.type === LOGIN.SUCCESS || action.type === SET_TOKEN.REQUEST || action.type === REFRESH_TOKEN.SUCCESS) {
+    if (
+        action.type === LOGIN.SUCCESS ||
+        action.type === SET_TOKEN.REQUEST ||
+        action.type === REFRESH_TOKEN.SUCCESS ||
+        action.type === CREATE_ACCOUNT.SUCCESS ||
+        action.type === RESET_USER_PASSWORD.SUCCESS
+    ) {
         _setToken(action.payload.token);
         if (action.payload.token !== null) {
             localStorage.setItem(`${ASYNC_PREFIX}token`, action.payload.token);

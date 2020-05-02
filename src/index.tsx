@@ -16,7 +16,7 @@ import 'typeface-roboto-mono';
 
 import { store } from './redux/store';
 import { loadInitialData } from './redux/actions/extra-actions';
-import { TokenModal } from './components/authentication/TokenModal';
+import { TokenModal } from './components/dialogs/TokenModal';
 
 const App: React.FC = () => {
     useEffect(() => {

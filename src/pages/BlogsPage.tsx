@@ -22,11 +22,11 @@ import { useSelector } from 'react-redux';
 import { AppState, Blog } from '../__types__';
 import { Banner } from '../components/display/Banner';
 import { Section } from '../components/display/Section';
-import { ActionToolbar } from '../components/actions/ActionToolbar';
+import { ActionToolbar } from '../components/toolbars/ActionToolbar';
 import { LoadingIndicator } from '../components/display/LoadingIndicator';
 import { useParams, Redirect, useHistory } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
-import { EditBlogDialog } from '../components/blogs/EditBlogDialog';
+import { EditBlogDialog } from '../components/dialogs/EditBlogDialog';
 
 const BlankBlog: Blog = {
     id: -1,

@@ -4,4 +4,6 @@ export { LessonsPage } from './LessonsPage';
 export { LoginPage } from './LoginPage';
 export { PlaceholderPage } from './Placeholder';
 export { ProsPage } from './ProsPage';
+export { ResetPasswordPage } from './ResetPasswordPage';
 export { TipsPage } from './TipsPage';
+export { VerifyEmailPage } from './VerifyEmailPage';

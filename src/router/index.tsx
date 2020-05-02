@@ -2,10 +2,20 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, useLocation, Redirect } from 'react-router-dom';
 // import { DrawerLayout } from '@pxblue/react-components';
 import { NavigationDrawer } from '../components/navigation/drawer';
-import { Toolbar } from '../components/navigation/Toolbar';
-import { Footer } from '../components/navigation/Footer';
+import { Toolbar } from '../components/toolbars/Toolbar';
+import { Footer } from '../components/toolbars/Footer';
 import { ROUTES } from '../constants/routes';
-import { LessonsPage, LandingPage, PlaceholderPage, ProsPage, TipsPage, BlogsPage, LoginPage } from '../pages';
+import {
+    LessonsPage,
+    LandingPage,
+    PlaceholderPage,
+    ProsPage,
+    TipsPage,
+    BlogsPage,
+    LoginPage,
+    VerifyEmailPage,
+    ResetPasswordPage,
+} from '../pages';
 import { usePrevious } from '../hooks';
 
 const ScrollToTop = (): any => {
@@ -32,22 +42,23 @@ export const MainRouter = (): JSX.Element => (
             <Route exact path={`${ROUTES.BLOG}`} component={BlogsPage} />
             <Route exact path={`${ROUTES.TIPS}`} component={TipsPage} />
             <Route exact path={`${ROUTES.LESSONS}`} component={LessonsPage} />
+            <Route exact path={`${ROUTES.REGISTER}/:key`} component={VerifyEmailPage} />
+            <Route exact path={`${ROUTES.RESET}/:key`} component={ResetPasswordPage} />
 
             {/* Deep Links */}
             <Route exact path={`${ROUTES.BLOG}/:id`} component={BlogsPage} />
             <Route exact path={`${ROUTES.TIPS}/:id`} component={TipsPage} />
             <Route exact path={`${ROUTES.LESSONS}/:id`} component={LessonsPage} />
 
+            {/* TODO */}
             <Route exact path={`${ROUTES.ORDER}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.SUBMIT}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.PROFILE}`} component={PlaceholderPage} />
-            <Route exact path={`${ROUTES.REGISTER}`} component={PlaceholderPage} />
-            <Route exact path={`${ROUTES.REGISTER}/:key`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.UNSUBSCRIBE}/:user/:key`} component={PlaceholderPage} />
-            <Route exact path={`${ROUTES.RESET}/:key`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.ADMIN}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.PRIVACY}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.TERMS}`} component={PlaceholderPage} />
+
             <Route path="*">
                 <Redirect to="/" />
             </Route>

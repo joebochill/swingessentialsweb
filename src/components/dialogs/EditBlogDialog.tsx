@@ -13,9 +13,9 @@ import {
 import { useDispatch } from 'react-redux';
 import { Blog } from '../../__types__';
 import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
-import { DateRegex } from '../../constants';
+import { DATE_REGEX } from '../../constants';
 import { Spacer } from '@pxblue/react-components';
-import { ConfirmationDialog } from '../display/ConfirmationDialog';
+import { ConfirmationDialog } from './ConfirmationDialog';
 import { addBlog, updateBlog, removeBlog } from '../../redux/actions/blog-actions';
 
 type EditBlogDialogProps = DialogProps & {
@@ -67,7 +67,7 @@ export const EditBlogDialog: React.FC<EditBlogDialogProps> = (props) => {
                         label={'Date'}
                         placeholder={'YYYY-MM-DD'}
                         name={'date'}
-                        error={!DateRegex.test(date)}
+                        error={!DATE_REGEX.test(date)}
                         value={date}
                         onChange={(e): void => {
                             setDate(e.target.value);
@@ -127,7 +127,7 @@ export const EditBlogDialog: React.FC<EditBlogDialogProps> = (props) => {
                     <Button
                         color="primary"
                         variant={'contained'}
-                        disabled={!title || !date || !body || !DateRegex.test(date)}
+                        disabled={!title || !date || !body || !DATE_REGEX.test(date)}
                         onClick={(e): void => {
                             if (isNew) {
                                 dispatch(

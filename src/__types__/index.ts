@@ -91,6 +91,16 @@ export type UserDataState = {
     lastName: string;
     email: string;
     joined: number;
+    location?: string;
+    image?: string;
+    password: {
+        pending: boolean;
+        codeValid: boolean;
+        resetUser: string;
+        resetToken: string;
+        error: number;
+        resetSuccess: boolean;
+    };
 };
 export type UsersState = {
     list: User[];
@@ -115,13 +125,6 @@ export type PackagesState = {
     list: Package[];
     loading: boolean;
 };
-// export type SettingsState = {
-//     loading: boolean;
-//     duration: number;
-//     delay: number;
-//     overlay: boolean;
-//     handedness: HandednessType;
-// };
 export type RegistrationState = {
     pending: boolean;
     userAvailable: boolean;
@@ -132,30 +135,6 @@ export type RegistrationState = {
     emailVerified: boolean;
     error: number;
 };
-// export type FAQ = {
-//     id: number;
-//     question: string;
-//     platform_specific: boolean;
-//     answer: string;
-//     answer_android: string;
-//     answer_ios: string;
-//     video: string;
-// };
-// export type FAQState = {
-//     loading: boolean;
-//     questions: FAQ[];
-// };
-
-// export type LogsState = {
-//     loading: boolean;
-// };
-// export type TutorialsState = {
-//     tutorial_lesson_list: boolean;
-//     tutorial_lesson: boolean;
-//     tutorial_submit_swing: boolean;
-//     tutorial_order: boolean;
-//     tutorial_home: boolean;
-// };
 
 export type AppState = {
     app: GeneralState;
@@ -166,4 +145,5 @@ export type AppState = {
     tips: TipsState;
     pros: ProsState;
     lessons: LessonsState;
+    registration: RegistrationState;
 };

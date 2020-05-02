@@ -6,6 +6,7 @@ import { ROUTES } from '../../constants/routes';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../__types__';
 import { MenuContent } from './MenuContent';
+import { Person } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -47,7 +48,7 @@ export const UserMenu: React.FC = () => {
     return token ? (
         <>
             <Avatar className={classes.avatar} onClick={openMenu}>
-                {initials}
+                {initials ? initials : <Person fontSize={'inherit'} />}
             </Avatar>
             <Menu
                 open={Boolean(anchorEl)}

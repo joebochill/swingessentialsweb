@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
     DialogProps,
     Dialog,
@@ -10,43 +10,46 @@ import {
     InputLabel,
     Select,
     MenuItem,
+    capitalize,
     DialogActions,
     Button,
     TextField,
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import { Lesson } from '../../__types__';
-import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
-import { putLessonResponse } from '../../redux/actions/lesons-actions';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState } from '../../__types__';
+import { convertMultilineToDatabaseText } from '../../utilities/text';
+import { putLessonResponse } from '../../redux/actions/lessons-actions';
+import { getDate } from '../../utilities/date';
+import { sortUsers } from '../../utilities/user';
+import { DATE_REGEX } from '../../constants';
 
-type EditLessonDialogProps = DialogProps & {
-    lesson: Lesson;
-};
-export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
-    const { lesson, ...dialogProps } = props;
+type NewLessonDialogProps = DialogProps & {};
+export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
+    const { ...dialogProps } = props;
     const {
         onClose = (): void => {
             /* do nothing */
         },
     } = dialogProps;
 
-    const [video, setVideo] = useState(lesson.response_video);
-    const [comments, setComments] = useState(convertDatabaseTextToMultiline(lesson.response_notes));
-    const [status, setStatus] = useState(lesson.response_status);
+    const users = useSelector((state: AppState) => state.users.list);
+    const usersByName = [...users].sort(sortUsers('last'));
+
+    // Form fields
+    const [user, setUser] = useState('');
+    const [date, setDate] = useState('');
+    const [video, setVideo] = useState('');
+    const [comments, setComments] = useState('');
 
     const dispatch = useDispatch();
 
     const resetLesson = useCallback(() => {
-        setVideo(lesson.response_video);
-        setComments(convertDatabaseTextToMultiline(lesson.response_notes));
-        setStatus(lesson.response_status);
-    }, [lesson]);
+        setUser('');
+        setDate(getDate(Date.now()));
+        setVideo('');
+        setComments('');
+    }, []);
 
-    useEffect(() => {
-        resetLesson();
-    }, [lesson, resetLesson]);
-
-    if (!lesson) return null;
     return (
         <Dialog
             {...dialogProps}
@@ -55,9 +58,37 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
                 resetLesson();
             }}
         >
-            <DialogTitle>Edit Lesson</DialogTitle>
+            <DialogTitle>New In-Person Lesson</DialogTitle>
             <DialogContent>
-                <DialogContentText>{`Enter the lesson information for ${lesson.username} below:`}</DialogContentText>
+                <DialogContentText>{`Enter the new lesson information below:`}</DialogContentText>
+                <FormControl variant="filled" fullWidth style={{ marginBottom: 16 }}>
+                    <InputLabel id="username-label">{`User`}</InputLabel>
+                    <Select
+                        labelId="username-label"
+                        placeholder="Choose a User"
+                        value={user}
+                        onChange={(e): void => setUser(e.target.value as string)}
+                    >
+                        {usersByName.map((_user) => (
+                            <MenuItem key={_user.username} value={_user.username}>{`${capitalize(
+                                _user.last
+                            )}, ${capitalize(_user.first)} (${_user.username})`}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <TextField
+                    fullWidth
+                    variant={'filled'}
+                    label={'Date'}
+                    placeholder={'YYYY-MM-DD'}
+                    name={'date'}
+                    error={!DATE_REGEX.test(date)}
+                    value={date}
+                    onChange={(e): void => {
+                        setDate(e.target.value);
+                    }}
+                    style={{ marginBottom: 16 }}
+                />
                 <TextField
                     fullWidth
                     variant={'filled'}
@@ -85,17 +116,6 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
                     helperText={`${500 - comments.length} characters left`}
                     style={{ marginBottom: 16 }}
                 />
-                <FormControl variant="filled" fullWidth>
-                    <InputLabel id="status-label">{`Response Status`}</InputLabel>
-                    <Select
-                        labelId="status-label"
-                        value={status}
-                        onChange={(e): void => setStatus(e.target.value as 'good' | 'bad')}
-                    >
-                        <MenuItem value="good">Accepted</MenuItem>
-                        <MenuItem value="bad">Rejected</MenuItem>
-                    </Select>
-                </FormControl>
             </DialogContent>
             <DialogActions>
                 <Button
@@ -111,21 +131,22 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
                 <Button
                     color="primary"
                     variant={'contained'}
-                    disabled={!video || !comments || !status}
+                    disabled={!user || !date || !video || !comments || !DATE_REGEX.test(date)}
                     onClick={(e): void => {
                         dispatch(
                             putLessonResponse({
-                                lesson_id: lesson.request_id,
-                                username: lesson.username || '',
+                                lesson_id: -1,
+                                username: user,
+                                date: date,
                                 response_video: video,
                                 response_notes: convertMultilineToDatabaseText(comments),
-                                response_status: status,
+                                response_status: 'good',
                             })
                         );
                         onClose(e, 'escapeKeyDown');
                     }}
                 >
-                    Save
+                    Create
                 </Button>
             </DialogActions>
         </Dialog>

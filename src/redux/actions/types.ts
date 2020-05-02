@@ -11,10 +11,13 @@ export const LOGOUT = createAction('LOGOUT', 'logout');
 export const SET_TOKEN = createAction('SET_TOKEN', '');
 export const CHECK_TOKEN = createAction('CHECK_TOKEN', 'checkToken');
 export const REFRESH_TOKEN = createAction('REFRESH_TOKEN', 'refresh');
+export const RESET_LOGIN_FAIL_COUNT = 'RESET_LOGIN_FAIL_COUNT';
 
 /* User Actions */
 export const GET_USER_DATA = createAction('GET_USER_DATA', 'user');
 export const GET_USERS = createAction('GET_USERS', 'users');
+export const RESET_USER_PASSWORD = createAction('RESET_USER_PASSWORD', 'credentials');
+export const UPDATE_USER_CREDENTIALS = createAction('UPDATE_USER_CREDENTIALS', 'credentials');
 
 /* Settings Actions */
 export const GET_SETTINGS = createAction('GET_SETTINGS', 'settings');
@@ -57,3 +60,5 @@ export const CHECK_EMAIL = createAction('CHECK_EMAIL', 'checkEmail');
 export const CREATE_ACCOUNT = createAction('CREATE_ACCOUNT', 'user');
 export const RESET_PASSWORD_EMAIL = createAction('RESET_PASSWORD_EMAIL', 'reset');
 export const VERIFY_EMAIL = createAction('VERIFY_EMAIL', 'verify');
+export const RESET_REGISTRATION_CHECKS = 'RESET_REGISTRATION_CHECKS';
+export const VERIFY_RESET_PASSWORD_CODE = createAction('VERIFY_RESET_PASSWORD_CODE', 'verify');

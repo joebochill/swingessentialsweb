@@ -6,7 +6,7 @@ import { InfoListItem, ListItemTag } from '@pxblue/react-components';
 import { prettyDate } from '../../utilities/date';
 import { PlaceholderLesson } from '../../constants/lessons';
 import { ChevronRight, ChevronLeft } from '@material-ui/icons';
-import { markLessonViewed } from '../../redux/actions/lesons-actions';
+import { markLessonViewed } from '../../redux/actions/lessons-actions';
 import { useHistory } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
 

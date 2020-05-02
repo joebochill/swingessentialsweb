@@ -7,11 +7,11 @@ export const ASYNC_PREFIX = '@SwingEssentials:';
 // export const ERROR_LIMIT = 8000; // characters
 // export const LOG_LIMIT = 24000; // characters
 
-export const BASEURL_DEV = 'https://www.swingessentials.com/apis/dev/dev.php';
+export const BASEURL_DEV = 'https://www.swingessentials.com/dev_apis/swingessentials.php';
 export const BASEURL_PROD = 'https://www.swingessentials.com/apis/swingessentials.php';
 
-export const BASEURL = BASEURL_PROD;
+export const BASEURL = BASEURL_DEV;
 export const AUTH = 'Message';
 
-export const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-export const DateRegex = new RegExp(/^[0-9]{4}-[0-9]{2}-[0-9]{2}/);
+export const EMAIL_REGEX = new RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
+export const DATE_REGEX = new RegExp(/^[0-9]{4}-[0-9]{2}-[0-9]{2}/);

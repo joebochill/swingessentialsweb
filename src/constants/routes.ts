@@ -1,6 +1,7 @@
 export const ROUTES = {
     HOME: '/',
     LOGIN: '/signin',
+    FORGOT: '/forgot-password',
     PROS: '/our-pros',
     BLOG: '/19th-hole',
     TIPS: '/tip-of-the-month',
