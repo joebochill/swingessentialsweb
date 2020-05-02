@@ -15,6 +15,8 @@ import {
     LoginPage,
     VerifyEmailPage,
     ResetPasswordPage,
+    TermsPage,
+    PrivacyPage,
 } from '../pages';
 import { usePrevious } from '../hooks';
 
@@ -23,7 +25,7 @@ const ScrollToTop = (): any => {
     const previousPath = usePrevious(pathname);
 
     useEffect(() => {
-        if (pathname.split('/')[1] !== previousPath?.split('/')[1]) {
+        if (pathname.split('/')[1] !== previousPath?.split('/')[1] || pathname.split('/')[1] === 'legal') {
             window.scrollTo(0, 0);
         }
     }, [pathname, previousPath]);
@@ -45,6 +47,9 @@ export const MainRouter = (): JSX.Element => (
             <Route exact path={`${ROUTES.REGISTER}/:key`} component={VerifyEmailPage} />
             <Route exact path={`${ROUTES.RESET}/:key`} component={ResetPasswordPage} />
 
+            <Route exact path={`${ROUTES.TERMS}`} component={TermsPage} />
+            <Route exact path={`${ROUTES.PRIVACY}`} component={PrivacyPage} />
+
             {/* Deep Links */}
             <Route exact path={`${ROUTES.BLOG}/:id`} component={BlogsPage} />
             <Route exact path={`${ROUTES.TIPS}/:id`} component={TipsPage} />
@@ -57,7 +62,6 @@ export const MainRouter = (): JSX.Element => (
             <Route exact path={`${ROUTES.UNSUBSCRIBE}/:user/:key`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.ADMIN}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.PRIVACY}`} component={PlaceholderPage} />
-            <Route exact path={`${ROUTES.TERMS}`} component={PlaceholderPage} />
 
             <Route path="*">
                 <Redirect to="/" />

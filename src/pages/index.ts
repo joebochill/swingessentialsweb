@@ -7,3 +7,5 @@ export { ProsPage } from './ProsPage';
 export { ResetPasswordPage } from './ResetPasswordPage';
 export { TipsPage } from './TipsPage';
 export { VerifyEmailPage } from './VerifyEmailPage';
+export { TermsPage } from './TermsPage';
+export { PrivacyPage } from './PrivacyPage';
