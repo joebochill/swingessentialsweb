@@ -4,7 +4,8 @@ import {
     SET_TOKEN,
     TOKEN_TIMEOUT,
     REFRESH_TOKEN,
-    CREATE_ACCOUNT,    RESET_USER_PASSWORD,
+    CREATE_ACCOUNT,
+    RESET_USER_PASSWORD,
 } from '../redux/actions/types';
 import { ASYNC_PREFIX } from '../constants';
 

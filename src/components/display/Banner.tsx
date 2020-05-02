@@ -84,13 +84,10 @@ export const Banner: React.FC<BannerProps> = (props): JSX.Element => {
     const classes = useStyles(props);
 
     return (
-        <div 
-            className={
-                clsx(classes.bannerWrapper, 
-                { 
-                    [classes.maintainRatio]: background.maintainAspectRatio 
-                })
-            }
+        <div
+            className={clsx(classes.bannerWrapper, {
+                [classes.maintainRatio]: background.maintainAspectRatio,
+            })}
             style={{ backgroundColor: background.color }}
         >
             <div
@@ -102,8 +99,10 @@ export const Banner: React.FC<BannerProps> = (props): JSX.Element => {
                     opacity: background.opacity,
                 }}
             />
-            <div className={clsx(classes.contentWrapper, {[classes.maintainRatio]: background.maintainAspectRatio})}>
-                <div className={clsx(classes.content,{[classes.content]: background.maintainAspectRatio})}>{props.children}</div>
+            <div className={clsx(classes.contentWrapper, { [classes.maintainRatio]: background.maintainAspectRatio })}>
+                <div className={clsx(classes.content, { [classes.content]: background.maintainAspectRatio })}>
+                    {props.children}
+                </div>
             </div>
         </div>
     );
