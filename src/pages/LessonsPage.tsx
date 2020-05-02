@@ -138,10 +138,8 @@ export const LessonsPage: React.FC = (): JSX.Element => {
 
     // Update selection if it's no longer part of filtered list
     useEffect(() => {
-        console.log('filter changed');
         if (activeLesson && completeIndex < 0 && pendingIndex < 0) {
             const active = filteredLessons.length > 0 ? filteredLessons[0] : null;
-            console.log('active lesson no longer in filtered');
             dispatch({ type: SET_SELECTED_LESSON, payload: active });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

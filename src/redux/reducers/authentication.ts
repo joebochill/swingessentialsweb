@@ -8,6 +8,7 @@ import {
     UPDATE_USER_CREDENTIALS,
     RESET_USER_PASSWORD,
     RESET_LOGIN_FAIL_COUNT,
+    INITIAL_LOAD,
 } from '../actions/types';
 import { getUserRole } from '../../utilities/user';
 import { AuthState } from '../../__types__';
@@ -19,10 +20,17 @@ const initialState: AuthState = {
     modalWarning: false,
     failCount: 0,
     pending: false,
+    initialLoaded: false,
 };
 
 export const AuthReducer = (state = initialState, action: any): AuthState => {
     switch (action.type) {
+        case INITIAL_LOAD:{
+            return {
+                ...state,
+                initialLoaded: true,
+            }
+        }
         case LOGIN.REQUEST:
         case REFRESH_TOKEN.REQUEST:
             return {

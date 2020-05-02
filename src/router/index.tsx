@@ -17,6 +17,7 @@ import {
     ResetPasswordPage,
     TermsPage,
     PrivacyPage,
+    ProfilePage,
 } from '../pages';
 import { usePrevious } from '../hooks';
 
@@ -46,6 +47,7 @@ export const MainRouter = (): JSX.Element => (
             <Route exact path={`${ROUTES.LESSONS}`} component={LessonsPage} />
             <Route exact path={`${ROUTES.REGISTER}/:key`} component={VerifyEmailPage} />
             <Route exact path={`${ROUTES.RESET}/:key`} component={ResetPasswordPage} />
+            <Route exact path={`${ROUTES.PROFILE}`} component={ProfilePage} />
 
             <Route exact path={`${ROUTES.TERMS}`} component={TermsPage} />
             <Route exact path={`${ROUTES.PRIVACY}`} component={PrivacyPage} />
@@ -58,7 +60,7 @@ export const MainRouter = (): JSX.Element => (
             {/* TODO */}
             <Route exact path={`${ROUTES.ORDER}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.SUBMIT}`} component={PlaceholderPage} />
-            <Route exact path={`${ROUTES.PROFILE}`} component={PlaceholderPage} />
+            
             <Route exact path={`${ROUTES.UNSUBSCRIBE}/:user/:key`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.ADMIN}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.PRIVACY}`} component={PlaceholderPage} />

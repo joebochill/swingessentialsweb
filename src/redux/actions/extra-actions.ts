@@ -10,6 +10,7 @@ import { loadPros } from './pro-actions';
 
 export function loadInitialData(): Function {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
+        
         const token = localStorage.getItem(`${ASYNC_PREFIX}token`);
         if (token) dispatch(setToken(token));
 

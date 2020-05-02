@@ -15,6 +15,8 @@ export const RESET_LOGIN_FAIL_COUNT = 'RESET_LOGIN_FAIL_COUNT';
 
 /* User Actions */
 export const GET_USER_DATA = createAction('GET_USER_DATA', 'user');
+export const SET_USER_DATA = createAction('SET_USER_DATA', 'details');
+export const RESET_SET_USER_DATA = 'RESET_SET_USER_DATA';
 export const GET_USERS = createAction('GET_USERS', 'users');
 export const RESET_USER_PASSWORD = createAction('RESET_USER_PASSWORD', 'credentials');
 export const UPDATE_USER_CREDENTIALS = createAction('UPDATE_USER_CREDENTIALS', 'credentials');

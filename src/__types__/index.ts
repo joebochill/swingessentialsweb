@@ -71,6 +71,7 @@ export type AuthState = {
     modalWarning: boolean;
     failCount: number;
     pending: boolean;
+    initialLoaded: boolean;
 };
 export type LessonsState = {
     loading: boolean;
@@ -92,6 +93,8 @@ export type UserDataState = {
     email: string;
     joined: number;
     location?: string;
+    phone?: string;
+    notifications?: boolean;
     image?: string;
     password: {
         pending: boolean;
@@ -101,6 +104,7 @@ export type UserDataState = {
         error: number;
         resetSuccess: boolean;
     };
+    update: 'unset' | 'pending' | 'error' | 'success';
 };
 export type UsersState = {
     list: User[];

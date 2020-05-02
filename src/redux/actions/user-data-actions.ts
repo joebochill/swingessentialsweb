@@ -19,30 +19,6 @@ export function loadUserInfo() {
     };
 }
 
-/* Retrieves user personal data from the database */
-// export function getUserData(token) {
-//     return (dispatch) => {
-//         return fetch(BASEURL + 'user', {
-//             headers: {
-//                 [AUTH]: 'Bearer ' + token
-//             }
-//         })
-//             .then((response) => {
-//                 switch (response.status) {
-//                     case 200:
-//                         response.json()
-//                             .then((json) => dispatch(success(GET_USER_DATA.SUCCESS, json)));
-//                         break;
-//                     default:
-//                         checkTimeout(response, dispatch);
-//                         dispatch(failure(GET_USER_DATA.FAIL, response));
-//                         break;
-//                 }
-//             })
-//             .catch((error) => console.error(error));
-//     }
-// }
-
 /* Retrieves a list of users from the database */
 export function getUsers() {
     return (dispatch: Dispatch): void => {
@@ -54,6 +30,29 @@ export function getUsers() {
             })
             .onFailure((response: Response) => {
                 dispatch(failure(ACTIONS.GET_USERS.FAILURE, response, 'loadUsers'));
+            })
+            .request();
+    };
+}
+type UserDataChange = {
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+    location?: string;
+}
+
+export function setUserData(data: UserDataChange) {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
+        dispatch({ type: ACTIONS.SET_USER_DATA.REQUEST });
+
+        HttpRequest.put(ACTIONS.SET_USER_DATA.API)
+            .withBody(data)
+            .onSuccess((response: any) => {
+                dispatch(success(ACTIONS.SET_USER_DATA.SUCCESS, response));
+                dispatch(loadUserInfo());
+            })
+            .onFailure((response: Response) => {
+                dispatch(failure(ACTIONS.SET_USER_DATA.FAILURE, response, 'SetUserData'));
             })
             .request();
     };
