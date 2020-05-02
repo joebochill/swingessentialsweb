@@ -1,4 +1,4 @@
-import { GET_LESSONS, LOGOUT, SUBMIT_LESSON, TOKEN_TIMEOUT } from '../actions/types';
+import { GET_LESSONS, LOGOUT, SUBMIT_LESSON, TOKEN_TIMEOUT, SET_SELECTED_LESSON } from '../actions/types';
 import { LessonsState } from '../../__types__';
 
 const initialState: LessonsState = {
@@ -60,7 +60,7 @@ export const LessonsReducer = (state = initialState, action: any): LessonsState 
                 redeemSuccess: false,
                 redeemError: parseInt(action.error, 10),
             };
-        case 'SET_SELECTED_LESSON':
+        case SET_SELECTED_LESSON:
             return {
                 ...state,
                 selected: action.payload,

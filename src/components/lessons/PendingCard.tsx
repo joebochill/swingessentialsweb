@@ -7,6 +7,7 @@ import { prettyDate } from '../../utilities/date';
 import { Videocam } from '@material-ui/icons';
 import { ROUTES } from '../../constants/routes';
 import { useHistory } from 'react-router-dom';
+import { SET_SELECTED_LESSON } from '../../redux/actions/types';
 
 type PendingLessonsCardProps = CardProps & {
     hidden?: boolean;
@@ -52,7 +53,7 @@ export const PendingLessonsCard: React.FC<PendingLessonsCardProps> = (props) => 
                     }
                     onClick={(): void => {
                         history.replace(`${ROUTES.LESSONS}/${lesson.request_url}`);
-                        dispatch({ type: 'SET_SELECTED_LESSON', payload: lesson });
+                        dispatch({ type: SET_SELECTED_LESSON, payload: lesson });
                     }}
                     statusColor={
                         selected && selected.request_id === lesson.request_id ? theme.palette.primary.main : ''

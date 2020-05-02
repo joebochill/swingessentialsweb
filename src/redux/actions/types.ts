@@ -28,6 +28,7 @@ export const GET_LESSONS = createAction('GET_LESSONS', 'lessons');
 export const SUBMIT_LESSON = createAction('SUBMIT_LESSON', 'redeem');
 export const MARK_VIEWED = createAction('MARK_LESSON_VIEWED', 'viewed');
 export const PUT_LESSON = createAction('PUT_LESSON', 'lesson');
+export const SET_SELECTED_LESSON = 'SET_SELECTED_LESSON';
 
 /* Tips Actions */
 export const GET_TIPS = createAction('GET_TIPS', 'tips');
