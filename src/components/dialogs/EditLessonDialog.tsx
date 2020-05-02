@@ -17,7 +17,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { Lesson } from '../../__types__';
 import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
-import { putLessonResponse } from '../../redux/actions/lesons-actions';
+import { putLessonResponse } from '../../redux/actions/lessons-actions';
 
 type EditLessonDialogProps = DialogProps & {
     lesson: Lesson;

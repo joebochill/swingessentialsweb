@@ -1,4 +1,14 @@
-import { LOGIN, LOGOUT, CREATE_ACCOUNT, SET_TOKEN, REFRESH_TOKEN, TOKEN_TIMEOUT } from '../actions/types';
+import {
+    LOGIN,
+    LOGOUT,
+    CREATE_ACCOUNT,
+    SET_TOKEN,
+    REFRESH_TOKEN,
+    TOKEN_TIMEOUT,
+    UPDATE_USER_CREDENTIALS,
+    RESET_USER_PASSWORD,
+    RESET_LOGIN_FAIL_COUNT,
+} from '../actions/types';
 import { getUserRole } from '../../utilities/user';
 import { AuthState } from '../../__types__';
 
@@ -22,7 +32,9 @@ export const AuthReducer = (state = initialState, action: any): AuthState => {
         case LOGIN.SUCCESS:
         case CREATE_ACCOUNT.SUCCESS:
         case SET_TOKEN.REQUEST:
-        case REFRESH_TOKEN.SUCCESS: {
+        case REFRESH_TOKEN.SUCCESS:
+        case UPDATE_USER_CREDENTIALS.SUCCESS:
+        case RESET_USER_PASSWORD.SUCCESS: {
             const role = getUserRole(action.payload.token);
             return {
                 ...state,
@@ -48,6 +60,7 @@ export const AuthReducer = (state = initialState, action: any): AuthState => {
                 ...state,
                 pending: false,
             };
+
         case LOGOUT.SUCCESS:
         case LOGOUT.FAILURE:
         case TOKEN_TIMEOUT:
@@ -57,6 +70,11 @@ export const AuthReducer = (state = initialState, action: any): AuthState => {
                 admin: false,
                 pending: false,
                 role: 'anonymous',
+                failCount: 0,
+            };
+        case RESET_LOGIN_FAIL_COUNT:
+            return {
+                ...state,
                 failCount: 0,
             };
         default:

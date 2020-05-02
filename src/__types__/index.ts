@@ -91,6 +91,16 @@ export type UserDataState = {
     lastName: string;
     email: string;
     joined: number;
+    location?: string;
+    image?: string;
+    password: {
+        pending: boolean;
+        codeValid: boolean;
+        resetUser: string;
+        resetToken: string;
+        error: number;
+        resetSuccess: boolean;
+    };
 };
 export type UsersState = {
     list: User[];

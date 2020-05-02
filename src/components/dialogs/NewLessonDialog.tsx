@@ -18,7 +18,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../../__types__';
 import { convertMultilineToDatabaseText } from '../../utilities/text';
-import { putLessonResponse } from '../../redux/actions/lesons-actions';
+import { putLessonResponse } from '../../redux/actions/lessons-actions';
 import { getDate } from '../../utilities/date';
 import { sortUsers } from '../../utilities/user';
 import { DATE_REGEX } from '../../constants';

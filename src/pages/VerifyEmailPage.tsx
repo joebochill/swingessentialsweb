@@ -19,7 +19,7 @@ const _getRegistrationErrorMessage = (code: number): string => {
         case -1:
             return 'Your your email address has already been verified. Sign in to view your account.';
         default:
-            return `Unknown Error: ${  code}`;
+            return `Unknown Error: ${code}`;
     }
 };
 
@@ -38,7 +38,7 @@ const useStyles = makeStyles(() =>
     })
 );
 
-export const RegisterPage: React.FC = () => {
+export const VerifyEmailPage: React.FC = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const classes = useStyles();

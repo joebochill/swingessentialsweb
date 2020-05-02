@@ -34,6 +34,7 @@ import {
 import { StyledTextField, StyledSelect } from '../components/text/StyledInputs';
 import { Visibility, VisibilityOff, Info } from '@material-ui/icons';
 import { usePrevious } from '../hooks';
+import { RESET_LOGIN_FAIL_COUNT } from '../redux/actions/types';
 
 type Form = 'login' | 'register' | 'forgot';
 type Acquisition =
@@ -80,7 +81,7 @@ export const LoginPage: React.FC = () => {
     const token = useSelector((state: AppState) => state.auth.token);
     const history = useHistory();
     const registration = useSelector((state: AppState) => state.registration);
-    const [form, setForm] = useState<Form>('register');
+    const [form, setForm] = useState<Form>('login');
 
     if (token) {
         if (!registration.success) {
@@ -119,11 +120,20 @@ type SignInFormProps = HTMLAttributes<HTMLDivElement> & {
 const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref) => {
     const { onChangeForm, ...other } = props;
     const classes = useStyles();
+    const dispatch = useDispatch();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
     const [errorMessage, setErrorMessage] = useState('');
     const failCount = useSelector((state: AppState) => state.auth.failCount);
-    const dispatch = useDispatch();
+
+    const resetForm = useCallback(() => {
+        setUsername('');
+        setPassword('');
+        setPassword('');
+        setErrorMessage('');
+        dispatch({ type: RESET_LOGIN_FAIL_COUNT });
+    }, [setUsername, setPassword, setErrorMessage, dispatch]);
 
     useEffect(() => {
         if (failCount > 0) {
@@ -160,16 +170,28 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref
                 onClick={
                     username && password
                         ? (): void => {
-                            dispatch(requestLogin({ username, password }));
-                        }
+                              dispatch(requestLogin({ username, password }));
+                          }
                         : (): void => setErrorMessage('You need to enter your username / password first.')
                 }
             >
                 Sign In
             </Button>
             <div className={classes.linkContainer}>
-                <SimpleLink label={'Forgot Password?'} onClick={(): void => onChangeForm('forgot' as Form)} />
-                <SimpleLink label={'Need an Account?'} onClick={(): void => onChangeForm('register' as Form)} />
+                <SimpleLink
+                    label={'Forgot Password?'}
+                    onClick={(): void => {
+                        onChangeForm('forgot' as Form);
+                        resetForm();
+                    }}
+                />
+                <SimpleLink
+                    label={'Need an Account?'}
+                    onClick={(): void => {
+                        onChangeForm('register' as Form);
+                        resetForm();
+                    }}
+                />
             </div>
         </div>
     );
@@ -306,21 +328,21 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
                 color={'primary'}
                 onClick={
                     email &&
-                        EMAIL_REGEX.test(email) &&
-                        registration.emailAvailable &&
-                        username &&
-                        registration.userAvailable &&
-                        password
+                    EMAIL_REGEX.test(email) &&
+                    registration.emailAvailable &&
+                    username &&
+                    registration.userAvailable &&
+                    password
                         ? (): void => {
-                            dispatch(
-                                createAccount({
-                                    username,
-                                    email,
-                                    password,
-                                    heard: acquisition,
-                                })
-                            );
-                        }
+                              dispatch(
+                                  createAccount({
+                                      username,
+                                      email,
+                                      password,
+                                      heard: acquisition,
+                                  })
+                              );
+                          }
                         : (): void => setErrorMessage('Please make sure all fields are filled.')
                 }
             >
@@ -380,17 +402,17 @@ const ForgotForm = React.forwardRef<HTMLDivElement, ForgotFormProps>((props, ref
                 onClick={
                     complete
                         ? (): void => {
-                            onChangeForm('login' as Form);
-                            setComplete(false);
-                            setEmail('');
-                            setErrorMessage('');
-                        }
+                              onChangeForm('login' as Form);
+                              setComplete(false);
+                              setEmail('');
+                              setErrorMessage('');
+                          }
                         : email && EMAIL_REGEX.test(email)
-                            ? (): void => {
-                                dispatch(requestPasswordReset({ email }));
-                                setComplete(true);
-                            }
-                            : (): void => setErrorMessage('You need to enter a valid email address.')
+                        ? (): void => {
+                              dispatch(requestPasswordReset({ email }));
+                              setComplete(true);
+                          }
+                        : (): void => setErrorMessage('You need to enter a valid email address.')
                 }
             >
                 {complete ? ' Back to Sign In' : 'Send Reset Instructions'}

@@ -85,38 +85,53 @@ export function getUsers() {
 //             .catch((error) => console.error(error));
 //     }
 // }
+type UserCredentials = {
+    username?: string;
+    password?: string;
+    email?: string;
+};
+// export function updateUserCredentials(data: UserCredentials) {
+//     return (dispatch: ThunkDispatch<any, void, any>): void => {
+//         dispatch({ type: ACTIONS.UPDATE_USER_CREDENTIALS.REQUEST });
 
-// /* Updates user credentials (username, email, password) in the database */
-// export function updateUserCredentials(data, token) {
-//     return (dispatch) => {
-//         dispatch({ type: UPDATE_CREDENTIALS.REQUEST });
-
-//         if (Object.keys(data).length < 1) { return; }
-
-//         return fetch(BASEURL + 'credentials', {
-//             method: 'PUT',
-//             headers: {
-//                 [AUTH]: 'Bearer ' + token,
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify(data)
-//         })
-//             .then((response) => {
-//                 switch (response.status) {
-//                     case 200:
-//                         dispatch(success(UPDATE_CREDENTIALS.SUCCESS, { token: response.headers.get('Token') }));
-//                         dispatch(getUserData(response.headers.get('Token')));
-//                         break;
-//                     default:
-//                         checkTimeout(response, dispatch);
-//                         dispatch(failure(UPDATE_CREDENTIALS.FAIL, response));
-//                         dispatch(getUserData(token));
-//                         break;
-//                 }
+//         HttpRequest.put(ACTIONS.UPDATE_USER_CREDENTIALS.API)
+//             .withBody(data)
+//             .onSuccess((body: any) => {
+//                 dispatch(success(ACTIONS.UPDATE_USER_CREDENTIALS.SUCCESS, body));
+//                 dispatch(loadUserInfo());
+//                 // dispatch(requestLogout());
 //             })
-//             .catch((error) => console.error(error));
-//     }
+//             .onFailure((response: Response) => {
+//                 dispatch(failure(ACTIONS.UPDATE_USER_CREDENTIALS.FAILURE, response, 'UpdateCredentials'));
+//                 // dispatch(requestLogout());
+//             })
+//             .request();
+//     };
 // }
+type ResetPassword = {
+    password: string;
+    token: string;
+};
+export function resetUserPassword(data: ResetPassword) {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
+        dispatch({ type: ACTIONS.RESET_USER_PASSWORD.REQUEST });
+
+        HttpRequest.put(ACTIONS.RESET_USER_PASSWORD.API)
+            .withExplicitToken(data.token)
+            .withBody(data)
+            .onSuccess((response: any) => {
+                const token = response.headers.get('Token');
+                dispatch(success(ACTIONS.RESET_USER_PASSWORD.SUCCESS, { token }));
+                dispatch(loadUserInfo());
+                // dispatch(requestLogout());
+            })
+            .onFailure((response: Response) => {
+                dispatch(failure(ACTIONS.RESET_USER_PASSWORD.FAILURE, response, 'ResetPassword'));
+                // dispatch(requestLogout());
+            })
+            .request();
+    };
+}
 
 // /* Retrieves user app settings from the database */
 // export function getSettings(token) {

@@ -32,18 +32,24 @@ export class HttpRequest<TResponses extends GeneralResponseMapping = {}> {
     private successCallback?: Function;
     private failureCallback?: Function;
     private body?: any;
+    private explicitToken?: string | null;
     private parseResponse?: boolean;
 
     private constructor(method: HttpMethod, endpoint: string, optionals: Optionals = {}) {
         this.method = method;
         this.endpoint = endpoint;
-        this.parseResponse = true;
+        this.parseResponse = method === 'GET' ? true : false;
+        this.explicitToken = null;
         if (optionals) {
             this.body = optionals.body;
         }
     }
     public withBody<TBody>(body: TBody, stringify = true): HttpRequest<TResponses> {
         this.body = stringify ? JSON.stringify(body) : body;
+        return this;
+    }
+    public withExplicitToken(token: string): HttpRequest<TResponses> {
+        this.explicitToken = token;
         return this;
     }
     public onSuccess(callback: Function): HttpRequest<TResponses> {
@@ -58,21 +64,26 @@ export class HttpRequest<TResponses extends GeneralResponseMapping = {}> {
         this.parseResponse = false;
         return this;
     }
+    public withParsedResponse(): HttpRequest<TResponses> {
+        this.parseResponse = true;
+        return this;
+    }
     public request(): Promise<void> {
+        const token = this.explicitToken || TOKEN;
         return fetch(`${BASEURL}/${this.endpoint}`, {
             method: this.method,
             // @ts-ignore
-            headers: Object.assign({ 'Content-Type': 'application/json' }, TOKEN ? { [AUTH]: `Bearer ${TOKEN}` } : {}),
+            headers: Object.assign({ 'Content-Type': 'application/json' }, token ? { [AUTH]: `Bearer ${token}` } : {}),
             body: this.body,
         })
             .then(async (response: Response) => {
                 switch (response.status) {
                     case 200: {
                         let reply = {};
-                        if (this.method === HttpMethod.PUT || this.parseResponse === false) {
-                            reply = response;
-                        } else if (this.method === HttpMethod.GET) {
+                        if (this.parseResponse) {
                             reply = await response.json();
+                        } else {
+                            reply = response;
                         }
                         if (this.successCallback) this.successCallback(reply);
                         break;

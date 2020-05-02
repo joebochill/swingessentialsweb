@@ -92,3 +92,19 @@ export function requestPasswordReset(data: { email: string }) {
             .request();
     };
 }
+
+export function verifyResetPasswordCode(code: string) {
+    return (dispatch: Dispatch): void => {
+        dispatch({ type: ACTIONS.VERIFY_RESET_PASSWORD_CODE.REQUEST });
+        HttpRequest.put(ACTIONS.VERIFY_RESET_PASSWORD_CODE.API)
+            .withBody({ type: 'reset', code: code })
+            .withParsedResponse()
+            .onSuccess((response: any) => {
+                dispatch(success(ACTIONS.VERIFY_RESET_PASSWORD_CODE.SUCCESS, response));
+            })
+            .onFailure((response: Response) => {
+                dispatch(failure(ACTIONS.VERIFY_RESET_PASSWORD_CODE.FAILURE, response, 'VerifyResetCode'));
+            })
+            .request();
+    };
+}

@@ -79,42 +79,5 @@ export const SETheme: ThemeOptions = {
                 },
             },
         },
-
-        // BUTTON OVERRIDES
-        // MuiButton: {
-        //     root: {
-        //         textTransform: 'none',
-        //     },
-        //     outlined: {
-        //         borderColor: ThemeColors.black[500],
-        //     },
-        //     outlinedPrimary: {
-        //         borderColor: purple[500],
-        //     },
-        //     outlinedSecondary: {
-        //         borderColor: ThemeColors.green[500],
-        //     },
-        // },
-
-        // BUTTON OVERRIDES
-        MuiFab: {
-            root: {
-                textTransform: 'none',
-            },
-        },
-
-        // LIST ITEM OVERRIDES
-        // MuiListItem: {
-        //     root: {
-        //         color: ThemeColors.black['500'],
-        //     },
-        // },
-
-        // TABS OVERRIDES
-        MuiTabs: {
-            indicator: {
-                backgroundColor: ThemeColors.white['50'],
-            },
-        },
     },
 };
