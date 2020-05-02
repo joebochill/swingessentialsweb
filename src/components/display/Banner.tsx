@@ -8,6 +8,10 @@ const useStyles = makeStyles<Theme, BannerProps>((theme: Theme) =>
             minHeight: 540,
             width: '100%',
             position: 'relative',
+            backgroundColor: theme.palette.primary.main,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             '&$maintainRatio': {
                 [theme.breakpoints.down('sm')]: {
                     minHeight: 'initial',
@@ -36,12 +40,17 @@ const useStyles = makeStyles<Theme, BannerProps>((theme: Theme) =>
             opacity: 0.5,
         },
         contentWrapper: {
-            position: 'absolute',
+            zIndex: 100,
+            height: '100%',
+            width: '100%',
             padding: (props): number => (props.noPadding ? 0 : 64),
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
+            '&$maintainRatio': {
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+            },
             [theme.breakpoints.down('sm')]: {
                 padding: (props): number | string => (props.noPadding ? 0 : `64px 10%`),
                 textAlign: 'center',
@@ -75,8 +84,15 @@ export const Banner: React.FC<BannerProps> = (props): JSX.Element => {
     const classes = useStyles(props);
 
     return (
-        <div className={clsx(classes.bannerWrapper, { [classes.maintainRatio]: background.maintainAspectRatio })}>
-            <div className={classes.coloredBackdrop} style={{ backgroundColor: background.color }} />
+        <div 
+            className={
+                clsx(classes.bannerWrapper, 
+                { 
+                    [classes.maintainRatio]: background.maintainAspectRatio 
+                })
+            }
+            style={{ backgroundColor: background.color }}
+        >
             <div
                 className={classes.imageBackdrop}
                 style={{
@@ -86,8 +102,8 @@ export const Banner: React.FC<BannerProps> = (props): JSX.Element => {
                     opacity: background.opacity,
                 }}
             />
-            <div className={classes.contentWrapper}>
-                <div className={clsx(classes.content)}>{props.children}</div>
+            <div className={clsx(classes.contentWrapper, {[classes.maintainRatio]: background.maintainAspectRatio})}>
+                <div className={clsx(classes.content,{[classes.content]: background.maintainAspectRatio})}>{props.children}</div>
             </div>
         </div>
     );

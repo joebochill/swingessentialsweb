@@ -14,6 +14,7 @@ import {
     InputLabel,
     IconButton,
     Tooltip,
+    SlideProps,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -35,6 +36,7 @@ import { StyledTextField, StyledSelect } from '../components/text/StyledInputs';
 import { Visibility, VisibilityOff, Info } from '@material-ui/icons';
 import { usePrevious } from '../hooks';
 import { RESET_LOGIN_FAIL_COUNT } from '../redux/actions/types';
+import clsx from 'clsx';
 
 type Form = 'login' | 'register' | 'forgot';
 type Acquisition =
@@ -60,12 +62,17 @@ const acquisitionMenuItems: Acquisition[] = [
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        transformer:{
+            height: '100%',
+            maxWidth: '80%',
+            margin: '0 auto',
+            top: 0,
+            display: 'flex',
+            alignItems: 'center',
+        },
         form: {
-            position: 'absolute',
-            // top: '50%',
-            // transform: 'translateY(-50%)',
             zIndex: 100,
-            width: '80%',
+            width: '100%',
             maxWidth: 512,
             color: 'white',
         },
@@ -80,8 +87,27 @@ const useStyles = makeStyles((theme: Theme) =>
 export const LoginPage: React.FC = () => {
     const token = useSelector((state: AppState) => state.auth.token);
     const history = useHistory();
+    const classes = useStyles();
     const registration = useSelector((state: AppState) => state.registration);
     const [form, setForm] = useState<Form>('login');
+
+    const previousForm = usePrevious(form);
+
+    const isLogin = form === 'login';
+    const isForgot = form === 'forgot';
+    const isRegister = form === 'register';
+
+    let loginSlideDirection: SlideProps['direction'] = 'up';
+    if (previousForm !== undefined) {
+        if (previousForm === 'login') {
+            if (form === 'register') loginSlideDirection = 'right'
+            else if (form === 'forgot') loginSlideDirection = 'left'
+        }
+        else {
+            if (previousForm === 'register') loginSlideDirection = 'right'
+            else if (previousForm === 'forgot') loginSlideDirection = 'left'
+        }
+    }
 
     if (token) {
         if (!registration.success) {
@@ -92,20 +118,51 @@ export const LoginPage: React.FC = () => {
     return (
         <>
             <Banner background={{ src: bg, position: 'center 70%' }} justify={'center'}>
-                {/* <div style={{ display: 'flex' }}> */}
                 {
-                    <Slide direction="up" in={form === 'login'} unmountOnExit>
-                        <SignInForm onChangeForm={(f: Form): void => setForm(f)} />
+                    <Slide
+                        direction={loginSlideDirection}
+                        in={isLogin}
+                        style={{ position: form === 'login' ? 'static' : 'absolute' }}
+                        timeout={{
+                            enter: 500,
+                            exit: 250
+                        }}
+                    >
+                        <div className={classes.transformer}>
+                            <SignInForm onChangeForm={(f: Form): void => setForm(f)} />
+                        </div>
                     </Slide>
                 }
                 {
-                    <Slide direction="left" in={form === 'register'} unmountOnExit>
+                    <Slide
+                        direction={"left"}
+                        in={isRegister}
+                        style={{ position: isRegister ? 'static' : 'absolute' }}
+                        timeout={{
+                            enter: 500,
+                            exit: 250
+                        }}
+                    >
+                        <div className={classes.transformer}>
                         <RegisterForm onChangeForm={(f: Form): void => setForm(f)} />
+
+                        </div>
                     </Slide>
                 }
                 {
-                    <Slide direction="right" in={form === 'forgot'} unmountOnExit>
+                    <Slide
+                        direction={"right"}
+                        in={isForgot}
+                        style={{ position: isForgot ? 'static' : 'absolute' }}
+                        timeout={{
+                            enter: 500,
+                            exit: 250
+                        }}
+                    >
+                        <div className={classes.transformer}>
                         <ForgotForm onChangeForm={(f: Form): void => setForm(f)} />
+
+                        </div>
                     </Slide>
                 }
                 {/* </div> */}
@@ -170,8 +227,8 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref
                 onClick={
                     username && password
                         ? (): void => {
-                              dispatch(requestLogin({ username, password }));
-                          }
+                            dispatch(requestLogin({ username, password }));
+                        }
                         : (): void => setErrorMessage('You need to enter your username / password first.')
                 }
             >
@@ -328,21 +385,21 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
                 color={'primary'}
                 onClick={
                     email &&
-                    EMAIL_REGEX.test(email) &&
-                    registration.emailAvailable &&
-                    username &&
-                    registration.userAvailable &&
-                    password
+                        EMAIL_REGEX.test(email) &&
+                        registration.emailAvailable &&
+                        username &&
+                        registration.userAvailable &&
+                        password
                         ? (): void => {
-                              dispatch(
-                                  createAccount({
-                                      username,
-                                      email,
-                                      password,
-                                      heard: acquisition,
-                                  })
-                              );
-                          }
+                            dispatch(
+                                createAccount({
+                                    username,
+                                    email,
+                                    password,
+                                    heard: acquisition,
+                                })
+                            );
+                        }
                         : (): void => setErrorMessage('Please make sure all fields are filled.')
                 }
             >
@@ -402,23 +459,23 @@ const ForgotForm = React.forwardRef<HTMLDivElement, ForgotFormProps>((props, ref
                 onClick={
                     complete
                         ? (): void => {
-                              onChangeForm('login' as Form);
-                              setComplete(false);
-                              setEmail('');
-                              setErrorMessage('');
-                          }
+                            onChangeForm('login' as Form);
+                            setComplete(false);
+                            setEmail('');
+                            setErrorMessage('');
+                        }
                         : email && EMAIL_REGEX.test(email)
-                        ? (): void => {
-                              dispatch(requestPasswordReset({ email }));
-                              setComplete(true);
-                          }
-                        : (): void => setErrorMessage('You need to enter a valid email address.')
+                            ? (): void => {
+                                dispatch(requestPasswordReset({ email }));
+                                setComplete(true);
+                            }
+                            : (): void => setErrorMessage('You need to enter a valid email address.')
                 }
             >
                 {complete ? ' Back to Sign In' : 'Send Reset Instructions'}
             </Button>
             {!complete && (
-                <div className={classes.linkContainer}>
+                <div className={classes.linkContainer} style={{justifyContent: 'flex-end'}}>
                     <SimpleLink label={'Back to Sign In'} onClick={(): void => onChangeForm('login' as Form)} />
                 </div>
             )}
