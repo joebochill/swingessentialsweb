@@ -1,5 +1,5 @@
-import { GET_LESSONS, LOGOUT, SUBMIT_LESSON, TOKEN_TIMEOUT, SET_SELECTED_LESSON } from '../actions/types';
-import { LessonsState } from '../../__types__';
+import { GET_LESSONS, LOGOUT, SUBMIT_LESSON, TOKEN_TIMEOUT, SET_SELECTED_LESSON } from '../../actions/types';
+import { LessonsState } from '../../../__types__';
 
 const initialState: LessonsState = {
     loading: false,

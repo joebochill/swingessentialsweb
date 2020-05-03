@@ -129,8 +129,7 @@ export function resetUserPassword(data: ResetPassword) {
     };
 }
 
-
-export function setUserNotifications(data: {subscribe: boolean}) {
+export function setUserNotifications(data: { subscribe: boolean }) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.SET_USER_NOTIFICATIONS.REQUEST });
 
@@ -146,7 +145,6 @@ export function setUserNotifications(data: {subscribe: boolean}) {
             .request();
     };
 }
-
 
 // /* Retrieves user app settings from the database */
 // export function getSettings(token) {

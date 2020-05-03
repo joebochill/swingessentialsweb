@@ -7,14 +7,13 @@ import {
     TOKEN_TIMEOUT,
     UPDATE_USER_CREDENTIALS,
     RESET_USER_PASSWORD,
-    RESET_LOGIN_FAIL_COUNT,
     INITIAL_LOAD,
     VALIDATE_PASSWORD,
     CHANGE_PASSWORD,
-    RESET_CHANGE_PASSWORD,
-} from '../actions/types';
-import { getUserRole } from '../../utilities/user';
-import { AuthState } from '../../__types__';
+    RESET_API_STATUS,
+} from '../../actions/types';
+import { getUserRole } from '../../../utilities/user';
+import { AuthState } from '../../../__types__';
 
 const initialState: AuthState = {
     token: null,
@@ -24,10 +23,10 @@ const initialState: AuthState = {
     failCount: 0,
     pending: false,
     initialLoaded: false,
-    changePassword: {
-        currentValidated: 'initial',
-        result: 'initial',
-    },
+    // changePassword: {
+    //     currentValidated: 'initial',
+    //     result: 'initial',
+    // },
 };
 
 export const AuthReducer = (state = initialState, action: any): AuthState => {
@@ -87,43 +86,12 @@ export const AuthReducer = (state = initialState, action: any): AuthState => {
                 role: 'anonymous',
                 failCount: 0,
             };
-        case RESET_LOGIN_FAIL_COUNT:
+        case RESET_API_STATUS.LOGIN_FAILURES:
             return {
                 ...state,
                 failCount: 0,
             };
-        case VALIDATE_PASSWORD.REQUEST:
-            return {
-                ...state,
-                changePassword: {
-                    ...state.changePassword,
-                    currentValidated: 'pending',
-                },
-            };
-        case VALIDATE_PASSWORD.SUCCESS:
-            return {
-                ...state,
-                changePassword: {
-                    ...state.changePassword,
-                    currentValidated: 'success',
-                },
-            };
-        case VALIDATE_PASSWORD.FAILURE:
-            return {
-                ...state,
-                changePassword: {
-                    ...state.changePassword,
-                    currentValidated: 'failed',
-                },
-            };
-        case CHANGE_PASSWORD.REQUEST:
-            return {
-                ...state,
-                changePassword: {
-                    ...state.changePassword,
-                    result: 'pending',
-                },
-            };
+
         case CHANGE_PASSWORD.SUCCESS: {
             const role = getUserRole(action.payload.token);
             return {
@@ -132,28 +100,8 @@ export const AuthReducer = (state = initialState, action: any): AuthState => {
                 pending: false,
                 role: role,
                 admin: role === 'administrator',
-                changePassword: {
-                    ...state.changePassword,
-                    result: 'success',
-                },
             };
         }
-        case CHANGE_PASSWORD.FAILURE:
-            return {
-                ...state,
-                changePassword: {
-                    ...state.changePassword,
-                    result: 'failed',
-                },
-            };
-        case RESET_CHANGE_PASSWORD:
-            return {
-                ...state,
-                changePassword: {
-                    currentValidated: 'initial',
-                    result: 'initial',
-                },
-            };
         default:
             return state;
     }

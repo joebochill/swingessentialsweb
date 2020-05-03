@@ -1,4 +1,4 @@
-import { createAction } from './utilities';
+import { createAction, createResetAction } from './utilities';
 
 /* Non-API actions */
 // export const LOCATION_CHANGE = '@@router/LOCATION_CHANGE';
@@ -11,15 +11,15 @@ export const LOGOUT = createAction('LOGOUT', 'logout');
 export const SET_TOKEN = createAction('SET_TOKEN', '');
 export const CHECK_TOKEN = createAction('CHECK_TOKEN', 'checkToken');
 export const REFRESH_TOKEN = createAction('REFRESH_TOKEN', 'refresh');
-export const RESET_LOGIN_FAIL_COUNT = 'RESET_LOGIN_FAIL_COUNT';
+// export const RESET_LOGIN_FAIL_COUNT = 'RESET_LOGIN_FAIL_COUNT';
 export const VALIDATE_PASSWORD = createAction('VALIDATE_PASSWORD', 'validate');
 export const CHANGE_PASSWORD = createAction('CHANGE_PASSWORD', 'credentials');
-export const RESET_CHANGE_PASSWORD = 'RESET_CHANGE_PASSWORD';
+// export const RESET_CHANGE_PASSWORD = 'RESET_CHANGE_PASSWORD';
 
 /* User Actions */
 export const GET_USER_DATA = createAction('GET_USER_DATA', 'user');
 export const SET_USER_DATA = createAction('SET_USER_DATA', 'details');
-export const RESET_SET_USER_DATA = 'RESET_SET_USER_DATA';
+// export const RESET_SET_USER_DATA = 'RESET_SET_USER_DATA';
 export const GET_USERS = createAction('GET_USERS', 'users');
 export const RESET_USER_PASSWORD = createAction('RESET_USER_PASSWORD', 'credentials');
 export const UPDATE_USER_CREDENTIALS = createAction('UPDATE_USER_CREDENTIALS', 'credentials');
@@ -34,6 +34,7 @@ export const GET_LESSONS = createAction('GET_LESSONS', 'lessons');
 export const SUBMIT_LESSON = createAction('SUBMIT_LESSON', 'redeem');
 export const MARK_VIEWED = createAction('MARK_LESSON_VIEWED', 'viewed');
 export const PUT_LESSON = createAction('PUT_LESSON', 'lesson');
+// TODO
 export const SET_SELECTED_LESSON = 'SET_SELECTED_LESSON';
 
 /* Tips Actions */
@@ -67,5 +68,22 @@ export const CHECK_EMAIL = createAction('CHECK_EMAIL', 'checkEmail');
 export const CREATE_ACCOUNT = createAction('CREATE_ACCOUNT', 'user');
 export const RESET_PASSWORD_EMAIL = createAction('RESET_PASSWORD_EMAIL', 'reset');
 export const VERIFY_EMAIL = createAction('VERIFY_EMAIL', 'verify');
-export const RESET_REGISTRATION_CHECKS = 'RESET_REGISTRATION_CHECKS';
+// export const RESET_REGISTRATION_CHECKS = 'RESET_REGISTRATION_CHECKS';
 export const VERIFY_RESET_PASSWORD_CODE = createAction('VERIFY_RESET_PASSWORD_CODE', 'verify');
+
+/* API Reset Actions */
+export const RESET_API_STATUS = {
+    AUTHENTICATION: createResetAction('AUTHENTICATION'),
+    BLOGS: createResetAction('BLOGS'),
+    LESSONS: createResetAction('LESSONS'),
+    PROS: createResetAction('PROS'),
+    REGISTRATION: createResetAction('REGISTRATION'),
+    TIPS: createResetAction('TIPS'),
+    USER_DATA: createResetAction('USER_DATA'),
+    CHANGE_PASSWORD: createResetAction('CHANGE_PASSWORD'),
+    USER_SETTINGS: createResetAction('USER_SETTINGS'),
+
+    SET_USER_CHECKS: createResetAction('SET_USER_CHECKS'),
+    LOGIN_FAILURES: createResetAction('LOGIN_FAILURES'),
+    REGISTRATION_CHECKS: createResetAction('REGISTRATION_CHECKS'),
+};

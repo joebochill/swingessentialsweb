@@ -35,7 +35,7 @@ import {
 import { StyledTextField, StyledSelect } from '../components/text/StyledInputs';
 import { Visibility, VisibilityOff, Info } from '@material-ui/icons';
 import { usePrevious } from '../hooks';
-import { RESET_LOGIN_FAIL_COUNT } from '../redux/actions/types';
+import { RESET_API_STATUS } from '../redux/actions/types';
 
 type Form = 'login' | 'register' | 'forgot';
 type Acquisition =
@@ -185,7 +185,7 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref
         setPassword('');
         setPassword('');
         setErrorMessage('');
-        dispatch({ type: RESET_LOGIN_FAIL_COUNT });
+        dispatch({ type: RESET_API_STATUS.LOGIN_FAILURES });
     }, [setUsername, setPassword, setErrorMessage, dispatch]);
 
     useEffect(() => {

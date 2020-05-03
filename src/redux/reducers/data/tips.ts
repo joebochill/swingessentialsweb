@@ -1,5 +1,5 @@
-import { GET_TIPS, LOGOUT, TOKEN_TIMEOUT } from '../actions/types';
-import { TipsState } from '../../__types__';
+import { GET_TIPS, LOGOUT, TOKEN_TIMEOUT } from '../../actions/types';
+import { TipsState } from '../../../__types__';
 
 const initialState: TipsState = {
     loading: false,

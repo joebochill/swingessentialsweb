@@ -1,13 +1,5 @@
-import {
-    LOGIN,
-    LOGOUT,
-    GET_USER_DATA,
-    TOKEN_TIMEOUT,
-    CREATE_ACCOUNT,
-    SET_USER_DATA,
-    RESET_SET_USER_DATA,
-} from '../actions/types';
-import { UserDataState } from '../../__types__';
+import { LOGIN, LOGOUT, GET_USER_DATA, TOKEN_TIMEOUT, CREATE_ACCOUNT } from '../../actions/types';
+import { UserDataState } from '../../../__types__';
 
 const initialState: UserDataState = {
     username: '',
@@ -17,15 +9,10 @@ const initialState: UserDataState = {
     location: '',
     phone: '',
     joined: 0,
-    update: 'unset',
+    // update: 'unset',
 };
 export const UserDataReducer = (state = initialState, action: any): UserDataState => {
     switch (action.type) {
-        case SET_USER_DATA.REQUEST:
-            return {
-                ...state,
-                update: 'pending',
-            };
         case GET_USER_DATA.SUCCESS:
         case LOGIN.SUCCESS:
             return {
@@ -45,21 +32,6 @@ export const UserDataReducer = (state = initialState, action: any): UserDataStat
                 username: action.payload.personal.username,
                 email: action.payload.personal.email,
                 joined: Date.now(), //TODO is this right or *1000?
-            };
-        case SET_USER_DATA.SUCCESS:
-            return {
-                ...state,
-                update: 'success',
-            };
-        case SET_USER_DATA.FAILURE:
-            return {
-                ...state,
-                update: 'error',
-            };
-        case RESET_SET_USER_DATA:
-            return {
-                ...state,
-                update: 'unset',
             };
         case GET_USER_DATA.FAILURE:
         case LOGOUT.SUCCESS:

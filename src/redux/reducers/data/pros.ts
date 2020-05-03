@@ -1,5 +1,5 @@
-import { GET_PROS } from '../actions/types';
-import { ProsState } from '../../__types__';
+import { GET_PROS } from '../../actions/types';
+import { ProsState } from '../../../__types__';
 
 const initialState: ProsState = {
     loading: false,

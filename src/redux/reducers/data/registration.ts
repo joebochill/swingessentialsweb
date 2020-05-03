@@ -1,5 +1,5 @@
-import { CREATE_ACCOUNT, CHECK_USERNAME, CHECK_EMAIL, VERIFY_EMAIL, RESET_REGISTRATION_CHECKS } from '../actions/types';
-import { RegistrationState } from '../../__types__';
+import { CREATE_ACCOUNT, CHECK_USERNAME, CHECK_EMAIL, VERIFY_EMAIL, RESET_API_STATUS } from '../../actions/types';
+import { RegistrationState } from '../../../__types__';
 
 const initialState: RegistrationState = {
     pending: false,
@@ -39,7 +39,7 @@ export const RegistrationReducer = (state = initialState, action: any): Registra
                 ...state,
                 emailAvailable: action.payload.available,
             };
-        case RESET_REGISTRATION_CHECKS:
+        case RESET_API_STATUS.REGISTRATION_CHECKS:
             return { ...state, emailAvailable: true, userAvailable: true };
         case VERIFY_EMAIL.REQUEST:
             return {

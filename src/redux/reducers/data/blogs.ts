@@ -1,5 +1,5 @@
-import { GET_BLOGS, LOGOUT, TOKEN_TIMEOUT } from '../actions/types';
-import { BlogsState } from '../../__types__';
+import { GET_BLOGS, LOGOUT, TOKEN_TIMEOUT } from '../../actions/types';
+import { BlogsState } from '../../../__types__';
 
 const initialState: BlogsState = {
     loading: false,

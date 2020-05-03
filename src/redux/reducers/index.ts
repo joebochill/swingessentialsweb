@@ -3,21 +3,23 @@ import { combineReducers } from 'redux';
 // import { connectRouter } from 'connected-react-router';
 // import { History } from 'history';
 // import { AppActions } from '../actions/actionTypes';
-import { AuthReducer } from './authentication';
+import { AuthReducer } from './data/authentication';
 import { AppState } from '../../__types__';
 import { GeneralReducer } from './general';
-import { UserDataReducer } from './userData';
-import { BlogsReducer } from './blogs';
-import { TipsReducer } from './tips';
-import { ProsReducer } from './pros';
-import { LessonsReducer } from './lessons';
-import { UsersReducer } from './users';
-import { RegistrationReducer } from './registration';
-import { UserSettingsReducer } from './userSettings';
+import { UserDataReducer } from './data/userData';
+import { BlogsReducer } from './data/blogs';
+import { TipsReducer } from './data/tips';
+import { ProsReducer } from './data/pros';
+import { LessonsReducer } from './data/lessons';
+import { UsersReducer } from './data/users';
+import { RegistrationReducer } from './data/registration';
+import { UserSettingsReducer } from './data/userSettings';
+import { StatusReducer } from './apis';
 
 export const rootReducer = (): any =>
     combineReducers<AppState>({
         app: GeneralReducer,
+        status: StatusReducer,
         auth: AuthReducer,
         user: UserDataReducer,
         users: UsersReducer,

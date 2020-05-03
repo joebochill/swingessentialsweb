@@ -12,3 +12,5 @@ export const createAction = (action: string, api: string): ReduxAction => ({
     FAILURE: `${PREFIX}/${action}.FAILURE`,
     API: api,
 });
+
+export const createResetAction = (action: string): string => `${PREFIX}/RESET/${action}`;

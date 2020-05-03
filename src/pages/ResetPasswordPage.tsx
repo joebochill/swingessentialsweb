@@ -23,7 +23,7 @@ import { resetUserPassword } from '../redux/actions/user-data-actions';
 import { requestLogout } from '../redux/actions/auth-actions';
 import { btoa } from '../utilities/base64';
 
-const _getErrorMessage = (code: number): string => {
+const _getErrorMessage = (code: number | null): string => {
     switch (code) {
         case 400300:
             return 'Oops! Your reset password link is invalid or may have already been used. Please check your the link in your email and try again. If you continue to have problems, please contact us.';
@@ -84,7 +84,9 @@ type PreRequestProps = {
 const PreRequest: React.FC<PreRequestProps> = (props) => {
     const dispatch = useDispatch();
 
-    const verification = useSelector((state: AppState) => state.settings.password);
+    const verification = useSelector((state: AppState) => state.status.verifyReset);
+    const status = verification.requestStatus;
+    const loading = status === 'loading';
 
     const [password, setPassword] = useState('');
     const [confirm, setConfirm] = useState('');
@@ -93,7 +95,7 @@ const PreRequest: React.FC<PreRequestProps> = (props) => {
 
     return (
         <>
-            {verification.pending && (
+            {loading && (
                 <>
                     <CircularProgress color={'inherit'} />
                     <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
@@ -101,7 +103,7 @@ const PreRequest: React.FC<PreRequestProps> = (props) => {
                     </Typography>
                 </>
             )}
-            {!verification.pending && verification.codeValid && (
+            {status === 'success' && (
                 <>
                     <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
                         Enter your new password below:
@@ -166,7 +168,7 @@ const PreRequest: React.FC<PreRequestProps> = (props) => {
                                       dispatch(
                                           resetUserPassword({
                                               password: btoa(password),
-                                              token: verification.resetToken,
+                                              token: verification.extra.resetToken,
                                           })
                                       );
                                       props.onSubmit();
@@ -178,10 +180,10 @@ const PreRequest: React.FC<PreRequestProps> = (props) => {
                     </Button>
                 </>
             )}
-            {!verification.pending && !verification.codeValid && (
+            {status === 'failed' && (
                 <>
                     <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
-                        {_getErrorMessage(verification.error)}
+                        {_getErrorMessage(verification.code)}
                     </Typography>
                 </>
             )}
@@ -191,11 +193,13 @@ const PreRequest: React.FC<PreRequestProps> = (props) => {
 
 const PostRequest: React.FC = () => {
     const history = useHistory();
-    const verification = useSelector((state: AppState) => state.settings.password);
+    const verification = useSelector((state: AppState) => state.status.resetPassword);
+    const status = verification.requestStatus;
+    const loading = status === 'loading';
 
     return (
         <>
-            {verification.pending && (
+            {loading && (
                 <>
                     <CircularProgress color={'inherit'} />
                     <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
@@ -203,7 +207,7 @@ const PostRequest: React.FC = () => {
                     </Typography>
                 </>
             )}
-            {!verification.pending && verification.resetSuccess && (
+            {status === 'success' && (
                 <>
                     <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
                         Your password was successfully changed!
@@ -220,7 +224,7 @@ const PostRequest: React.FC = () => {
                     </Button>
                 </>
             )}
-            {!verification.pending && !verification.resetSuccess && (
+            {status === 'failed' && (
                 <>
                     <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
                         Failed to change your password. Please try again later. If the problem persists, please contact
