@@ -233,14 +233,19 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                             icon={<Update fontSize={'inherit'} />}
                                             title={'Swing Analysis In Progress'}
                                             description={`We're working on your lesson now. Check back soon!`}
-                                            actions={admin ?
-                                                <Button variant={'contained'} color={'primary'} onClick={(): void => {
-                                                    setShowEditDialog(true);
-                                                }}>
-                                                    <AddCircle color={'inherit'} style={{ marginRight: 4 }} />
-                                                    Add Response
-                                                </Button>
-                                                : undefined
+                                            actions={
+                                                admin ? (
+                                                    <Button
+                                                        variant={'contained'}
+                                                        color={'primary'}
+                                                        onClick={(): void => {
+                                                            setShowEditDialog(true);
+                                                        }}
+                                                    >
+                                                        <AddCircle color={'inherit'} style={{ marginRight: 4 }} />
+                                                        Add Response
+                                                    </Button>
+                                                ) : undefined
                                             }
                                         />
                                     </div>
@@ -258,8 +263,8 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                                     pendingIndex > 0
                                                         ? pendingLessons[pendingIndex - 1]
                                                         : completeIndex === 0
-                                                            ? pendingLessons[pendingLessons.length - 1]
-                                                            : filteredLessons[completeIndex - 1];
+                                                        ? pendingLessons[pendingLessons.length - 1]
+                                                        : filteredLessons[completeIndex - 1];
                                                 dispatch({ type: SET_SELECTED_LESSON, payload: next });
                                                 history.replace(`${ROUTES.LESSONS}/${next.request_url}`);
                                             }}
@@ -307,15 +312,15 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                             admin
                                                 ? prettyDate(activeLesson.request_date)
                                                 : activeLesson.type === 'in-person'
-                                                    ? 'In-Person Lesson'
-                                                    : 'Remote Lesson'
+                                                ? 'In-Person Lesson'
+                                                : 'Remote Lesson'
                                         }
                                         style={admin ? { cursor: 'pointer' } : {}}
                                         onClick={
                                             admin
                                                 ? (): void => {
-                                                    setShowEditDialog(true);
-                                                }
+                                                      setShowEditDialog(true);
+                                                  }
                                                 : undefined
                                         }
                                     />

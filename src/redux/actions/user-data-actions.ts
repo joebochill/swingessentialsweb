@@ -39,7 +39,7 @@ type UserDataChange = {
     lastName?: string;
     phone?: string;
     location?: string;
-}
+};
 
 export function setUserData(data: UserDataChange) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
@@ -84,29 +84,26 @@ export function setUserData(data: UserDataChange) {
 //             .catch((error) => console.error(error));
 //     }
 // }
-type UserCredentials = {
-    username?: string;
-    password?: string;
-    email?: string;
-};
-// export function updateUserCredentials(data: UserCredentials) {
-//     return (dispatch: ThunkDispatch<any, void, any>): void => {
-//         dispatch({ type: ACTIONS.UPDATE_USER_CREDENTIALS.REQUEST });
 
-//         HttpRequest.put(ACTIONS.UPDATE_USER_CREDENTIALS.API)
-//             .withBody(data)
-//             .onSuccess((body: any) => {
-//                 dispatch(success(ACTIONS.UPDATE_USER_CREDENTIALS.SUCCESS, body));
-//                 dispatch(loadUserInfo());
-//                 // dispatch(requestLogout());
-//             })
-//             .onFailure((response: Response) => {
-//                 dispatch(failure(ACTIONS.UPDATE_USER_CREDENTIALS.FAILURE, response, 'UpdateCredentials'));
-//                 // dispatch(requestLogout());
-//             })
-//             .request();
-//     };
-// }
+export function updateUserPassword(password: string) {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
+        dispatch({ type: ACTIONS.CHANGE_PASSWORD.REQUEST });
+
+        HttpRequest.put(ACTIONS.CHANGE_PASSWORD.API)
+            .withBody({ password: btoa(password) })
+            .onSuccess((response: any) => {
+                const token = response.headers.get('Token');
+                dispatch(success(ACTIONS.CHANGE_PASSWORD.SUCCESS, { token }));
+                // dispatch(loadUserInfo());
+                // dispatch(requestLogout());
+            })
+            .onFailure((response: Response) => {
+                dispatch(failure(ACTIONS.CHANGE_PASSWORD.FAILURE, response, 'UpdatePassword'));
+                // dispatch(requestLogout());
+            })
+            .request();
+    };
+}
 type ResetPassword = {
     password: string;
     token: string;

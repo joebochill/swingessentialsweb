@@ -36,7 +36,7 @@ export const UserDataReducer = (state = initialState, action: any): UserDataStat
             return {
                 ...state,
                 update: 'pending',
-            }
+            };
         case GET_USER_DATA.SUCCESS:
         case LOGIN.SUCCESS:
             return {
@@ -60,18 +60,18 @@ export const UserDataReducer = (state = initialState, action: any): UserDataStat
         case SET_USER_DATA.SUCCESS:
             return {
                 ...state,
-                update: 'success'
-            }
+                update: 'success',
+            };
         case SET_USER_DATA.FAILURE:
             return {
                 ...state,
-                update: 'error'
-            }
+                update: 'error',
+            };
         case RESET_SET_USER_DATA:
             return {
                 ...state,
-                update: 'unset'
-            }
+                update: 'unset',
+            };
         case VERIFY_RESET_PASSWORD_CODE.REQUEST:
             return {
                 ...state,

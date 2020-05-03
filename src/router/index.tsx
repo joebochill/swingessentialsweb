@@ -60,7 +60,7 @@ export const MainRouter = (): JSX.Element => (
             {/* TODO */}
             <Route exact path={`${ROUTES.ORDER}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.SUBMIT}`} component={PlaceholderPage} />
-            
+
             <Route exact path={`${ROUTES.UNSUBSCRIBE}/:user/:key`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.ADMIN}`} component={PlaceholderPage} />
             <Route exact path={`${ROUTES.PRIVACY}`} component={PlaceholderPage} />

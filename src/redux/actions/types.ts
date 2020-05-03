@@ -12,6 +12,9 @@ export const SET_TOKEN = createAction('SET_TOKEN', '');
 export const CHECK_TOKEN = createAction('CHECK_TOKEN', 'checkToken');
 export const REFRESH_TOKEN = createAction('REFRESH_TOKEN', 'refresh');
 export const RESET_LOGIN_FAIL_COUNT = 'RESET_LOGIN_FAIL_COUNT';
+export const VALIDATE_PASSWORD = createAction('VALIDATE_PASSWORD', 'validate');
+export const CHANGE_PASSWORD = createAction('CHANGE_PASSWORD', 'credentials');
+export const RESET_CHANGE_PASSWORD = 'RESET_CHANGE_PASSWORD';
 
 /* User Actions */
 export const GET_USER_DATA = createAction('GET_USER_DATA', 'user');
