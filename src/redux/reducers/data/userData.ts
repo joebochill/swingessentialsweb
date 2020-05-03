@@ -9,7 +9,6 @@ const initialState: UserDataState = {
     location: '',
     phone: '',
     joined: 0,
-    // update: 'unset',
 };
 export const UserDataReducer = (state = initialState, action: any): UserDataState => {
     switch (action.type) {

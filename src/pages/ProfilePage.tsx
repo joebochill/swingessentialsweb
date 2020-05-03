@@ -294,7 +294,11 @@ export const ProfileForm: React.FC = () => {
             <FormControlLabel
                 labelPlacement="start"
                 control={
-                    <Switch checked={sendEmails} color={'default'} onChange={(e): void => setSendEmails(e.target.checked)} />
+                    <Switch
+                        checked={sendEmails}
+                        color={'default'}
+                        onChange={(e): void => setSendEmails(e.target.checked)}
+                    />
                 }
                 label="New Lesson Emails"
                 style={{ marginLeft: 0 }}

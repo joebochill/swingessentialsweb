@@ -1,5 +1,5 @@
 import { Status } from '../../../__types__';
-import { CHANGE_PASSWORD, RESET_API_STATUS } from '../../actions/types';
+import { GET_TIPS, LOGOUT, TOKEN_TIMEOUT } from '../../actions/types';
 
 const initialAppState: Status = {
     initialized: false,
@@ -9,9 +9,9 @@ const initialAppState: Status = {
     extra: null,
 };
 
-export const ChangePasswordReducer = (state = initialAppState, action: any): Status => {
+export const TipsReducer = (state = initialAppState, action: any): Status => {
     switch (action.type) {
-        case CHANGE_PASSWORD.REQUEST:
+        case GET_TIPS.REQUEST:
             return {
                 ...state,
                 requestStatus: 'loading',
@@ -19,7 +19,8 @@ export const ChangePasswordReducer = (state = initialAppState, action: any): Sta
                 code: null,
                 extra: null,
             };
-        case CHANGE_PASSWORD.SUCCESS:
+
+        case GET_TIPS.SUCCESS:
             return {
                 ...state,
                 requestStatus: 'success',
@@ -27,7 +28,7 @@ export const ChangePasswordReducer = (state = initialAppState, action: any): Sta
                 code: null,
                 extra: null,
             };
-        case CHANGE_PASSWORD.FAILURE: {
+        case GET_TIPS.FAILURE:
             return {
                 ...state,
                 requestStatus: 'failed',
@@ -35,8 +36,9 @@ export const ChangePasswordReducer = (state = initialAppState, action: any): Sta
                 code: null,
                 extra: null,
             };
-        }
-        case RESET_API_STATUS.CHANGE_PASSWORD:
+        case LOGOUT.SUCCESS:
+        case LOGOUT.FAILURE:
+        case TOKEN_TIMEOUT:
             return initialAppState;
         default:
             return state;

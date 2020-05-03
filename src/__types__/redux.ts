@@ -20,6 +20,8 @@ export type StatusState = {
     resetPassword: Status;
     validatePassword: Status;
     authentication: AuthenticationAPI;
+    tips: Status;
+    blogs: Status;
 };
 
 // Data Reducers
@@ -42,7 +44,6 @@ export type LessonsState = {
     selected: Lesson | null;
 };
 export type TipsState = {
-    loading: boolean;
     tipList: Tip[];
 };
 export type UserDataState = {
@@ -70,7 +71,6 @@ export type CreditsState = {
     fail: boolean;
 };
 export type BlogsState = {
-    loading: boolean;
     blogList: Blog[];
 };
 export type ProsState = {

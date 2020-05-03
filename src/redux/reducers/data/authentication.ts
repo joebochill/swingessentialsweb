@@ -17,29 +17,10 @@ const initialState: AuthState = {
     admin: false,
     role: 'anonymous',
     modalWarning: false,
-    // failCount: 0,
-    // pending: false,
-    // initialLoaded: false,
-    // changePassword: {
-    //     currentValidated: 'initial',
-    //     result: 'initial',
-    // },
 };
 
 export const AuthReducer = (state = initialState, action: any): AuthState => {
     switch (action.type) {
-        // case INITIAL_LOAD: {
-        //     return {
-        //         ...state,
-        //         initialLoaded: true,
-        //     };
-        // }
-        // case LOGIN.REQUEST:
-        // case REFRESH_TOKEN.REQUEST:
-        //     return {
-        //         ...state,
-        //         pending: true,
-        //     };
         case LOGIN.SUCCESS:
         case CREATE_ACCOUNT.SUCCESS:
         case SET_TOKEN.REQUEST:
