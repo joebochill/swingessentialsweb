@@ -41,7 +41,7 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
     }, [setCurrentPassword, setNewPassword, dispatch]);
 
     useEffect(() => {
-        if (!showDialog) {
+        if (showDialog) {
             resetDialog();
         }
     }, [showDialog, resetDialog]);

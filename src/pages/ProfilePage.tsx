@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import bg from '../assets/images/banners/landing.jpg';
+import swing from '../assets/images/banners/swing.jpg';
+import order from '../assets/images/banners/order.jpg';
+import lessons from '../assets/images/banners/lessons.jpg';
 
 import {
     makeStyles,
@@ -11,8 +14,9 @@ import {
     IconButton,
     CircularProgress,
     useTheme,
+    Grid,
 } from '@material-ui/core';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../__types__';
 import { Banner } from '../components/display/Banner';
@@ -26,6 +30,8 @@ import { setUserData } from '../redux/actions/user-data-actions';
 import { RESET_SET_USER_DATA } from '../redux/actions/types';
 
 import { ChangePassword } from '../components/dialogs/ChangePassword';
+import { Section } from '../components/display/Section';
+import { InfoCard } from '../components/display/InfoCard';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -68,6 +74,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export const ProfilePage: React.FC = () => {
     const classes = useStyles();
     const theme = useTheme();
+    const history = useHistory();
 
     const token = useSelector((state: AppState) => state.auth.token);
     const loaded = useSelector((state: AppState) => state.auth.initialLoaded);
@@ -132,6 +139,49 @@ export const ProfilePage: React.FC = () => {
                     </div>
                 )}
             </Banner>
+            <Section>
+                <Grid container spacing={10} justify={'center'}>
+                    <Grid item xs={12} md={4}>
+                        <InfoCard
+                            spacing={10}
+                            source={lessons}
+                            title={'Your Lessons'}
+                            aspectRatio={'16x9'}
+                            backgroundPosition={'right center'}
+                            description={'Check out all of your past lessons and see your progress.'}
+                            onClick={(): void => {
+                                history.push(ROUTES.LESSONS);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <InfoCard
+                            spacing={10}
+                            source={order}
+                            title={'Order More'}
+                            aspectRatio={'16x9'}
+                            backgroundPosition={'center center'}
+                            description={'Buy a single lesson or purchase in bulk for a discount.'}
+                            onClick={(): void => {
+                                history.push(ROUTES.ORDER);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <InfoCard
+                            spacing={10}
+                            source={swing}
+                            title={'Submit Your Swing'}
+                            aspectRatio={'16x9'}
+                            backgroundPosition={'left center'}
+                            description={'Send in your swing videos today to receive a professional analysis.'}
+                            onClick={(): void => {
+                                history.push(ROUTES.SUBMIT);
+                            }}
+                        />
+                    </Grid>
+                </Grid>
+            </Section>
         </>
     );
 };
@@ -140,8 +190,7 @@ export const ProfileForm: React.FC = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
 
-    const token = useSelector((state: AppState) => state.auth.token);
-    const loaded = useSelector((state: AppState) => state.auth.initialLoaded);
+    const auth = useSelector((state: AppState) => state.auth);
     const user = useSelector((state: AppState) => state.user);
     const update = user.update;
 
@@ -149,12 +198,17 @@ export const ProfileForm: React.FC = () => {
     const [last, setLast] = useState('');
     const [location, setLocation] = useState('');
     const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('');
     // const [sendEmails, setSendEmails] = useState(true);
 
     const [initialized, setInitialized] = useState(false);
 
     const changes =
-        first !== user.firstName || last !== user.lastName || location !== user.location || phone !== user.phone;
+        first !== user.firstName ||
+        last !== user.lastName ||
+        location !== user.location ||
+        phone !== user.phone ||
+        email !== user.email;
 
     useEffect(() => {
         if (changes) {
@@ -168,12 +222,11 @@ export const ProfileForm: React.FC = () => {
             setLast(user.lastName);
             setLocation(user.location || '');
             setPhone(user.phone || '');
+            setEmail(user.email);
             // setSendEmails(user.notifications !== undefined ? user.notifications : false);
             setInitialized(true);
         }
     }, [user, initialized]);
-
-    if (loaded && !token) return <Redirect to={ROUTES.LOGIN} />;
 
     return (
         <div className={classes.aboutMe}>
@@ -207,13 +260,25 @@ export const ProfileForm: React.FC = () => {
                 }}
             />
             <StyledTextField
-                last
+                // last
                 label={'Phone Number'}
                 name={'phone'}
                 placeholder={'e.g. 123-456-7890'}
                 value={phone}
                 onChange={(e): void => {
                     setPhone(e.target.value.replace(/[^0-9- +().]/gi, '').substr(0, 20));
+                }}
+            />
+            <StyledTextField
+                last
+                disabled
+                label={`Email Address ${
+                    auth.role !== 'customer' && auth.role !== 'administrator' ? '(unverified)' : ''
+                }`}
+                name={'email'}
+                value={email}
+                onChange={(e): void => {
+                    setEmail(e.target.value.substr(0, 128));
                 }}
             />
             {/* <Typography variant={'h6'} style={{ marginTop: 16, marginBottom: 16 }}>Notifications:</Typography>
