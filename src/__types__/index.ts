@@ -2,7 +2,6 @@ export type UserRole = 'administrator' | 'anonymous' | 'customer' | 'pending';
 export type LessonType = 'in-person' | 'single';
 export type SwingType = 'dtl' | 'fo';
 export type HandednessType = 'right' | 'left';
-export type APIState = 'initial' | 'pending' | 'success' | 'failed';
 export type Credentials = {
     username: string;
     password: string;

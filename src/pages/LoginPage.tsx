@@ -178,7 +178,7 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref
     const [password, setPassword] = useState('');
 
     const [errorMessage, setErrorMessage] = useState('');
-    const failCount = useSelector((state: AppState) => state.auth.failCount);
+    const failCount = useSelector((state: AppState) => state.status.authentication.extra.failures);
 
     const resetForm = useCallback(() => {
         setUsername('');

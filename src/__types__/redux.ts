@@ -1,4 +1,4 @@
-import { Status, UserRole, APIState } from '.';
+import { Status, UserRole } from '.';
 import { Lesson, Tip, User, Blog, Pro, Package } from './data';
 
 /*
@@ -8,12 +8,18 @@ export type GeneralState = {
     drawerOpen: boolean;
 };
 
+export type AuthenticationAPI = Omit<Status, 'extra'> & {
+    extra: {
+        failures: number;
+    };
+};
 // API Reducers
 export type StatusState = {
     verifyReset: Status;
     changePassword: Status;
     resetPassword: Status;
     validatePassword: Status;
+    authentication: AuthenticationAPI;
 };
 
 // Data Reducers
@@ -22,9 +28,9 @@ export type AuthState = {
     admin: boolean;
     role: UserRole;
     modalWarning: boolean;
-    failCount: number;
-    pending: boolean;
-    initialLoaded: boolean;
+    // failCount: number;
+    // pending: boolean;
+    // initialLoaded: boolean;
 };
 export type LessonsState = {
     loading: boolean;

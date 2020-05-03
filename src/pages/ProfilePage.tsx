@@ -79,7 +79,7 @@ export const ProfilePage: React.FC = () => {
     const history = useHistory();
 
     const token = useSelector((state: AppState) => state.auth.token);
-    const loaded = useSelector((state: AppState) => state.auth.initialLoaded);
+    const loaded = useSelector((state: AppState) => state.status.authentication.initialized);
     const user = useSelector((state: AppState) => state.user);
 
     // const [image, setImage] = useState('');
@@ -294,7 +294,7 @@ export const ProfileForm: React.FC = () => {
             <FormControlLabel
                 labelPlacement="start"
                 control={
-                    <Switch checked={sendEmails} color={'default'} onChange={(e) => setSendEmails(e.target.checked)} />
+                    <Switch checked={sendEmails} color={'default'} onChange={(e): void => setSendEmails(e.target.checked)} />
                 }
                 label="New Lesson Emails"
                 style={{ marginLeft: 0 }}
@@ -308,22 +308,19 @@ export const ProfileForm: React.FC = () => {
                         onClick={
                             changes
                                 ? (): void => {
-                                      let newChanges: UserDataChange = {};
+                                      const newChanges: UserDataChange = {};
                                       if (first !== user.firstName) newChanges.firstName = first;
                                       if (last !== user.lastName) newChanges.lastName = last;
                                       if (location !== user.location) newChanges.location = location;
                                       if (phone !== user.phone) newChanges.phone = phone;
 
                                       if (Object.keys(newChanges).length > 0) {
-                                          console.log('changing personal');
                                           dispatch(setUserData(newChanges));
                                       }
                                       if (email !== user.email) {
-                                          console.log('changing email');
                                           // dispatch change email request
                                       }
                                       if (sendEmails !== settings.notifications) {
-                                          console.log('changing notification');
                                           dispatch(setUserNotifications({ subscribe: sendEmails }));
                                       }
                                   }

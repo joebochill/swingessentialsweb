@@ -7,10 +7,7 @@ import {
     TOKEN_TIMEOUT,
     UPDATE_USER_CREDENTIALS,
     RESET_USER_PASSWORD,
-    INITIAL_LOAD,
-    VALIDATE_PASSWORD,
     CHANGE_PASSWORD,
-    RESET_API_STATUS,
 } from '../../actions/types';
 import { getUserRole } from '../../../utilities/user';
 import { AuthState } from '../../../__types__';
@@ -20,9 +17,9 @@ const initialState: AuthState = {
     admin: false,
     role: 'anonymous',
     modalWarning: false,
-    failCount: 0,
-    pending: false,
-    initialLoaded: false,
+    // failCount: 0,
+    // pending: false,
+    // initialLoaded: false,
     // changePassword: {
     //     currentValidated: 'initial',
     //     result: 'initial',
@@ -31,18 +28,18 @@ const initialState: AuthState = {
 
 export const AuthReducer = (state = initialState, action: any): AuthState => {
     switch (action.type) {
-        case INITIAL_LOAD: {
-            return {
-                ...state,
-                initialLoaded: true,
-            };
-        }
-        case LOGIN.REQUEST:
-        case REFRESH_TOKEN.REQUEST:
-            return {
-                ...state,
-                pending: true,
-            };
+        // case INITIAL_LOAD: {
+        //     return {
+        //         ...state,
+        //         initialLoaded: true,
+        //     };
+        // }
+        // case LOGIN.REQUEST:
+        // case REFRESH_TOKEN.REQUEST:
+        //     return {
+        //         ...state,
+        //         pending: true,
+        //     };
         case LOGIN.SUCCESS:
         case CREATE_ACCOUNT.SUCCESS:
         case SET_TOKEN.REQUEST:
@@ -53,9 +50,7 @@ export const AuthReducer = (state = initialState, action: any): AuthState => {
             return {
                 ...state,
                 modalWarning: false,
-                failCount: 0,
                 token: action.payload.token,
-                pending: false,
                 role: role,
                 admin: role === 'administrator',
             };
@@ -65,14 +60,7 @@ export const AuthReducer = (state = initialState, action: any): AuthState => {
                 ...state,
                 token: null,
                 admin: false,
-                pending: false,
                 role: 'anonymous',
-                failCount: state.failCount + 1,
-            };
-        case REFRESH_TOKEN.FAILURE:
-            return {
-                ...state,
-                pending: false,
             };
 
         case LOGOUT.SUCCESS:
@@ -82,14 +70,7 @@ export const AuthReducer = (state = initialState, action: any): AuthState => {
                 ...state,
                 token: null,
                 admin: false,
-                pending: false,
                 role: 'anonymous',
-                failCount: 0,
-            };
-        case RESET_API_STATUS.LOGIN_FAILURES:
-            return {
-                ...state,
-                failCount: 0,
             };
 
         case CHANGE_PASSWORD.SUCCESS: {
@@ -97,7 +78,6 @@ export const AuthReducer = (state = initialState, action: any): AuthState => {
             return {
                 ...state,
                 token: action.payload.token,
-                pending: false,
                 role: role,
                 admin: role === 'administrator',
             };

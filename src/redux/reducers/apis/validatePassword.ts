@@ -1,5 +1,5 @@
 import { Status } from '../../../__types__';
-import { CHANGE_PASSWORD, VALIDATE_PASSWORD, RESET_API_STATUS } from '../../actions/types';
+import { VALIDATE_PASSWORD, RESET_API_STATUS } from '../../actions/types';
 
 const initialAppState: Status = {
     initialized: false,
