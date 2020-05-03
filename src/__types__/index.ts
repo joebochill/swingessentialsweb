@@ -99,8 +99,11 @@ export type UserDataState = {
     joined: number;
     location?: string;
     phone?: string;
-    notifications?: boolean;
     image?: string;
+    update: 'unset' | 'pending' | 'error' | 'success';
+};
+export type UserSettingsState = {
+    notifications?: boolean;
     password: {
         pending: boolean;
         codeValid: boolean;
@@ -109,7 +112,6 @@ export type UserDataState = {
         error: number;
         resetSuccess: boolean;
     };
-    update: 'unset' | 'pending' | 'error' | 'success';
 };
 export type UsersState = {
     list: User[];
@@ -155,4 +157,5 @@ export type AppState = {
     pros: ProsState;
     lessons: LessonsState;
     registration: RegistrationState;
+    settings: UserSettingsState;
 };

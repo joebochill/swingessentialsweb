@@ -13,6 +13,7 @@ import { ProsReducer } from './pros';
 import { LessonsReducer } from './lessons';
 import { UsersReducer } from './users';
 import { RegistrationReducer } from './registration';
+import { UserSettingsReducer } from './userSettings';
 
 export const rootReducer = (): any =>
     combineReducers<AppState>({
@@ -25,4 +26,5 @@ export const rootReducer = (): any =>
         pros: ProsReducer,
         lessons: LessonsReducer,
         registration: RegistrationReducer,
+        settings: UserSettingsReducer,
     });

@@ -15,6 +15,8 @@ import {
     CircularProgress,
     useTheme,
     Grid,
+    Switch,
+    FormControlLabel,
 } from '@material-ui/core';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -26,7 +28,7 @@ import { StyledTextField } from '../components/text/StyledInputs';
 import { Edit } from '@material-ui/icons';
 
 import { Spacer } from '@pxblue/react-components';
-import { setUserData } from '../redux/actions/user-data-actions';
+import { setUserData, setUserNotifications, UserDataChange } from '../redux/actions/user-data-actions';
 import { RESET_SET_USER_DATA } from '../redux/actions/types';
 
 import { ChangePassword } from '../components/dialogs/ChangePassword';
@@ -112,7 +114,7 @@ export const ProfilePage: React.FC = () => {
                                     backgroundColor: theme.palette.primary.light,
                                     backgroundImage: `url(https://www.swingessentials.com/images/profiles/${
                                         user.image ? `${user.username}/image.jpeg` : 'blank.png'
-                                    }`,
+                                        }`,
                                 }}
                             >
                                 <IconButton color={'inherit'}>
@@ -192,6 +194,7 @@ export const ProfileForm: React.FC = () => {
 
     const auth = useSelector((state: AppState) => state.auth);
     const user = useSelector((state: AppState) => state.user);
+    const settings = useSelector((state: AppState) => state.settings);
     const update = user.update;
 
     const [first, setFirst] = useState('');
@@ -199,7 +202,7 @@ export const ProfileForm: React.FC = () => {
     const [location, setLocation] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
-    // const [sendEmails, setSendEmails] = useState(true);
+    const [sendEmails, setSendEmails] = useState(true);
 
     const [initialized, setInitialized] = useState(false);
 
@@ -208,32 +211,34 @@ export const ProfileForm: React.FC = () => {
         last !== user.lastName ||
         location !== user.location ||
         phone !== user.phone ||
-        email !== user.email;
+        email !== user.email ||
+        sendEmails !== settings.notifications;
 
     useEffect(() => {
         if (changes) {
             dispatch({ type: RESET_SET_USER_DATA });
+            // dispatch({ type: RESET_SET_SETTINGS });
         }
     }, [changes, dispatch]);
 
     useEffect(() => {
-        if (!initialized && user.username) {
+        if (!initialized && user.username /* && settings loaded */) {
             setFirst(user.firstName);
             setLast(user.lastName);
             setLocation(user.location || '');
             setPhone(user.phone || '');
             setEmail(user.email);
-            // setSendEmails(user.notifications !== undefined ? user.notifications : false);
+            setSendEmails(settings.notifications !== undefined ? settings.notifications : false);
             setInitialized(true);
         }
-    }, [user, initialized]);
+    }, [user, settings, initialized]);
 
     return (
         <div className={classes.aboutMe}>
             <Typography variant={'h5'}>Welcome to the Swing Essentials family!</Typography>
             <Typography paragraph>Help us get to know you by filling out your profile below.</Typography>
 
-            {/* <Typography variant={'h6'} style={{ marginTop: 16, marginBottom: 16 }}>About Me:</Typography> */}
+            <Typography variant={'subtitle1'} style={{ fontWeight: 600, marginTop: 16, marginBottom: 16 }}>About Me:</Typography>
             <StyledTextField
                 label={'First Name'}
                 name={'first-name'}
@@ -274,39 +279,49 @@ export const ProfileForm: React.FC = () => {
                 disabled
                 label={`Email Address ${
                     auth.role !== 'customer' && auth.role !== 'administrator' ? '(unverified)' : ''
-                }`}
+                    }`}
                 name={'email'}
                 value={email}
                 onChange={(e): void => {
                     setEmail(e.target.value.substr(0, 128));
                 }}
             />
-            {/* <Typography variant={'h6'} style={{ marginTop: 16, marginBottom: 16 }}>Notifications:</Typography>
-                        <FormControlLabel labelPlacement="start"
-                            control={<PurpleSwitch checked={sendEmails} color={'default'} onChange={(e) => setSendEmails(e.target.checked)} />}
-                            label="New Lesson Emails"
-                            style={{ marginLeft: 0 }}
-                        /> */}
+            <Typography variant={'subtitle1'} style={{ fontWeight: 600, marginTop: 16, marginBottom: 16 }}>Notifications:</Typography>
+            <FormControlLabel labelPlacement="start"
+                control={<Switch checked={sendEmails} color={'default'} onChange={(e) => setSendEmails(e.target.checked)} />}
+                label="New Lesson Emails"
+                style={{ marginLeft: 0 }}
+            />
 
-            <div style={{ textAlign: 'center', marginTop: 16 }}>
-                {changes && update === 'unset' && (
+            <div style={{ textAlign: 'center', marginTop: 16, minHeight: 36 }}>
+                {changes && update === 'unset' &&
                     <Button
                         color={'primary'}
                         variant={'contained'}
-                        onClick={(): void => {
-                            dispatch(
-                                setUserData({
-                                    firstName: first,
-                                    lastName: last,
-                                    location,
-                                    phone,
-                                })
-                            );
-                        }}
+                        onClick={changes ? (): void => {
+                            let newChanges: UserDataChange = {};
+                            if (first !== user.firstName) newChanges.firstName = first;
+                            if (last !== user.lastName) newChanges.lastName = last;
+                            if (location !== user.location) newChanges.location = location;
+                            if (phone !== user.phone) newChanges.phone = phone;
+
+                            if (Object.keys(newChanges).length > 0) {
+                                console.log('changing personal');
+                                dispatch(setUserData(newChanges));
+                            }
+                            if (email !== user.email) {
+                                console.log('changing email');
+                                // dispatch change email request
+                            }
+                            if (sendEmails !== settings.notifications) {
+                                console.log('changing notification');
+                                dispatch(setUserNotifications({ subscribe: sendEmails }))
+                            }
+                        } : undefined}
                     >
                         Save Changes
                     </Button>
-                )}
+                }
                 {update === 'pending' && <CircularProgress color={'inherit'} />}
                 {update === 'success' && <Typography variant={'caption'}>Success!</Typography>}
                 {update === 'error' && <Typography variant={'caption'}>Failed to update profile</Typography>}
