@@ -32,6 +32,7 @@ import { LoadingIndicator } from '../components/display/LoadingIndicator';
 import { FilterLessonsDialog } from '../components/dialogs/FilterLessonsDialog';
 import { EditLessonDialog } from '../components/dialogs/EditLessonDialog';
 import { NewLessonDialog } from '../components/dialogs/NewLessonDialog';
+import { SET_SELECTED_LESSON } from '../redux/actions/types';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -116,19 +117,19 @@ export const LessonsPage: React.FC = (): JSX.Element => {
     // Initialize the active lesson when we load the lessons
     useEffect(() => {
         if (paramIndexComplete >= 0) {
-            dispatch({ type: 'SET_SELECTED_LESSON', payload: filteredLessons[paramIndexComplete] });
+            dispatch({ type: SET_SELECTED_LESSON, payload: filteredLessons[paramIndexComplete] });
         } else if (paramIndexPending >= 0) {
-            dispatch({ type: 'SET_SELECTED_LESSON', payload: pendingLessons[paramIndexPending] });
+            dispatch({ type: SET_SELECTED_LESSON, payload: pendingLessons[paramIndexPending] });
         } else if (!activeLesson) {
             const active = filteredLessons.length > 0 ? filteredLessons[0] : PlaceholderLesson;
-            dispatch({ type: 'SET_SELECTED_LESSON', payload: active });
+            dispatch({ type: SET_SELECTED_LESSON, payload: active });
         } else if (activeLesson.request_id === -1 && filteredLessons.length > 0) {
-            dispatch({ type: 'SET_SELECTED_LESSON', payload: filteredLessons[0] });
+            dispatch({ type: SET_SELECTED_LESSON, payload: filteredLessons[0] });
         } else if (activeLesson && filteredLessons.length < 1) {
-            dispatch({ type: 'SET_SELECTED_LESSON', payload: PlaceholderLesson });
+            dispatch({ type: SET_SELECTED_LESSON, payload: PlaceholderLesson });
         } else if (activeLesson && completeIndex >= 0) {
             dispatch({
-                type: 'SET_SELECTED_LESSON',
+                type: SET_SELECTED_LESSON,
                 payload: filteredLessons.find((lesson) => lesson.request_id === activeLesson.request_id),
             });
         }
@@ -139,7 +140,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
     useEffect(() => {
         if (activeLesson && completeIndex < 0 && pendingIndex < 0) {
             const active = filteredLessons.length > 0 ? filteredLessons[0] : null;
-            dispatch({ type: 'SET_SELECTED_LESSON', payload: active });
+            dispatch({ type: SET_SELECTED_LESSON, payload: active });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter]);
@@ -232,6 +233,20 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                             icon={<Update fontSize={'inherit'} />}
                                             title={'Swing Analysis In Progress'}
                                             description={`We're working on your lesson now. Check back soon!`}
+                                            actions={
+                                                admin ? (
+                                                    <Button
+                                                        variant={'contained'}
+                                                        color={'primary'}
+                                                        onClick={(): void => {
+                                                            setShowEditDialog(true);
+                                                        }}
+                                                    >
+                                                        <AddCircle color={'inherit'} style={{ marginRight: 4 }} />
+                                                        Add Response
+                                                    </Button>
+                                                ) : undefined
+                                            }
                                         />
                                     </div>
                                 )}
@@ -250,7 +265,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                                         : completeIndex === 0
                                                         ? pendingLessons[pendingLessons.length - 1]
                                                         : filteredLessons[completeIndex - 1];
-                                                dispatch({ type: 'SET_SELECTED_LESSON', payload: next });
+                                                dispatch({ type: SET_SELECTED_LESSON, payload: next });
                                                 history.replace(`${ROUTES.LESSONS}/${next.request_url}`);
                                             }}
                                         >
@@ -277,7 +292,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                                 else if (completeIndex >= 0) {
                                                     next = filteredLessons[completeIndex + 1];
                                                 }
-                                                dispatch({ type: 'SET_SELECTED_LESSON', payload: next });
+                                                dispatch({ type: SET_SELECTED_LESSON, payload: next });
                                                 history.replace(`${ROUTES.LESSONS}/${next.request_url}`);
                                             }}
                                         >

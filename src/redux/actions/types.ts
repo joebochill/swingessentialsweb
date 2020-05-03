@@ -12,9 +12,14 @@ export const SET_TOKEN = createAction('SET_TOKEN', '');
 export const CHECK_TOKEN = createAction('CHECK_TOKEN', 'checkToken');
 export const REFRESH_TOKEN = createAction('REFRESH_TOKEN', 'refresh');
 export const RESET_LOGIN_FAIL_COUNT = 'RESET_LOGIN_FAIL_COUNT';
+export const VALIDATE_PASSWORD = createAction('VALIDATE_PASSWORD', 'validate');
+export const CHANGE_PASSWORD = createAction('CHANGE_PASSWORD', 'credentials');
+export const RESET_CHANGE_PASSWORD = 'RESET_CHANGE_PASSWORD';
 
 /* User Actions */
 export const GET_USER_DATA = createAction('GET_USER_DATA', 'user');
+export const SET_USER_DATA = createAction('SET_USER_DATA', 'details');
+export const RESET_SET_USER_DATA = 'RESET_SET_USER_DATA';
 export const GET_USERS = createAction('GET_USERS', 'users');
 export const RESET_USER_PASSWORD = createAction('RESET_USER_PASSWORD', 'credentials');
 export const UPDATE_USER_CREDENTIALS = createAction('UPDATE_USER_CREDENTIALS', 'credentials');
@@ -28,6 +33,7 @@ export const GET_LESSONS = createAction('GET_LESSONS', 'lessons');
 export const SUBMIT_LESSON = createAction('SUBMIT_LESSON', 'redeem');
 export const MARK_VIEWED = createAction('MARK_LESSON_VIEWED', 'viewed');
 export const PUT_LESSON = createAction('PUT_LESSON', 'lesson');
+export const SET_SELECTED_LESSON = 'SET_SELECTED_LESSON';
 
 /* Tips Actions */
 export const GET_TIPS = createAction('GET_TIPS', 'tips');

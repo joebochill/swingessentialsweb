@@ -6,6 +6,7 @@ import {
     REFRESH_TOKEN,
     CREATE_ACCOUNT,
     RESET_USER_PASSWORD,
+    CHANGE_PASSWORD,
 } from '../redux/actions/types';
 import { ASYNC_PREFIX } from '../constants';
 
@@ -21,7 +22,8 @@ export const saveAuthToken = (store: any) => (next: any) => (action: any) => {
         action.type === SET_TOKEN.REQUEST ||
         action.type === REFRESH_TOKEN.SUCCESS ||
         action.type === CREATE_ACCOUNT.SUCCESS ||
-        action.type === RESET_USER_PASSWORD.SUCCESS
+        action.type === RESET_USER_PASSWORD.SUCCESS ||
+        action.type === CHANGE_PASSWORD.SUCCESS
     ) {
         _setToken(action.payload.token);
         if (action.payload.token !== null) {

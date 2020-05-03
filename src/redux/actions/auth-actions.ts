@@ -10,7 +10,7 @@ import { loadBlogs } from './blog-actions';
 import { ThunkDispatch } from 'redux-thunk';
 import { Credentials } from '../../__types__';
 import { HttpRequest } from '../../api/http';
-import { loadUserInfo } from './user-data-actions';
+import { loadUserInfo, updateUserPassword } from './user-data-actions';
 // import { Logger } from '../../utilities/logging';
 // import * as Keychain from 'react-native-keychain';
 
@@ -119,6 +119,37 @@ export function checkToken() {
             })
             .onFailure((response: Response) => {
                 dispatch(failure(ACTIONS.CHECK_TOKEN.FAILURE, response, 'Check Token'));
+            })
+            .request();
+    };
+}
+
+export function validateCurrentPassword(password: string) {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
+        dispatch({ type: ACTIONS.VALIDATE_PASSWORD.REQUEST });
+        HttpRequest.put(ACTIONS.VALIDATE_PASSWORD.API)
+            .withBody({ password: btoa(password) })
+            .onSuccess((response: any) => {
+                dispatch(success(ACTIONS.VALIDATE_PASSWORD.SUCCESS, response));
+            })
+            .onFailure((response: Response) => {
+                dispatch(failure(ACTIONS.VALIDATE_PASSWORD.FAILURE, response, 'CheckPassword'));
+            })
+            .request();
+    };
+}
+
+export function changePassword(data: { currentPassword: string; newPassword: string }) {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
+        dispatch({ type: ACTIONS.VALIDATE_PASSWORD.REQUEST });
+        HttpRequest.put(ACTIONS.VALIDATE_PASSWORD.API)
+            .withBody({ password: btoa(data.currentPassword) })
+            .onSuccess((response: any) => {
+                dispatch(success(ACTIONS.VALIDATE_PASSWORD.SUCCESS, response));
+                dispatch(updateUserPassword(data.newPassword));
+            })
+            .onFailure((response: Response) => {
+                dispatch(failure(ACTIONS.VALIDATE_PASSWORD.FAILURE, response, 'ChangePassword'));
             })
             .request();
     };

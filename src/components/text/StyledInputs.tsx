@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     makeStyles,
     createStyles,
@@ -7,7 +7,10 @@ import {
     SelectProps,
     Select,
     FilledInput,
+    InputAdornment,
+    IconButton,
 } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -43,20 +46,23 @@ const useStyles = makeStyles(() =>
 
 type StyledTextFieldProps = TextFieldProps & {
     last?: boolean;
+    onDark?: boolean;
 };
 export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
-    const { last, style, InputProps, ...other } = props;
+    const { last, style, InputProps, onDark, ...other } = props;
     const classes = useStyles();
     return (
         <TextField
             fullWidth
             InputProps={Object.assign(
-                {
-                    classes: {
-                        root: props.value ? classes.focused : classes.input,
-                        focused: classes.focused,
-                    },
-                },
+                onDark
+                    ? {
+                          classes: {
+                              root: props.value ? classes.focused : classes.input,
+                              focused: classes.focused,
+                          },
+                      }
+                    : {},
                 InputProps
             )}
             style={Object.assign({ marginBottom: last ? 0 : 16 }, style)}
@@ -66,6 +72,7 @@ export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
 };
 StyledTextField.defaultProps = {
     variant: 'filled',
+    onDark: true,
 };
 
 type StyledSelectProps = SelectProps & {
@@ -85,6 +92,34 @@ export const StyledSelect: React.FC<StyledSelectProps> = (props) => {
             }
             style={Object.assign({ textAlign: 'left', marginBottom: last ? 0 : 16 }, style)}
             {...other}
+        />
+    );
+};
+
+export const StyledPassword: React.FC<StyledTextFieldProps> = (props) => {
+    const { type, InputProps, ...textFieldProps } = props;
+    const [showPassword, setShowPassword] = useState(false);
+
+    return (
+        <StyledTextField
+            type={type ? type : showPassword ? 'text' : 'password'}
+            InputProps={Object.assign(
+                {
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={(): void => setShowPassword(!showPassword)}
+                                onMouseDown={(e): void => e.preventDefault()}
+                            >
+                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                },
+                InputProps
+            )}
+            {...textFieldProps}
         />
     );
 };

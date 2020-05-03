@@ -2,6 +2,7 @@ export type UserRole = 'administrator' | 'anonymous' | 'customer' | 'pending';
 export type LessonType = 'in-person' | 'single';
 export type SwingType = 'dtl' | 'fo';
 export type HandednessType = 'right' | 'left';
+export type APIState = 'initial' | 'pending' | 'success' | 'failed';
 export type Credentials = {
     username: string;
     password: string;
@@ -71,6 +72,11 @@ export type AuthState = {
     modalWarning: boolean;
     failCount: number;
     pending: boolean;
+    initialLoaded: boolean;
+    changePassword: {
+        currentValidated: APIState;
+        result: APIState;
+    };
 };
 export type LessonsState = {
     loading: boolean;
@@ -92,6 +98,8 @@ export type UserDataState = {
     email: string;
     joined: number;
     location?: string;
+    phone?: string;
+    notifications?: boolean;
     image?: string;
     password: {
         pending: boolean;
@@ -101,6 +109,7 @@ export type UserDataState = {
         error: number;
         resetSuccess: boolean;
     };
+    update: 'unset' | 'pending' | 'error' | 'success';
 };
 export type UsersState = {
     list: User[];

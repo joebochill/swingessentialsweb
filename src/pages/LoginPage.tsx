@@ -16,7 +16,7 @@ import {
     Tooltip,
     SlideProps,
 } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { useLocation, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../__types__';
 import { requestLogin } from '../redux/actions/auth-actions';
@@ -85,12 +85,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const LoginPage: React.FC = () => {
     const token = useSelector((state: AppState) => state.auth.token);
-    const history = useHistory();
+    const location = useLocation();
     const classes = useStyles();
-    const registration = useSelector((state: AppState) => state.registration);
     const [form, setForm] = useState<Form>('login');
 
     const previousForm = usePrevious(form);
+
+    // @ts-ignore
+    const { from } = location && location.state ? location.state : { from: { pathname: ROUTES.HOME } };
 
     const isLogin = form === 'login';
     const isForgot = form === 'forgot';
@@ -108,11 +110,9 @@ export const LoginPage: React.FC = () => {
     }
 
     if (token) {
-        if (!registration.success) {
-            history.goBack();
-            return null;
-        }
+        return <Redirect to={from} />;
     }
+
     return (
         <>
             <Banner background={{ src: bg, position: 'center 70%' }} justify={'center'}>
@@ -257,7 +257,6 @@ type RegisterFormProps = HTMLAttributes<HTMLDivElement> & {
 const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props, ref) => {
     const { onChangeForm, ...other } = props;
     const classes = useStyles();
-    const history = useHistory();
     const dispatch = useDispatch();
 
     const [email, setEmail] = useState('');
@@ -284,15 +283,13 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
     useEffect(() => {
         // Registration finished
         if (previousPendingState && !registration.pending) {
-            if (registration.success) {
-                history.replace(ROUTES.PROFILE);
-            } else {
+            if (!registration.success) {
                 setErrorMessage(
                     'Your account registration has failed. Please try again later and contact us if the problem continues.'
                 );
             }
         }
-    }, [previousPendingState, registration, history, setErrorMessage]);
+    }, [previousPendingState, registration, setErrorMessage]);
 
     return (
         <div className={classes.form} {...other} ref={ref}>
