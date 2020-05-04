@@ -267,8 +267,9 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const registration = useSelector((state: AppState) => state.registration);
-    const previousPendingState = usePrevious(registration.pending);
+    const createAccountStatus = useSelector((state: AppState) => state.status.createAccount.requestStatus);
+    const usernameStatus = useSelector((state: AppState) => state.status.checkEmail.requestStatus);
+    const emailStatus = useSelector((state: AppState) => state.status.checkEmail.requestStatus);
 
     const resetForm = useCallback(() => {
         setEmail('');
@@ -282,14 +283,14 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
 
     useEffect(() => {
         // Registration finished
-        if (previousPendingState && !registration.pending) {
-            if (!registration.success) {
-                setErrorMessage(
-                    'Your account registration has failed. Please try again later and contact us if the problem continues.'
-                );
-            }
+        if (createAccountStatus === 'failed') {
+            // if (!registration.success) {
+            setErrorMessage(
+                'Your account registration has failed. Please try again later and contact us if the problem continues.'
+            );
+            // }
         }
-    }, [previousPendingState, registration, setErrorMessage]);
+    }, [createAccountStatus, setErrorMessage]);
 
     return (
         <div className={classes.form} {...other} ref={ref}>
@@ -297,9 +298,9 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
                 label={'Username'}
                 name={'new-username'}
                 value={username}
-                error={username !== '' && !registration.userAvailable}
+                error={username !== '' && usernameStatus === 'failed'}
                 helperText={
-                    username !== '' && !registration.userAvailable ? 'Username is already registered.' : undefined
+                    username !== '' && usernameStatus === 'failed' ? 'Username is already registered.' : undefined
                 }
                 InputProps={{
                     endAdornment: (
@@ -323,9 +324,9 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
                 label={'Email Address'}
                 name={'email'}
                 value={email}
-                error={email !== '' && !registration.emailAvailable}
+                error={email !== '' && emailStatus === 'failed'}
                 helperText={
-                    email !== '' && !registration.emailAvailable ? 'Email address is already registered.' : undefined
+                    email !== '' && emailStatus === 'failed' ? 'Email address is already registered.' : undefined
                 }
                 onChange={(e): void => {
                     setEmail(e.target.value.substr(0, 128));
@@ -379,9 +380,9 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
                 onClick={
                     email &&
                     EMAIL_REGEX.test(email) &&
-                    registration.emailAvailable &&
+                    emailStatus === 'success' &&
                     username &&
-                    registration.userAvailable &&
+                    emailStatus === 'success' &&
                     password
                         ? (): void => {
                               dispatch(

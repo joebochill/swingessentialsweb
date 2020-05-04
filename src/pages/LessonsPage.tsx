@@ -87,6 +87,9 @@ export const LessonsPage: React.FC = (): JSX.Element => {
     const { id } = useParams();
 
     const lessons = useSelector((state: AppState) => state.lessons);
+    const apiStatus = useSelector((state: AppState) => state.status.loadLessons.requestStatus);
+    const loading = apiStatus === 'loading';
+
     const closedLessons = lessons.closed;
     const pendingLessons = lessons.pending;
     const activeLesson = lessons.selected;
@@ -177,7 +180,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                 </Button>
             </ActionToolbar>
 
-            <LoadingIndicator show={pendingLessons.length < 1 && closedLessons.length < 1 && lessons.loading} />
+            <LoadingIndicator show={pendingLessons.length < 1 && closedLessons.length < 1 && loading} />
             {admin && (
                 <>
                     <FilterLessonsDialog

@@ -1,4 +1,4 @@
-import { Status, UserRole } from '.';
+import { Status, UserRole, APIStatus } from '.';
 import { Lesson, Tip, User, Blog, Pro, Package } from './data';
 
 /*
@@ -13,6 +13,12 @@ export type AuthenticationAPI = Omit<Status, 'extra'> & {
         failures: number;
     };
 };
+export type RegistrationAPI = Omit<Status, 'extra'> & {
+    extra: {
+        emailAvailable: APIStatus;
+        usernameAvailable: APIStatus;
+    };
+};
 // API Reducers
 export type StatusState = {
     verifyReset: Status;
@@ -22,6 +28,14 @@ export type StatusState = {
     authentication: AuthenticationAPI;
     tips: Status;
     blogs: Status;
+    pros: Status;
+    loadLessons: Status;
+    redeemLessons: Status;
+    checkEmail: Status;
+    checkUsername: Status;
+    verifyEmail: Status;
+    createAccount: Status;
+    // register: Status;
 };
 
 // Data Reducers
@@ -30,17 +44,10 @@ export type AuthState = {
     admin: boolean;
     role: UserRole;
     modalWarning: boolean;
-    // failCount: number;
-    // pending: boolean;
-    // initialLoaded: boolean;
 };
 export type LessonsState = {
-    loading: boolean;
     pending: Lesson[];
     closed: Lesson[];
-    redeemPending: boolean;
-    redeemSuccess: boolean;
-    redeemError: number | null;
     selected: Lesson | null;
 };
 export type TipsState = {
@@ -74,22 +81,19 @@ export type BlogsState = {
     blogList: Blog[];
 };
 export type ProsState = {
-    loading: boolean;
     prosList: Pro[];
 };
 export type PackagesState = {
     list: Package[];
-    loading: boolean;
+    // loading: boolean;
 };
 export type RegistrationState = {
-    pending: boolean;
-    userAvailable: boolean;
-    // lastUserChecked: string;
-    emailAvailable: boolean;
-    // lastEmailChecked: string;
-    success: boolean;
-    emailVerified: boolean;
-    error: number;
+    // pending: boolean;
+    // userAvailable: boolean;
+    // emailAvailable: boolean;
+    // success: boolean;
+    // emailVerified: boolean;
+    // error: number;
 };
 
 // Overall Redux State
