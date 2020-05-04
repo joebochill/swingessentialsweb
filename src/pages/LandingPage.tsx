@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { HTMLAttributes } from 'react';
 import bg from '../assets/images/banners/landing.jpg';
-import fullLogo from '../assets/images/logos/fullLogo-06.svg';
+import fullLogo from '../assets/images/logos/logo-full-white.svg';
 import pga from '../assets/images/logos/pga_p.svg';
 import post1 from '../assets/icons/post-01.svg';
 import post2 from '../assets/icons/post-02.svg';
@@ -10,11 +10,11 @@ import nineteen from '../assets/images/banners/19th.jpg';
 import pros from '../assets/images/banners/nelson.jpeg';
 import cart from '../assets/images/banners/download.jpg';
 
-import screenshot from '../assets/images/screenshot/screenshot.png';
+import screenshot from '../assets/images/screenshot/home.png';
 import appstore from '../assets/images/logos/app-store.svg';
 import playstore from '../assets/images/logos/google-play.svg';
 
-import { makeStyles, Theme, createStyles, Grid, Typography } from '@material-ui/core';
+import { makeStyles, Theme, createStyles, Grid, Typography, Hidden } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
 import { InfoCard } from '../components/display/InfoCard';
 import { useHistory } from 'react-router-dom';
@@ -78,6 +78,28 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+const AppleStoreIcon: React.FC<HTMLAttributes<HTMLImageElement>> = (props) => (
+    <img
+        src={appstore}
+        alt={'Apple App Store Icon'}
+        onClick={(): void => {
+            window.open('https://itunes.apple.com/us/app/swing-essentials-golf-app/id1382453145?mt=8', 'blank');
+        }}
+        {...props}
+    />
+);
+
+const GoogleStoreIcon: React.FC<HTMLAttributes<HTMLImageElement>> = (props) => (
+    <img
+        src={playstore}
+        alt={'Google Play Store Icon'}
+        onClick={(): void => {
+            window.open('https://play.google.com/store/apps/details?id=com.swingessentials.app', 'blank');
+        }}
+        {...props}
+    />
+);
+
 export const LandingPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const history = useHistory();
@@ -89,8 +111,16 @@ export const LandingPage: React.FC = (): JSX.Element => {
                 noPadding
                 justify={'center'}
             >
-                <img src={fullLogo} alt={'Swing Essentials banner logo'} className={classes.seLogo} />
                 <img src={pga} alt={'PGA Logo'} className={classes.pgaLogo} />
+                <div className={classes.seLogo}>
+                    <img src={fullLogo} alt={'Swing Essentials banner logo'} style={{ width: '100%' }} />
+                    <Hidden xsDown>
+                        <div style={{ marginTop: 16, textAlign: 'center' }}>
+                            <AppleStoreIcon style={{ cursor: 'pointer' }} />
+                            <GoogleStoreIcon style={{ cursor: 'pointer' }} />
+                        </div>
+                    </Hidden>
+                </div>
             </Banner>
             <div />
             <Section>
@@ -210,22 +240,8 @@ export const LandingPage: React.FC = (): JSX.Element => {
                         style={{ color: 'white' }}
                     />
                     <div style={{ marginTop: 16, display: 'inline-flex' }}>
-                        <img
-                            src={appstore}
-                            alt={'Apple App Store Icon'}
-                            style={{ cursor: 'pointer' }}
-                            onClick={(): void => {
-                                /* do nothing */
-                            }}
-                        />
-                        <img
-                            src={playstore}
-                            alt={'Google Play Store Icon'}
-                            style={{ cursor: 'pointer', marginLeft: 16 }}
-                            onClick={(): void => {
-                                /* do nothing */
-                            }}
-                        />
+                        <AppleStoreIcon style={{ cursor: 'pointer' }} />
+                        <GoogleStoreIcon style={{ cursor: 'pointer', marginLeft: 16 }} />
                     </div>
                 </div>
 

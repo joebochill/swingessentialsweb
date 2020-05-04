@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import bg from '../assets/images/banners/pros.jpg';
+import pga from '../assets/images/logos/pga_p.svg';
+
 import { Button } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
-import { Face, AddCircle } from '@material-ui/icons';
+import { AddCircle } from '@material-ui/icons';
 import { ProBio } from '../components/display/ProBio';
 import { AppState, Pro } from '../__types__';
 import { useSelector } from 'react-redux';
@@ -33,10 +35,10 @@ export const ProsPage: React.FC = (): JSX.Element => {
             <Banner background={{ src: bg, position: 'center 70%' }}>
                 <SectionBlurb
                     jumbo
-                    icon={<Face fontSize={'inherit'} />}
+                    icon={<img src={pga} alt={'PGA Logo'} width={48} />}
                     headline={'Meet Our Pros'}
                     subheading={'The folks behind the magic'}
-                    body={`At Swing Essentials, all of our lessons are crafted by PGA-certified golf professionals with years of playing and coaching experience. Rest assured that you are in good hands when you submit your videos for analysis. If you are interested in joining our team of professionals, please contact us!`}
+                    body={`At Swing Essentials, all of our lessons are crafted by PGA golf professionals with years of playing and coaching experience. Rest assured that you are in good hands when you submit your videos for analysis. If you are interested in joining our team of professionals, please contact us!`}
                     style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
                 />
             </Banner>
