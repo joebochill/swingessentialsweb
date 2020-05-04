@@ -1,15 +1,17 @@
-import { Status } from '../../../__types__';
+import { CheckAvailable } from '../../../__types__';
 import { CHECK_USERNAME, RESET_API_STATUS } from '../../actions/types';
 
-const initialAppState: Status = {
+const initialAppState: CheckAvailable = {
     initialized: false,
     requestStatus: 'initial',
     message: '',
     code: null,
-    extra: null,
+    extra: {
+        available: false,
+    },
 };
 
-export const CheckUsernameReducer = (state = initialAppState, action: any): Status => {
+export const CheckUsernameReducer = (state = initialAppState, action: any): CheckAvailable => {
     switch (action.type) {
         case CHECK_USERNAME.REQUEST:
             return {
@@ -17,7 +19,9 @@ export const CheckUsernameReducer = (state = initialAppState, action: any): Stat
                 requestStatus: 'loading',
                 message: '',
                 code: null,
-                extra: null,
+                extra: {
+                    available: false,
+                },
             };
 
         case CHECK_USERNAME.SUCCESS:
@@ -26,7 +30,9 @@ export const CheckUsernameReducer = (state = initialAppState, action: any): Stat
                 requestStatus: 'success',
                 message: '',
                 code: null,
-                extra: null,
+                extra: {
+                    available: action.payload.available,
+                },
             };
         case CHECK_USERNAME.FAILURE: {
             return {
@@ -34,7 +40,9 @@ export const CheckUsernameReducer = (state = initialAppState, action: any): Stat
                 requestStatus: 'failed',
                 message: '',
                 code: null,
-                extra: null,
+                extra: {
+                    available: false,
+                },
             };
         }
         case RESET_API_STATUS.REGISTRATION_CHECKS:

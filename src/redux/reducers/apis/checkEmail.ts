@@ -1,15 +1,17 @@
-import { Status } from '../../../__types__';
+import { CheckAvailable } from '../../../__types__';
 import { CHECK_EMAIL, RESET_API_STATUS } from '../../actions/types';
 
-const initialAppState: Status = {
+const initialAppState: CheckAvailable = {
     initialized: false,
     requestStatus: 'initial',
     message: '',
     code: null,
-    extra: null,
+    extra: {
+        available: false,
+    },
 };
 
-export const CheckEmailReducer = (state = initialAppState, action: any): Status => {
+export const CheckEmailReducer = (state = initialAppState, action: any): CheckAvailable => {
     switch (action.type) {
         case CHECK_EMAIL.REQUEST:
             return {
@@ -17,7 +19,9 @@ export const CheckEmailReducer = (state = initialAppState, action: any): Status 
                 requestStatus: 'loading',
                 message: '',
                 code: null,
-                extra: null,
+                extra: {
+                    available: false,
+                },
             };
 
         case CHECK_EMAIL.SUCCESS:
@@ -26,7 +30,9 @@ export const CheckEmailReducer = (state = initialAppState, action: any): Status 
                 requestStatus: 'success',
                 message: '',
                 code: null,
-                extra: null,
+                extra: {
+                    available: action.payload.available,
+                },
             };
         case CHECK_EMAIL.FAILURE: {
             return {
@@ -34,7 +40,9 @@ export const CheckEmailReducer = (state = initialAppState, action: any): Status 
                 requestStatus: 'failed',
                 message: '',
                 code: null,
-                extra: null,
+                extra: {
+                    available: false,
+                },
             };
         }
         case RESET_API_STATUS.REGISTRATION_CHECKS:

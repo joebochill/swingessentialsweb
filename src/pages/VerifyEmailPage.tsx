@@ -8,6 +8,7 @@ import { AppState } from '../__types__';
 import { Banner } from '../components/display/Banner';
 import { verifyEmail } from '../redux/actions/registration-actions';
 import { ROUTES } from '../constants/routes';
+import { requestLogout } from '../redux/actions/auth-actions';
 
 const _getRegistrationErrorMessage = (code: number | null): string => {
     switch (code) {
@@ -50,6 +51,7 @@ export const VerifyEmailPage: React.FC = () => {
 
     useEffect(() => {
         if (key) {
+            dispatch(requestLogout());
             dispatch(verifyEmail(key));
         }
     }, [key, dispatch]);
@@ -79,7 +81,7 @@ export const VerifyEmailPage: React.FC = () => {
                                     history.replace(ROUTES.PROFILE);
                                 }}
                             >
-                                {'View Profile'}
+                                {'Sign In'}
                             </Button>
                         </>
                     )}

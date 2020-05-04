@@ -196,7 +196,7 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
                     icon={<Person />}
                     divider
                     onClick={(): void => {
-                        history.push(ROUTES.LOGIN);
+                        history.push(ROUTES.LOGIN, { from: { pathname: history.location.pathname } });
                         onClose();
                     }}
                 />

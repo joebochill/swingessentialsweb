@@ -19,6 +19,11 @@ export type RegistrationAPI = Omit<Status, 'extra'> & {
         usernameAvailable: APIStatus;
     };
 };
+export type CheckAvailable = Omit<Status, 'extra'> & {
+    extra: {
+        available: boolean;
+    };
+};
 // API Reducers
 export type StatusState = {
     verifyReset: Status;
@@ -31,8 +36,8 @@ export type StatusState = {
     pros: Status;
     loadLessons: Status;
     redeemLessons: Status;
-    checkEmail: Status;
-    checkUsername: Status;
+    checkEmail: CheckAvailable;
+    checkUsername: CheckAvailable;
     verifyEmail: Status;
     createAccount: Status;
     // register: Status;

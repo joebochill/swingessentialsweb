@@ -64,7 +64,11 @@ export const UserMenu: React.FC = () => {
             </Menu>
         </>
     ) : (
-        <Button variant={'outlined'} color={'inherit'} onClick={(): void => history.push(ROUTES.LOGIN)}>
+        <Button
+            variant={'outlined'}
+            color={'inherit'}
+            onClick={(): void => history.push(ROUTES.LOGIN, { from: { pathname: history.location.pathname } })}
+        >
             SIGN IN
         </Button>
     );
