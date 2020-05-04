@@ -16,7 +16,7 @@ import {
     Tooltip,
     SlideProps,
 } from '@material-ui/core';
-import { useLocation, Redirect } from 'react-router-dom';
+import { useLocation, Redirect, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../__types__';
 import { requestLogin } from '../redux/actions/auth-actions';
@@ -35,7 +35,7 @@ import {
 import { StyledTextField, StyledSelect } from '../components/text/StyledInputs';
 import { Visibility, VisibilityOff, Info } from '@material-ui/icons';
 import { usePrevious } from '../hooks';
-import { RESET_LOGIN_FAIL_COUNT } from '../redux/actions/types';
+import { RESET_API_STATUS } from '../redux/actions/types';
 
 type Form = 'login' | 'register' | 'forgot';
 type Acquisition =
@@ -86,10 +86,12 @@ const useStyles = makeStyles((theme: Theme) =>
 export const LoginPage: React.FC = () => {
     const token = useSelector((state: AppState) => state.auth.token);
     const location = useLocation();
+    const history = useHistory();
     const classes = useStyles();
     const [form, setForm] = useState<Form>('login');
 
     const previousForm = usePrevious(form);
+    const registration = useSelector((state: AppState) => state.status.createAccount.requestStatus);
 
     // @ts-ignore
     const { from } = location && location.state ? location.state : { from: { pathname: ROUTES.HOME } };
@@ -110,7 +112,8 @@ export const LoginPage: React.FC = () => {
     }
 
     if (token) {
-        return <Redirect to={from} />;
+        if (registration === 'success') history.push(ROUTES.PROFILE);
+        else return <Redirect to={from} />;
     }
 
     return (
@@ -178,14 +181,14 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref
     const [password, setPassword] = useState('');
 
     const [errorMessage, setErrorMessage] = useState('');
-    const failCount = useSelector((state: AppState) => state.auth.failCount);
+    const failCount = useSelector((state: AppState) => state.status.authentication.extra.failures);
 
     const resetForm = useCallback(() => {
         setUsername('');
         setPassword('');
         setPassword('');
         setErrorMessage('');
-        dispatch({ type: RESET_LOGIN_FAIL_COUNT });
+        dispatch({ type: RESET_API_STATUS.LOGIN_FAILURES });
     }, [setUsername, setPassword, setErrorMessage, dispatch]);
 
     useEffect(() => {
@@ -267,8 +270,12 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const registration = useSelector((state: AppState) => state.registration);
-    const previousPendingState = usePrevious(registration.pending);
+    const createAccountStatus = useSelector((state: AppState) => state.status.createAccount.requestStatus);
+    const usernameStatus = useSelector((state: AppState) => state.status.checkUsername);
+    const emailStatus = useSelector((state: AppState) => state.status.checkEmail);
+
+    const usernameTaken = usernameStatus.requestStatus === 'success' && !usernameStatus.extra.available;
+    const emailTaken = emailStatus.requestStatus === 'success' && !emailStatus.extra.available;
 
     const resetForm = useCallback(() => {
         setEmail('');
@@ -282,14 +289,14 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
 
     useEffect(() => {
         // Registration finished
-        if (previousPendingState && !registration.pending) {
-            if (!registration.success) {
-                setErrorMessage(
-                    'Your account registration has failed. Please try again later and contact us if the problem continues.'
-                );
-            }
+        if (createAccountStatus === 'failed') {
+            // if (!registration.success) {
+            setErrorMessage(
+                'Your account registration has failed. Please try again later and contact us if the problem continues.'
+            );
+            // }
         }
-    }, [previousPendingState, registration, setErrorMessage]);
+    }, [createAccountStatus, setErrorMessage]);
 
     return (
         <div className={classes.form} {...other} ref={ref}>
@@ -297,10 +304,8 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
                 label={'Username'}
                 name={'new-username'}
                 value={username}
-                error={username !== '' && !registration.userAvailable}
-                helperText={
-                    username !== '' && !registration.userAvailable ? 'Username is already registered.' : undefined
-                }
+                error={username !== '' && usernameTaken}
+                helperText={username !== '' && usernameTaken ? 'Username is already registered.' : undefined}
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
@@ -316,22 +321,20 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
                     setUsername(e.target.value.replace(/[^A-Z0-9-_.$#@!+]/gi, '').substr(0, 32));
                 }}
                 onBlur={(): void => {
-                    dispatch(checkUsernameAvailability(username));
+                    if (username) dispatch(checkUsernameAvailability(username));
                 }}
             />
             <StyledTextField
                 label={'Email Address'}
                 name={'email'}
                 value={email}
-                error={email !== '' && !registration.emailAvailable}
-                helperText={
-                    email !== '' && !registration.emailAvailable ? 'Email address is already registered.' : undefined
-                }
+                error={email !== '' && emailTaken}
+                helperText={email !== '' && emailTaken ? 'Email address is already registered.' : undefined}
                 onChange={(e): void => {
                     setEmail(e.target.value.substr(0, 128));
                 }}
                 onBlur={(): void => {
-                    dispatch(checkEmailAvailability(email));
+                    if (email) dispatch(checkEmailAvailability(email));
                 }}
             />
             <StyledTextField
@@ -377,12 +380,7 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
                 variant={'contained'}
                 color={'primary'}
                 onClick={
-                    email &&
-                    EMAIL_REGEX.test(email) &&
-                    registration.emailAvailable &&
-                    username &&
-                    registration.userAvailable &&
-                    password
+                    email && EMAIL_REGEX.test(email) && !emailTaken && username && !usernameTaken && password
                         ? (): void => {
                               dispatch(
                                   createAccount({

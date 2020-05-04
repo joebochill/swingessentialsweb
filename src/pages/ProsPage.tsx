@@ -22,7 +22,8 @@ const BlankPro: Pro = {
 
 export const ProsPage: React.FC = (): JSX.Element => {
     const pros = useSelector((state: AppState) => state.pros.prosList);
-    const loading = useSelector((state: AppState) => state.pros.loading);
+    const status = useSelector((state: AppState) => state.status.pros.requestStatus);
+    const loading = status === 'loading';
     const admin = useSelector((state: AppState) => state.auth.admin);
 
     const [showNewDialog, setShowNewDialog] = useState(false);

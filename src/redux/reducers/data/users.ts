@@ -1,5 +1,5 @@
-import { LOGOUT, GET_USERS, TOKEN_TIMEOUT } from '../actions/types';
-import { UsersState } from '../../__types__';
+import { LOGOUT, GET_USERS, TOKEN_TIMEOUT } from '../../actions/types';
+import { UsersState } from '../../../__types__';
 
 const initialState: UsersState = {
     list: [],

@@ -12,13 +12,13 @@ import {
 } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../../__types__';
-import { RESET_CHANGE_PASSWORD } from '../../redux/actions/types';
 import { StyledPassword } from '../text/StyledInputs';
 import { EmptyState } from '@pxblue/react-components';
 import { CheckCircle, Error } from '@material-ui/icons';
 import { changePassword } from '../../redux/actions/auth-actions';
 
 import * as Colors from '@pxblue/colors';
+import { RESET_API_STATUS } from '../../redux/actions/types';
 
 type ChangePasswordProps = ButtonProps & {
     dialogProps?: DialogProps;
@@ -30,14 +30,21 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
 
-    const changingPassword = useSelector((state: AppState) => state.auth.changePassword);
+    const validateStatus = useSelector((state: AppState) => state.status.validatePassword);
+    const changeStatus = useSelector((state: AppState) => state.status.changePassword);
+
+    const validLoading = validateStatus.requestStatus === 'loading';
+    const changeLoading = changeStatus.requestStatus === 'loading';
+
+    const validateRequestStatus = validateStatus.requestStatus;
+    const changeRequestStatus = changeStatus.requestStatus;
 
     const dispatch = useDispatch();
 
     const resetDialog = useCallback(() => {
         setCurrentPassword('');
         setNewPassword('');
-        dispatch({ type: RESET_CHANGE_PASSWORD });
+        dispatch({ type: RESET_API_STATUS.CHANGE_PASSWORD });
     }, [setCurrentPassword, setNewPassword, dispatch]);
 
     useEffect(() => {
@@ -62,17 +69,15 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
             <Dialog disableBackdropClick open={showDialog} onClose={(): void => setShowDialog(false)} {...dialogProps}>
                 <DialogTitle>{`Change Password`}</DialogTitle>
                 <DialogContent>
-                    {changingPassword.result === 'initial' && changingPassword.currentValidated !== 'pending' && (
+                    {changeRequestStatus === 'initial' && validateRequestStatus !== 'loading' && (
                         <>
                             <DialogContentText>{`To change your password, enter your current password and new password below.`}</DialogContentText>
                             <StyledPassword
                                 onDark={false}
                                 label={'Current Password'}
                                 name={'current'}
-                                error={changingPassword.currentValidated === 'failed'}
-                                helperText={
-                                    changingPassword.currentValidated === 'failed' ? 'Password is incorrect' : ''
-                                }
+                                error={validateRequestStatus === 'failed'}
+                                helperText={validateRequestStatus === 'failed' ? 'Password is incorrect' : ''}
                                 value={currentPassword}
                                 onChange={(e): void => {
                                     setCurrentPassword(e.target.value);
@@ -89,19 +94,19 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
                             />
                         </>
                     )}
-                    {(changingPassword.result === 'pending' || changingPassword.currentValidated === 'pending') && (
+                    {(changeLoading || validLoading) && (
                         <div style={{ textAlign: 'center' }}>
                             <CircularProgress />
                         </div>
                     )}
-                    {changingPassword.result === 'success' && (
+                    {changeRequestStatus === 'success' && (
                         <EmptyState
                             icon={<CheckCircle fontSize={'inherit'} htmlColor={Colors.green[500]} />}
                             title={'Password Changed'}
                             description={'Your password was changed successfully'}
                         />
                     )}
-                    {changingPassword.result === 'failed' && (
+                    {changeRequestStatus === 'failed' && (
                         <EmptyState
                             icon={<Error fontSize={'inherit'} htmlColor={Colors.red[500]} />}
                             title={'Password Change Failed'}
@@ -110,7 +115,7 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
                     )}
                 </DialogContent>
                 <DialogActions>
-                    {changingPassword.currentValidated !== 'pending' && changingPassword.result === 'initial' && (
+                    {validateRequestStatus !== 'loading' && changeRequestStatus === 'initial' && (
                         <>
                             <Button
                                 color={'primary'}
@@ -133,7 +138,7 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
                             </Button>
                         </>
                     )}
-                    {changingPassword.result === 'success' && (
+                    {changeRequestStatus === 'success' && (
                         <Button
                             disabled={!currentPassword || !newPassword}
                             color={'primary'}

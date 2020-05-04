@@ -8,8 +8,9 @@ import { AppState } from '../__types__';
 import { Banner } from '../components/display/Banner';
 import { verifyEmail } from '../redux/actions/registration-actions';
 import { ROUTES } from '../constants/routes';
+import { requestLogout } from '../redux/actions/auth-actions';
 
-const _getRegistrationErrorMessage = (code: number): string => {
+const _getRegistrationErrorMessage = (code: number | null): string => {
     switch (code) {
         case 400302:
             return 'Oops! Your verification link is invalid. Please check your registration email and try again. If you continue to have problems, please contact us.';
@@ -44,9 +45,13 @@ export const VerifyEmailPage: React.FC = () => {
     const classes = useStyles();
     const { key } = useParams();
 
-    const verification = useSelector((state: AppState) => state.registration);
+    const verification = useSelector((state: AppState) => state.status.verifyEmail);
+    const verifyStatus = verification.requestStatus;
+    const loading = verifyStatus === 'loading';
+
     useEffect(() => {
         if (key) {
+            dispatch(requestLogout());
             dispatch(verifyEmail(key));
         }
     }, [key, dispatch]);
@@ -55,7 +60,7 @@ export const VerifyEmailPage: React.FC = () => {
         <>
             <Banner background={{ src: bg, position: 'center 70%' }} justify={'center'}>
                 <div className={classes.form}>
-                    {verification.pending && (
+                    {loading && (
                         <>
                             <CircularProgress color={'inherit'} />
                             <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
@@ -63,7 +68,7 @@ export const VerifyEmailPage: React.FC = () => {
                             </Typography>
                         </>
                     )}
-                    {!verification.pending && verification.emailVerified && (
+                    {verifyStatus === 'success' && (
                         <>
                             <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
                                 Your email address has been confirmed!
@@ -76,14 +81,14 @@ export const VerifyEmailPage: React.FC = () => {
                                     history.replace(ROUTES.PROFILE);
                                 }}
                             >
-                                {'View Profile'}
+                                {'Sign In'}
                             </Button>
                         </>
                     )}
-                    {!verification.pending && !verification.emailVerified && (
+                    {verifyStatus === 'failed' && (
                         <>
                             <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
-                                {_getRegistrationErrorMessage(verification.error)}
+                                {_getRegistrationErrorMessage(verification.code)}
                             </Typography>
                         </>
                     )}

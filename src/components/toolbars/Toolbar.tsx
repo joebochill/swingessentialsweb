@@ -69,7 +69,9 @@ export const Toolbar: React.FC = (): JSX.Element => {
                             <Button
                                 variant={'outlined'}
                                 color={'inherit'}
-                                onClick={(): void => history.push(ROUTES.LOGIN)}
+                                onClick={(): void =>
+                                    history.push(ROUTES.LOGIN, { from: { pathname: history.location.pathname } })
+                                }
                             >
                                 SIGN IN
                             </Button>

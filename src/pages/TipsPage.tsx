@@ -71,9 +71,11 @@ export const TipsPage: React.FC = (): JSX.Element => {
     const history = useHistory();
 
     const tips = useSelector((state: AppState) => state.tips.tipList);
-    const loading = useSelector((state: AppState) => state.tips.loading);
+    const loadingStatus = useSelector((state: AppState) => state.status.tips.requestStatus);
     const admin = useSelector((state: AppState) => state.auth.admin);
     const { id } = useParams();
+
+    const loading = loadingStatus === 'loading';
 
     const [activeYear, setActiveYear] = useState(currentYear);
     const [activeTip, setActiveTip] = useState<Tip | null>(null);

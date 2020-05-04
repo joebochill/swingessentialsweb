@@ -34,7 +34,7 @@ export function getUsers() {
             .request();
     };
 }
-type UserDataChange = {
+export type UserDataChange = {
     firstName?: string;
     lastName?: string;
     phone?: string;
@@ -124,6 +124,23 @@ export function resetUserPassword(data: ResetPassword) {
             .onFailure((response: Response) => {
                 dispatch(failure(ACTIONS.RESET_USER_PASSWORD.FAILURE, response, 'ResetPassword'));
                 // dispatch(requestLogout());
+            })
+            .request();
+    };
+}
+
+export function setUserNotifications(data: { subscribe: boolean }) {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
+        dispatch({ type: ACTIONS.SET_USER_NOTIFICATIONS.REQUEST });
+
+        HttpRequest.put(ACTIONS.SET_USER_NOTIFICATIONS.API)
+            .withBody(data)
+            .onSuccess((response: any) => {
+                dispatch(success(ACTIONS.SET_USER_NOTIFICATIONS.SUCCESS, response));
+                dispatch(loadUserInfo());
+            })
+            .onFailure((response: Response) => {
+                dispatch(failure(ACTIONS.SET_USER_NOTIFICATIONS.FAILURE, response, 'SetUserNotifications'));
             })
             .request();
     };

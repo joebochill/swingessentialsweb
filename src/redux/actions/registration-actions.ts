@@ -33,7 +33,7 @@ export function checkEmailAvailability(email: string) {
 
 export function resetRegistrationAvailabilityChecks() {
     return (dispatch: Dispatch): void => {
-        dispatch({ type: ACTIONS.RESET_REGISTRATION_CHECKS });
+        dispatch({ type: ACTIONS.RESET_API_STATUS.REGISTRATION_CHECKS });
     };
 }
 
