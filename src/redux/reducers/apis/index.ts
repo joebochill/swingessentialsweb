@@ -14,6 +14,8 @@ import { CheckUsernameReducer } from './checkUsername';
 import { CheckEmailReducer } from './checkEmail';
 import { VerifyEmailReducer } from './verifyEmail';
 import { CreateAccountReducer } from './createAccount';
+import { GetUserDataReducer } from './getUserData';
+import { UpdateUserDataReducer } from './updateUserData';
 
 export const StatusReducer = combineReducers<StatusState>({
     verifyReset: VerifyResetReducer,
@@ -30,4 +32,6 @@ export const StatusReducer = combineReducers<StatusState>({
     checkEmail: CheckEmailReducer,
     verifyEmail: VerifyEmailReducer,
     createAccount: CreateAccountReducer,
+    updateUserData: UpdateUserDataReducer,
+    getUserData: GetUserDataReducer,
 });

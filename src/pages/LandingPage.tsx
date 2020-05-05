@@ -165,7 +165,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
                             title={'Tip of the Month'}
                             aspectRatio={'16x9'}
                             description={
-                                'Each month we bring you a new video top to help you bring your golf game to the next level.'
+                                'Each month we bring you a new video to help you bring your golf game to the next level.'
                             }
                             onClick={(): void => {
                                 history.push(ROUTES.TIPS);

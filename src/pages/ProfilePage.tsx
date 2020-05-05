@@ -195,7 +195,7 @@ export const ProfileForm: React.FC = () => {
     const auth = useSelector((state: AppState) => state.auth);
     const user = useSelector((state: AppState) => state.user);
     const settings = useSelector((state: AppState) => state.settings);
-    const update = null; //useSelector((state: AppState) => state.status.);
+    const update = useSelector((state: AppState) => state.status.updateUserData.requestStatus);
 
     const [first, setFirst] = useState('');
     const [last, setLast] = useState('');
@@ -305,7 +305,7 @@ export const ProfileForm: React.FC = () => {
             />
 
             <div style={{ textAlign: 'center', marginTop: 16, minHeight: 36 }}>
-                {changes && update === 'unset' && (
+                {changes && update === 'initial' && (
                     <Button
                         color={'primary'}
                         variant={'contained'}
@@ -334,9 +334,9 @@ export const ProfileForm: React.FC = () => {
                         Save Changes
                     </Button>
                 )}
-                {update === 'pending' && <CircularProgress color={'inherit'} />}
+                {update === 'loading' && <CircularProgress color={'inherit'} />}
                 {update === 'success' && <Typography variant={'caption'}>Success!</Typography>}
-                {update === 'error' && <Typography variant={'caption'}>Failed to update profile</Typography>}
+                {update === 'failed' && <Typography variant={'caption'}>Failed to update profile</Typography>}
             </div>
         </div>
     );

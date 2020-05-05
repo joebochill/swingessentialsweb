@@ -40,6 +40,8 @@ export type StatusState = {
     checkUsername: CheckAvailable;
     verifyEmail: Status;
     createAccount: Status;
+    updateUserData: Status;
+    getUserData: Status;
     // register: Status;
 };
 
