@@ -6,6 +6,13 @@ export type Credentials = {
     username: string;
     password: string;
 };
+export type LessonPackage = {
+    name: string;
+    description: string;
+    price: number;
+    shortcode: string;
+};
+
 export type APICallStatus = 'initial' | 'loading' | 'failed' | 'success';
 export type BasicAPIStatus = {
     status: APICallStatus;

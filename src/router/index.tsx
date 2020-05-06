@@ -18,6 +18,7 @@ import {
     TermsPage,
     PrivacyPage,
     ProfilePage,
+    PackagesPage,
 } from '../pages';
 import { usePrevious } from '../hooks';
 import { useSelector } from 'react-redux';
@@ -52,6 +53,7 @@ export const MainRouter = (): JSX.Element => {
                 <Route exact path={`${ROUTES.TIPS}`} component={TipsPage} />
                 <PrivateRoute exact path={`${ROUTES.LESSONS}`} component={LessonsPage} canActivate={loggedIn} />
                 <PrivateRoute exact path={`${ROUTES.PROFILE}`} component={ProfilePage} canActivate={loggedIn} />
+                <PrivateRoute exact path={`${ROUTES.ORDER}`} component={PackagesPage} canActivate={loggedIn} />
 
                 <Route exact path={`${ROUTES.REGISTER}/:key`} component={VerifyEmailPage} />
                 <Route exact path={`${ROUTES.RESET}/:key`} component={ResetPasswordPage} />
@@ -65,7 +67,7 @@ export const MainRouter = (): JSX.Element => {
                 <Route exact path={`${ROUTES.LESSONS}/:id`} component={LessonsPage} />
 
                 {/* TODO */}
-                <Route exact path={`${ROUTES.ORDER}`} component={PlaceholderPage} />
+
                 <Route exact path={`${ROUTES.SUBMIT}`} component={PlaceholderPage} />
 
                 <Route exact path={`${ROUTES.UNSUBSCRIBE}/:user/:key`} component={PlaceholderPage} />

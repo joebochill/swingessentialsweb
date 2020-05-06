@@ -217,6 +217,15 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref
                 onChange={(e): void => {
                     setPassword(e.target.value);
                 }}
+                onKeyPress={
+                    username && password
+                        ? (e): void => {
+                              if (e.key === 'Enter') {
+                                  dispatch(requestLogin({ username, password }));
+                              }
+                          }
+                        : undefined
+                }
             />
             <ErrorBox message={errorMessage} />
             <Button
