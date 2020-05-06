@@ -1,4 +1,4 @@
-import { Status, UserRole, APIStatus } from '.';
+import { APIStatus, UserRole } from '.';
 import { Lesson, Tip, User, Blog, Pro, Package } from './data';
 
 /*
@@ -8,41 +8,41 @@ export type GeneralState = {
     drawerOpen: boolean;
 };
 
-export type AuthenticationAPI = Omit<Status, 'extra'> & {
+export type AuthenticationAPI = Omit<APIStatus, 'extra'> & {
     extra: {
         failures: number;
     };
 };
-export type RegistrationAPI = Omit<Status, 'extra'> & {
+export type RegistrationAPI = Omit<APIStatus, 'extra'> & {
     extra: {
         emailAvailable: APIStatus;
         usernameAvailable: APIStatus;
     };
 };
-export type CheckAvailable = Omit<Status, 'extra'> & {
+export type CheckAvailable = Omit<APIStatus, 'extra'> & {
     extra: {
         available: boolean;
     };
 };
 // API Reducers
-export type StatusState = {
-    verifyReset: Status;
-    changePassword: Status;
-    resetPassword: Status;
-    validatePassword: Status;
+export type APIStatusState = {
     authentication: AuthenticationAPI;
-    tips: Status;
-    blogs: Status;
-    pros: Status;
-    loadLessons: Status;
-    redeemLessons: Status;
+    blogs: APIStatus;
+    changePassword: APIStatus;
     checkEmail: CheckAvailable;
     checkUsername: CheckAvailable;
-    verifyEmail: Status;
-    createAccount: Status;
-    updateUserData: Status;
-    getUserData: Status;
-    // register: Status;
+    createAccount: APIStatus;
+    getUserData: APIStatus;
+    loadLessons: APIStatus;
+    loadUsers: APIStatus;
+    pros: APIStatus;
+    redeemLessons: APIStatus;
+    resetPassword: APIStatus;
+    tips: APIStatus;
+    updateUserData: APIStatus;
+    validatePassword: APIStatus;
+    verifyEmail: APIStatus;
+    verifyReset: APIStatus;
 };
 
 // Data Reducers
@@ -105,8 +105,8 @@ export type RegistrationState = {
 
 // Overall Redux State
 export type AppState = {
+    api: APIStatusState;
     app: GeneralState;
-    status: StatusState;
     auth: AuthState;
     user: UserDataState;
     users: UsersState;

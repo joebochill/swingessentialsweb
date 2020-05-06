@@ -79,7 +79,7 @@ export const ProfilePage: React.FC = () => {
     const history = useHistory();
 
     const token = useSelector((state: AppState) => state.auth.token);
-    const loaded = useSelector((state: AppState) => state.status.authentication.initialized);
+    const loaded = useSelector((state: AppState) => state.api.authentication.initialized);
     const user = useSelector((state: AppState) => state.user);
 
     // const [image, setImage] = useState('');
@@ -195,7 +195,7 @@ export const ProfileForm: React.FC = () => {
     const auth = useSelector((state: AppState) => state.auth);
     const user = useSelector((state: AppState) => state.user);
     const settings = useSelector((state: AppState) => state.settings);
-    const update = useSelector((state: AppState) => state.status.updateUserData.requestStatus);
+    const update = useSelector((state: AppState) => state.api.updateUserData.requestStatus);
 
     const [first, setFirst] = useState('');
     const [last, setLast] = useState('');

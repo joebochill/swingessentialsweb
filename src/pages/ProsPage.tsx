@@ -24,7 +24,7 @@ const BlankPro: Pro = {
 
 export const ProsPage: React.FC = (): JSX.Element => {
     const pros = useSelector((state: AppState) => state.pros.prosList);
-    const status = useSelector((state: AppState) => state.status.pros.requestStatus);
+    const status = useSelector((state: AppState) => state.api.pros.requestStatus);
     const loading = status === 'loading';
     const admin = useSelector((state: AppState) => state.auth.admin);
 

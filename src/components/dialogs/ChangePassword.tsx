@@ -30,8 +30,8 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
 
-    const validateStatus = useSelector((state: AppState) => state.status.validatePassword);
-    const changeStatus = useSelector((state: AppState) => state.status.changePassword);
+    const validateStatus = useSelector((state: AppState) => state.api.validatePassword);
+    const changeStatus = useSelector((state: AppState) => state.api.changePassword);
 
     const validLoading = validateStatus.requestStatus === 'loading';
     const changeLoading = changeStatus.requestStatus === 'loading';

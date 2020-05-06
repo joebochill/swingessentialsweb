@@ -62,7 +62,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
     const history = useHistory();
 
     const blogs = useSelector((state: AppState) => state.blogs.blogList);
-    const loadingStatus = useSelector((state: AppState) => state.status.blogs.requestStatus);
+    const loadingStatus = useSelector((state: AppState) => state.api.blogs.requestStatus);
     const admin = useSelector((state: AppState) => state.auth.admin);
     const { id } = useParams();
 

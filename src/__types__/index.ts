@@ -6,10 +6,10 @@ export type Credentials = {
     username: string;
     password: string;
 };
-export type APIStatus = 'initial' | 'loading' | 'failed' | 'success';
-export type Status = {
+export type APICallStatus = 'initial' | 'loading' | 'failed' | 'success';
+export type APIStatus = {
     initialized: boolean;
-    requestStatus: APIStatus;
+    requestStatus: APICallStatus;
     message: string;
     code: number | null;
     extra: any;

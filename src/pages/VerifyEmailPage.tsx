@@ -45,7 +45,7 @@ export const VerifyEmailPage: React.FC = () => {
     const classes = useStyles();
     const { key } = useParams();
 
-    const verification = useSelector((state: AppState) => state.status.verifyEmail);
+    const verification = useSelector((state: AppState) => state.api.verifyEmail);
     const verifyStatus = verification.requestStatus;
     const loading = verifyStatus === 'loading';
 

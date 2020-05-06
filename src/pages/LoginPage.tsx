@@ -91,7 +91,7 @@ export const LoginPage: React.FC = () => {
     const [form, setForm] = useState<Form>('login');
 
     const previousForm = usePrevious(form);
-    const registration = useSelector((state: AppState) => state.status.createAccount.requestStatus);
+    const registration = useSelector((state: AppState) => state.api.createAccount.requestStatus);
 
     // @ts-ignore
     const { from } = location && location.state ? location.state : { from: { pathname: ROUTES.HOME } };
@@ -181,7 +181,7 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref
     const [password, setPassword] = useState('');
 
     const [errorMessage, setErrorMessage] = useState('');
-    const failCount = useSelector((state: AppState) => state.status.authentication.extra.failures);
+    const failCount = useSelector((state: AppState) => state.api.authentication.extra.failures);
 
     const resetForm = useCallback(() => {
         setUsername('');
@@ -270,9 +270,9 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const createAccountStatus = useSelector((state: AppState) => state.status.createAccount.requestStatus);
-    const usernameStatus = useSelector((state: AppState) => state.status.checkUsername);
-    const emailStatus = useSelector((state: AppState) => state.status.checkEmail);
+    const createAccountStatus = useSelector((state: AppState) => state.api.createAccount.requestStatus);
+    const usernameStatus = useSelector((state: AppState) => state.api.checkUsername);
+    const emailStatus = useSelector((state: AppState) => state.api.checkEmail);
 
     const usernameTaken = usernameStatus.requestStatus === 'success' && !usernameStatus.extra.available;
     const emailTaken = emailStatus.requestStatus === 'success' && !emailStatus.extra.available;

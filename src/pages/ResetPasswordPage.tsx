@@ -84,7 +84,7 @@ type PreRequestProps = {
 const PreRequest: React.FC<PreRequestProps> = (props) => {
     const dispatch = useDispatch();
 
-    const verification = useSelector((state: AppState) => state.status.verifyReset);
+    const verification = useSelector((state: AppState) => state.api.verifyReset);
     const status = verification.requestStatus;
     const loading = status === 'loading';
 
@@ -193,7 +193,7 @@ const PreRequest: React.FC<PreRequestProps> = (props) => {
 
 const PostRequest: React.FC = () => {
     const history = useHistory();
-    const verification = useSelector((state: AppState) => state.status.resetPassword);
+    const verification = useSelector((state: AppState) => state.api.resetPassword);
     const status = verification.requestStatus;
     const loading = status === 'loading';
 
