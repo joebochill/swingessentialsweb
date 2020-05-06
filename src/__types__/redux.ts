@@ -1,11 +1,4 @@
-import {
-    UserRole,
-    BasicAPIStatus,
-    BasicAPICheckStatus,
-    ValidateStatus,
-    VerifyStatus,
-    AuthenticationStatus,
-} from '.';
+import { UserRole, BasicAPIStatus, BasicAPICheckStatus, ValidateStatus, VerifyStatus, AuthenticationStatus } from '.';
 import { Lesson, Tip, User, Blog, Pro, Package } from './data';
 
 /*
@@ -24,6 +17,7 @@ export type APIStatusState = {
     checkUsername: BasicAPICheckStatus;
     createAccount: BasicAPIStatus;
     getUserData: BasicAPIStatus;
+    getUserSettings: BasicAPIStatus;
     loadLessons: BasicAPIStatus;
     loadUsers: BasicAPIStatus;
     pros: BasicAPIStatus;
@@ -31,6 +25,7 @@ export type APIStatusState = {
     resetPassword: BasicAPIStatus;
     tips: BasicAPIStatus;
     updateUserData: BasicAPIStatus;
+    updateUserSettings: BasicAPIStatus;
     validatePassword: ValidateStatus;
     verifyEmail: BasicAPIStatus;
     verifyReset: VerifyStatus;

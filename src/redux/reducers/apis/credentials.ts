@@ -1,7 +1,4 @@
-import {
-    ValidateStatus,
-    VerifyStatus,
-} from '../../../__types__';
+import { ValidateStatus, VerifyStatus } from '../../../__types__';
 import { VALIDATE_PASSWORD, VERIFY_RESET_PASSWORD_CODE } from '../../actions/types';
 
 const initialState: ValidateStatus = {

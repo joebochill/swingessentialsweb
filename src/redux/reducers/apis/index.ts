@@ -12,6 +12,8 @@ import {
     SET_USER_DATA,
     VERIFY_EMAIL,
     REDEEM_LESSON,
+    SET_USER_NOTIFICATIONS,
+    GET_SETTINGS,
 } from '../../actions/types';
 import { combineReducers } from 'redux';
 import { simpleReducer } from './simpleReducer';
@@ -27,6 +29,7 @@ export const APIReducer = combineReducers<APIStatusState>({
     checkUsername: CheckUsernameReducer,
     createAccount: simpleReducer(CREATE_ACCOUNT),
     getUserData: simpleReducer(GET_USER_DATA),
+    getUserSettings: simpleReducer(GET_SETTINGS),
     loadLessons: simpleReducer(GET_LESSONS),
     loadUsers: simpleReducer(GET_USERS),
     pros: simpleReducer(GET_PROS),
@@ -34,6 +37,7 @@ export const APIReducer = combineReducers<APIStatusState>({
     resetPassword: simpleReducer(RESET_USER_PASSWORD),
     tips: simpleReducer(GET_TIPS),
     updateUserData: simpleReducer(SET_USER_DATA),
+    updateUserSettings: simpleReducer(SET_USER_NOTIFICATIONS),
     validatePassword: ValidatePasswordReducer,
     verifyEmail: simpleReducer(VERIFY_EMAIL),
     verifyReset: VerifyResetPasswordReducer,
