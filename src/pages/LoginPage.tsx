@@ -35,7 +35,7 @@ import {
 import { StyledTextField, StyledSelect } from '../components/text/StyledInputs';
 import { Visibility, VisibilityOff, Info } from '@material-ui/icons';
 import { usePrevious } from '../hooks';
-import { RESET_API_STATUS } from '../redux/actions/types';
+import { LOGIN } from '../redux/actions/types';
 
 type Form = 'login' | 'register' | 'forgot';
 type Acquisition =
@@ -91,7 +91,7 @@ export const LoginPage: React.FC = () => {
     const [form, setForm] = useState<Form>('login');
 
     const previousForm = usePrevious(form);
-    const registration = useSelector((state: AppState) => state.api.createAccount.requestStatus);
+    const registration = useSelector((state: AppState) => state.api.createAccount.status);
 
     // @ts-ignore
     const { from } = location && location.state ? location.state : { from: { pathname: ROUTES.HOME } };
@@ -181,14 +181,14 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref
     const [password, setPassword] = useState('');
 
     const [errorMessage, setErrorMessage] = useState('');
-    const failCount = useSelector((state: AppState) => state.api.authentication.extra.failures);
+    const failCount = useSelector((state: AppState) => state.api.authentication.data.failures);
 
     const resetForm = useCallback(() => {
         setUsername('');
         setPassword('');
         setPassword('');
         setErrorMessage('');
-        dispatch({ type: RESET_API_STATUS.LOGIN_FAILURES });
+        dispatch({ type: LOGIN.RESET });
     }, [setUsername, setPassword, setErrorMessage, dispatch]);
 
     useEffect(() => {
@@ -270,12 +270,12 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const createAccountStatus = useSelector((state: AppState) => state.api.createAccount.requestStatus);
+    const createAccountStatus = useSelector((state: AppState) => state.api.createAccount.status);
     const usernameStatus = useSelector((state: AppState) => state.api.checkUsername);
     const emailStatus = useSelector((state: AppState) => state.api.checkEmail);
 
-    const usernameTaken = usernameStatus.requestStatus === 'success' && !usernameStatus.extra.available;
-    const emailTaken = emailStatus.requestStatus === 'success' && !emailStatus.extra.available;
+    const usernameTaken = usernameStatus.status === 'success' && !usernameStatus.data.available;
+    const emailTaken = emailStatus.status === 'success' && !emailStatus.data.available;
 
     const resetForm = useCallback(() => {
         setEmail('');

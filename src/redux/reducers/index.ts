@@ -10,7 +10,7 @@ import { LessonsReducer } from './data/lessons';
 import { UsersReducer } from './data/users';
 import { RegistrationReducer } from './data/registration';
 import { UserSettingsReducer } from './data/userSettings';
-import { APIReducer } from './apis/apiReducer';
+import { APIReducer } from './apis';
 
 export const rootReducer = (): any =>
     combineReducers<AppState>({

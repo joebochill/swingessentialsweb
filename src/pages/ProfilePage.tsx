@@ -33,7 +33,7 @@ import { setUserData, setUserNotifications, UserDataChange } from '../redux/acti
 import { ChangePassword } from '../components/dialogs/ChangePassword';
 import { Section } from '../components/display/Section';
 import { InfoCard } from '../components/display/InfoCard';
-import { RESET_API_STATUS } from '../redux/actions/types';
+import { CHECK_USERNAME } from '../redux/actions/types';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -195,7 +195,7 @@ export const ProfileForm: React.FC = () => {
     const auth = useSelector((state: AppState) => state.auth);
     const user = useSelector((state: AppState) => state.user);
     const settings = useSelector((state: AppState) => state.settings);
-    const update = useSelector((state: AppState) => state.api.updateUserData.requestStatus);
+    const update = useSelector((state: AppState) => state.api.updateUserData.status);
 
     const [first, setFirst] = useState('');
     const [last, setLast] = useState('');
@@ -216,7 +216,7 @@ export const ProfileForm: React.FC = () => {
 
     useEffect(() => {
         if (changes) {
-            dispatch({ type: RESET_API_STATUS.SET_USER_CHECKS });
+            dispatch({ type: CHECK_USERNAME.RESET });
             // dispatch({ type: RESET_SET_SETTINGS });
         }
     }, [changes, dispatch]);

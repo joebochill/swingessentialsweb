@@ -1,4 +1,11 @@
-import { APIStatus, UserRole } from '.';
+import {
+    UserRole,
+    BasicAPIStatus,
+    BasicAPICheckStatus,
+    ValidateStatus,
+    VerifyStatus,
+    AuthenticationStatus,
+} from '.';
 import { Lesson, Tip, User, Blog, Pro, Package } from './data';
 
 /*
@@ -8,41 +15,25 @@ export type GeneralState = {
     drawerOpen: boolean;
 };
 
-export type AuthenticationAPI = Omit<APIStatus, 'extra'> & {
-    extra: {
-        failures: number;
-    };
-};
-export type RegistrationAPI = Omit<APIStatus, 'extra'> & {
-    extra: {
-        emailAvailable: APIStatus;
-        usernameAvailable: APIStatus;
-    };
-};
-export type CheckAvailable = Omit<APIStatus, 'extra'> & {
-    extra: {
-        available: boolean;
-    };
-};
 // API Reducers
 export type APIStatusState = {
-    authentication: AuthenticationAPI;
-    blogs: APIStatus;
-    changePassword: APIStatus;
-    checkEmail: CheckAvailable;
-    checkUsername: CheckAvailable;
-    createAccount: APIStatus;
-    getUserData: APIStatus;
-    loadLessons: APIStatus;
-    loadUsers: APIStatus;
-    pros: APIStatus;
-    redeemLessons: APIStatus;
-    resetPassword: APIStatus;
-    tips: APIStatus;
-    updateUserData: APIStatus;
-    validatePassword: APIStatus;
-    verifyEmail: APIStatus;
-    verifyReset: APIStatus;
+    authentication: AuthenticationStatus;
+    blogs: BasicAPIStatus;
+    changePassword: BasicAPIStatus;
+    checkEmail: BasicAPICheckStatus;
+    checkUsername: BasicAPICheckStatus;
+    createAccount: BasicAPIStatus;
+    getUserData: BasicAPIStatus;
+    loadLessons: BasicAPIStatus;
+    loadUsers: BasicAPIStatus;
+    pros: BasicAPIStatus;
+    redeemLessons: BasicAPIStatus;
+    resetPassword: BasicAPIStatus;
+    tips: BasicAPIStatus;
+    updateUserData: BasicAPIStatus;
+    validatePassword: ValidateStatus;
+    verifyEmail: BasicAPIStatus;
+    verifyReset: VerifyStatus;
 };
 
 // Data Reducers
