@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'inline-flex',
             alignItems: 'center',
             textAlign: 'left',
+            marginBottom: theme.spacing(2),
             '&$jumbo': {
                 [theme.breakpoints.down('sm')]: {
                     textAlign: 'center',
@@ -18,8 +19,10 @@ const useStyles = makeStyles((theme: Theme) =>
         headlineIcon: {
             marginRight: 16,
             fontSize: 48,
+            display: 'flex',
         },
         smallHeadlineIcon: {
+            display: 'flex',
             marginRight: 4,
             fontSize: 24,
         },
@@ -40,7 +43,7 @@ export const FancyHeadline: React.FC<FancyHeadlineProps> = (props) => {
     return !jumbo ? (
         <div className={classes.headline} {...other}>
             {icon && <div className={classes.smallHeadlineIcon}>{icon}</div>}
-            <div style={{ marginBottom: 16 }}>
+            <div>
                 <Typography variant={'h6'}>{headline}</Typography>
                 {subheading && <Typography variant={'caption'}>{subheading}</Typography>}
             </div>
@@ -48,7 +51,7 @@ export const FancyHeadline: React.FC<FancyHeadlineProps> = (props) => {
     ) : (
         <div className={clsx(classes.headline, { [classes.jumbo]: !icon })} {...other}>
             {icon && <div className={classes.headlineIcon}>{icon}</div>}
-            <div style={{ marginBottom: 16 }}>
+            <div>
                 <Headline>{headline}</Headline>
                 {subheading && <SubHeading>{subheading}</SubHeading>}
             </div>

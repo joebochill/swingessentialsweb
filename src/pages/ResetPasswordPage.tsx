@@ -84,8 +84,8 @@ type PreRequestProps = {
 const PreRequest: React.FC<PreRequestProps> = (props) => {
     const dispatch = useDispatch();
 
-    const verification = useSelector((state: AppState) => state.status.verifyReset);
-    const status = verification.requestStatus;
+    const verification = useSelector((state: AppState) => state.api.verifyReset);
+    const status = verification.status;
     const loading = status === 'loading';
 
     const [password, setPassword] = useState('');
@@ -168,7 +168,7 @@ const PreRequest: React.FC<PreRequestProps> = (props) => {
                                       dispatch(
                                           resetUserPassword({
                                               password: btoa(password),
-                                              token: verification.extra.resetToken,
+                                              token: verification.data ? verification.data.resetToken || '' : '',
                                           })
                                       );
                                       props.onSubmit();
@@ -193,8 +193,8 @@ const PreRequest: React.FC<PreRequestProps> = (props) => {
 
 const PostRequest: React.FC = () => {
     const history = useHistory();
-    const verification = useSelector((state: AppState) => state.status.resetPassword);
-    const status = verification.requestStatus;
+    const verification = useSelector((state: AppState) => state.api.resetPassword);
+    const status = verification.status;
     const loading = status === 'loading';
 
     return (

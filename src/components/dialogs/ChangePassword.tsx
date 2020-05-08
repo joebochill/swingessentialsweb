@@ -18,7 +18,7 @@ import { CheckCircle, Error } from '@material-ui/icons';
 import { changePassword } from '../../redux/actions/auth-actions';
 
 import * as Colors from '@pxblue/colors';
-import { RESET_API_STATUS } from '../../redux/actions/types';
+import { CHANGE_PASSWORD } from '../../redux/actions/types';
 
 type ChangePasswordProps = ButtonProps & {
     dialogProps?: DialogProps;
@@ -30,21 +30,21 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
 
-    const validateStatus = useSelector((state: AppState) => state.status.validatePassword);
-    const changeStatus = useSelector((state: AppState) => state.status.changePassword);
+    const validateStatus = useSelector((state: AppState) => state.api.validatePassword);
+    const changeStatus = useSelector((state: AppState) => state.api.changePassword);
 
-    const validLoading = validateStatus.requestStatus === 'loading';
-    const changeLoading = changeStatus.requestStatus === 'loading';
+    const validLoading = validateStatus.status === 'loading';
+    const changeLoading = changeStatus.status === 'loading';
 
-    const validateRequestStatus = validateStatus.requestStatus;
-    const changeRequestStatus = changeStatus.requestStatus;
+    const validateRequestStatus = validateStatus.status;
+    const changeRequestStatus = changeStatus.status;
 
     const dispatch = useDispatch();
 
     const resetDialog = useCallback(() => {
         setCurrentPassword('');
         setNewPassword('');
-        dispatch({ type: RESET_API_STATUS.CHANGE_PASSWORD });
+        dispatch({ type: CHANGE_PASSWORD.RESET });
     }, [setCurrentPassword, setNewPassword, dispatch]);
 
     useEffect(() => {

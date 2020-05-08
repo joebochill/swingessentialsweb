@@ -28,12 +28,13 @@ import { StyledTextField } from '../components/text/StyledInputs';
 import { Edit } from '@material-ui/icons';
 
 import { Spacer } from '@pxblue/react-components';
-import { setUserData, setUserNotifications, UserDataChange } from '../redux/actions/user-data-actions';
+import { setUserData, UserDataChange } from '../redux/actions/user-data-actions';
 
 import { ChangePassword } from '../components/dialogs/ChangePassword';
 import { Section } from '../components/display/Section';
 import { InfoCard } from '../components/display/InfoCard';
-import { RESET_API_STATUS } from '../redux/actions/types';
+import { SET_USER_DATA, SET_USER_NOTIFICATIONS } from '../redux/actions/types';
+import { setUserNotifications } from '../redux/actions/user-settings-actions';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -79,7 +80,7 @@ export const ProfilePage: React.FC = () => {
     const history = useHistory();
 
     const token = useSelector((state: AppState) => state.auth.token);
-    const loaded = useSelector((state: AppState) => state.status.authentication.initialized);
+    const loaded = useSelector((state: AppState) => state.api.authentication.initialized);
     const user = useSelector((state: AppState) => state.user);
 
     // const [image, setImage] = useState('');
@@ -195,7 +196,14 @@ export const ProfileForm: React.FC = () => {
     const auth = useSelector((state: AppState) => state.auth);
     const user = useSelector((state: AppState) => state.user);
     const settings = useSelector((state: AppState) => state.settings);
-    const update = null; //useSelector((state: AppState) => state.status.);
+    const updateData = useSelector((state: AppState) => state.api.updateUserData.status);
+    const updateSettings = useSelector((state: AppState) => state.api.updateUserSettings.status);
+
+    const loading = updateData === 'loading' || updateSettings === 'loading';
+    const failure = updateData === 'failed' || updateSettings === 'failed';
+    const success =
+        (updateData === 'success' && (updateSettings === 'success' || updateSettings === 'initial')) ||
+        (updateSettings === 'success' && (updateData === 'success' || updateData === 'initial'));
 
     const [first, setFirst] = useState('');
     const [last, setLast] = useState('');
@@ -215,14 +223,7 @@ export const ProfileForm: React.FC = () => {
         sendEmails !== settings.notifications;
 
     useEffect(() => {
-        if (changes) {
-            dispatch({ type: RESET_API_STATUS.SET_USER_CHECKS });
-            // dispatch({ type: RESET_SET_SETTINGS });
-        }
-    }, [changes, dispatch]);
-
-    useEffect(() => {
-        if (!initialized && user.username /* && settings loaded */) {
+        if (!initialized && user.username && settings.notifications !== undefined) {
             setFirst(user.firstName);
             setLast(user.lastName);
             setLocation(user.location || '');
@@ -305,13 +306,15 @@ export const ProfileForm: React.FC = () => {
             />
 
             <div style={{ textAlign: 'center', marginTop: 16, minHeight: 36 }}>
-                {changes && update === 'unset' && (
+                {initialized && changes && !loading /*(updateData === 'initial' && updateSettings === 'initial') && */ && (
                     <Button
                         color={'primary'}
                         variant={'contained'}
                         onClick={
                             changes
                                 ? (): void => {
+                                      dispatch({ type: SET_USER_DATA.RESET });
+                                      dispatch({ type: SET_USER_NOTIFICATIONS.RESET });
                                       const newChanges: UserDataChange = {};
                                       if (first !== user.firstName) newChanges.firstName = first;
                                       if (last !== user.lastName) newChanges.lastName = last;
@@ -334,9 +337,9 @@ export const ProfileForm: React.FC = () => {
                         Save Changes
                     </Button>
                 )}
-                {update === 'pending' && <CircularProgress color={'inherit'} />}
-                {update === 'success' && <Typography variant={'caption'}>Success!</Typography>}
-                {update === 'error' && <Typography variant={'caption'}>Failed to update profile</Typography>}
+                {loading && <CircularProgress color={'inherit'} />}
+                {success && !changes && <Typography variant={'caption'}>Success!</Typography>}
+                {failure && !changes && <Typography variant={'caption'}>Failed to update profile</Typography>}
             </div>
         </div>
     );

@@ -1,4 +1,12 @@
-import { Status, UserRole, APIStatus } from '.';
+import {
+    UserRole,
+    BasicAPIStatus,
+    BasicAPICheckStatus,
+    ValidateStatus,
+    VerifyStatus,
+    AuthenticationStatus,
+    DiscountStatus,
+} from '.';
 import { Lesson, Tip, User, Blog, Pro, Package } from './data';
 
 /*
@@ -8,39 +16,29 @@ export type GeneralState = {
     drawerOpen: boolean;
 };
 
-export type AuthenticationAPI = Omit<Status, 'extra'> & {
-    extra: {
-        failures: number;
-    };
-};
-export type RegistrationAPI = Omit<Status, 'extra'> & {
-    extra: {
-        emailAvailable: APIStatus;
-        usernameAvailable: APIStatus;
-    };
-};
-export type CheckAvailable = Omit<Status, 'extra'> & {
-    extra: {
-        available: boolean;
-    };
-};
 // API Reducers
-export type StatusState = {
-    verifyReset: Status;
-    changePassword: Status;
-    resetPassword: Status;
-    validatePassword: Status;
-    authentication: AuthenticationAPI;
-    tips: Status;
-    blogs: Status;
-    pros: Status;
-    loadLessons: Status;
-    redeemLessons: Status;
-    checkEmail: CheckAvailable;
-    checkUsername: CheckAvailable;
-    verifyEmail: Status;
-    createAccount: Status;
-    // register: Status;
+export type APIStatusState = {
+    authentication: AuthenticationStatus;
+    blogs: BasicAPIStatus;
+    changePassword: BasicAPIStatus;
+    checkEmail: BasicAPICheckStatus;
+    checkUsername: BasicAPICheckStatus;
+    createAccount: BasicAPIStatus;
+    discount: DiscountStatus;
+    getUserData: BasicAPIStatus;
+    getUserSettings: BasicAPIStatus;
+    loadLessons: BasicAPIStatus;
+    loadUsers: BasicAPIStatus;
+    packages: BasicAPIStatus;
+    pros: BasicAPIStatus;
+    redeemLessons: BasicAPIStatus;
+    resetPassword: BasicAPIStatus;
+    tips: BasicAPIStatus;
+    updateUserData: BasicAPIStatus;
+    updateUserSettings: BasicAPIStatus;
+    validatePassword: ValidateStatus;
+    verifyEmail: BasicAPIStatus;
+    verifyReset: VerifyStatus;
 };
 
 // Data Reducers
@@ -90,7 +88,6 @@ export type ProsState = {
 };
 export type PackagesState = {
     list: Package[];
-    // loading: boolean;
 };
 export type RegistrationState = {
     // pending: boolean;
@@ -103,15 +100,16 @@ export type RegistrationState = {
 
 // Overall Redux State
 export type AppState = {
+    api: APIStatusState;
     app: GeneralState;
-    status: StatusState;
     auth: AuthState;
-    user: UserDataState;
-    users: UsersState;
     blogs: BlogsState;
-    tips: TipsState;
-    pros: ProsState;
     lessons: LessonsState;
+    packages: PackagesState;
+    pros: ProsState;
     registration: RegistrationState;
     settings: UserSettingsState;
+    tips: TipsState;
+    user: UserDataState;
+    users: UsersState;
 };

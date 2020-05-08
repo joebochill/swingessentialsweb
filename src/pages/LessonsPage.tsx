@@ -87,7 +87,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
     const { id } = useParams();
 
     const lessons = useSelector((state: AppState) => state.lessons);
-    const apiStatus = useSelector((state: AppState) => state.status.loadLessons.requestStatus);
+    const apiStatus = useSelector((state: AppState) => state.api.loadLessons.status);
     const loading = apiStatus === 'loading';
 
     const closedLessons = lessons.closed;
