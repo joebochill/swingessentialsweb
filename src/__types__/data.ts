@@ -28,8 +28,13 @@ export type Package = {
     shortcode: string;
     count: string | number;
     duration: string | number;
-    price: string | number;
+    price: string;
     app_sku: string;
+};
+export type Discount = {
+    code: string;
+    type: 'percent' | 'amount';
+    value: number;
 };
 export type Tip = {
     id: string | number;

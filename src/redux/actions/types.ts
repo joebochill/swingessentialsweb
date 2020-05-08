@@ -54,6 +54,7 @@ export const REMOVE_PRO = createAction('REMOVE_PRO', 'removebio');
 
 /* Package Actions */
 export const GET_PACKAGES = createAction('GET_PACKAGES', 'packages');
+export const CHECK_DISCOUNT = createAction('CHECK_DISCOUNT', 'checkCoupon');
 
 /* Credits Actions */
 export const GET_CREDITS = createAction('GET_CREDITS', 'credits');

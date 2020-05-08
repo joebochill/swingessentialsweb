@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import React from 'react';
 import { PayPalButton as PPButton } from 'react-paypal-button-v2';
-import { LessonPackage } from '../../__types__';
+import { Package } from '../../__types__';
 
 type PayPalButtonProps = {
-    pkg: LessonPackage;
+    pkg: Package;
     discount: number;
 };
 export const PayPalButton: React.FC<PayPalButtonProps> = (props) => {
     const { pkg, discount } = props;
+
+    const activePrice = parseFloat(pkg.price);
 
     return (
         <PPButton
@@ -26,7 +28,6 @@ export const PayPalButton: React.FC<PayPalButtonProps> = (props) => {
             }}
             //eslint-disable-next-line @typescript-eslint/no-unused-vars
             onSuccess={(details: any): void => {
-                // console.log("Transaction completed", details);
                 // TODO Make the API call to give the credits
             }}
             //eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,10 +36,10 @@ export const PayPalButton: React.FC<PayPalButtonProps> = (props) => {
                     purchase_units: [
                         {
                             amount: {
-                                value: `${Math.max(pkg.price - discount, 0).toFixed(2)}`,
+                                value: `${Math.max(activePrice - discount, 0).toFixed(2)}`,
                                 breakdown: {
                                     item_total: {
-                                        value: pkg.price.toFixed(2),
+                                        value: activePrice.toFixed(2),
                                         currency_code: 'USD',
                                     },
                                     tax_total: {
@@ -60,7 +61,7 @@ export const PayPalButton: React.FC<PayPalButtonProps> = (props) => {
                                 {
                                     name: pkg.name,
                                     unit_amount: {
-                                        value: pkg.price.toFixed(2),
+                                        value: activePrice.toFixed(2),
                                         currency_code: 'USD',
                                     },
                                     quantity: 1,

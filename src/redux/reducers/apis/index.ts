@@ -14,12 +14,14 @@ import {
     REDEEM_LESSON,
     SET_USER_NOTIFICATIONS,
     GET_SETTINGS,
+    GET_PACKAGES,
 } from '../../actions/types';
 import { combineReducers } from 'redux';
 import { simpleReducer } from './simpleReducer';
 import { CheckEmailReducer, CheckUsernameReducer } from './registration';
 import { ValidatePasswordReducer, VerifyResetPasswordReducer } from './credentials';
 import { AuthenticationReducer } from './authentication';
+import { DiscountReducer } from './discounts';
 
 export const APIReducer = combineReducers<APIStatusState>({
     authentication: AuthenticationReducer,
@@ -28,10 +30,12 @@ export const APIReducer = combineReducers<APIStatusState>({
     checkEmail: CheckEmailReducer,
     checkUsername: CheckUsernameReducer,
     createAccount: simpleReducer(CREATE_ACCOUNT),
+    discount: DiscountReducer,
     getUserData: simpleReducer(GET_USER_DATA),
     getUserSettings: simpleReducer(GET_SETTINGS),
     loadLessons: simpleReducer(GET_LESSONS),
     loadUsers: simpleReducer(GET_USERS),
+    packages: simpleReducer(GET_PACKAGES),
     pros: simpleReducer(GET_PROS),
     redeemLessons: simpleReducer(REDEEM_LESSON),
     resetPassword: simpleReducer(RESET_USER_PASSWORD),

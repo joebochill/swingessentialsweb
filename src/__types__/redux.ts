@@ -1,4 +1,12 @@
-import { UserRole, BasicAPIStatus, BasicAPICheckStatus, ValidateStatus, VerifyStatus, AuthenticationStatus } from '.';
+import {
+    UserRole,
+    BasicAPIStatus,
+    BasicAPICheckStatus,
+    ValidateStatus,
+    VerifyStatus,
+    AuthenticationStatus,
+    DiscountStatus,
+} from '.';
 import { Lesson, Tip, User, Blog, Pro, Package } from './data';
 
 /*
@@ -16,10 +24,12 @@ export type APIStatusState = {
     checkEmail: BasicAPICheckStatus;
     checkUsername: BasicAPICheckStatus;
     createAccount: BasicAPIStatus;
+    discount: DiscountStatus;
     getUserData: BasicAPIStatus;
     getUserSettings: BasicAPIStatus;
     loadLessons: BasicAPIStatus;
     loadUsers: BasicAPIStatus;
+    packages: BasicAPIStatus;
     pros: BasicAPIStatus;
     redeemLessons: BasicAPIStatus;
     resetPassword: BasicAPIStatus;
@@ -78,7 +88,6 @@ export type ProsState = {
 };
 export type PackagesState = {
     list: Package[];
-    // loading: boolean;
 };
 export type RegistrationState = {
     // pending: boolean;
@@ -94,12 +103,13 @@ export type AppState = {
     api: APIStatusState;
     app: GeneralState;
     auth: AuthState;
-    user: UserDataState;
-    users: UsersState;
     blogs: BlogsState;
-    tips: TipsState;
-    pros: ProsState;
     lessons: LessonsState;
+    packages: PackagesState;
+    pros: ProsState;
     registration: RegistrationState;
     settings: UserSettingsState;
+    tips: TipsState;
+    user: UserDataState;
+    users: UsersState;
 };
