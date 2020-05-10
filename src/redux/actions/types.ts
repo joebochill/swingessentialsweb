@@ -58,7 +58,7 @@ export const CHECK_DISCOUNT = createAction('CHECK_DISCOUNT', 'checkCoupon');
 
 /* Credits Actions */
 export const GET_CREDITS = createAction('GET_CREDITS', 'credits');
-export const PURCHASE_CREDITS = createAction('PURCHASE_CREDITS', 'TODO');
+export const PURCHASE_CREDITS = createAction('PURCHASE_CREDITS', 'executepayment');
 
 /* Registration Actions */
 export const CHECK_USERNAME = createAction('CHECK_USERNAME', 'checkUser');

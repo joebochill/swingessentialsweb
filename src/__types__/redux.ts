@@ -25,12 +25,14 @@ export type APIStatusState = {
     checkUsername: BasicAPICheckStatus;
     createAccount: BasicAPIStatus;
     discount: DiscountStatus;
+    getCredits: BasicAPIStatus;
     getUserData: BasicAPIStatus;
     getUserSettings: BasicAPIStatus;
     loadLessons: BasicAPIStatus;
     loadUsers: BasicAPIStatus;
     packages: BasicAPIStatus;
     pros: BasicAPIStatus;
+    purchaseCredits: BasicAPIStatus;
     redeemLessons: BasicAPIStatus;
     resetPassword: BasicAPIStatus;
     tips: BasicAPIStatus;
@@ -74,11 +76,6 @@ export type UsersState = {
 };
 export type CreditsState = {
     count: number;
-    // unlimited: number,
-    // unlimitedExpires: number,
-    inProgress: boolean;
-    success: boolean;
-    fail: boolean;
 };
 export type BlogsState = {
     blogList: Blog[];
@@ -103,6 +100,7 @@ export type AppState = {
     api: APIStatusState;
     app: GeneralState;
     auth: AuthState;
+    credits: CreditsState;
     blogs: BlogsState;
     lessons: LessonsState;
     packages: PackagesState;

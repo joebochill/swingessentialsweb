@@ -33,6 +33,9 @@ export const DiscountReducer = (state = initialState, action: any): DiscountStat
                 code: null,
             };
         }
+        case CHECK_DISCOUNT.RESET: {
+            return initialState;
+        }
         default:
             return state;
     }

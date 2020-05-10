@@ -12,12 +12,14 @@ import { RegistrationReducer } from './data/registration';
 import { UserSettingsReducer } from './data/userSettings';
 import { APIReducer } from './apis';
 import { PackagesReducer } from './data/packages';
+import { CreditsReducer } from './data/credits';
 
 export const rootReducer = (): any =>
     combineReducers<AppState>({
         app: GeneralReducer,
         api: APIReducer,
         auth: AuthReducer,
+        credits: CreditsReducer,
         user: UserDataReducer,
         users: UsersReducer,
         blogs: BlogsReducer,
