@@ -45,6 +45,13 @@ const useStyles = makeStyles((theme: Theme) =>
                 alignSelf: 'stretch',
             },
         },
+        currentCredits: {
+            // flex: '0 0 auto',
+            textAlign: 'center',
+            padding: 32,
+            background: theme.palette.primary.light,
+            border: `1px solid ${theme.palette.primary.main}`,
+        },
     })
 );
 
@@ -113,19 +120,6 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                     body={`Swing Essentials offers competitive pricing on all of our lesson packages. Save yourself time and money by taking a remote lesson at your convenience. If you are not fully satisfied with your experience, we have a 100% money back guarantee.`}
                     style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
                 />
-                <Spacer flex={0} width={64} height={64} />
-                <div style={{ flex: '0 0 auto', padding: 32, background: 'rgba(255,255,255,0.5' }}>
-                    {loadingCredits ? (
-                        <CircularProgress />
-                    ) : (
-                        <>
-                            <Typography variant={'h3'} align={'center'}>
-                                {credits}
-                            </Typography>
-                            <Typography variant={'subtitle1'}>Credits Remaining</Typography>
-                        </>
-                    )}
-                </div>
             </Banner>
             <ActionToolbar show={admin}>
                 <Button variant={'text'} /*onClick={(): void => setShowNewDialog(true)}*/>
@@ -138,37 +132,54 @@ export const PackagesPage: React.FC = (): JSX.Element => {
 
             {packages.length > 0 && (
                 <Section align={'flex-start'}>
-                    <Card className={classes.listCard}>
-                        <CardHeader
-                            title={'Available Packages'}
-                            titleTypographyProps={{ variant: 'subtitle2' }}
-                            style={{ background: theme.palette.primary.main, color: 'white' }}
-                        />
-                        {packages.map((pkg, ind) => (
-                            <InfoListItem
-                                key={`package_${ind}`}
-                                dense
-                                chevron
-                                hidePadding
-                                wrapTitle
-                                divider={'full'}
-                                title={pkg.name}
-                                subtitle={pkg.description}
-                                rightComponent={<Typography>{`$${pkg.price}`}</Typography>}
-                                onClick={(): void => {
-                                    setActivePackage(pkg);
-                                }}
-                                statusColor={
-                                    activePackage && pkg.name === activePackage.name ? theme.palette.primary.main : ''
-                                }
-                                backgroundColor={
-                                    activePackage && pkg.name === activePackage.name
-                                        ? theme.palette.primary.light
-                                        : undefined
-                                }
+                    <div className={classes.listCard}>
+                        <Card>
+                            <CardHeader
+                                title={'Available Packages'}
+                                titleTypographyProps={{ variant: 'subtitle2' }}
+                                style={{ background: theme.palette.primary.main, color: 'white' }}
                             />
-                        ))}
-                    </Card>
+                            {packages.map((pkg, ind) => (
+                                <InfoListItem
+                                    key={`package_${ind}`}
+                                    dense
+                                    chevron
+                                    hidePadding
+                                    wrapTitle
+                                    divider={'full'}
+                                    title={pkg.name}
+                                    subtitle={pkg.description}
+                                    rightComponent={<Typography>{`$${pkg.price}`}</Typography>}
+                                    onClick={(): void => {
+                                        setActivePackage(pkg);
+                                    }}
+                                    statusColor={
+                                        activePackage && pkg.name === activePackage.name
+                                            ? theme.palette.primary.main
+                                            : ''
+                                    }
+                                    backgroundColor={
+                                        activePackage && pkg.name === activePackage.name
+                                            ? theme.palette.primary.light
+                                            : undefined
+                                    }
+                                />
+                            ))}
+                        </Card>
+                        <Spacer flex={0} width={64} height={64} />
+                        <div className={classes.currentCredits}>
+                            {loadingCredits ? (
+                                <CircularProgress />
+                            ) : (
+                                <>
+                                    <Typography variant={'h3'} align={'center'}>
+                                        {credits}
+                                    </Typography>
+                                    <Typography variant={'subtitle1'}>Current Credits Remaining</Typography>
+                                </>
+                            )}
+                        </div>
+                    </div>
                     <Spacer flex={0} width={64} height={64} />
                     <div style={{ flex: '1 1 0px', alignSelf: 'stretch', textAlign: 'center' }}>
                         {activePackage && (
