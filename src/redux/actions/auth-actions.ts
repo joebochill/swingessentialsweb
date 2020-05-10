@@ -4,7 +4,7 @@ import * as ACTIONS from './types';
 import { AUTH, BASEURL } from '../../constants';
 import { loadLessons } from './lessons-actions';
 import { loadTips } from './tip-actions';
-// import { loadCredits } from './CreditActions';
+import { loadCredits } from './credit-actions';
 import { loadBlogs } from './blog-actions';
 // import { loadSettings } from './SettingsActions';
 import { ThunkDispatch } from 'redux-thunk';
@@ -18,7 +18,7 @@ import { getUserNotifications } from './user-settings-actions';
 export function loadUserContent() {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch(loadLessons());
-        // dispatch(loadCredits());
+        dispatch(loadCredits());
         dispatch(getUserNotifications());
         dispatch(loadTips());
         dispatch(loadBlogs());
