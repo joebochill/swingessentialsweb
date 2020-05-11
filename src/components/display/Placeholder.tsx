@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useState, ChangeEvent } from 'react';
+import React, { HTMLAttributes, useState, ChangeEvent, MouseEvent } from 'react';
 import {
     makeStyles,
     Theme,
@@ -8,6 +8,11 @@ import {
     Button,
     TextField,
     FormHelperText,
+    Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    DialogActions,
 } from '@material-ui/core';
 import { AddAPhoto, Edit, AddCircle } from '@material-ui/icons';
 import clsx from 'clsx';
@@ -76,52 +81,80 @@ export const PlaceHolderVideo: React.FC<PlaceholderVideoProps> = (props) => {
     const [videoSrc, setVideoSrc] = useState<File | null>(null);
     const [videoSrcString, setVideoSrcString] = useState('');
 
+    const [error, setError] = useState('');
+    const [showError, setShowError] = useState(false);
+
     return (
-        <div {...divProps} style={Object.assign({ textAlign: 'center' }, style)}>
-            <div
-                className={clsx({ [classes.placeholder]: !videoSrc, [classes.portrait]: !videoSrc })}
-                style={videoSrc ? { background: 'none' } : { backgroundImage: `url(${background})` }}
-            >
-                <div className={classes.container}>
-                    <Typography variant={'subtitle1'} color={'primary'}>
-                        {title}
-                    </Typography>
+        <>
+            <div {...divProps} style={Object.assign({ textAlign: 'center' }, style)}>
+                <div
+                    className={clsx({ [classes.placeholder]: !videoSrc, [classes.portrait]: !videoSrc })}
+                    style={videoSrc ? { background: 'none' } : { backgroundImage: `url(${background})` }}
+                >
+                    <div className={classes.container}>
+                        <Typography variant={'subtitle1'} color={'primary'}>
+                            {title}
+                        </Typography>
+                    </div>
+                    <input
+                        className={classes.input}
+                        id={`file-picker-${title}`}
+                        style={{ display: videoSrc ? 'none' : 'initial' }}
+                        type={'file'}
+                        accept={'.mov,.mp4,.mpeg'}
+                        title={`Select a new ${title} video`}
+                        onClick={(evt: MouseEvent): void => {
+                            (evt.target as HTMLInputElement).value = '';
+                        }}
+                        onChange={(evt: ChangeEvent<HTMLInputElement>): void => {
+                            if (evt && evt.target && evt.target.files && evt.target.files.length > 0) {
+                                const size = evt.target.files[0].size;
+                                const tooBig = size > 10 * 1024 * 1024;
+                                if (tooBig) {
+                                    setError(
+                                        `The video you have selected is too large (${(size / (1024 * 1024)).toFixed(
+                                            1
+                                        )} MB). The maximum allowable file size is 10MB.`
+                                    );
+                                    setShowError(true);
+                                }
+                                setVideoSrc(tooBig ? null : evt.target.files[0]);
+                                setVideoSrcString(tooBig ? '' : URL.createObjectURL(evt.target.files[0] || ''));
+                                onVideoChange(tooBig ? null : evt.target.files[0]);
+                            }
+                        }}
+                    />
+                    {videoSrc && (
+                        <video className={classes.video} controls src={videoSrcString}>
+                            Your browser does not support the video tag.
+                        </video>
+                    )}
                 </div>
-                <input
-                    className={classes.input}
-                    id={`file-picker-${title}`}
-                    style={{ display: videoSrc ? 'none' : 'initial' }}
-                    type={'file'}
-                    accept={'.mov,.mp4,.mpeg'}
-                    title={`Select a new ${title} video`}
-                    // disabled={this.props.redeemPending}
-                    onChange={(evt: ChangeEvent<HTMLInputElement>): void => {
-                        if (evt && evt.target && evt.target.files && evt.target.files.length > 0) {
-                            setVideoSrc(evt.target.files[0]);
-                            setVideoSrcString(URL.createObjectURL(evt.target.files[0] || ''));
-                            onVideoChange(evt.target.files[0]);
-                        }
-                    }}
-                />
-                {videoSrc && (
-                    <video
-                        className={classes.video}
-                        // width="100%"
-                        controls
-                    >
-                        <source src={videoSrcString} type={'video/mov'}></source>
-                        <source src={videoSrcString} type={'video/mp4'}></source>
-                        Your browser does not support the video tag.
-                    </video>
-                )}
+                <label htmlFor={`file-picker-${title}`}>
+                    <Button variant={'text'} color={'primary'} component={'span'} style={{ marginTop: 8 }}>
+                        {videoSrc ? <Edit style={{ marginRight: 4 }} /> : <AddAPhoto style={{ marginRight: 4 }} />}
+                        {`${videoSrc ? 'Change' : 'Add'} Video`}
+                    </Button>
+                </label>
             </div>
-            <label htmlFor={`file-picker-${title}`}>
-                <Button variant={'text'} color={'primary'} component={'span'} style={{ marginTop: 8 }}>
-                    {videoSrc ? <Edit style={{ marginRight: 4 }} /> : <AddAPhoto style={{ marginRight: 4 }} />}
-                    {`${videoSrc ? 'Change' : 'Add'} Video`}
-                </Button>
-            </label>
-        </div>
+            <Dialog disableBackdropClick open={showError} onClose={(): void => setShowError(false)}>
+                <DialogTitle>{`Video Error`}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>{error}</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        color={'primary'}
+                        variant={'contained'}
+                        onClick={(): void => {
+                            setShowError(false);
+                        }}
+                    >
+                        Okay
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </>
     );
 };
 

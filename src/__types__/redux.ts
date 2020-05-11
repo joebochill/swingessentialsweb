@@ -35,6 +35,7 @@ export type APIStatusState = {
     purchaseCredits: BasicAPIStatus;
     redeemLessons: BasicAPIStatus;
     resetPassword: BasicAPIStatus;
+    submitLesson: BasicAPIStatus;
     tips: BasicAPIStatus;
     updateUserData: BasicAPIStatus;
     updateUserSettings: BasicAPIStatus;

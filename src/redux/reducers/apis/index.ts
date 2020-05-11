@@ -17,6 +17,7 @@ import {
     GET_PACKAGES,
     GET_CREDITS,
     PURCHASE_CREDITS,
+    SUBMIT_LESSON,
 } from '../../actions/types';
 import { combineReducers } from 'redux';
 import { simpleReducer } from './simpleReducer';
@@ -43,6 +44,7 @@ export const APIReducer = combineReducers<APIStatusState>({
     purchaseCredits: simpleReducer(PURCHASE_CREDITS),
     redeemLessons: simpleReducer(REDEEM_LESSON),
     resetPassword: simpleReducer(RESET_USER_PASSWORD),
+    submitLesson: simpleReducer(SUBMIT_LESSON),
     tips: simpleReducer(GET_TIPS),
     updateUserData: simpleReducer(SET_USER_DATA),
     updateUserSettings: simpleReducer(SET_USER_NOTIFICATIONS),
