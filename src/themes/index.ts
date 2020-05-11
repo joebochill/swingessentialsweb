@@ -56,7 +56,6 @@ export const SETheme: ThemeOptions = {
         },
     },
     overrides: {
-        // APP BAR OVERRIDES
         MuiAppBar: {
             colorDefault: {
                 color: ThemeColors.black['500'],
@@ -67,14 +66,15 @@ export const SETheme: ThemeOptions = {
             },
         },
         MuiFormHelperText: {
-            root: {
-                color: ThemeColors.white[50],
+            contained: {
+                marginLeft: 0,
+                marginRight: 0,
+                color: purple['700'],
                 '&$error': {
                     color: ThemeColors.white[50],
                     margin: 0,
                     paddingLeft: 14,
                     paddingRight: 14,
-                    // background: 'rgba(255,255,255,0.4)'
                     background: '#d2595a',
                 },
             },
