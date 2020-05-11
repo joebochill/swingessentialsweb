@@ -12,7 +12,7 @@ import {
     Theme,
 } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
-import { AddCircle, ShoppingCart, AddShoppingCart, CheckCircle, Error } from '@material-ui/icons';
+import { AddCircle, ShoppingCart, AddShoppingCart, CheckCircle, Error, Mail } from '@material-ui/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState, Package } from '../__types__';
 import { Banner } from '../components/display/Banner';
@@ -70,6 +70,7 @@ export const PackagesPage: React.FC = (): JSX.Element => {
     const packages = useSelector((state: AppState) => state.packages.list);
     const discount = useSelector((state: AppState) => state.api.discount.data);
     const credits = useSelector((state: AppState) => state.credits.count);
+    const role = useSelector((state: AppState) => state.auth.role);
 
     const loadingPackages = packagesStatus === 'loading';
     const loadingCredits = creditsStatus === 'loading';
@@ -90,6 +91,7 @@ export const PackagesPage: React.FC = (): JSX.Element => {
             : Math.min(discount.value, activePrice);
 
     const currentTotal = roundNumber(activePrice - discountAmount, 2);
+    const userAllowed = admin || role === 'customer';
 
     useEffect(() => {
         if (purchaseStatus === 'success' || purchaseStatus === 'failed') {
@@ -182,222 +184,235 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                     </div>
                     <Spacer flex={0} width={64} height={64} />
                     <div style={{ flex: '1 1 0px', alignSelf: 'stretch', textAlign: 'center' }}>
-                        {activePackage && (
+                        {userAllowed && (
                             <>
-                                <Card>
-                                    <CardHeader
-                                        title={'Order Details'}
-                                        titleTypographyProps={{ variant: 'subtitle2' }}
-                                        style={{
-                                            background: theme.palette.primary.main,
-                                            color: 'white',
-                                            textAlign: 'left',
-                                        }}
-                                    />
-                                    <InfoListItem
-                                        dense
-                                        hidePadding
-                                        wrapTitle
-                                        divider={'full'}
-                                        title={'Sub-total'}
-                                        subtitle={activePackage.name}
-                                        rightComponent={<Typography>{`$${activePackage.price}`}</Typography>}
-                                    />
-                                    {discount && discountAmount !== 0 && (
-                                        <InfoListItem
-                                            dense
-                                            hidePadding
-                                            wrapTitle
-                                            divider={'full'}
-                                            title={'Discount'}
-                                            subtitle={`${
-                                                discount.type === 'amount'
-                                                    ? `$${discount.value.toFixed(2)}`
-                                                    : `${discount.value}%`
-                                            } Off`}
-                                            rightComponent={
-                                                <Typography
-                                                    style={{ fontStyle: 'italic' }}
-                                                >{`-$${discountAmount.toFixed(2)}`}</Typography>
-                                            }
-                                        />
-                                    )}
-                                    <InfoListItem
-                                        dense
-                                        hidePadding
-                                        wrapTitle
-                                        divider={'full'}
-                                        title={'Tax'}
-                                        rightComponent={<Typography>{`$0.00`}</Typography>}
-                                    />
-                                    <InfoListItem
-                                        dense
-                                        hidePadding
-                                        wrapTitle
-                                        divider={'full'}
-                                        title={'Total'}
-                                        rightComponent={
-                                            <Typography style={{ fontWeight: 600 }}>{`$${currentTotal}`}</Typography>
-                                        }
-                                    />
-                                </Card>
-                                {discountStatus === 'success' && discount && discountAmount !== 0 && (
-                                    <div style={{ textAlign: 'center', marginTop: 16 }}>
-                                        <Typography variant={'overline'} style={{ lineHeight: 1 }}>
-                                            Discount Applied
-                                        </Typography>
-                                        <Typography variant={'subtitle2'}>{discount.code}</Typography>
-                                        <Typography variant={'body2'}>{`${
-                                            discount.type === 'amount'
-                                                ? `$${discount.value.toFixed(2)}`
-                                                : `${discount.value}%`
-                                        } Off`}</Typography>
-                                    </div>
-                                )}
-                                {discountStatus === 'failed' && (
-                                    <div style={{ textAlign: 'center', marginTop: 16 }}>
-                                        <Typography variant={'overline'} style={{ lineHeight: 1 }}>
-                                            Invalid Code
-                                        </Typography>
-                                    </div>
-                                )}
-                                {!showDiscount && (
+                                {activePackage && (
                                     <>
-                                        {/* <Typography variant={'subtitle2'}>Have a discount code?</Typography> */}
-                                        <SimpleLink
-                                            label={`Have a ${discount ? 'different' : 'discount'} code?`}
-                                            onClick={(): void => {
-                                                setShowDiscount(true);
-                                            }}
-                                            style={{ display: 'inline-block', marginTop: 16 }}
-                                        />
-                                    </>
-                                )}
-                                {showDiscount && (
-                                    <>
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <StyledTextField
-                                                fullWidth={false}
-                                                label={'Discount Code'}
-                                                name={'discount'}
-                                                error={false}
-                                                value={discountCode}
-                                                onChange={(e): void => {
-                                                    setDiscountCode(e.target.value);
+                                        <Card>
+                                            <CardHeader
+                                                title={'Order Details'}
+                                                titleTypographyProps={{ variant: 'subtitle2' }}
+                                                style={{
+                                                    background: theme.palette.primary.main,
+                                                    color: 'white',
+                                                    textAlign: 'left',
                                                 }}
-                                                style={{ flex: '1 1 0px', marginTop: 16 }}
                                             />
-                                            <Button
-                                                disabled={discountCode.length < 1}
-                                                variant={'contained'}
-                                                color={'primary'}
-                                                style={{ flex: '0 0 auto', marginLeft: 16 }}
-                                                onClick={(): void => {
-                                                    dispatch(checkDiscount(discountCode));
-                                                    setDiscountCode('');
-                                                    setShowDiscount(false);
-                                                }}
-                                            >
-                                                Apply
-                                            </Button>
-                                        </div>
-                                    </>
-                                )}
-
-                                <div style={{ marginTop: 16 }}>
-                                    {loadingPurchase ? (
-                                        <CircularProgress />
-                                    ) : currentTotal > 0 ? (
-                                        <>
-                                            <div
-                                                onClick={(): void => {
-                                                    setPaypalPending(true);
-                                                }}
-                                                style={{ display: paypalPending ? 'none' : 'initial' }}
-                                            >
-                                                <PayPalButton
-                                                    pkg={activePackage}
-                                                    discount={discountAmount}
+                                            <InfoListItem
+                                                dense
+                                                hidePadding
+                                                wrapTitle
+                                                divider={'full'}
+                                                title={'Sub-total'}
+                                                subtitle={activePackage.name}
+                                                rightComponent={<Typography>{`$${activePackage.price}`}</Typography>}
+                                            />
+                                            {discount && discountAmount !== 0 && (
+                                                <InfoListItem
+                                                    dense
+                                                    hidePadding
+                                                    wrapTitle
+                                                    divider={'full'}
+                                                    title={'Discount'}
+                                                    subtitle={`${
+                                                        discount.type === 'amount'
+                                                            ? `$${discount.value.toFixed(2)}`
+                                                            : `${discount.value}%`
+                                                    } Off`}
+                                                    rightComponent={
+                                                        <Typography
+                                                            style={{ fontStyle: 'italic' }}
+                                                        >{`-$${discountAmount.toFixed(2)}`}</Typography>
+                                                    }
+                                                />
+                                            )}
+                                            <InfoListItem
+                                                dense
+                                                hidePadding
+                                                wrapTitle
+                                                divider={'full'}
+                                                title={'Tax'}
+                                                rightComponent={<Typography>{`$0.00`}</Typography>}
+                                            />
+                                            <InfoListItem
+                                                dense
+                                                hidePadding
+                                                wrapTitle
+                                                divider={'full'}
+                                                title={'Total'}
+                                                rightComponent={
+                                                    <Typography
+                                                        style={{ fontWeight: 600 }}
+                                                    >{`$${currentTotal}`}</Typography>
+                                                }
+                                            />
+                                        </Card>
+                                        {discountStatus === 'success' && discount && discountAmount !== 0 && (
+                                            <div style={{ textAlign: 'center', marginTop: 16 }}>
+                                                <Typography variant={'overline'} style={{ lineHeight: 1 }}>
+                                                    Discount Applied
+                                                </Typography>
+                                                <Typography variant={'subtitle2'}>{discount.code}</Typography>
+                                                <Typography variant={'body2'}>{`${
+                                                    discount.type === 'amount'
+                                                        ? `$${discount.value.toFixed(2)}`
+                                                        : `${discount.value}%`
+                                                } Off`}</Typography>
+                                            </div>
+                                        )}
+                                        {discountStatus === 'failed' && (
+                                            <div style={{ textAlign: 'center', marginTop: 16 }}>
+                                                <Typography variant={'overline'} style={{ lineHeight: 1 }}>
+                                                    Invalid Code
+                                                </Typography>
+                                            </div>
+                                        )}
+                                        {!showDiscount && (
+                                            <>
+                                                {/* <Typography variant={'subtitle2'}>Have a discount code?</Typography> */}
+                                                <SimpleLink
+                                                    label={`Have a ${discount ? 'different' : 'discount'} code?`}
                                                     onClick={(): void => {
-                                                        setPaypalPending(true);
+                                                        setShowDiscount(true);
                                                     }}
-                                                    onSuccess={(data: any): void => {
-                                                        setPaypalPending(false);
+                                                    style={{ display: 'inline-block', marginTop: 16 }}
+                                                />
+                                            </>
+                                        )}
+                                        {showDiscount && (
+                                            <>
+                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <StyledTextField
+                                                        fullWidth={false}
+                                                        label={'Discount Code'}
+                                                        name={'discount'}
+                                                        error={false}
+                                                        value={discountCode}
+                                                        onChange={(e): void => {
+                                                            setDiscountCode(e.target.value);
+                                                        }}
+                                                        style={{ flex: '1 1 0px', marginTop: 16 }}
+                                                    />
+                                                    <Button
+                                                        disabled={discountCode.length < 1}
+                                                        variant={'contained'}
+                                                        color={'primary'}
+                                                        style={{ flex: '0 0 auto', marginLeft: 16 }}
+                                                        onClick={(): void => {
+                                                            dispatch(checkDiscount(discountCode));
+                                                            setDiscountCode('');
+                                                            setShowDiscount(false);
+                                                        }}
+                                                    >
+                                                        Apply
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        )}
+
+                                        <div style={{ marginTop: 16 }}>
+                                            {loadingPurchase ? (
+                                                <CircularProgress />
+                                            ) : currentTotal > 0 ? (
+                                                <>
+                                                    <div
+                                                        onClick={(): void => {
+                                                            setPaypalPending(true);
+                                                        }}
+                                                        style={{ display: paypalPending ? 'none' : 'initial' }}
+                                                    >
+                                                        <PayPalButton
+                                                            pkg={activePackage}
+                                                            discount={discountAmount}
+                                                            onClick={(): void => {
+                                                                setPaypalPending(true);
+                                                            }}
+                                                            onSuccess={(data: any): void => {
+                                                                setPaypalPending(false);
+                                                                dispatch(
+                                                                    purchaseCredits({
+                                                                        version: 'v2',
+                                                                        id: data.id,
+                                                                        payer: data.payer.payer_id,
+                                                                        package: activePackage.shortcode,
+                                                                        coupon: discount ? discount.code : '',
+                                                                        total: currentTotal.toFixed(2),
+                                                                    })
+                                                                );
+                                                            }}
+                                                            onCanceled={(): void => {
+                                                                setPaypalPending(false);
+                                                            }}
+                                                            onError={(): void => {
+                                                                setPaypalPending(false);
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    {paypalPending && <CircularProgress />}
+                                                </>
+                                            ) : (
+                                                <Button
+                                                    fullWidth
+                                                    variant={'contained'}
+                                                    color={'primary'}
+                                                    onClick={(): void => {
                                                         dispatch(
                                                             purchaseCredits({
                                                                 version: 'v2',
-                                                                id: data.id,
-                                                                payer: data.payer.payer_id,
+                                                                id: 'N/A',
+                                                                payer: 'N/A',
                                                                 package: activePackage.shortcode,
                                                                 coupon: discount ? discount.code : '',
                                                                 total: currentTotal.toFixed(2),
                                                             })
                                                         );
                                                     }}
-                                                    onCanceled={(): void => {
-                                                        setPaypalPending(false);
-                                                    }}
-                                                    onError={(): void => {
-                                                        setPaypalPending(false);
-                                                    }}
-                                                />
-                                            </div>
-                                            {paypalPending && <CircularProgress />}
-                                        </>
-                                    ) : (
-                                        <Button
-                                            fullWidth
-                                            variant={'contained'}
-                                            color={'primary'}
-                                            onClick={(): void => {
-                                                dispatch(
-                                                    purchaseCredits({
-                                                        version: 'v2',
-                                                        id: 'N/A',
-                                                        payer: 'N/A',
-                                                        package: activePackage.shortcode,
-                                                        coupon: discount ? discount.code : '',
-                                                        total: currentTotal.toFixed(2),
-                                                    })
-                                                );
-                                            }}
-                                        >
-                                            Complete Purchase
-                                        </Button>
-                                    )}
-                                </div>
+                                                >
+                                                    Complete Purchase
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </>
+                                )}
+                                {!activePackage && purchaseStatus === 'initial' && (
+                                    <EmptyState
+                                        icon={<AddShoppingCart fontSize={'inherit'} />}
+                                        title={'Select a lesson package to purchase'}
+                                        description={`Choose one of our available packages to complete your order.`}
+                                    />
+                                )}
+                                {!activePackage && purchaseStatus === 'success' && (
+                                    <EmptyState
+                                        icon={<CheckCircle fontSize={'inherit'} htmlColor={Colors.green[500]} />}
+                                        title={'Purchase Complete'}
+                                        description={`Your purchase was successful!`}
+                                        actions={
+                                            <Button
+                                                variant={'contained'}
+                                                color={'primary'}
+                                                onClick={(): void => {
+                                                    history.push(ROUTES.SUBMIT);
+                                                }}
+                                            >
+                                                Submit Your Swing
+                                            </Button>
+                                        }
+                                    />
+                                )}
+                                {!activePackage && purchaseStatus === 'failed' && (
+                                    <EmptyState
+                                        icon={<Error fontSize={'inherit'} htmlColor={Colors.red[500]} />}
+                                        title={'Purchase Failed'}
+                                        description={`There was a problem completing your purchase. If this problem persists, please contact us.`}
+                                    />
+                                )}
                             </>
                         )}
-                        {!activePackage && purchaseStatus === 'initial' && (
+                        {role === 'pending' && (
                             <EmptyState
-                                icon={<AddShoppingCart fontSize={'inherit'} />}
-                                title={'Select a lesson package to purchase'}
-                                description={`Choose one of our available packages to complete your order.`}
-                            />
-                        )}
-                        {!activePackage && purchaseStatus === 'success' && (
-                            <EmptyState
-                                icon={<CheckCircle fontSize={'inherit'} htmlColor={Colors.green[500]} />}
-                                title={'Purchase Complete'}
-                                description={`Your purchase was successful!`}
-                                actions={
-                                    <Button
-                                        variant={'contained'}
-                                        color={'primary'}
-                                        onClick={(): void => {
-                                            history.push(ROUTES.SUBMIT);
-                                        }}
-                                    >
-                                        Submit Your Swing
-                                    </Button>
-                                }
-                            />
-                        )}
-                        {!activePackage && purchaseStatus === 'failed' && (
-                            <EmptyState
-                                icon={<Error fontSize={'inherit'} htmlColor={Colors.red[500]} />}
-                                title={'Purchase Failed'}
-                                description={`There was a problem completing your purchase. If this problem persists, please contact us.`}
+                                icon={<Mail fontSize={'inherit'} color={'inherit'} />}
+                                title={'Verify Account'}
+                                description={`You must confirm your email address before you can order lessons.`}
                             />
                         )}
                     </div>
