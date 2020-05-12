@@ -12,14 +12,12 @@ import {
     Theme,
 } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
-import { AddCircle, ShoppingCart, AddShoppingCart, CheckCircle, Error, Mail } from '@material-ui/icons';
+import { AddCircle, ShoppingCart, AddShoppingCart, CheckCircle, Error, Mail, Edit } from '@material-ui/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState, Package } from '../__types__';
 import { Banner } from '../components/display/Banner';
 import { Section } from '../components/display/Section';
 import { ActionToolbar } from '../components/toolbars/ActionToolbar';
-// import { LoadingIndicator } from '../components/display/LoadingIndicator';
-// import { useHistory } from 'react-router-dom';
 import { InfoListItem, Spacer, EmptyState } from '@pxblue/react-components';
 import { PayPalButton } from '../components/lessons/PayPal';
 import { SimpleLink } from '../components/navigation/SimpleLink';
@@ -33,6 +31,24 @@ import * as Colors from '@pxblue/colors';
 import { CHECK_DISCOUNT, PURCHASE_CREDITS } from '../redux/actions/types';
 import { useHistory } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
+import { EditPackageDialog } from '../components/dialogs/EditPackageDialog';
+
+const BlankPackage: Package = {
+    id: -1,
+    name: '',
+    description: '',
+    shortcode: '',
+    count: '',
+    duration: 0,
+    price: '',
+    //eslint-disable-next-line @typescript-eslint/camelcase
+    app_sku: '',
+};
+
+type DialogOpen = {
+    open: boolean;
+    isNew: boolean;
+};
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -76,10 +92,12 @@ export const PackagesPage: React.FC = (): JSX.Element => {
     const loadingCredits = creditsStatus === 'loading';
     const loadingPurchase = purchaseStatus === 'loading';
 
-    const [activePackage, setActivePackage] = useState<Package | null>(null);
     const [showDiscount, setShowDiscount] = useState(false);
     const [discountCode, setDiscountCode] = useState('');
     const [paypalPending, setPaypalPending] = useState(false);
+
+    const [activePackage, setActivePackage] = useState<Package | null>(null);
+    const [showDialog, setShowDialog] = useState<DialogOpen>({ open: false, isNew: true });
 
     const activePrice = !activePackage ? 0 : parseFloat(activePackage.price);
 
@@ -124,13 +142,24 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                 />
             </Banner>
             <ActionToolbar show={admin}>
-                <Button variant={'text'} /*onClick={(): void => setShowNewDialog(true)}*/>
+                <Button variant={'text'} onClick={(): void => setShowDialog({ open: true, isNew: true })}>
                     <AddCircle style={{ marginRight: 4 }} />
                     New Package
                 </Button>
             </ActionToolbar>
 
             <LoadingIndicator show={loadingPackages && packages.length < 1} />
+
+            {admin && (
+                <EditPackageDialog
+                    isNew={showDialog.isNew}
+                    pkg={showDialog.isNew ? BlankPackage : activePackage ? activePackage : BlankPackage}
+                    open={showDialog.open}
+                    onClose={(): void => {
+                        setShowDialog({ open: false, isNew: showDialog.isNew });
+                    }}
+                />
+            )}
 
             {packages.length > 0 && (
                 <Section align={'flex-start'}>
@@ -148,6 +177,13 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                                     chevron
                                     hidePadding
                                     wrapTitle
+                                    icon={
+                                        <Edit
+                                            onClick={(): void => {
+                                                setShowDialog({ open: true, isNew: false });
+                                            }}
+                                        />
+                                    }
                                     divider={'full'}
                                     title={pkg.name}
                                     subtitle={pkg.description}
