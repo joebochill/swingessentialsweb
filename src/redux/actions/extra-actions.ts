@@ -7,6 +7,7 @@ import { ASYNC_PREFIX } from '../../constants';
 import { setToken } from './auth-actions';
 import { loadPros } from './pro-actions';
 import { loadPackages } from './package-actions';
+import { loadDiscounts } from './discount-actions';
 // import { loadTutorials } from './TutorialsActions';
 
 export function loadInitialData(): Function {
@@ -19,8 +20,7 @@ export function loadInitialData(): Function {
         dispatch(loadBlogs());
         dispatch(loadPros());
         dispatch(loadPackages());
-        // dispatch(loadFAQ());
-        // dispatch(loadTutorials());
+        dispatch(loadDiscounts());
     };
 }
 

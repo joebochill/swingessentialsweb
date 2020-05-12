@@ -7,7 +7,7 @@ import {
     AuthenticationStatus,
     DiscountStatus,
 } from '.';
-import { Lesson, Tip, User, Blog, Pro, Package } from './data';
+import { Lesson, Tip, User, Blog, Pro, Package, Discount } from './data';
 
 /*
     REDUX STATES TYPES
@@ -24,8 +24,9 @@ export type APIStatusState = {
     checkEmail: BasicAPICheckStatus;
     checkUsername: BasicAPICheckStatus;
     createAccount: BasicAPIStatus;
-    discount: DiscountStatus;
+    checkDiscount: DiscountStatus;
     getCredits: BasicAPIStatus;
+    getDiscounts: BasicAPIStatus;
     getUserData: BasicAPIStatus;
     getUserSettings: BasicAPIStatus;
     loadLessons: BasicAPIStatus;
@@ -78,6 +79,9 @@ export type UsersState = {
 export type CreditsState = {
     count: number;
 };
+export type DiscountsState = {
+    list: Discount[];
+};
 export type BlogsState = {
     blogList: Blog[];
 };
@@ -101,8 +105,9 @@ export type AppState = {
     api: APIStatusState;
     app: GeneralState;
     auth: AuthState;
-    credits: CreditsState;
     blogs: BlogsState;
+    credits: CreditsState;
+    discounts: DiscountsState;
     lessons: LessonsState;
     packages: PackagesState;
     pros: ProsState;

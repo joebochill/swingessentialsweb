@@ -18,13 +18,14 @@ import {
     GET_CREDITS,
     PURCHASE_CREDITS,
     SUBMIT_LESSON,
+    GET_DISCOUNTS,
 } from '../../actions/types';
 import { combineReducers } from 'redux';
 import { simpleReducer } from './simpleReducer';
 import { CheckEmailReducer, CheckUsernameReducer } from './registration';
 import { ValidatePasswordReducer, VerifyResetPasswordReducer } from './credentials';
 import { AuthenticationReducer } from './authentication';
-import { DiscountReducer } from './discounts';
+import { CheckDiscountReducer } from './check-discounts';
 
 export const APIReducer = combineReducers<APIStatusState>({
     authentication: AuthenticationReducer,
@@ -33,8 +34,9 @@ export const APIReducer = combineReducers<APIStatusState>({
     checkEmail: CheckEmailReducer,
     checkUsername: CheckUsernameReducer,
     createAccount: simpleReducer(CREATE_ACCOUNT),
-    discount: DiscountReducer,
+    checkDiscount: CheckDiscountReducer,
     getCredits: simpleReducer(GET_CREDITS),
+    getDiscounts: simpleReducer(GET_DISCOUNTS),
     getUserData: simpleReducer(GET_USER_DATA),
     getUserSettings: simpleReducer(GET_SETTINGS),
     loadLessons: simpleReducer(GET_LESSONS),

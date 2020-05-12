@@ -6,7 +6,7 @@ const initialState: DiscountStatus = {
     code: null,
     data: null,
 };
-export const DiscountReducer = (state = initialState, action: any): DiscountStatus => {
+export const CheckDiscountReducer = (state = initialState, action: any): DiscountStatus => {
     switch (action.type) {
         case CHECK_DISCOUNT.REQUEST:
             return {
@@ -23,7 +23,7 @@ export const DiscountReducer = (state = initialState, action: any): DiscountStat
                 data: {
                     code: action.payload.code,
                     type: action.payload.type,
-                    value: parseFloat(action.payload.value),
+                    value: action.payload.value,
                 },
             };
         case CHECK_DISCOUNT.FAILURE: {

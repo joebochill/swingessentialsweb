@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, useLocation, Redirect } from 'react-router-dom';
-// import { DrawerLayout } from '@pxblue/react-components';
 import { NavigationDrawer } from '../components/navigation/drawer';
 import { Toolbar } from '../components/toolbars/Toolbar';
 import { Footer } from '../components/toolbars/Footer';
@@ -8,7 +7,6 @@ import { ROUTES } from '../constants/routes';
 import {
     LessonsPage,
     LandingPage,
-    PlaceholderPage,
     ProsPage,
     TipsPage,
     BlogsPage,
@@ -19,12 +17,13 @@ import {
     PrivacyPage,
     ProfilePage,
     PackagesPage,
+    SubmitPage,
+    AdminPage,
 } from '../pages';
 import { usePrevious } from '../hooks';
 import { useSelector } from 'react-redux';
 import { AppState } from '../__types__';
 import { PrivateRoute } from '../components/navigation/PrivateRoute';
-import { SubmitPage } from '../pages/SubmitPage';
 
 const ScrollToTop = (): any => {
     const { pathname } = useLocation();
@@ -41,6 +40,7 @@ const ScrollToTop = (): any => {
 
 export const MainRouter = (): JSX.Element => {
     const token = useSelector((state: AppState) => state.auth.token);
+    const admin = useSelector((state: AppState) => state.auth.admin);
     const loggedIn = token !== null;
     return (
         <Router>
@@ -63,14 +63,12 @@ export const MainRouter = (): JSX.Element => {
                 <Route exact path={`${ROUTES.TERMS}`} component={TermsPage} />
                 <Route exact path={`${ROUTES.PRIVACY}`} component={PrivacyPage} />
 
+                <PrivateRoute exact path={`${ROUTES.ADMIN}`} component={AdminPage} canActivate={admin} />
+
                 {/* Deep Links */}
                 <Route exact path={`${ROUTES.BLOG}/:id`} component={BlogsPage} />
                 <Route exact path={`${ROUTES.TIPS}/:id`} component={TipsPage} />
                 <Route exact path={`${ROUTES.LESSONS}/:id`} component={LessonsPage} />
-
-                {/* TODO */}
-                {/* <Route exact path={`${ROUTES.UNSUBSCRIBE}/:user/:key`} component={PlaceholderPage} /> */}
-                <Route exact path={`${ROUTES.ADMIN}`} component={PlaceholderPage} />
 
                 <Route path="*">
                     <Redirect to="/" />

@@ -12,14 +12,11 @@ import {
     Theme,
 } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
-import { AddCircle, ShoppingCart, AddShoppingCart, CheckCircle, Error, Mail } from '@material-ui/icons';
+import { ShoppingCart, AddShoppingCart, CheckCircle, Error, Mail } from '@material-ui/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState, Package } from '../__types__';
 import { Banner } from '../components/display/Banner';
 import { Section } from '../components/display/Section';
-import { ActionToolbar } from '../components/toolbars/ActionToolbar';
-// import { LoadingIndicator } from '../components/display/LoadingIndicator';
-// import { useHistory } from 'react-router-dom';
 import { InfoListItem, Spacer, EmptyState } from '@pxblue/react-components';
 import { PayPalButton } from '../components/lessons/PayPal';
 import { SimpleLink } from '../components/navigation/SimpleLink';
@@ -33,6 +30,11 @@ import * as Colors from '@pxblue/colors';
 import { CHECK_DISCOUNT, PURCHASE_CREDITS } from '../redux/actions/types';
 import { useHistory } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
+
+type DialogOpen = {
+    open: boolean;
+    isNew: boolean;
+};
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -62,13 +64,13 @@ export const PackagesPage: React.FC = (): JSX.Element => {
     const history = useHistory();
 
     const packagesStatus = useSelector((state: AppState) => state.api.packages.status);
-    const discountStatus = useSelector((state: AppState) => state.api.discount.status);
+    const discountStatus = useSelector((state: AppState) => state.api.checkDiscount.status);
     const purchaseStatus = useSelector((state: AppState) => state.api.purchaseCredits.status);
     const creditsStatus = useSelector((state: AppState) => state.api.getCredits.status);
 
     const admin = useSelector((state: AppState) => state.auth.admin);
     const packages = useSelector((state: AppState) => state.packages.list);
-    const discount = useSelector((state: AppState) => state.api.discount.data);
+    const discount = useSelector((state: AppState) => state.api.checkDiscount.data);
     const credits = useSelector((state: AppState) => state.credits.count);
     const role = useSelector((state: AppState) => state.auth.role);
 
@@ -76,10 +78,11 @@ export const PackagesPage: React.FC = (): JSX.Element => {
     const loadingCredits = creditsStatus === 'loading';
     const loadingPurchase = purchaseStatus === 'loading';
 
-    const [activePackage, setActivePackage] = useState<Package | null>(null);
     const [showDiscount, setShowDiscount] = useState(false);
     const [discountCode, setDiscountCode] = useState('');
     const [paypalPending, setPaypalPending] = useState(false);
+
+    const [activePackage, setActivePackage] = useState<Package | null>(null);
 
     const activePrice = !activePackage ? 0 : parseFloat(activePackage.price);
 
@@ -87,8 +90,8 @@ export const PackagesPage: React.FC = (): JSX.Element => {
         !activePackage || !discount
             ? 0
             : discount.type === 'percent'
-            ? Math.min((discount.value / 100) * activePrice, activePrice)
-            : Math.min(discount.value, activePrice);
+            ? Math.min((parseInt(discount.value, 10) / 100) * activePrice, activePrice)
+            : Math.min(parseInt(discount.value), activePrice);
 
     const currentTotal = roundNumber(activePrice - discountAmount, 2);
     const userAllowed = admin || role === 'customer';
@@ -123,12 +126,6 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                     style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
                 />
             </Banner>
-            <ActionToolbar show={admin}>
-                <Button variant={'text'} /*onClick={(): void => setShowNewDialog(true)}*/>
-                    <AddCircle style={{ marginRight: 4 }} />
-                    New Package
-                </Button>
-            </ActionToolbar>
 
             <LoadingIndicator show={loadingPackages && packages.length < 1} />
 
@@ -216,8 +213,8 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                                                     title={'Discount'}
                                                     subtitle={`${
                                                         discount.type === 'amount'
-                                                            ? `$${discount.value.toFixed(2)}`
-                                                            : `${discount.value}%`
+                                                            ? `$${parseInt(discount.value, 10).toFixed(2)}`
+                                                            : `${parseInt(discount.value, 10)}%`
                                                     } Off`}
                                                     rightComponent={
                                                         <Typography
@@ -255,7 +252,7 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                                                 <Typography variant={'subtitle2'}>{discount.code}</Typography>
                                                 <Typography variant={'body2'}>{`${
                                                     discount.type === 'amount'
-                                                        ? `$${discount.value.toFixed(2)}`
+                                                        ? `$${parseInt(discount.value).toFixed(2)}`
                                                         : `${discount.value}%`
                                                 } Off`}</Typography>
                                             </div>

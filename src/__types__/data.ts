@@ -32,9 +32,18 @@ export type Package = {
     app_sku: string;
 };
 export type Discount = {
+    id: number | string;
+    description: string;
     code: string;
     type: 'percent' | 'amount';
-    value: number;
+    value: string;
+    expires: string;
+    quantity: string;
+};
+export type CurrentDiscount = {
+    code: string;
+    type: 'percent' | 'amount';
+    value: string;
 };
 export type Tip = {
     id: string | number;
