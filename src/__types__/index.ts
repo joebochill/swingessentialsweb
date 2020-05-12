@@ -1,4 +1,4 @@
-import { Discount } from './data';
+import { CurrentDiscount } from './data';
 
 export type UserRole = 'administrator' | 'anonymous' | 'customer' | 'pending';
 export type LessonType = 'in-person' | 'single';
@@ -36,7 +36,7 @@ export type VerifyStatus = BasicAPIStatusWithData<{
     resetUser: string | null;
     resetToken: string | null;
 } | null>;
-export type DiscountStatus = BasicAPIStatusWithData<Discount | null>;
+export type DiscountStatus = BasicAPIStatusWithData<CurrentDiscount | null>;
 
 export * from './data';
 export * from './redux';

@@ -12,6 +12,7 @@ import { Credentials } from '../../__types__';
 import { HttpRequest } from '../../api/http';
 import { loadUserInfo, updateUserPassword } from './user-data-actions';
 import { getUserNotifications } from './user-settings-actions';
+import { loadDiscounts } from './discount-actions';
 // import { Logger } from '../../utilities/logging';
 // import * as Keychain from 'react-native-keychain';
 
@@ -22,6 +23,7 @@ export function loadUserContent() {
         dispatch(getUserNotifications());
         dispatch(loadTips());
         dispatch(loadBlogs());
+        dispatch(loadDiscounts());
     };
 }
 

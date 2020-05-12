@@ -119,7 +119,7 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
             <MenuListItem title={'Home'} icon={<Home />} divider onClick={(): void => clickMenuItem(ROUTES.HOME)} />
             {isAdmin && (
                 <MenuListItem
-                    title={'Admin'}
+                    title={'Admin Portal'}
                     icon={<Security />}
                     divider
                     onClick={(): void => clickMenuItem(ROUTES.ADMIN)}

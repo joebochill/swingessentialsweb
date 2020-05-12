@@ -163,7 +163,7 @@ export const EditPackageDialog: React.FC<EditPackageDialogProps> = (props) => {
                     <Button
                         color="primary"
                         variant={'contained'}
-                        disabled={!name}
+                        disabled={!name || !description || !short || count < 1 || !price || !sku}
                         onClick={(e): void => {
                             if (isNew) {
                                 dispatch(

@@ -57,6 +57,12 @@ export const GET_PACKAGES = createAction('GET_PACKAGES', 'packages');
 export const UPDATE_PACKAGE = createAction('UPDATE_PACKAGE', 'package');
 export const ADD_PACKAGE = createAction('ADD_PACKAGE', 'package');
 export const REMOVE_PACKAGE = createAction('REMOVE_PACKAGE', 'removepackage');
+
+/* Discount Actions */
+export const GET_DISCOUNTS = createAction('GET_DISCOUNTS', 'discounts');
+export const UPDATE_DISCOUNT = createAction('UPDATE_DISCOUNT', 'discount');
+export const ADD_DISCOUNT = createAction('ADD_DISCOUNT', 'discount');
+export const REMOVE_DISCOUNT = createAction('REMOVE_DISCOUNT', 'removediscount');
 export const CHECK_DISCOUNT = createAction('CHECK_DISCOUNT', 'checkCoupon');
 
 /* Credits Actions */
