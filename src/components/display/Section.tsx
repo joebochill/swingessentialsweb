@@ -2,12 +2,14 @@ import React, { HTMLAttributes } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core';
 import clsx from 'clsx';
 
+type TextAlign = 'left' | 'right' | 'center';
 const useStyles = makeStyles<Theme, SectionProps>((theme: Theme) =>
     createStyles({
         section: {
             background: theme.palette.background.paper,
             padding: 64,
             display: 'flex',
+            textAlign: (props): TextAlign => props.textAlign || 'left',
             alignItems: (props): string => props.align || 'center',
             justifyContent: (props): string => props.justify || 'center',
             '&:nth-of-type(even)': {
@@ -17,7 +19,7 @@ const useStyles = makeStyles<Theme, SectionProps>((theme: Theme) =>
                 padding: `64px 10%`,
                 justifyContent: 'stretch',
                 flexDirection: 'column',
-                textAlign: 'center',
+                textAlign: (props): TextAlign => props.textAlign || 'center',
             },
         },
     })
@@ -29,17 +31,18 @@ type SectionProps = HTMLAttributes<HTMLDivElement> & {
     };
     justify?: 'flex-start' | 'center' | 'stretch';
     align?: 'flex-start' | 'center' | 'stretch';
+    textAlign?: TextAlign;
     dark?: boolean;
     light?: boolean;
 };
 export const Section: React.FC<SectionProps> = (props): JSX.Element => {
-    const { background = {}, style, ...other } = props;
+    const { background = {}, style, textAlign, ...other } = props;
     const classes = useStyles(props);
 
     return (
         <div
             className={clsx(classes.section)}
-            style={Object.assign({ backgroundColor: background.color }, style)}
+            style={Object.assign({ backgroundColor: background.color, textAlign: textAlign }, style)}
             {...other}
         >
             {props.children}

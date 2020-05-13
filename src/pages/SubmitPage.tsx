@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import bg from '../assets/images/banners/swing.jpg';
+import bg from '../assets/images/banners/swing3.jpg';
 import dtl from '../assets/icons/down-the-line.png';
 import fo from '../assets/icons/face-on.png';
 

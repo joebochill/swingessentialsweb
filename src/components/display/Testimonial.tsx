@@ -25,7 +25,8 @@ const useStyles = makeStyles((theme: Theme) =>
             top: -40,
             left: '50%',
             transform: 'translateX(-50%)',
-            border: `${theme.spacing(1)}px solid rgba(255,255,255,0.25)`,
+            border: (props): string =>
+                `${theme.spacing(0.5)}px solid ${props.src ? 'rgba(255,255,255,0.25)' : theme.palette.primary.main}`,
         },
         quoteWrapper: {
             background: theme.palette.primary.light,
@@ -89,7 +90,7 @@ export const Testimonial: React.FC<TestimonialProps> = (props) => {
         <div className={classes.root} {...divProps}>
             <div className={classes.quoteWrapper}>
                 {/* <Typography variant={'h5'} className={classes.punctuation}>“</Typography> */}
-                <Typography>
+                <Typography style={{ width: '100%' }}>
                     <Typography component={'span'} variant={'h5'} className={classes.punctuation}>
                         “
                     </Typography>
@@ -105,10 +106,12 @@ export const Testimonial: React.FC<TestimonialProps> = (props) => {
                     {initials}
                 </Avatar>
                 <Headline noWrap>{name}</Headline>
+                {/* <Hidden xsUp> */}
                 <SubHeading noWrap display={'block'}>
                     {location}
                 </SubHeading>
                 <Typography noWrap variant={'caption'}>{`Member since ${joined}`}</Typography>
+                {/* </Hidden> */}
             </div>
         </div>
     );

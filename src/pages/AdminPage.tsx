@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import bg from '../assets/images/banners/order.jpg';
+import bg from '../assets/images/banners/pros2.jpg';
 import {
     makeStyles,
     createStyles,
@@ -90,7 +90,7 @@ export const AdminPage: React.FC = (): JSX.Element => {
 
     return (
         <>
-            <Banner background={{ src: '', position: 'right bottom' }}>
+            <Banner background={{ src: bg, position: 'right bottom' }}>
                 <SectionBlurb
                     jumbo
                     icon={<Security fontSize={'inherit'} />}

@@ -14,6 +14,7 @@ import { APIReducer } from './apis';
 import { PackagesReducer } from './data/packages';
 import { CreditsReducer } from './data/credits';
 import { DiscountsReducer } from './data/discounts';
+import { TestimonialsReducer } from './data/testimonials';
 
 export const rootReducer = (): any =>
     combineReducers<AppState>({
@@ -31,4 +32,5 @@ export const rootReducer = (): any =>
         lessons: LessonsReducer,
         registration: RegistrationReducer,
         settings: UserSettingsReducer,
+        testimonials: TestimonialsReducer,
     });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import bg from '../assets/images/banners/lessons.jpg';
+import bg from '../assets/images/banners/lessons2.jpg';
 import { makeStyles, createStyles, Button, Typography, IconButton, useMediaQuery, Theme } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
 import {
@@ -159,7 +159,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
 
     return (
         <>
-            <Banner background={{ src: bg, position: 'center right' }}>
+            <Banner background={{ src: bg, position: 'right center' }}>
                 <SectionBlurb
                     jumbo
                     icon={<Subscriptions fontSize={'inherit'} />}

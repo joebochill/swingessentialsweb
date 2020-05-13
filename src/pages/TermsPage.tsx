@@ -1,13 +1,11 @@
 import React, { ReactNode } from 'react';
-import bg from '../assets/images/banners/landing.jpg';
 import { Banner } from '../components/display/Banner';
 import { SectionBlurb } from '../components/text/SectionBlurb';
 import { Gavel } from '@material-ui/icons';
 import { Section } from '../components/display/Section';
 import { Typography } from '@material-ui/core';
 import { SimpleRouterLink, SimpleLink } from '../components/navigation/SimpleLink';
-// import Footer from '../footer/Footer.js';
-// import { NavLink } from 'react-router-dom';
+
 type TermsContent = {
     title: string;
     contents: ReactNode[];
@@ -16,7 +14,7 @@ const termsData: TermsContent[] = [
     {
         title: 'I. USE OF THE SITE AND APP',
         contents: [
-            'Swing Essentials owns and operates the Site and App. The documents and other information and content available on the Site and App (the “Site and App Content”) are protected by copyright laws throughout the world. The Site and App Content may be owned by us or may be provided through an arrangement We have with others, including other users, or our partners, sponsors, or affiliates. The Site and App Content is protected by copyright under both United States and foreign laws. Unauthorized use of the Site and App Content may violate copyright, trademark, and other laws. You have no rights in or to the Site and App Content, and you may not use the Site and App Content except as permitted under these Terms of Use. No other use is permitted without prior written consent from us or the owner of the Site and App Content. You must retain all copyright and other proprietary notices contained in the original Site and App Content on any copy you make of the Site and App Content. You may not sell, transfer, assign, license, sublicense, or modify the Site and App Content or reproduce, display, publicly perform, make a derivative version of, distribute, or otherwise use the Site and App Content in any way for any public or commercial purpose, except to utilize features of the Site and App that, by their nature, involve publishing or sharing of the Site and App Content with the public. If you violate any part of these Terms of Use, your permission to access and/or use the Site and App Content automatically terminates and you must immediately destroy any copies you have made of the Site and App Content.',
+            'Swing Essentials owns and operates the Site and App. The documents and other information and content available on the Site and App (the "Site and App Content") are protected by copyright laws throughout the world. The Site and App Content may be owned by us or may be provided through an arrangement We have with others, including other users, or our partners, sponsors, or affiliates. The Site and App Content is protected by copyright under both United States and foreign laws. Unauthorized use of the Site and App Content may violate copyright, trademark, and other laws. You have no rights in or to the Site and App Content, and you may not use the Site and App Content except as permitted under these Terms of Use. No other use is permitted without prior written consent from us or the owner of the Site and App Content. You must retain all copyright and other proprietary notices contained in the original Site and App Content on any copy you make of the Site and App Content. You may not sell, transfer, assign, license, sublicense, or modify the Site and App Content or reproduce, display, publicly perform, make a derivative version of, distribute, or otherwise use the Site and App Content in any way for any public or commercial purpose, except to utilize features of the Site and App that, by their nature, involve publishing or sharing of the Site and App Content with the public. If you violate any part of these Terms of Use, your permission to access and/or use the Site and App Content automatically terminates and you must immediately destroy any copies you have made of the Site and App Content.',
         ],
     },
     {
@@ -98,18 +96,18 @@ const termsData: TermsContent[] = [
 
 export const TermsPage: React.FC = () => (
     <>
-        <Banner background={{ src: bg, position: 'center 70%', opacity: 0.3 }}>
+        <Banner background={{ src: '', position: 'center 70%', opacity: 0.3 }}>
             <SectionBlurb
                 jumbo
                 icon={<Gavel fontSize={'inherit'} />}
                 headline={'Terms of Use'}
                 subheading={'Effective March 1, 2018'}
-                body={`Swing Essentials, LLC  (“Swing Essentials” or “We”) grants you the right to use this website (“Site”) and mobile application (“App”) subject to the terms and conditions of use (“Terms of Use” or “Agreement”) set forth below. THE PURCHASE OF ANY PRODUCT OR SERVICE THROUGH THE SITE IS GOVERNED BY THE TERMS OF SALE . PLEASE READ THESE TERMS OF USE CAREFULLY. BY ACCESSING THE SITE, YOU AGREE TO BE BOUND BY THE TERMS OF USE. IF YOU DO NOT WISH TO BE BOUND BY THESE TERMS OF USE, YOU MAY NOT ACCESS OR USE THIS SITE OR THE APP.`}
+                body={`Swing Essentials, LLC  ("Swing Essentials" or "We") grants you the right to use this website ("Site") and mobile application ("App") subject to the terms and conditions of use ("Terms of Use" or "Agreement") set forth below. The purchase of any product or service through the site is governed by the terms of sale . Please read these terms of use carefully. By accessing the site, you agree to be bound by the terms of use. If you do not wish to be bound by these terms of use, you may not access or use this site or the app.`}
                 style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
             />
         </Banner>
         {termsData.map((section, index) => (
-            <Section key={`terms_section_${index}`} style={{ display: 'block' }}>
+            <Section key={`terms_section_${index}`} style={{ display: 'block' }} textAlign={'left'}>
                 <Typography variant={'h6'}>{section.title}</Typography>
                 {section.contents.map((par, pInd) => (
                     <Typography key={`p_${pInd}`} paragraph={pInd < section.contents.length - 1}>

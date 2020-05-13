@@ -1,13 +1,11 @@
 import React, { ReactNode } from 'react';
-import bg from '../assets/images/banners/landing.jpg';
 import { Banner } from '../components/display/Banner';
 import { SectionBlurb } from '../components/text/SectionBlurb';
 import { Policy } from '@material-ui/icons';
 import { Section } from '../components/display/Section';
 import { Typography } from '@material-ui/core';
 import { SimpleLink } from '../components/navigation/SimpleLink';
-// import Footer from '../footer/Footer.js';
-// import { NavLink } from 'react-router-dom';
+
 type PrivacyContent = {
     title: string;
     contents: ReactNode[];
@@ -152,18 +150,18 @@ const privacyData: PrivacyContent[] = [
 
 export const PrivacyPage: React.FC = () => (
     <>
-        <Banner background={{ src: bg, position: 'center 70%', opacity: 0.3 }}>
+        <Banner background={{ src: '', position: 'center 70%', opacity: 0.3 }}>
             <SectionBlurb
                 jumbo
                 icon={<Policy fontSize={'inherit'} />}
                 headline={'Privacy Policy'}
                 subheading={'Effective March 1, 2018'}
-                body={`BY VIEWING AND ACCESSING THIS HTTPS://WWW.SWINGESSENTIALS.COM/ WEB SITE (the “Site”), THE SWING ESSENTIALS MOBILE APPLICATION (the “App”) AND/OR PURCHASING ANY OF THE PRODUCTS AVAILABLE VIA THE SITE AND APP, YOU (“You” or “Your”) REPRESENT THAT YOU HAVE READ AND UNDERSTOOD THIS ENTIRE PRIVACY POLICY AND YOU AGREE TO ALL THE TERMS OF THIS PRIVACY POLICY. IF YOU DO NOT CONSENT TO THIS PRIVACY POLICY IN ITS ENTIRETY, YOUR SOLE AND EXCLUSIVE REMEDY IS TO IMMEDIATELY CEASE USE OF THIS SITE.`}
+                body={`By viewing and accessing this https://www.swingessentials.com/ web site (the "site"), the swing essentials mobile application (the "app") and/or purchasing any of the products available via the site and app, you ("you" or "your") represent that you have read and understood this entire privacy policy and you agree to all the terms of this privacy policy. If you do not consent to this privacy policy in its entirety, your sole and exclusive remedy is to immediately cease use of this site.`}
                 style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
             />
         </Banner>
         {privacyData.map((section, index) => (
-            <Section key={`privacy_section_${index}`} style={{ display: 'block' }}>
+            <Section key={`privacy_section_${index}`} style={{ display: 'block' }} textAlign={'left'}>
                 {section.title ? <Typography variant={'h6'}>{section.title}</Typography> : null}
                 {section.contents.map((par, pInd) => (
                     <Typography key={`p_${pInd}`} paragraph={pInd < section.contents.length - 1}>
