@@ -14,7 +14,7 @@ import screenshot from '../assets/images/screenshot/home.png';
 import appstore from '../assets/images/logos/app-store.svg';
 import playstore from '../assets/images/logos/google-play.svg';
 
-import { makeStyles, Theme, createStyles, Grid, Typography, Hidden } from '@material-ui/core';
+import { makeStyles, Theme, createStyles, Grid, Typography } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
 import { InfoCard } from '../components/display/InfoCard';
 import { useHistory } from 'react-router-dom';
@@ -40,6 +40,16 @@ const useStyles = makeStyles((theme: Theme) =>
             maxWidth: 150,
             width: '15%',
         },
+        stores: {
+            marginTop: 16,
+            textAlign: 'center',
+            [theme.breakpoints.down('xs')]: {
+                marginTop: 0,
+                position: 'absolute',
+                left: 0,
+                width: '100%',
+            },
+        },
         stepsWrapper: {
             marginLeft: 64,
             maxWidth: 512,
@@ -49,6 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         stepIcon: {
             marginRight: 32,
+            flex: '0 0 auto',
             [theme.breakpoints.down('sm')]: {
                 marginRight: 0,
                 marginBottom: 8,
@@ -71,8 +82,9 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'center',
             marginTop: 32,
             [theme.breakpoints.down('sm')]: {
-                flexDirection: 'column',
-                alignItems: 'center',
+                display: 'block',
+                // flexDirection: 'column',
+                // alignItems: 'center',
             },
         },
     })
@@ -114,12 +126,12 @@ export const LandingPage: React.FC = (): JSX.Element => {
                 <img src={pga} alt={'PGA Logo'} className={classes.pgaLogo} />
                 <div className={classes.seLogo}>
                     <img src={fullLogo} alt={'Swing Essentials banner logo'} style={{ width: '100%' }} />
-                    <Hidden xsDown>
-                        <div style={{ marginTop: 16, textAlign: 'center' }}>
-                            <AppleStoreIcon style={{ cursor: 'pointer' }} />
-                            <GoogleStoreIcon style={{ cursor: 'pointer' }} />
-                        </div>
-                    </Hidden>
+                    {/* <Hidden xsDown> */}
+                    <div className={classes.stores}>
+                        <AppleStoreIcon style={{ cursor: 'pointer' }} />
+                        <GoogleStoreIcon style={{ cursor: 'pointer' }} />
+                    </div>
+                    {/* </Hidden> */}
                 </div>
             </Banner>
             <div />
@@ -249,7 +261,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
                 <ScreenShot src={screenshot} alt={'Swing Essentials app screenshot'} style={{ flex: '0 0 auto' }} />
             </Section>
             <Section style={{ display: 'block', textAlign: 'center' }}>
-                <Headline>{`Here's What Our Fans Are Saying`}</Headline>
+                <Headline>{`Here's What Our Customers Are Saying`}</Headline>
                 <div className={classes.testimonialWrapper}>
                     <Testimonial
                         name={'David A.'}
@@ -257,20 +269,26 @@ export const LandingPage: React.FC = (): JSX.Element => {
                         location={'Raleigh, NC'}
                         joined={'2017'}
                         testimonial={`Thanks for the great work this last year. After working with you, I've lowered my handicap by three and a half.`}
+                        style={{ flex: '1 1 0', margin: '0 auto' }}
                     />
+                    <Spacer flex={0} height={64} width={64} />
                     <Testimonial
                         name={'Dean L.'}
                         initials={'DL'}
+                        // src={pros}
                         location={'Ashburn, VA'}
                         joined={'2018'}
                         testimonial={`I sent my swing in to Swing Essentials and I'm playing so much better - it's easily taken four to five shots off my game. I strongly recommend it!`}
+                        style={{ flex: '1 1 0', margin: '0 auto' }}
                     />
+                    <Spacer flex={0} height={64} width={64} />
                     <Testimonial
                         name={'Will M.'}
                         initials={'WM'}
                         location={'Louisville, KY'}
                         joined={'2019'}
                         testimonial={`Thanks to you, I have been playing my best golf. It's all finally clicking now!`}
+                        style={{ flex: '1 1 0', margin: '0 auto' }}
                     />
                 </div>
             </Section>

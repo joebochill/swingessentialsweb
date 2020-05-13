@@ -35,7 +35,7 @@ export const ProsPage: React.FC = (): JSX.Element => {
             <Banner background={{ src: bg, position: 'center 70%' }}>
                 <SectionBlurb
                     jumbo
-                    icon={<img src={pga} alt={'PGA Logo'} width={48} />}
+                    icon={<img src={pga} alt={'PGA Logo'} width={48} height={56} />}
                     headline={'Meet Our Pros'}
                     subheading={'The folks behind the magic'}
                     body={`At Swing Essentials, all of our lessons are crafted by PGA golf professionals with years of playing and coaching experience. Rest assured that you are in good hands when you submit your videos for analysis. If you are interested in joining our team of professionals, please contact us!`}

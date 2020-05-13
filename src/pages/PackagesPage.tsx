@@ -136,7 +136,7 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                             <CardHeader
                                 title={'Available Packages'}
                                 titleTypographyProps={{ variant: 'subtitle2' }}
-                                style={{ background: theme.palette.primary.main, color: 'white' }}
+                                style={{ background: theme.palette.primary.main, color: 'white', textAlign: 'left' }}
                             />
                             {packages.map((pkg, ind) => (
                                 <InfoListItem
