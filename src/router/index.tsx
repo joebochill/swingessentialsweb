@@ -50,9 +50,9 @@ export const MainRouter = (): JSX.Element => {
                 <Route exact path={`${ROUTES.HOME}`} component={LandingPage} />
                 <Route exact path={`${ROUTES.LOGIN}`} component={LoginPage} />
                 <Route exact path={`${ROUTES.PROS}`} component={ProsPage} />
-                <Route exact path={`${ROUTES.BLOG}`} component={BlogsPage} />
-                <Route exact path={`${ROUTES.TIPS}`} component={TipsPage} />
-                <PrivateRoute exact path={`${ROUTES.LESSONS}`} component={LessonsPage} canActivate={loggedIn} />
+                <Route exact path={`${ROUTES.BLOG}/:id?`} component={BlogsPage} />
+                <Route exact path={`${ROUTES.TIPS}/:id?`} component={TipsPage} />
+                <PrivateRoute exact path={`${ROUTES.LESSONS}/:id?`} component={LessonsPage} canActivate={loggedIn} />
                 <PrivateRoute exact path={`${ROUTES.PROFILE}`} component={ProfilePage} canActivate={loggedIn} />
                 <PrivateRoute exact path={`${ROUTES.ORDER}`} component={PackagesPage} canActivate={loggedIn} />
                 <PrivateRoute exact path={`${ROUTES.SUBMIT}`} component={SubmitPage} canActivate={loggedIn} />
@@ -64,11 +64,6 @@ export const MainRouter = (): JSX.Element => {
                 <Route exact path={`${ROUTES.PRIVACY}`} component={PrivacyPage} />
 
                 <PrivateRoute exact path={`${ROUTES.ADMIN}`} component={AdminPage} canActivate={admin} />
-
-                {/* Deep Links */}
-                <Route exact path={`${ROUTES.BLOG}/:id`} component={BlogsPage} />
-                <Route exact path={`${ROUTES.TIPS}/:id`} component={TipsPage} />
-                <Route exact path={`${ROUTES.LESSONS}/:id`} component={LessonsPage} />
 
                 <Route path="*">
                     <Redirect to="/" />

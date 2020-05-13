@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import bg from '../assets/images/banners/swing.jpg';
+import bg from '../assets/images/banners/swing3.jpg';
 import dtl from '../assets/icons/down-the-line.png';
 import fo from '../assets/icons/face-on.png';
 
-import { makeStyles, createStyles, Button, Theme, LinearProgress } from '@material-ui/core';
+import { makeStyles, createStyles, Button, Theme, LinearProgress, Hidden } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
 import { Videocam, CheckCircle, CloudUpload, Error, Mail, ShoppingCart, Update } from '@material-ui/icons';
 import { Banner } from '../components/display/Banner';
@@ -111,13 +111,22 @@ export const SubmitPage: React.FC = (): JSX.Element => {
                 />
             </Banner>
             <Section>
-                <SectionBlurb
-                    headline={'Pro Tips'}
-                    subheading={'How to submit your swing'}
-                    body={`Select two videos of your golf swing from your computer: one from the face-on view and one looking down the line. Try to keep your videos files smaller by trimming any excess footage before submitting.`}
-                    style={{ zIndex: 100, maxWidth: '40%', alignSelf: 'flex-start' }}
-                />
-                <Spacer flex={0} width={64} height={64} />
+                <Hidden smDown>
+                    <div style={{ maxWidth: '40%', alignSelf: 'flex-start' }}>
+                        <SectionBlurb
+                            headline={'Pro Tip #1'}
+                            subheading={'How to submit your swing'}
+                            body={`Select two videos of your golf swing from your computer: one from the face-on view and one looking down the line.`}
+                        />
+                        <Spacer flex={0} width={64} height={64} />
+                        <SectionBlurb
+                            headline={'Pro Tip #2'}
+                            subheading={'Choosing a video'}
+                            body={`Try to keep your video files smaller by trimming any excess footage before submitting. We also caution against using slow-motion videos as they tend to yield much larger files.`}
+                        />
+                    </div>
+                    <Spacer flex={0} width={64} height={64} />
+                </Hidden>
                 <div className={classes.panel}>
                     {getLessons === 'success' && getCredits === 'success' && submitStatus === 'initial' && canShowForm && (
                         <>

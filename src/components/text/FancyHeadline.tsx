@@ -2,6 +2,7 @@ import React, { HTMLAttributes } from 'react';
 import { makeStyles, createStyles, Typography, Theme } from '@material-ui/core';
 import { Headline, SubHeading } from './Typography';
 import clsx from 'clsx';
+import { Spacer } from '@pxblue/react-components';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -10,6 +11,10 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
             textAlign: 'left',
             marginBottom: theme.spacing(2),
+            [theme.breakpoints.down('sm')]: {
+                textAlign: 'center',
+                display: 'block',
+            },
             '&$jumbo': {
                 [theme.breakpoints.down('sm')]: {
                     textAlign: 'center',
@@ -17,13 +22,12 @@ const useStyles = makeStyles((theme: Theme) =>
             },
         },
         headlineIcon: {
-            marginRight: 16,
             fontSize: 48,
-            display: 'flex',
+            display: 'inline-flex',
         },
         smallHeadlineIcon: {
-            display: 'flex',
-            marginRight: 4,
+            display: 'inline-flex',
+            marginRight: theme.spacing(0.5),
             fontSize: 24,
         },
         jumbo: {},
@@ -50,7 +54,12 @@ export const FancyHeadline: React.FC<FancyHeadlineProps> = (props) => {
         </div>
     ) : (
         <div className={clsx(classes.headline, { [classes.jumbo]: !icon })} {...other}>
-            {icon && <div className={classes.headlineIcon}>{icon}</div>}
+            {icon && (
+                <>
+                    <div className={classes.headlineIcon}>{icon}</div>
+                    <Spacer flex={0} height={0} width={16} />
+                </>
+            )}
             <div>
                 <Headline>{headline}</Headline>
                 {subheading && <SubHeading>{subheading}</SubHeading>}

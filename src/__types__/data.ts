@@ -40,6 +40,14 @@ export type Discount = {
     expires: string;
     quantity: string;
 };
+export type Testimonial = {
+    username: string;
+    first: string;
+    last: string;
+    location: string;
+    joined: string;
+    review: string;
+};
 export type CurrentDiscount = {
     code: string;
     type: 'percent' | 'amount';

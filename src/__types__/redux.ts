@@ -7,7 +7,7 @@ import {
     AuthenticationStatus,
     DiscountStatus,
 } from '.';
-import { Lesson, Tip, User, Blog, Pro, Package, Discount } from './data';
+import { Lesson, Tip, User, Blog, Pro, Package, Discount, Testimonial } from './data';
 
 /*
     REDUX STATES TYPES
@@ -99,6 +99,9 @@ export type RegistrationState = {
     // emailVerified: boolean;
     // error: number;
 };
+export type TestimonialsState = {
+    list: Testimonial[];
+};
 
 // Overall Redux State
 export type AppState = {
@@ -113,6 +116,7 @@ export type AppState = {
     pros: ProsState;
     registration: RegistrationState;
     settings: UserSettingsState;
+    testimonials: TestimonialsState;
     tips: TipsState;
     user: UserDataState;
     users: UsersState;

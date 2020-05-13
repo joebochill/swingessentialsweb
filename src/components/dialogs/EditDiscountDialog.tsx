@@ -153,6 +153,7 @@ export const EditDiscountDialog: React.FC<EditDiscountDialogProps> = (props) => 
                             variant={'filled'}
                             label={'Expires'}
                             name={'expires'}
+                            error={!never && !DATE_REGEX.test(expires)}
                             disabled={never}
                             value={never ? '' : expires}
                             placeholder={'YYYY-MM-DD'}

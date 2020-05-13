@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import bg from '../assets/images/banners/landing.jpg';
-import swing from '../assets/images/banners/swing.jpg';
+import swing from '../assets/images/banners/swing3.jpg';
 import order from '../assets/images/banners/order.jpg';
-import lessons from '../assets/images/banners/lessons.jpg';
+import lessons from '../assets/images/banners/lessons2.jpg';
 
 import {
     makeStyles,

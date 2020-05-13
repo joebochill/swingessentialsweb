@@ -14,7 +14,7 @@ import screenshot from '../assets/images/screenshot/home.png';
 import appstore from '../assets/images/logos/app-store.svg';
 import playstore from '../assets/images/logos/google-play.svg';
 
-import { makeStyles, Theme, createStyles, Grid, Typography, Hidden } from '@material-ui/core';
+import { makeStyles, Theme, createStyles, Grid, Typography } from '@material-ui/core';
 import { SectionBlurb } from '../components/text/SectionBlurb';
 import { InfoCard } from '../components/display/InfoCard';
 import { useHistory } from 'react-router-dom';
@@ -26,6 +26,26 @@ import { Testimonial } from '../components/display/Testimonial';
 import { ROUTES } from '../constants/routes';
 import { Banner } from '../components/display/Banner';
 import { Section } from '../components/display/Section';
+import { useSelector } from 'react-redux';
+import { AppState } from '../__types__/redux';
+
+const getAbbreviatedName = (username: string, first: string, last: string): string => {
+    if (!first) return username;
+
+    const _first = first.charAt(0).toUpperCase() + first.substr(1);
+    const _last = last ? last.charAt(0).toUpperCase() : '';
+
+    return `${_first} ${_last}.`;
+};
+
+const getInitials = (username: string, first: string, last: string): string => {
+    if (!first) return username.charAt(0).toUpperCase();
+
+    const _first = first.charAt(0).toUpperCase();
+    const _last = last ? last.charAt(0).toUpperCase() : '';
+
+    return `${_first}${_last}`;
+};
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -40,6 +60,16 @@ const useStyles = makeStyles((theme: Theme) =>
             maxWidth: 150,
             width: '15%',
         },
+        stores: {
+            marginTop: 16,
+            textAlign: 'center',
+            [theme.breakpoints.down('xs')]: {
+                marginTop: 0,
+                position: 'absolute',
+                left: 0,
+                width: '100%',
+            },
+        },
         stepsWrapper: {
             marginLeft: 64,
             maxWidth: 512,
@@ -49,6 +79,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         stepIcon: {
             marginRight: 32,
+            flex: '0 0 auto',
             [theme.breakpoints.down('sm')]: {
                 marginRight: 0,
                 marginBottom: 8,
@@ -71,8 +102,9 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'center',
             marginTop: 32,
             [theme.breakpoints.down('sm')]: {
-                flexDirection: 'column',
-                alignItems: 'center',
+                display: 'block',
+                // flexDirection: 'column',
+                // alignItems: 'center',
             },
         },
     })
@@ -104,6 +136,8 @@ export const LandingPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const history = useHistory();
 
+    const testimonials = useSelector((state: AppState) => state.testimonials.list);
+
     return (
         <>
             <Banner
@@ -114,12 +148,12 @@ export const LandingPage: React.FC = (): JSX.Element => {
                 <img src={pga} alt={'PGA Logo'} className={classes.pgaLogo} />
                 <div className={classes.seLogo}>
                     <img src={fullLogo} alt={'Swing Essentials banner logo'} style={{ width: '100%' }} />
-                    <Hidden xsDown>
-                        <div style={{ marginTop: 16, textAlign: 'center' }}>
-                            <AppleStoreIcon style={{ cursor: 'pointer' }} />
-                            <GoogleStoreIcon style={{ cursor: 'pointer' }} />
-                        </div>
-                    </Hidden>
+                    {/* <Hidden xsDown> */}
+                    <div className={classes.stores}>
+                        <AppleStoreIcon style={{ cursor: 'pointer' }} />
+                        <GoogleStoreIcon style={{ cursor: 'pointer' }} />
+                    </div>
+                    {/* </Hidden> */}
                 </div>
             </Banner>
             <div />
@@ -248,32 +282,30 @@ export const LandingPage: React.FC = (): JSX.Element => {
                 <Spacer flex={0} width={64} height={64} />
                 <ScreenShot src={screenshot} alt={'Swing Essentials app screenshot'} style={{ flex: '0 0 auto' }} />
             </Section>
-            <Section style={{ display: 'block', textAlign: 'center' }}>
-                <Headline>{`Here's What Our Fans Are Saying`}</Headline>
-                <div className={classes.testimonialWrapper}>
-                    <Testimonial
-                        name={'David A.'}
-                        initials={'DA'}
-                        location={'Raleigh, NC'}
-                        joined={'2017'}
-                        testimonial={`Thanks for the great work this last year. After working with you, I've lowered my handicap by three and a half.`}
-                    />
-                    <Testimonial
-                        name={'Dean L.'}
-                        initials={'DL'}
-                        location={'Ashburn, VA'}
-                        joined={'2018'}
-                        testimonial={`I sent my swing in to Swing Essentials and I'm playing so much better - it's easily taken four to five shots off my game. I strongly recommend it!`}
-                    />
-                    <Testimonial
-                        name={'Will M.'}
-                        initials={'WM'}
-                        location={'Louisville, KY'}
-                        joined={'2019'}
-                        testimonial={`Thanks to you, I have been playing my best golf. It's all finally clicking now!`}
-                    />
-                </div>
-            </Section>
+            {testimonials.length > 0 && (
+                <Section style={{ display: 'block', textAlign: 'center' }}>
+                    <Headline>{`Here's What Our Customers Are Saying`}</Headline>
+                    <div className={classes.testimonialWrapper}>
+                        {testimonials.slice(0, 3).map((testimonial, ind) => (
+                            <React.Fragment key={`testimonial_${ind}`}>
+                                <Testimonial
+                                    name={getAbbreviatedName(testimonial.username, testimonial.first, testimonial.last)}
+                                    initials={getInitials(testimonial.username, testimonial.first, testimonial.last)}
+                                    location={testimonial.location}
+                                    joined={
+                                        parseInt(testimonial.joined, 10) > 0
+                                            ? new Date(parseInt(testimonial.joined, 10) * 1000).getFullYear().toString()
+                                            : ''
+                                    }
+                                    testimonial={testimonial.review}
+                                    style={{ flex: '1 1 0', margin: '0 auto' }}
+                                />
+                                {ind < testimonials.length - 1 && ind < 2 && <Spacer flex={0} height={64} width={64} />}
+                            </React.Fragment>
+                        ))}
+                    </div>
+                </Section>
+            )}
         </>
     );
 };
