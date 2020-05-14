@@ -89,7 +89,7 @@ export const ProfilePage: React.FC = () => {
     const [avatarInitialized, setAvatarInitialized] = useState(false);
     const [avatar, setAvatar] = useState('');
 
-    const joined = new Date(user.joined).getFullYear();
+    const joined = new Date(user.joined * 1000).getFullYear();
 
     useEffect(() => {
         if (!initialized && user.username) {
