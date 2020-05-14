@@ -3,6 +3,7 @@ import { GET_SETTINGS, LOGOUT, TOKEN_TIMEOUT } from '../../actions/types';
 
 const initialState: UserSettingsState = {
     notifications: undefined,
+    avatar: '',
 };
 export const UserSettingsReducer = (state = initialState, action: any): UserSettingsState => {
     switch (action.type) {
@@ -10,6 +11,7 @@ export const UserSettingsReducer = (state = initialState, action: any): UserSett
             return {
                 ...state,
                 notifications: action.payload.subbed,
+                avatar: action.payload.avatar,
             };
         }
         case LOGOUT.SUCCESS:

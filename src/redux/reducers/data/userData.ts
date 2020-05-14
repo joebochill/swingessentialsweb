@@ -22,7 +22,6 @@ export const UserDataReducer = (state = initialState, action: any): UserDataStat
                 email: action.payload.personal.email,
                 location: action.payload.personal.location,
                 phone: action.payload.personal.phone,
-                image: action.payload.personal.image,
                 joined: action.payload.personal.joined,
             };
         case CREATE_ACCOUNT.SUCCESS:

@@ -1,9 +1,9 @@
 import { HttpRequest } from '../../api/http';
-import { success, failure } from '../../api/http-helper';
+import { success, failure, xhrfailure } from '../../api/http-helper';
 import * as ACTIONS from './types';
 import { ThunkDispatch } from 'redux-thunk';
 
-export function getUserNotifications() {
+export function getUserSettings() {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.GET_SETTINGS.REQUEST });
 
@@ -12,7 +12,7 @@ export function getUserNotifications() {
                 dispatch(success(ACTIONS.GET_SETTINGS.SUCCESS, body));
             })
             .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.SET_USER_NOTIFICATIONS.FAILURE, response, 'GetUserNotifications'));
+                dispatch(failure(ACTIONS.SET_USER_NOTIFICATIONS.FAILURE, response, 'GetUserSettings'));
             })
             .request();
     };
@@ -26,10 +26,31 @@ export function setUserNotifications(data: { subscribe: boolean }) {
             .withBody(data)
             .onSuccess((response: any) => {
                 dispatch(success(ACTIONS.SET_USER_NOTIFICATIONS.SUCCESS, response));
-                dispatch(getUserNotifications());
+                dispatch(getUserSettings());
             })
             .onFailure((response: Response) => {
                 dispatch(failure(ACTIONS.SET_USER_NOTIFICATIONS.FAILURE, response, 'SetUserNotifications'));
+            })
+            .request();
+    };
+}
+
+type SetAvatar = {
+    useAvatar: 0 | 1;
+    avatar: string;
+};
+export function setUserAvatar(data: SetAvatar) {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
+        dispatch({ type: ACTIONS.CHANGE_AVATAR.REQUEST });
+
+        HttpRequest.post(ACTIONS.CHANGE_AVATAR.API)
+            .withBody(data)
+            .onSuccess((body: any) => {
+                dispatch(success(ACTIONS.CHANGE_AVATAR.SUCCESS, body));
+                dispatch(getUserSettings());
+            })
+            .onFailure((response: XMLHttpRequest) => {
+                dispatch(xhrfailure(ACTIONS.CHANGE_AVATAR.FAILURE, response));
             })
             .request();
     };

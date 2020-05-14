@@ -20,6 +20,7 @@ export const GET_USERS = createAction('GET_USERS', 'users');
 export const RESET_USER_PASSWORD = createAction('RESET_USER_PASSWORD', 'credentials');
 export const UPDATE_USER_CREDENTIALS = createAction('UPDATE_USER_CREDENTIALS', 'credentials');
 export const SET_USER_NOTIFICATIONS = createAction('SET_USER_NOTIFICATIONS', 'settings');
+export const CHANGE_AVATAR = createAction('SET_USER_AVATAR', 'avatar');
 
 /* Settings Actions */
 export const GET_SETTINGS = createAction('GET_SETTINGS', 'settings');

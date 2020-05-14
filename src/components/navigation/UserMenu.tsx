@@ -35,6 +35,7 @@ export const UserMenu: React.FC = () => {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const token = useSelector((state: AppState) => state.auth.token);
     const user = useSelector((state: AppState) => state.user);
+    const avatar = useSelector((state: AppState) => state.settings.avatar);
 
     const closeMenu = useCallback(() => {
         setAnchorEl(null);
@@ -47,7 +48,15 @@ export const UserMenu: React.FC = () => {
 
     return token ? (
         <>
-            <Avatar className={classes.avatar} onClick={openMenu}>
+            <Avatar
+                src={
+                    avatar
+                        ? `https://www.swingessentials.com/images/profiles/${user.username}/${avatar}.png`
+                        : undefined
+                }
+                className={classes.avatar}
+                onClick={openMenu}
+            >
                 {initials ? initials : <Person fontSize={'inherit'} />}
             </Avatar>
             <Menu
