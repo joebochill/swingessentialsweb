@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         transformer: {
             height: '100%',
-            maxWidth: '80%',
+            maxWidth: '100%',
             margin: '0 auto',
             top: 0,
             display: 'flex',
