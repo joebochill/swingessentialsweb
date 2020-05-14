@@ -8,11 +8,9 @@ import {
     makeStyles,
     createStyles,
     Button,
-    // Slide,
     Theme,
     Typography,
     CircularProgress,
-    useTheme,
     Grid,
     Switch,
     FormControlLabel,
@@ -32,7 +30,7 @@ import { Section } from '../components/display/Section';
 import { InfoCard } from '../components/display/InfoCard';
 import { SET_USER_DATA, SET_USER_NOTIFICATIONS } from '../redux/actions/types';
 import { setUserNotifications } from '../redux/actions/user-settings-actions';
-import { AvatarPicker } from '../components/dialogs/AvatarPicker';
+import { AvatarChanger } from '../components/dialogs/AvatarPicker';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,19 +48,6 @@ const useStyles = makeStyles((theme: Theme) =>
             flex: '0 0 auto',
             textAlign: 'center',
         },
-        avatar: {
-            height: 300,
-            width: 300,
-            borderRadius: 300,
-            color: 'white',
-            backgroundPosition: 'center center',
-            backgroundSize: '100%',
-            backgroundRepeat: 'no-repeat',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-        },
         name: {
             marginTop: theme.spacing(2),
         },
@@ -74,20 +59,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const ProfilePage: React.FC = () => {
     const classes = useStyles();
-    const theme = useTheme();
     const history = useHistory();
 
     const token = useSelector((state: AppState) => state.auth.token);
     const loaded = useSelector((state: AppState) => state.api.authentication.initialized);
-    const settingsLoaded = useSelector((state: AppState) => state.api.getUserSettings.status);
     const user = useSelector((state: AppState) => state.user);
-    const _avatar = useSelector((state: AppState) => state.settings.avatar);
-
-    // const [image, setImage] = useState('');
 
     const [initialized, setInitialized] = useState(false);
-    const [avatarInitialized, setAvatarInitialized] = useState(false);
-    const [avatar, setAvatar] = useState('');
 
     const joined = new Date(user.joined * 1000).getFullYear();
 
@@ -96,18 +74,6 @@ export const ProfilePage: React.FC = () => {
             setInitialized(true);
         }
     }, [user, initialized, setInitialized]);
-
-    useEffect(() => {
-        if (settingsLoaded === 'success' && !avatarInitialized && user.username) {
-            setAvatarInitialized(true);
-            setAvatar(
-                `https://www.swingessentials.com/images/profiles/${
-                    _avatar ? `${user.username}/${_avatar}.png` : 'blank.png'
-                }`
-            );
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user, avatarInitialized, settingsLoaded, setAvatar]);
 
     if (loaded && !token) return <Redirect to={ROUTES.LOGIN} />;
 
@@ -122,17 +88,7 @@ export const ProfilePage: React.FC = () => {
                 {initialized && (
                     <div className={classes.root}>
                         <div className={classes.imageWrapper}>
-                            <div
-                                className={classes.avatar}
-                                style={{
-                                    backgroundColor: theme.palette.primary.light,
-                                    backgroundImage: `url(${
-                                        avatar || 'https://www.swingessentials.com/images/profiles/blank.png'
-                                    })`,
-                                }}
-                            >
-                                <AvatarPicker onImageChange={(newImage): void => setAvatar(newImage)} />
-                            </div>
+                            <AvatarChanger />
                             <div className={classes.name}>
                                 <Typography variant={'h5'} style={{ fontWeight: 700, lineHeight: 1.3 }}>
                                     {`${user.firstName} ${user.lastName}`}

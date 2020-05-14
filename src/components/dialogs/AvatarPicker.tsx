@@ -14,25 +14,58 @@ import {
     MenuItem,
     useTheme,
     useMediaQuery,
+    makeStyles,
+    Theme,
+    createStyles,
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Edit } from '@material-ui/icons';
 import { setUserAvatar } from '../../redux/actions/user-settings-actions';
+import { AppState } from '../../__types__';
 
-type AvatarPickerProps = {
-    onImageChange: (newImage: string) => void;
-};
-export const AvatarPicker: React.FC<AvatarPickerProps> = (props) => {
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        avatar: {
+            height: 300,
+            width: 300,
+            borderRadius: 300,
+            color: 'white',
+            backgroundPosition: 'center center',
+            backgroundSize: '100%',
+            backgroundRepeat: 'no-repeat',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            boxShadow: theme.shadows[6],
+        },
+    })
+);
+
+export const AvatarChanger: React.FC = () => {
+    const theme = useTheme();
+    const classes = useStyles();
     const dispatch = useDispatch();
+
+    const settingsLoaded = useSelector((state: AppState) => state.api.getUserSettings.status);
+    const user = useSelector((state: AppState) => state.user);
+
+    // avatar hash code
+    const _avatar = useSelector((state: AppState) => state.settings.avatar);
+    const [avatarInitialized, setAvatarInitialized] = useState(false);
+    // full path to hosted image used by main display
+    const [avatar, setAvatar] = useState('');
+    // source used in the edit dialog
     const [source, setSource] = useState('');
     const [showImagePicker, setShowImagePicker] = useState(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
     const handleClose = (): void => {
         setAnchorEl(null);
     };
     const removePhoto = (): void => {
         setAnchorEl(null);
-        props.onImageChange('');
+        setAvatar('');
         dispatch(
             setUserAvatar({
                 useAvatar: 0,
@@ -41,18 +74,36 @@ export const AvatarPicker: React.FC<AvatarPickerProps> = (props) => {
         );
     };
 
+    useEffect(() => {
+        if (settingsLoaded === 'success' && !avatarInitialized && user.username) {
+            setAvatarInitialized(true);
+            setAvatar(
+                `https://www.swingessentials.com/images/profiles/${
+                    _avatar ? `${user.username}/${_avatar}.png` : 'blank.png'
+                }`
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user, avatarInitialized, settingsLoaded, setAvatar]);
+
     return (
-        <>
+        <div
+            className={classes.avatar}
+            style={{
+                backgroundColor: theme.palette.primary.light,
+                backgroundImage: `url(${avatar || 'https://www.swingessentials.com/images/profiles/blank.png'})`,
+            }}
+        >
             <IconButton
                 color={'inherit'}
                 aria-controls="avatar-menu"
                 aria-haspopup="true"
+                style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
                 onClick={(e): void => setAnchorEl(e.currentTarget)}
             >
                 <Edit />
             </IconButton>
             <input
-                // className={classes.input}
                 id={`file-picker-avatar`}
                 style={{ display: 'none' }}
                 type={'file'}
@@ -62,21 +113,6 @@ export const AvatarPicker: React.FC<AvatarPickerProps> = (props) => {
                     (evt.target as HTMLInputElement).value = '';
                 }}
                 onChange={(evt: ChangeEvent<HTMLInputElement>): void => {
-                    // if (evt && evt.target && evt.target.files && evt.target.files.length > 0) {
-                    //     const size = evt.target.files[0].size;
-                    //     const tooBig = size > 10 * 1024 * 1024;
-                    //     if (tooBig) {
-                    //         setError(
-                    //             `The video you have selected is too large (${(size / (1024 * 1024)).toFixed(
-                    //                 1
-                    //             )} MB). The maximum allowable file size is 10MB.`
-                    //         );
-                    //         setShowError(true);
-                    //     }
-                    //     setVideoSrc(tooBig ? null : evt.target.files[0]);
-                    //     setVideoSrcString(tooBig ? '' : URL.createObjectURL(evt.target.files[0] || ''));
-                    //     onVideoChange(tooBig ? null : evt.target.files[0]);
-                    // }
                     if (evt && evt.target && evt.target.files && evt.target.files.length > 0) {
                         setSource(URL.createObjectURL(evt.target.files[0] || ''));
                         setShowImagePicker(true);
@@ -96,9 +132,9 @@ export const AvatarPicker: React.FC<AvatarPickerProps> = (props) => {
                 onClose={(): void => {
                     setShowImagePicker(false);
                 }}
-                onImageChange={props.onImageChange}
+                onImageChange={(newImage: string): void => setAvatar(newImage)}
             />
-        </>
+        </div>
     );
 };
 
