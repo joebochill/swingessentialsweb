@@ -68,10 +68,10 @@ export type UserDataState = {
     joined: number;
     location?: string;
     phone?: string;
-    image?: string;
 };
 export type UserSettingsState = {
     notifications?: boolean;
+    avatar: string;
 };
 export type UsersState = {
     list: User[];

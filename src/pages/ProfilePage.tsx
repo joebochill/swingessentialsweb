@@ -11,7 +11,6 @@ import {
     // Slide,
     Theme,
     Typography,
-    IconButton,
     CircularProgress,
     useTheme,
     Grid,
@@ -25,8 +24,6 @@ import { Banner } from '../components/display/Banner';
 import { ROUTES } from '../constants/routes';
 
 import { StyledTextField } from '../components/text/StyledInputs';
-import { Edit } from '@material-ui/icons';
-
 import { Spacer } from '@pxblue/react-components';
 import { setUserData, UserDataChange } from '../redux/actions/user-data-actions';
 
@@ -35,6 +32,7 @@ import { Section } from '../components/display/Section';
 import { InfoCard } from '../components/display/InfoCard';
 import { SET_USER_DATA, SET_USER_NOTIFICATIONS } from '../redux/actions/types';
 import { setUserNotifications } from '../redux/actions/user-settings-actions';
+import { AvatarPicker } from '../components/dialogs/AvatarPicker';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -81,20 +79,35 @@ export const ProfilePage: React.FC = () => {
 
     const token = useSelector((state: AppState) => state.auth.token);
     const loaded = useSelector((state: AppState) => state.api.authentication.initialized);
+    const settingsLoaded = useSelector((state: AppState) => state.api.getUserSettings.status);
     const user = useSelector((state: AppState) => state.user);
+    const _avatar = useSelector((state: AppState) => state.settings.avatar);
 
     // const [image, setImage] = useState('');
 
     const [initialized, setInitialized] = useState(false);
+    const [avatarInitialized, setAvatarInitialized] = useState(false);
+    const [avatar, setAvatar] = useState('');
 
     const joined = new Date(user.joined).getFullYear();
 
     useEffect(() => {
         if (!initialized && user.username) {
-            // setImage(user.image || '');
             setInitialized(true);
         }
-    }, [user, initialized, /*setImage,*/ setInitialized]);
+    }, [user, initialized, setInitialized]);
+
+    useEffect(() => {
+        if (settingsLoaded === 'success' && !avatarInitialized && user.username) {
+            setAvatarInitialized(true);
+            setAvatar(
+                `https://www.swingessentials.com/images/profiles/${
+                    _avatar ? `${user.username}/${_avatar}.png` : 'blank.png'
+                }`
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user, avatarInitialized, settingsLoaded, setAvatar]);
 
     if (loaded && !token) return <Redirect to={ROUTES.LOGIN} />;
 
@@ -113,14 +126,12 @@ export const ProfilePage: React.FC = () => {
                                 className={classes.avatar}
                                 style={{
                                     backgroundColor: theme.palette.primary.light,
-                                    backgroundImage: `url(https://www.swingessentials.com/images/profiles/${
-                                        user.image ? `${user.username}/image.jpeg` : 'blank.png'
-                                    }`,
+                                    backgroundImage: `url(${
+                                        avatar || 'https://www.swingessentials.com/images/profiles/blank.png'
+                                    })`,
                                 }}
                             >
-                                <IconButton color={'inherit'}>
-                                    <Edit />
-                                </IconButton>
+                                <AvatarPicker onImageChange={(newImage): void => setAvatar(newImage)} />
                             </div>
                             <div className={classes.name}>
                                 <Typography variant={'h5'} style={{ fontWeight: 700, lineHeight: 1.3 }}>
@@ -142,6 +153,7 @@ export const ProfilePage: React.FC = () => {
                     </div>
                 )}
             </Banner>
+
             <Section>
                 <Grid container spacing={10} justify={'center'}>
                     <Grid item xs={12} md={4}>

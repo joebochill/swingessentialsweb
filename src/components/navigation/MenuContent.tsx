@@ -81,6 +81,7 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
     const user = useSelector((state: AppState) => state.user);
     const token = useSelector((state: AppState) => state.auth.token);
     const isAdmin = useSelector((state: AppState) => state.auth.admin);
+    const avatar = useSelector((state: AppState) => state.settings.avatar);
 
     const clickMenuItem = useCallback(
         (route) => {
@@ -97,7 +98,14 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
             {token && (
                 <>
                     <div className={classes.menuHeader}>
-                        <Avatar className={classes.avatarInside}>
+                        <Avatar
+                            src={
+                                avatar
+                                    ? `https://www.swingessentials.com/images/profiles/${user.username}/${avatar}.png`
+                                    : undefined
+                            }
+                            className={classes.avatarInside}
+                        >
                             {initials ? initials : <Person fontSize={'inherit'} />}
                         </Avatar>
                         <div style={{ marginLeft: 16 }}>
