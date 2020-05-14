@@ -347,6 +347,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                                 <video
                                                     width="100%"
                                                     controls
+                                                    style={{ outline: 'none' }}
                                                     src={`https://www.swingessentials.com/video_links/${activeLesson.request_url}/${activeLesson.fo_swing}`}
                                                 >
                                                     Your browser does not support the video tag.
@@ -357,6 +358,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                                 <video
                                                     width="100%"
                                                     controls
+                                                    style={{ outline: 'none' }}
                                                     src={`https://www.swingessentials.com/video_links/${activeLesson.request_url}/${activeLesson.dtl_swing}`}
                                                 >
                                                     Your browser does not support the video tag.

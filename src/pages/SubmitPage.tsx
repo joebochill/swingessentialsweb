@@ -124,6 +124,12 @@ export const SubmitPage: React.FC = (): JSX.Element => {
                             subheading={'Choosing a video'}
                             body={`Try to keep your video files smaller by trimming any excess footage before submitting. We also caution against using slow-motion videos as they tend to yield much larger files.`}
                         />
+                        <Spacer flex={0} width={64} height={64} />
+                        <SectionBlurb
+                            headline={'Pro Tip #3'}
+                            subheading={'Video Formats'}
+                            body={`Some web browsers are not able to display a preview for the latest video format used by iPhones. We still accept these videos (just preview them on your phone before uploading).`}
+                        />
                     </div>
                     <Spacer flex={0} width={64} height={64} />
                 </Hidden>
