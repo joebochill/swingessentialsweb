@@ -9,10 +9,11 @@ type FailureAction = {
     error: string | null;
 };
 /* Dispatch a failure action for the supplied action type */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const failure = (type: string, response: Response | null, api: string): FailureAction => {
     if (response && response.headers && response.headers.get) {
         // TODO Log an error
-        console.error(`Request failed to ${api}`);
+        // console.error(`Request failed to ${api}`);
     }
     return {
         type: type,
