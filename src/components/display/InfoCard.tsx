@@ -1,7 +1,7 @@
 import React, { MouseEvent } from 'react';
 import { useTheme, makeStyles, Theme, createStyles, Typography } from '@material-ui/core';
-import * as Colors from '@pxblue/colors';
 import { ChevronRight } from '@material-ui/icons';
+import * as Colors from '@pxblue/colors';
 
 const getTopPaddingForAspectRatio = (ratio: AspectRatio | undefined): string => {
     switch (ratio) {

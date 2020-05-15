@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { Lesson } from '../../__types__';
+import { putLessonResponse } from '../../redux/actions/lessons-actions';
+import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
 import {
     DialogProps,
     Dialog,
@@ -13,11 +17,20 @@ import {
     DialogActions,
     Button,
     TextField,
+    makeStyles,
+    Theme,
+    createStyles,
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import { Lesson } from '../../__types__';
-import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
-import { putLessonResponse } from '../../redux/actions/lessons-actions';
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        field: {
+            '&:not(:last-child)': {
+                marginBottom: theme.spacing(2),
+            },
+        },
+    })
+);
 
 type EditLessonDialogProps = DialogProps & {
     lesson: Lesson;
@@ -30,11 +43,12 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
         },
     } = dialogProps;
 
+    const dispatch = useDispatch();
+    const classes = useStyles();
+
     const [video, setVideo] = useState(lesson.response_video);
     const [comments, setComments] = useState(convertDatabaseTextToMultiline(lesson.response_notes));
     const [status, setStatus] = useState(lesson.response_status);
-
-    const dispatch = useDispatch();
 
     const resetLesson = useCallback(() => {
         setVideo(lesson.response_video);
@@ -68,7 +82,7 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
                     onChange={(e): void => {
                         setVideo(e.target.value);
                     }}
-                    style={{ marginBottom: 16 }}
+                    className={classes.field}
                 />
                 <TextField
                     fullWidth
@@ -83,7 +97,7 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
                     }}
                     inputProps={{ maxLength: 500, style: { minHeight: 64 } }}
                     helperText={`${500 - comments.length} characters left`}
-                    style={{ marginBottom: 16 }}
+                    className={classes.field}
                 />
                 <FormControl variant="filled" fullWidth>
                     <InputLabel id="status-label">{`Response Status`}</InputLabel>

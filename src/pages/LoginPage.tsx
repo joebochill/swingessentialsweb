@@ -1,6 +1,25 @@
 import React, { useState, useEffect, HTMLAttributes, useCallback } from 'react';
-import bg from '../assets/images/banners/landing.jpg';
+import { useLocation, Redirect, useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { usePrevious } from '../hooks';
 
+import { AppState } from '../__types__';
+import { LOGIN } from '../redux/actions/types';
+import { requestLogin } from '../redux/actions/auth-actions';
+import {
+    requestPasswordReset,
+    createAccount,
+    checkUsernameAvailability,
+    checkEmailAvailability,
+    resetRegistrationAvailabilityChecks,
+} from '../redux/actions/registration-actions';
+import { ROUTES } from '../constants/routes';
+import { EMAIL_REGEX } from '../constants';
+
+import { StyledTextField, StyledSelect } from '../components/text/StyledInputs';
+import { Banner } from '../components/display/Banner';
+import { ErrorBox } from '../components/display/ErrorBox';
+import { SimpleLink } from '../components/navigation/SimpleLink';
 import {
     makeStyles,
     createStyles,
@@ -15,27 +34,11 @@ import {
     IconButton,
     Tooltip,
     SlideProps,
+    useTheme,
 } from '@material-ui/core';
-import { useLocation, Redirect, useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from '../__types__';
-import { requestLogin } from '../redux/actions/auth-actions';
-import { Banner } from '../components/display/Banner';
-import { ErrorBox } from '../components/display/ErrorBox';
-import { ROUTES } from '../constants/routes';
-import { SimpleLink } from '../components/navigation/SimpleLink';
-import { EMAIL_REGEX } from '../constants';
-import {
-    requestPasswordReset,
-    createAccount,
-    checkUsernameAvailability,
-    checkEmailAvailability,
-    resetRegistrationAvailabilityChecks,
-} from '../redux/actions/registration-actions';
-import { StyledTextField, StyledSelect } from '../components/text/StyledInputs';
 import { Visibility, VisibilityOff, Info } from '@material-ui/icons';
-import { usePrevious } from '../hooks';
-import { LOGIN } from '../redux/actions/types';
+
+import bg from '../assets/images/banners/landing.jpg';
 
 type Form = 'login' | 'register' | 'forgot';
 type Acquisition =
@@ -84,14 +87,15 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const LoginPage: React.FC = () => {
-    const token = useSelector((state: AppState) => state.auth.token);
     const location = useLocation();
     const history = useHistory();
     const classes = useStyles();
-    const [form, setForm] = useState<Form>('login');
 
-    const previousForm = usePrevious(form);
+    const token = useSelector((state: AppState) => state.auth.token);
     const registration = useSelector((state: AppState) => state.api.createAccount.status);
+
+    const [form, setForm] = useState<Form>('login');
+    const previousForm = usePrevious(form);
 
     // @ts-ignore
     const { from } = location && location.state ? location.state : { from: { pathname: ROUTES.HOME } };
@@ -175,13 +179,15 @@ type SignInFormProps = HTMLAttributes<HTMLDivElement> & {
 };
 const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref) => {
     const { onChangeForm, ...other } = props;
+
     const classes = useStyles();
     const dispatch = useDispatch();
+
+    const failCount = useSelector((state: AppState) => state.api.authentication.data.failures);
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
     const [errorMessage, setErrorMessage] = useState('');
-    const failCount = useSelector((state: AppState) => state.api.authentication.data.failures);
 
     const resetForm = useCallback(() => {
         setUsername('');
@@ -268,20 +274,20 @@ type RegisterFormProps = HTMLAttributes<HTMLDivElement> & {
 };
 const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props, ref) => {
     const { onChangeForm, ...other } = props;
+
     const classes = useStyles();
     const dispatch = useDispatch();
+
+    const createAccountStatus = useSelector((state: AppState) => state.api.createAccount.status);
+    const usernameStatus = useSelector((state: AppState) => state.api.checkUsername);
+    const emailStatus = useSelector((state: AppState) => state.api.checkEmail);
 
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [acquisition, setAcquisition] = useState<Acquisition | ''>('');
-
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-
-    const createAccountStatus = useSelector((state: AppState) => state.api.createAccount.status);
-    const usernameStatus = useSelector((state: AppState) => state.api.checkUsername);
-    const emailStatus = useSelector((state: AppState) => state.api.checkEmail);
 
     const usernameTaken = usernameStatus.status === 'success' && !usernameStatus.data.available;
     const emailTaken = emailStatus.status === 'success' && !emailStatus.data.available;
@@ -424,11 +430,14 @@ type ForgotFormProps = HTMLAttributes<HTMLDivElement> & {
 };
 const ForgotForm = React.forwardRef<HTMLDivElement, ForgotFormProps>((props, ref) => {
     const { onChangeForm, ...other } = props;
+
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const theme = useTheme();
+
     const [email, setEmail] = useState('');
     const [complete, setComplete] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const dispatch = useDispatch();
 
     return (
         <div className={classes.form} {...other} ref={ref}>
@@ -448,7 +457,7 @@ const ForgotForm = React.forwardRef<HTMLDivElement, ForgotFormProps>((props, ref
                 </>
             )}
             {complete && (
-                <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
+                <Typography variant={'h6'} align={'center'} style={{ marginBottom: theme.spacing(2) }}>
                     Your password reset request was received. Check your email for further instructions.
                 </Typography>
             )}

@@ -1,9 +1,13 @@
 import React, { useEffect } from 'react';
+import { ROUTES } from '../constants/routes';
+import { usePrevious } from '../hooks';
+import { useSelector } from 'react-redux';
+import { AppState } from '../__types__';
+import { PrivateRoute } from '../components/navigation/PrivateRoute';
 import { BrowserRouter as Router, Switch, Route, useLocation, Redirect } from 'react-router-dom';
 import { NavigationDrawer } from '../components/navigation/drawer';
 import { Toolbar } from '../components/toolbars/Toolbar';
 import { Footer } from '../components/toolbars/Footer';
-import { ROUTES } from '../constants/routes';
 import {
     LessonsPage,
     LandingPage,
@@ -20,10 +24,6 @@ import {
     SubmitPage,
     AdminPage,
 } from '../pages';
-import { usePrevious } from '../hooks';
-import { useSelector } from 'react-redux';
-import { AppState } from '../__types__';
-import { PrivateRoute } from '../components/navigation/PrivateRoute';
 
 const ScrollToTop = (): any => {
     const { pathname } = useLocation();

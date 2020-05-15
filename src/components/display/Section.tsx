@@ -7,7 +7,7 @@ const useStyles = makeStyles<Theme, SectionProps>((theme: Theme) =>
     createStyles({
         section: {
             background: theme.palette.background.paper,
-            padding: 64,
+            padding: theme.spacing(8),
             display: 'flex',
             textAlign: (props): TextAlign => props.textAlign || 'left',
             alignItems: (props): string => props.align || 'center',
@@ -16,7 +16,7 @@ const useStyles = makeStyles<Theme, SectionProps>((theme: Theme) =>
                 background: theme.palette.background.default,
             },
             [theme.breakpoints.down('sm')]: {
-                padding: `64px 10%`,
+                padding: `${theme.spacing(8)}px 10%`,
                 justifyContent: 'stretch',
                 flexDirection: 'column',
                 textAlign: (props): TextAlign => props.textAlign || 'center',
@@ -37,6 +37,7 @@ type SectionProps = HTMLAttributes<HTMLDivElement> & {
 };
 export const Section: React.FC<SectionProps> = (props): JSX.Element => {
     const { background = {}, style, textAlign, ...other } = props;
+
     const classes = useStyles(props);
 
     return (

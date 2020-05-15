@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import bg from '../assets/images/banners/landing.jpg';
-
+import { useHistory, useParams, Redirect } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState } from '../__types__';
+import { resetUserPassword } from '../redux/actions/user-data-actions';
+import { requestLogout } from '../redux/actions/auth-actions';
+import { verifyResetPasswordCode } from '../redux/actions/registration-actions';
+import { ROUTES } from '../constants/routes';
+import { btoa } from '../utilities/base64';
+import { StyledTextField } from '../components/text/StyledInputs';
+import { ErrorBox } from '../components/display/ErrorBox';
+import { Banner } from '../components/display/Banner';
 import {
     makeStyles,
     createStyles,
@@ -9,19 +18,10 @@ import {
     CircularProgress,
     InputAdornment,
     IconButton,
+    useTheme,
 } from '@material-ui/core';
-import { useHistory, useParams, Redirect } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from '../__types__';
-import { Banner } from '../components/display/Banner';
-import { verifyResetPasswordCode } from '../redux/actions/registration-actions';
-import { ROUTES } from '../constants/routes';
-import { StyledTextField } from '../components/text/StyledInputs';
-import { ErrorBox } from '../components/display/ErrorBox';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { resetUserPassword } from '../redux/actions/user-data-actions';
-import { requestLogout } from '../redux/actions/auth-actions';
-import { btoa } from '../utilities/base64';
+import bg from '../assets/images/banners/landing.jpg';
 
 const _getErrorMessage = (code: number | null): string => {
     switch (code) {
@@ -39,8 +39,6 @@ const useStyles = makeStyles(() =>
     createStyles({
         form: {
             position: 'absolute',
-            // top: '50%',
-            // transform: 'translateY(-50%)',
             zIndex: 100,
             width: '80%',
             maxWidth: 512,
@@ -83,6 +81,7 @@ type PreRequestProps = {
 };
 const PreRequest: React.FC<PreRequestProps> = (props) => {
     const dispatch = useDispatch();
+    const theme = useTheme();
 
     const verification = useSelector((state: AppState) => state.api.verifyReset);
     const status = verification.status;
@@ -98,14 +97,14 @@ const PreRequest: React.FC<PreRequestProps> = (props) => {
             {loading && (
                 <>
                     <CircularProgress color={'inherit'} />
-                    <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
+                    <Typography variant={'h6'} align={'center'} style={{ marginBottom: theme.spacing(2) }}>
                         Verifying your reset request...
                     </Typography>
                 </>
             )}
             {status === 'success' && (
                 <>
-                    <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
+                    <Typography variant={'h6'} align={'center'} style={{ marginBottom: theme.spacing(2) }}>
                         Enter your new password below:
                     </Typography>
                     <StyledTextField
@@ -164,7 +163,6 @@ const PreRequest: React.FC<PreRequestProps> = (props) => {
                         onClick={
                             confirm !== '' && password !== '' && password === confirm
                                 ? (): void => {
-                                      // history.replace(ROUTES.PROFILE);
                                       dispatch(
                                           resetUserPassword({
                                               password: btoa(password),
@@ -182,7 +180,7 @@ const PreRequest: React.FC<PreRequestProps> = (props) => {
             )}
             {status === 'failed' && (
                 <>
-                    <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
+                    <Typography variant={'h6'} align={'center'} style={{ marginBottom: theme.spacing(2) }}>
                         {_getErrorMessage(verification.code)}
                     </Typography>
                 </>
@@ -193,6 +191,8 @@ const PreRequest: React.FC<PreRequestProps> = (props) => {
 
 const PostRequest: React.FC = () => {
     const history = useHistory();
+    const theme = useTheme();
+
     const verification = useSelector((state: AppState) => state.api.resetPassword);
     const status = verification.status;
     const loading = status === 'loading';
@@ -202,14 +202,14 @@ const PostRequest: React.FC = () => {
             {loading && (
                 <>
                     <CircularProgress color={'inherit'} />
-                    <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
+                    <Typography variant={'h6'} align={'center'} style={{ marginBottom: theme.spacing(2) }}>
                         Resetting your password...
                     </Typography>
                 </>
             )}
             {status === 'success' && (
                 <>
-                    <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
+                    <Typography variant={'h6'} align={'center'} style={{ marginBottom: theme.spacing(2) }}>
                         Your password was successfully changed!
                     </Typography>
                     <Button
@@ -226,7 +226,7 @@ const PostRequest: React.FC = () => {
             )}
             {status === 'failed' && (
                 <>
-                    <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
+                    <Typography variant={'h6'} align={'center'} style={{ marginBottom: theme.spacing(2) }}>
                         Failed to change your password. Please try again later. If the problem persists, please contact
                         us.
                     </Typography>

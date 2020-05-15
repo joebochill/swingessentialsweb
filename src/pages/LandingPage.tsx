@@ -1,4 +1,22 @@
 import React, { HTMLAttributes } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+import { AppState } from '../__types__/redux';
+import { ROUTES } from '../constants/routes';
+import { APP_STORE_LINK, PLAY_STORE_LINK } from '../constants';
+
+import { SectionBlurb } from '../components/text/SectionBlurb';
+import { InfoCard } from '../components/display/InfoCard';
+import { ScreenShot } from '../components/display/ScreenShot';
+import { Headline } from '../components/text/Typography';
+import { Testimonial } from '../components/display/Testimonial';
+import { Banner } from '../components/display/Banner';
+import { Section } from '../components/display/Section';
+import { Spacer } from '@pxblue/react-components';
+import { makeStyles, Theme, createStyles, Grid, Typography, useTheme } from '@material-ui/core';
+import { GetApp } from '@material-ui/icons';
+
 import bg from '../assets/images/banners/landing.jpg';
 import fullLogo from '../assets/images/logos/logo-full-white.svg';
 import pga from '../assets/images/logos/pga_p.svg';
@@ -9,25 +27,9 @@ import tips from '../assets/images/banners/tips.jpg';
 import nineteen from '../assets/images/banners/19th.jpg';
 import pros from '../assets/images/banners/nelson.jpeg';
 import cart from '../assets/images/banners/download.jpg';
-
 import screenshot from '../assets/images/screenshot/home.png';
 import appstore from '../assets/images/logos/app-store.svg';
 import playstore from '../assets/images/logos/google-play.svg';
-
-import { makeStyles, Theme, createStyles, Grid, Typography } from '@material-ui/core';
-import { SectionBlurb } from '../components/text/SectionBlurb';
-import { InfoCard } from '../components/display/InfoCard';
-import { useHistory } from 'react-router-dom';
-import { GetApp } from '@material-ui/icons';
-import { ScreenShot } from '../components/display/ScreenShot';
-import { Spacer } from '@pxblue/react-components';
-import { Headline } from '../components/text/Typography';
-import { Testimonial } from '../components/display/Testimonial';
-import { ROUTES } from '../constants/routes';
-import { Banner } from '../components/display/Banner';
-import { Section } from '../components/display/Section';
-import { useSelector } from 'react-redux';
-import { AppState } from '../__types__/redux';
 
 const getAbbreviatedName = (username: string, first: string, last: string): string => {
     if (!first) return username;
@@ -55,13 +57,13 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         pgaLogo: {
             position: 'absolute',
-            top: 20,
-            right: 20,
+            top: theme.spacing(2),
+            right: theme.spacing(2),
             maxWidth: 150,
             width: '15%',
         },
         stores: {
-            marginTop: 16,
+            marginTop: theme.spacing(2),
             textAlign: 'center',
             [theme.breakpoints.down('xs')]: {
                 marginTop: 0,
@@ -71,40 +73,50 @@ const useStyles = makeStyles((theme: Theme) =>
             },
         },
         stepsWrapper: {
-            marginLeft: 64,
+            marginLeft: theme.spacing(8),
             maxWidth: 512,
             [theme.breakpoints.down('sm')]: {
                 marginLeft: 0,
             },
         },
         stepIcon: {
-            marginRight: 32,
+            marginRight: theme.spacing(4),
             flex: '0 0 auto',
             [theme.breakpoints.down('sm')]: {
                 marginRight: 0,
-                marginBottom: 8,
-                width: 64,
+                marginBottom: theme.spacing(1),
+                width: theme.spacing(8),
             },
         },
         step: {
             display: 'flex',
             alignItems: 'center',
             '&:not(:first-child)': {
-                marginTop: 20,
+                marginTop: theme.spacing(2),
             },
             [theme.breakpoints.down('sm')]: {
                 flexDirection: 'column',
             },
         },
+        cartBackground: {
+            position: 'absolute',
+            zIndex: 0,
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center center',
+            opacity: 0.3,
+        },
         testimonialWrapper: {
             display: 'flex',
             alignItems: 'stretch',
             justifyContent: 'center',
-            marginTop: 32,
+            marginTop: theme.spacing(4),
             [theme.breakpoints.down('sm')]: {
                 display: 'block',
-                // flexDirection: 'column',
-                // alignItems: 'center',
             },
         },
     })
@@ -115,7 +127,7 @@ const AppleStoreIcon: React.FC<HTMLAttributes<HTMLImageElement>> = (props) => (
         src={appstore}
         alt={'Apple App Store Icon'}
         onClick={(): void => {
-            window.open('https://itunes.apple.com/us/app/swing-essentials-golf-app/id1382453145?mt=8', 'blank');
+            window.open(APP_STORE_LINK, 'blank');
         }}
         {...props}
     />
@@ -126,7 +138,7 @@ const GoogleStoreIcon: React.FC<HTMLAttributes<HTMLImageElement>> = (props) => (
         src={playstore}
         alt={'Google Play Store Icon'}
         onClick={(): void => {
-            window.open('https://play.google.com/store/apps/details?id=com.swingessentials.app', 'blank');
+            window.open(PLAY_STORE_LINK, 'blank');
         }}
         {...props}
     />
@@ -135,6 +147,7 @@ const GoogleStoreIcon: React.FC<HTMLAttributes<HTMLImageElement>> = (props) => (
 export const LandingPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const history = useHistory();
+    const theme = useTheme();
 
     const testimonials = useSelector((state: AppState) => state.testimonials.list);
 
@@ -148,12 +161,10 @@ export const LandingPage: React.FC = (): JSX.Element => {
                 <img src={pga} alt={'PGA Logo'} className={classes.pgaLogo} />
                 <div className={classes.seLogo}>
                     <img src={fullLogo} alt={'Swing Essentials banner logo'} style={{ width: '100%' }} />
-                    {/* <Hidden xsDown> */}
                     <div className={classes.stores}>
                         <AppleStoreIcon style={{ cursor: 'pointer' }} />
                         <GoogleStoreIcon style={{ cursor: 'pointer' }} />
                     </div>
-                    {/* </Hidden> */}
                 </div>
             </Banner>
             <div />
@@ -238,21 +249,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
                 </Grid>
             </Section>
             <Section background={{ color: 'black' }} style={{ position: 'relative' }}>
-                <div
-                    style={{
-                        position: 'absolute',
-                        zIndex: 0,
-                        top: 0,
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        backgroundImage: `url(${cart})`,
-                        backgroundSize: 'cover',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'center center',
-                        opacity: 0.3,
-                    }}
-                />
+                <div className={classes.cartBackground} style={{ backgroundImage: `url(${cart})` }} />
                 <div style={{ zIndex: 100 }}>
                     <SectionBlurb
                         jumbo
@@ -273,15 +270,17 @@ export const LandingPage: React.FC = (): JSX.Element => {
                         }
                         style={{ color: 'white' }}
                     />
-                    <div style={{ marginTop: 16, display: 'inline-flex' }}>
+                    <div style={{ marginTop: theme.spacing(2), display: 'inline-flex' }}>
                         <AppleStoreIcon style={{ cursor: 'pointer' }} />
-                        <GoogleStoreIcon style={{ cursor: 'pointer', marginLeft: 16 }} />
+                        <GoogleStoreIcon style={{ cursor: 'pointer', marginLeft: theme.spacing(2) }} />
                     </div>
                 </div>
 
-                <Spacer flex={0} width={64} height={64} />
+                <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(8)} />
+
                 <ScreenShot src={screenshot} alt={'Swing Essentials app screenshot'} style={{ flex: '0 0 auto' }} />
             </Section>
+
             {testimonials.length > 0 && (
                 <Section style={{ display: 'block', textAlign: 'center' }}>
                     <Headline>{`Here's What Our Customers Are Saying`}</Headline>

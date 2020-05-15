@@ -1,7 +1,9 @@
+import { Dispatch } from 'redux';
+
+import * as ACTIONS from './types';
+
 import { HttpRequest } from '../../api/http';
 import { success, failure } from '../../api/http-helper';
-import { Dispatch } from 'redux';
-import * as ACTIONS from './types';
 
 export function checkUsernameAvailability(username: string) {
     return (dispatch: Dispatch): void => {

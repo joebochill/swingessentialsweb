@@ -1,14 +1,17 @@
+import { Dispatch } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
+
 import * as ACTIONS from './types';
+
 import { loadTips } from './tip-actions';
 import { loadBlogs } from './blog-actions';
-// import { loadPackages } from './PackageActions';
-import { ASYNC_PREFIX } from '../../constants';
 import { setToken } from './auth-actions';
 import { loadPros } from './pro-actions';
 import { loadPackages } from './package-actions';
 import { loadDiscounts } from './discount-actions';
-import { Dispatch } from 'redux';
+
+import { ASYNC_PREFIX } from '../../constants';
+
 import { HttpRequest } from '../../api/http';
 import { success, failure } from '../../api/http-helper';
 
@@ -41,21 +44,3 @@ export function loadInitialData(): Function {
         dispatch(loadDiscounts());
     };
 }
-
-// Send report with log data to swingessentials
-// export function sendLogReport(log: string, type: LOG_TYPE) {
-//     return (dispatch: ThunkDispatch<any, void, any>) => {
-//         dispatch({ type: ACTIONS.SEND_LOGS.REQUEST });
-//         HttpRequest.post(ACTIONS.SEND_LOGS.API)
-//             .withBody({ platform: Platform.OS, data: log })
-//             .onSuccess((body: any) => {
-//                 Logger.clear(type);
-//                 AsyncStorage.setItem(ASYNC_PREFIX + 'logs_sent', '' + Math.floor(Date.now() / 1000));
-//                 dispatch(success(ACTIONS.SEND_LOGS.SUCCESS, body));
-//             })
-//             .onFailure((response: Response) => {
-//                 dispatch(failure(ACTIONS.SEND_LOGS.FAILURE, response, 'SendLogs'));
-//             })
-//             .request();
-//     };
-// }

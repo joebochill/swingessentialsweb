@@ -1,7 +1,11 @@
-import { Avatar, Typography, Divider, Hidden } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { AppState } from '../../__types__';
+import { requestLogout } from '../../redux/actions/auth-actions';
+import { ROUTES } from '../../constants/routes';
 import { Spacer } from '@pxblue/react-components';
+import { Avatar, Typography, Divider, Hidden, createStyles, makeStyles, Theme, useTheme } from '@material-ui/core';
 import {
     ShoppingCart,
     Subscriptions,
@@ -14,17 +18,12 @@ import {
     LocalBar,
     Security,
 } from '@material-ui/icons';
-import { useHistory } from 'react-router-dom';
-import { ROUTES } from '../../constants/routes';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from '../../__types__';
-import { requestLogout } from '../../redux/actions/auth-actions';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         menuHeader: {
             display: 'flex',
-            padding: 16,
+            padding: theme.spacing(2),
             color: theme.palette.text.primary,
         },
         avatarInside: {
@@ -38,9 +37,9 @@ const useStyles = makeStyles((theme: Theme) =>
         row: {
             display: 'flex',
             alignItems: 'center',
-            paddingLeft: 16,
-            paddingRight: 16,
-            height: 48,
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+            height: theme.spacing(6),
             cursor: 'pointer',
             userSelect: 'none',
             '&:hover': {
@@ -58,11 +57,13 @@ type MenuListItemProps = {
 };
 export const MenuListItem: React.FC<MenuListItemProps> = (props) => {
     const classes = useStyles();
+    const theme = useTheme();
+
     return (
         <>
             <div className={classes.row} onClick={(): void => props.onClick()}>
                 {props.icon}
-                {props.icon && <Spacer flex={0} width={16} />}
+                {props.icon && <Spacer flex={0} width={theme.spacing(2)} />}
                 <Typography>{props.title}</Typography>
             </div>
             {props.divider && <Divider />}
@@ -75,9 +76,11 @@ type MenuContentProps = {
 };
 export const MenuContent: React.FC<MenuContentProps> = (props) => {
     const { onClose } = props;
+
     const history = useHistory();
     const classes = useStyles();
     const dispatch = useDispatch();
+
     const user = useSelector((state: AppState) => state.user);
     const token = useSelector((state: AppState) => state.auth.token);
     const isAdmin = useSelector((state: AppState) => state.auth.admin);

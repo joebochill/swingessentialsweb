@@ -1,23 +1,21 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppState } from '../__types__';
+import { SUBMIT_LESSON } from '../redux/actions/types';
+import { submitLesson } from '../redux/actions/lessons-actions';
+import { ROUTES } from '../constants/routes';
+import { SectionBlurb } from '../components/text/SectionBlurb';
+import { Banner } from '../components/display/Banner';
+import { Section } from '../components/display/Section';
+import { PlaceHolderVideo, PlaceHolderText } from '../components/display/Placeholder';
+import { Spacer, EmptyState } from '@pxblue/react-components';
+import { makeStyles, createStyles, Button, Theme, LinearProgress, Hidden, useTheme } from '@material-ui/core';
+import { Videocam, CheckCircle, CloudUpload, Error, Mail, ShoppingCart, Update } from '@material-ui/icons';
 import bg from '../assets/images/banners/swing3.jpg';
 import dtl from '../assets/icons/down-the-line.png';
 import fo from '../assets/icons/face-on.png';
-
-import { makeStyles, createStyles, Button, Theme, LinearProgress, Hidden } from '@material-ui/core';
-import { SectionBlurb } from '../components/text/SectionBlurb';
-import { Videocam, CheckCircle, CloudUpload, Error, Mail, ShoppingCart, Update } from '@material-ui/icons';
-import { Banner } from '../components/display/Banner';
-import { Section } from '../components/display/Section';
-import { Spacer, EmptyState } from '@pxblue/react-components';
-import { PlaceHolderVideo, PlaceHolderText } from '../components/display/Placeholder';
-import { useDispatch, useSelector } from 'react-redux';
-import { submitLesson } from '../redux/actions/lessons-actions';
-import { AppState } from '../__types__';
-
 import * as Colors from '@pxblue/colors';
-import { useHistory } from 'react-router-dom';
-import { ROUTES } from '../constants/routes';
-import { SUBMIT_LESSON } from '../redux/actions/types';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -42,6 +40,7 @@ export const SubmitPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
+    const theme = useTheme();
 
     const role = useSelector((state: AppState) => state.auth.role);
     const lessons = useSelector((state: AppState) => state.lessons);
@@ -49,7 +48,6 @@ export const SubmitPage: React.FC = (): JSX.Element => {
     const loaded = useSelector((state: AppState) => state.api.authentication.initialized);
     const getCredits = useSelector((state: AppState) => state.api.getCredits.status);
     const getLessons = useSelector((state: AppState) => state.api.loadLessons.status);
-
     const submitStatus = useSelector((state: AppState) => state.api.submitLesson.status);
 
     const [foVideo, setFoVideo] = useState<File | null>(null);
@@ -118,20 +116,20 @@ export const SubmitPage: React.FC = (): JSX.Element => {
                             subheading={'How to submit your swing'}
                             body={`Select two videos of your golf swing from your computer: one from the face-on view and one looking down the line.`}
                         />
-                        <Spacer flex={0} width={64} height={64} />
+                        <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(8)} />
                         <SectionBlurb
                             headline={'Pro Tip #2'}
                             subheading={'Choosing a video'}
                             body={`Try to keep your video files smaller by trimming any excess footage before submitting. We also caution against using slow-motion videos as they tend to yield much larger files.`}
                         />
-                        <Spacer flex={0} width={64} height={64} />
+                        <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(8)} />
                         <SectionBlurb
                             headline={'Pro Tip #3'}
                             subheading={'Video Formats'}
                             body={`Some web browsers are not able to display a preview for the latest video format used by iPhones. We still accept these videos (just preview them on your phone before uploading).`}
                         />
                     </div>
-                    <Spacer flex={0} width={64} height={64} />
+                    <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(8)} />
                 </Hidden>
                 <div className={classes.panel}>
                     {getLessons === 'success' && getCredits === 'success' && submitStatus === 'initial' && canShowForm && (
@@ -147,7 +145,7 @@ export const SubmitPage: React.FC = (): JSX.Element => {
                                         }}
                                     />
                                 </div>
-                                <Spacer flex={0} width={16} height={16} />
+                                <Spacer flex={0} width={theme.spacing(2)} height={theme.spacing(2)} />
                                 <div style={{ flex: '1 1 0px' }}>
                                     <PlaceHolderVideo
                                         title={'Down-the-Line'}
@@ -159,7 +157,7 @@ export const SubmitPage: React.FC = (): JSX.Element => {
                                     />
                                 </div>
                             </div>
-                            <Spacer flex={0} width={32} height={32} />
+                            <Spacer flex={0} width={theme.spacing(4)} height={theme.spacing(4)} />
                             <PlaceHolderText
                                 label={'Special Requests / Comments'}
                                 onTextChange={(text: string): void => {
@@ -171,7 +169,7 @@ export const SubmitPage: React.FC = (): JSX.Element => {
                                     fullWidth
                                     color={'primary'}
                                     variant={'contained'}
-                                    style={{ marginTop: 32 }}
+                                    style={{ marginTop: theme.spacing(4) }}
                                     onClick={(): void => _submitLesson()}
                                 >
                                     Submit

@@ -21,7 +21,6 @@ const initialState: AuthenticationStatus = {
 };
 export const AuthenticationReducer = (state = initialState, action: any): AuthenticationStatus => {
     switch (action.type) {
-        /* Authentication */
         case INITIAL_LOAD:
             return {
                 ...state,
@@ -94,10 +93,6 @@ export const AuthenticationReducer = (state = initialState, action: any): Authen
                 data: {
                     failures: 0,
                 },
-                // blogs: starterState,
-                // loadLessons: starterState,
-                // redeemLessons: starterState,
-                // tips: starterState,
             };
         }
         case LOGIN.RESET:

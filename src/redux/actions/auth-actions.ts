@@ -1,20 +1,20 @@
-import { success, failure } from '../../api/http-helper';
-import { btoa, atob } from '../../utilities/base64';
+import { ThunkDispatch } from 'redux-thunk';
 import * as ACTIONS from './types';
-import { AUTH, BASEURL } from '../../constants';
+import { Credentials } from '../../__types__';
+
 import { loadLessons } from './lessons-actions';
 import { loadTips } from './tip-actions';
 import { loadCredits } from './credit-actions';
 import { loadBlogs } from './blog-actions';
-// import { loadSettings } from './SettingsActions';
-import { ThunkDispatch } from 'redux-thunk';
-import { Credentials } from '../../__types__';
-import { HttpRequest } from '../../api/http';
 import { loadUserInfo, updateUserPassword } from './user-data-actions';
 import { getUserSettings } from './user-settings-actions';
 import { loadDiscounts } from './discount-actions';
-// import { Logger } from '../../utilities/logging';
-// import * as Keychain from 'react-native-keychain';
+
+import { AUTH, BASEURL } from '../../constants';
+
+import { HttpRequest } from '../../api/http';
+import { success, failure } from '../../api/http-helper';
+import { btoa, atob } from '../../utilities/base64';
 
 export function loadUserContent() {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
@@ -61,6 +61,7 @@ export function requestLogin(userCredentials: Credentials) {
             });
     };
 }
+
 /* clears the current authentication token */
 export function requestLogout() {
     return (dispatch: ThunkDispatch<any, void, any>): void => {

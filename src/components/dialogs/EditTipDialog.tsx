@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { Tip } from '../../__types__';
+import { updateTip, addTip, removeTip } from '../../redux/actions/tip-actions';
+import { DATE_REGEX } from '../../constants';
+import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
+import { Spacer } from '@pxblue/react-components';
+import { ConfirmationDialog } from './ConfirmationDialog';
 import {
     DialogProps,
     Dialog,
@@ -9,14 +16,20 @@ import {
     DialogActions,
     Button,
     TextField,
+    makeStyles,
+    Theme,
+    createStyles,
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import { Tip } from '../../__types__';
-import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
-import { DATE_REGEX } from '../../constants';
-import { updateTip, addTip, removeTip } from '../../redux/actions/tip-actions';
-import { Spacer } from '@pxblue/react-components';
-import { ConfirmationDialog } from './ConfirmationDialog';
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        field: {
+            '&:not(:last-child)': {
+                marginBottom: theme.spacing(2),
+            },
+        },
+    })
+);
 
 type EditTipDialogProps = DialogProps & {
     tip: Tip;
@@ -30,14 +43,15 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
         },
     } = dialogProps;
 
+    const dispatch = useDispatch();
+    const classes = useStyles();
+
     const [date, setDate] = useState(tip.date);
     const [title, setTitle] = useState(tip.title);
     const [video, setVideo] = useState(tip.video);
     const [comments, setComments] = useState(convertDatabaseTextToMultiline(tip.comments));
 
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-
-    const dispatch = useDispatch();
 
     const resetTip = useCallback(() => {
         setDate(tip.date);
@@ -74,7 +88,7 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                         onChange={(e): void => {
                             setDate(e.target.value);
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
                     <TextField
                         fullWidth
@@ -86,7 +100,7 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                         onChange={(e): void => {
                             setTitle(e.target.value);
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
                     <TextField
                         fullWidth
@@ -98,7 +112,7 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                         onChange={(e): void => {
                             setVideo(e.target.value);
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
                     <TextField
                         fullWidth
@@ -113,6 +127,7 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                         }}
                         inputProps={{ maxLength: 500, style: { minHeight: 64 } }}
                         helperText={`${500 - comments.length} characters left`}
+                        className={classes.field}
                     />
                 </DialogContent>
                 <DialogActions>

@@ -1,9 +1,11 @@
-import { HttpRequest } from '../../api/http';
-import { success, failure } from '../../api/http-helper';
 import { Dispatch } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+
 import * as ACTIONS from './types';
 import { Tip } from '../../__types__';
-import { ThunkDispatch } from 'redux-thunk';
+
+import { HttpRequest } from '../../api/http';
+import { success, failure } from '../../api/http-helper';
 
 export function loadTips() {
     return (dispatch: Dispatch): void => {

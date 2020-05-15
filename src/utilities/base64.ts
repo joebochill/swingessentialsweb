@@ -1,4 +1,5 @@
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
 export const btoa = (input = ''): string => {
     const str = input;
     let output = '';
@@ -19,6 +20,7 @@ export const btoa = (input = ''): string => {
 
     return output;
 };
+
 export const atob = (input = ''): string => {
     const str = input.replace(/=+$/, '');
     let output = '';

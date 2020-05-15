@@ -1,13 +1,13 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { AppState, Lesson } from '../../__types__';
-import { Card, CardHeader, CardProps, useTheme } from '@material-ui/core';
-import { InfoListItem } from '@pxblue/react-components';
-import { prettyDate } from '../../utilities/date';
-import { Videocam } from '@material-ui/icons';
-import { ROUTES } from '../../constants/routes';
 import { useHistory } from 'react-router-dom';
+import { AppState, Lesson } from '../../__types__';
 import { SET_SELECTED_LESSON } from '../../redux/actions/types';
+import { ROUTES } from '../../constants/routes';
+import { prettyDate } from '../../utilities/date';
+import { InfoListItem } from '@pxblue/react-components';
+import { Card, CardHeader, CardProps, useTheme } from '@material-ui/core';
+import { Videocam } from '@material-ui/icons';
 
 type PendingLessonsCardProps = CardProps & {
     hidden?: boolean;
@@ -19,8 +19,8 @@ export const PendingLessonsCard: React.FC<PendingLessonsCardProps> = (props) => 
     const theme = useTheme();
     const history = useHistory();
     const dispatch = useDispatch();
-    const selected = useSelector((state: AppState) => state.lessons.selected);
 
+    const selected = useSelector((state: AppState) => state.lessons.selected);
     const admin = useSelector((state: AppState) => state.auth.admin);
     const role = useSelector((state: AppState) => state.auth.role);
 

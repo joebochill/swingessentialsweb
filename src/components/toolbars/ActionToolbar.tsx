@@ -4,9 +4,9 @@ import { makeStyles, createStyles, Toolbar, AppBar, Theme, AppBarProps } from '@
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         actionBar: {
-            top: 64,
+            top: theme.spacing(8),
             [theme.breakpoints.down('xs')]: {
-                top: 56,
+                top: theme.spacing(7),
             },
         },
     })
@@ -16,6 +16,7 @@ type ActionToolbarProps = AppBarProps & {
 };
 export const ActionToolbar: React.FC<ActionToolbarProps> = (props) => {
     const { show, ...barProps } = props;
+
     const classes = useStyles();
 
     if (!show) return null;

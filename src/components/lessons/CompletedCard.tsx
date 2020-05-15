@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState, Lesson } from '../../__types__';
-import { Card, CardHeader, CardProps, useTheme, makeStyles, createStyles, Typography } from '@material-ui/core';
-import { InfoListItem, ListItemTag } from '@pxblue/react-components';
-import { prettyDate } from '../../utilities/date';
-import { PlaceholderLesson } from '../../constants/lessons';
-import { ChevronRight, ChevronLeft } from '@material-ui/icons';
-import { markLessonViewed } from '../../redux/actions/lessons-actions';
-import { useHistory } from 'react-router-dom';
-import { ROUTES } from '../../constants/routes';
 import { SET_SELECTED_LESSON } from '../../redux/actions/types';
+import { markLessonViewed } from '../../redux/actions/lessons-actions';
+import { PlaceholderLesson } from '../../constants/lessons';
+import { ROUTES } from '../../constants/routes';
+import { prettyDate } from '../../utilities/date';
+import { InfoListItem, ListItemTag } from '@pxblue/react-components';
+import { Card, CardHeader, CardProps, useTheme, makeStyles, createStyles, Typography } from '@material-ui/core';
+import { ChevronRight, ChevronLeft } from '@material-ui/icons';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -40,12 +40,13 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
     const theme = useTheme();
     const history = useHistory();
     const dispatch = useDispatch();
+
     const admin = useSelector((state: AppState) => state.auth.admin);
+    const selected = useSelector((state: AppState) => state.lessons.selected);
+
     const [page, setPage] = useState(0);
 
-    const selected = useSelector((state: AppState) => state.lessons.selected);
     const lessonsPerPage = 10;
-
     // Paginate the final lessons list
     let lessons = _lessons;
     if (lessons.length > lessonsPerPage) {
@@ -130,7 +131,7 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
                     backgroundColor={
                         selected && selected.request_id === lesson.request_id ? theme.palette.primary.light : undefined
                     }
-                    fontColor={admin && !lesson.viewed ? '#ca3c3d' : 'inherit'}
+                    fontColor={admin && !lesson.viewed ? theme.palette.error.dark : 'inherit'}
                     rightComponent={
                         <>
                             {!admin && !lesson.viewed && <ListItemTag label={'NEW'} />}

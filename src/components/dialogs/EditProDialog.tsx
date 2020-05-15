@@ -9,6 +9,9 @@ import {
     DialogActions,
     Button,
     TextField,
+    makeStyles,
+    Theme,
+    createStyles,
 } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { Pro } from '../../__types__';
@@ -16,6 +19,16 @@ import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '
 import { Spacer } from '@pxblue/react-components';
 import { ConfirmationDialog } from './ConfirmationDialog';
 import { addPro, updatePro, removePro } from '../../redux/actions/pro-actions';
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        field: {
+            '&:not(:last-child)': {
+                marginBottom: theme.spacing(2),
+            },
+        },
+    })
+);
 
 type EditProDialogProps = DialogProps & {
     pro: Pro;
@@ -29,14 +42,14 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
         },
     } = dialogProps;
 
+    const dispatch = useDispatch();
+    const classes = useStyles();
+
     const [name, setName] = useState(pro.name);
     const [title, setTitle] = useState(pro.title);
     const [bio, setBio] = useState(convertDatabaseTextToMultiline(pro.bio));
     const [image, setImage] = useState(pro.image);
-
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-
-    const dispatch = useDispatch();
 
     const resetPro = useCallback(() => {
         setName(pro.name);
@@ -72,7 +85,7 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
                         onChange={(e): void => {
                             setName(e.target.value);
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
                     <TextField
                         fullWidth
@@ -84,7 +97,7 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
                         onChange={(e): void => {
                             setTitle(e.target.value);
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
                     <TextField
                         fullWidth
@@ -96,7 +109,7 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
                         onChange={(e): void => {
                             setImage(e.target.value);
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
                     <TextField
                         fullWidth
@@ -111,6 +124,7 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
                         }}
                         inputProps={{ maxLength: 65000, style: { minHeight: 64 } }}
                         helperText={`${65000 - bio.length} characters left`}
+                        className={classes.field}
                     />
                 </DialogContent>
                 <DialogActions>

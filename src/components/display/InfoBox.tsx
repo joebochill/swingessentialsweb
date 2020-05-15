@@ -4,11 +4,10 @@ import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         infoBox: {
-            padding: 20,
+            padding: theme.spacing(2),
             background: theme.palette.primary.main,
-            // color: 'white',
             textAlign: 'center',
-            marginBottom: 16,
+            marginBottom: theme.spacing(2),
         },
     })
 );

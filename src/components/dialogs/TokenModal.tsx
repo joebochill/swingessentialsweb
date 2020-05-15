@@ -1,4 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppState } from '../../__types__';
+import { TransitionProps } from '@material-ui/core/transitions/transition';
+import { refreshToken, checkToken, requestLogout } from '../../redux/actions/auth-actions';
+import { formatTimer } from '../../utilities/date';
 import {
     DialogProps,
     Dialog,
@@ -9,13 +14,9 @@ import {
     Button,
     Typography,
     Zoom,
+    useTheme,
 } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
 import { Update } from '@material-ui/icons';
-import { refreshToken, checkToken, requestLogout } from '../../redux/actions/auth-actions';
-import { AppState } from '../../__types__';
-import { formatTimer } from '../../utilities/date';
-import { TransitionProps } from '@material-ui/core/transitions/transition';
 
 const Transition = React.forwardRef(
     (props: TransitionProps & { children?: React.ReactElement<any, any> }, ref: React.Ref<unknown>) => (
@@ -34,6 +35,8 @@ export const TokenModal: React.FC<TokenModalProps> = (props) => {
     } = dialogProps;
 
     const dispatch = useDispatch();
+    const theme = useTheme();
+
     const token = useSelector((state: AppState) => state.auth.token);
     const role = useSelector((state: AppState) => state.auth.role);
 
@@ -106,7 +109,7 @@ export const TokenModal: React.FC<TokenModalProps> = (props) => {
         >
             <DialogTitle disableTypography>
                 <Typography variant={'h6'} style={{ display: 'flex', alignItems: 'center' }}>
-                    <Update style={{ fontSize: 40, marginRight: 4 }} />
+                    <Update style={{ fontSize: 40, marginRight: theme.spacing(1) }} />
                     {`Session Expiration in ${formatTimer(timeRemaining)}`}
                 </Typography>
             </DialogTitle>

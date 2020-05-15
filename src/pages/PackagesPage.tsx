@@ -1,5 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import bg from '../assets/images/banners/order.jpg';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { AppState, Package } from '../__types__';
+import { CHECK_DISCOUNT, PURCHASE_CREDITS } from '../redux/actions/types';
+import { checkDiscount } from '../redux/actions/discount-actions';
+import { purchaseCredits } from '../redux/actions/credit-actions';
+import { ROUTES } from '../constants/routes';
+import { roundNumber } from '../utilities/numbers';
+import { Banner } from '../components/display/Banner';
+import { Section } from '../components/display/Section';
+import { SectionBlurb } from '../components/text/SectionBlurb';
+import { PayPalButton } from '../components/lessons/PayPal';
+import { SimpleLink } from '../components/navigation/SimpleLink';
+import { StyledTextField } from '../components/text/StyledInputs';
+import { LoadingIndicator } from '../components/display/LoadingIndicator';
+import { InfoListItem, Spacer, EmptyState } from '@pxblue/react-components';
 import {
     makeStyles,
     createStyles,
@@ -11,25 +26,9 @@ import {
     CardHeader,
     Theme,
 } from '@material-ui/core';
-import { SectionBlurb } from '../components/text/SectionBlurb';
 import { ShoppingCart, AddShoppingCart, CheckCircle, Error, Mail } from '@material-ui/icons';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState, Package } from '../__types__';
-import { Banner } from '../components/display/Banner';
-import { Section } from '../components/display/Section';
-import { InfoListItem, Spacer, EmptyState } from '@pxblue/react-components';
-import { PayPalButton } from '../components/lessons/PayPal';
-import { SimpleLink } from '../components/navigation/SimpleLink';
-import { StyledTextField } from '../components/text/StyledInputs';
-import { LoadingIndicator } from '../components/display/LoadingIndicator';
-import { checkDiscount } from '../redux/actions/discount-actions';
-import { purchaseCredits } from '../redux/actions/credit-actions';
-import { roundNumber } from '../utilities/numbers';
-
+import bg from '../assets/images/banners/order.jpg';
 import * as Colors from '@pxblue/colors';
-import { CHECK_DISCOUNT, PURCHASE_CREDITS } from '../redux/actions/types';
-import { useHistory } from 'react-router-dom';
-import { ROUTES } from '../constants/routes';
 
 type DialogOpen = {
     open: boolean;
@@ -48,9 +47,8 @@ const useStyles = makeStyles((theme: Theme) =>
             },
         },
         currentCredits: {
-            // flex: '0 0 auto',
             textAlign: 'center',
-            padding: 32,
+            padding: theme.spacing(4),
             background: theme.palette.primary.light,
             border: `1px solid ${theme.palette.primary.main}`,
         },
@@ -81,7 +79,6 @@ export const PackagesPage: React.FC = (): JSX.Element => {
     const [showDiscount, setShowDiscount] = useState(false);
     const [discountCode, setDiscountCode] = useState('');
     const [paypalPending, setPaypalPending] = useState(false);
-
     const [activePackage, setActivePackage] = useState<Package | null>(null);
 
     const activePrice = !activePackage ? 0 : parseFloat(activePackage.price);
@@ -165,7 +162,7 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                                 />
                             ))}
                         </Card>
-                        <Spacer flex={0} width={64} height={64} />
+                        <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(8)} />
                         <div className={classes.currentCredits}>
                             {loadingCredits ? (
                                 <CircularProgress />
@@ -179,7 +176,7 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                             )}
                         </div>
                     </div>
-                    <Spacer flex={0} width={64} height={64} />
+                    <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(8)} />
                     <div style={{ flex: '1 1 0px', alignSelf: 'stretch', textAlign: 'center' }}>
                         {userAllowed && (
                             <>
@@ -245,7 +242,7 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                                             />
                                         </Card>
                                         {discountStatus === 'success' && discount && discountAmount !== 0 && (
-                                            <div style={{ textAlign: 'center', marginTop: 16 }}>
+                                            <div style={{ textAlign: 'center', marginTop: theme.spacing(2) }}>
                                                 <Typography variant={'overline'} style={{ lineHeight: 1 }}>
                                                     Discount Applied
                                                 </Typography>
@@ -258,7 +255,7 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                                             </div>
                                         )}
                                         {discountStatus === 'failed' && (
-                                            <div style={{ textAlign: 'center', marginTop: 16 }}>
+                                            <div style={{ textAlign: 'center', marginTop: theme.spacing(2) }}>
                                                 <Typography variant={'overline'} style={{ lineHeight: 1 }}>
                                                     Invalid Code
                                                 </Typography>
@@ -272,7 +269,7 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                                                     onClick={(): void => {
                                                         setShowDiscount(true);
                                                     }}
-                                                    style={{ display: 'inline-block', marginTop: 16 }}
+                                                    style={{ display: 'inline-block', marginTop: theme.spacing(2) }}
                                                 />
                                             </>
                                         )}
@@ -288,13 +285,13 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                                                         onChange={(e): void => {
                                                             setDiscountCode(e.target.value);
                                                         }}
-                                                        style={{ flex: '1 1 0px', marginTop: 16 }}
+                                                        style={{ flex: '1 1 0px', marginTop: theme.spacing(2) }}
                                                     />
                                                     <Button
                                                         disabled={discountCode.length < 1}
                                                         variant={'contained'}
                                                         color={'primary'}
-                                                        style={{ flex: '0 0 auto', marginLeft: 16 }}
+                                                        style={{ flex: '0 0 auto', marginLeft: theme.spacing(2) }}
                                                         onClick={(): void => {
                                                             dispatch(checkDiscount(discountCode));
                                                             setDiscountCode('');
@@ -307,7 +304,7 @@ export const PackagesPage: React.FC = (): JSX.Element => {
                                             </>
                                         )}
 
-                                        <div style={{ marginTop: 16 }}>
+                                        <div style={{ marginTop: theme.spacing(2) }}>
                                             {loadingPurchase ? (
                                                 <CircularProgress />
                                             ) : currentTotal > 0 ? (

@@ -1,11 +1,14 @@
 import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
+import * as serviceWorker from './serviceWorker';
 
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import * as serviceWorker from './serviceWorker';
+import { loadInitialData } from './redux/actions/extra-actions';
 import { Provider } from 'react-redux';
 import { MainRouter } from './router';
+import { store } from './redux/store';
+import { TokenModal } from './components/dialogs/TokenModal';
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { SETheme } from './themes';
@@ -13,10 +16,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import './index.css';
 import 'typeface-open-sans';
 import 'typeface-roboto-mono';
-
-import { store } from './redux/store';
-import { loadInitialData } from './redux/actions/extra-actions';
-import { TokenModal } from './components/dialogs/TokenModal';
 
 const App: React.FC = () => {
     useEffect(() => {
@@ -33,12 +32,10 @@ const App: React.FC = () => {
 };
 
 ReactDOM.render(
-    // <React.StrictMode>
     <ThemeProvider theme={createMuiTheme(SETheme)}>
         <CssBaseline />
         <App />
     </ThemeProvider>,
-    // </React.StrictMode>,
     document.getElementById('root')
 );
 

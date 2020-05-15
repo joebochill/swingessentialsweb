@@ -1,8 +1,10 @@
-import { HttpRequest } from '../../api/http';
-import { success, failure } from '../../api/http-helper';
 import { Dispatch } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
+
 import * as ACTIONS from './types';
+
+import { HttpRequest } from '../../api/http';
+import { success, failure } from '../../api/http-helper';
 
 export function loadCredits() {
     return (dispatch: Dispatch): void => {

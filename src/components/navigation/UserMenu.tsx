@@ -1,11 +1,10 @@
-import { Menu, Avatar, Button } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { ROUTES } from '../../constants/routes';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../__types__';
+import { ROUTES } from '../../constants/routes';
 import { MenuContent } from './MenuContent';
+import { Menu, Avatar, Button, createStyles, makeStyles, Theme } from '@material-ui/core';
 import { Person } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -32,10 +31,12 @@ ForwardMenuContent.displayName = 'ForwardRefMenuContent';
 export const UserMenu: React.FC = () => {
     const history = useHistory();
     const classes = useStyles();
-    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
     const token = useSelector((state: AppState) => state.auth.token);
     const user = useSelector((state: AppState) => state.user);
     const avatar = useSelector((state: AppState) => state.settings.avatar);
+
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
     const closeMenu = useCallback(() => {
         setAnchorEl(null);

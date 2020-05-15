@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import bg from '../assets/images/banners/19th.jpg';
+import { useParams, Redirect, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { AppState, Blog } from '../__types__';
+import { ROUTES } from '../constants/routes';
+import { prettyDate } from '../utilities/date';
+import { splitDatabaseText } from '../utilities/text';
+import { Banner } from '../components/display/Banner';
+import { Section } from '../components/display/Section';
+import { ActionToolbar } from '../components/toolbars/ActionToolbar';
+import { LoadingIndicator } from '../components/display/LoadingIndicator';
+import { EditBlogDialog } from '../components/dialogs/EditBlogDialog';
+import { SectionBlurb } from '../components/text/SectionBlurb';
+import { FancyHeadline } from '../components/text/FancyHeadline';
+import { Spacer, InfoListItem } from '@pxblue/react-components';
 import {
     makeStyles,
     createStyles,
@@ -11,22 +24,8 @@ import {
     IconButton,
     useMediaQuery,
 } from '@material-ui/core';
-import { SectionBlurb } from '../components/text/SectionBlurb';
 import { AddCircle, Edit, ChevronRight, ChevronLeft, LocalBar } from '@material-ui/icons';
-
-import { Spacer, InfoListItem } from '@pxblue/react-components';
-import { prettyDate } from '../utilities/date';
-import { splitDatabaseText } from '../utilities/text';
-import { FancyHeadline } from '../components/text/FancyHeadline';
-import { useSelector } from 'react-redux';
-import { AppState, Blog } from '../__types__';
-import { Banner } from '../components/display/Banner';
-import { Section } from '../components/display/Section';
-import { ActionToolbar } from '../components/toolbars/ActionToolbar';
-import { LoadingIndicator } from '../components/display/LoadingIndicator';
-import { useParams, Redirect, useHistory } from 'react-router-dom';
-import { ROUTES } from '../constants/routes';
-import { EditBlogDialog } from '../components/dialogs/EditBlogDialog';
+import bg from '../assets/images/banners/19th.jpg';
 
 const BlankBlog: Blog = {
     id: -1,
@@ -57,14 +56,16 @@ const useStyles = makeStyles(() =>
 
 export const BlogsPage: React.FC = (): JSX.Element => {
     const currentYear = new Date().getFullYear();
+
     const classes = useStyles();
     const theme = useTheme();
     const history = useHistory();
+    const { id } = useParams();
+    const isSmall = useMediaQuery('(max-width:959px)');
 
     const blogs = useSelector((state: AppState) => state.blogs.blogList);
     const loadingStatus = useSelector((state: AppState) => state.api.blogs.status);
     const admin = useSelector((state: AppState) => state.auth.admin);
-    const { id } = useParams();
 
     const loading = loadingStatus === 'loading';
 
@@ -75,8 +76,6 @@ export const BlogsPage: React.FC = (): JSX.Element => {
     const [showNewDialog, setShowNewDialog] = useState(false);
 
     const paramIndex = id !== undefined ? blogs.findIndex((blog) => blog.id === id) : -1;
-
-    const isSmall = useMediaQuery('(max-width:959px)');
 
     useEffect(() => {
         if (!activeBlog) {
@@ -132,7 +131,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
             </Banner>
             <ActionToolbar show={admin} onClick={(): void => setShowNewDialog(true)}>
                 <Button variant={'text'}>
-                    <AddCircle style={{ marginRight: 4 }} />
+                    <AddCircle style={{ marginRight: theme.spacing(0.5) }} />
                     New Post
                 </Button>
             </ActionToolbar>
@@ -210,7 +209,9 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                             })}
                         </Card>
                     )}
-                    <Spacer flex={0} width={64} />
+
+                    <Spacer flex={0} width={theme.spacing(8)} />
+
                     {activeBlog && (
                         <div style={{ flex: '1 1 0px', position: 'relative' }}>
                             {isSmall && (

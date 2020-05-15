@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { Blog } from '../../__types__';
+import { addBlog, updateBlog, removeBlog } from '../../redux/actions/blog-actions';
+import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
+import { DATE_REGEX } from '../../constants';
+import { Spacer } from '@pxblue/react-components';
+import { ConfirmationDialog } from './ConfirmationDialog';
 import {
     DialogProps,
     Dialog,
@@ -9,14 +16,20 @@ import {
     DialogActions,
     Button,
     TextField,
+    makeStyles,
+    Theme,
+    createStyles,
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import { Blog } from '../../__types__';
-import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
-import { DATE_REGEX } from '../../constants';
-import { Spacer } from '@pxblue/react-components';
-import { ConfirmationDialog } from './ConfirmationDialog';
-import { addBlog, updateBlog, removeBlog } from '../../redux/actions/blog-actions';
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        field: {
+            '&:not(:last-child)': {
+                marginBottom: theme.spacing(2),
+            },
+        },
+    })
+);
 
 type EditBlogDialogProps = DialogProps & {
     blog: Blog;
@@ -30,13 +43,14 @@ export const EditBlogDialog: React.FC<EditBlogDialogProps> = (props) => {
         },
     } = dialogProps;
 
+    const dispatch = useDispatch();
+    const classes = useStyles();
+
     const [date, setDate] = useState(blog.date);
     const [title, setTitle] = useState(blog.title);
     const [body, setBody] = useState(convertDatabaseTextToMultiline(blog.body));
 
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-
-    const dispatch = useDispatch();
 
     const resetBlog = useCallback(() => {
         setDate(blog.date);
@@ -72,7 +86,7 @@ export const EditBlogDialog: React.FC<EditBlogDialogProps> = (props) => {
                         onChange={(e): void => {
                             setDate(e.target.value);
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
                     <TextField
                         fullWidth
@@ -84,7 +98,7 @@ export const EditBlogDialog: React.FC<EditBlogDialogProps> = (props) => {
                         onChange={(e): void => {
                             setTitle(e.target.value);
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
                     <TextField
                         fullWidth
@@ -99,6 +113,7 @@ export const EditBlogDialog: React.FC<EditBlogDialogProps> = (props) => {
                         }}
                         inputProps={{ maxLength: 65000, style: { minHeight: 128 } }}
                         helperText={`${65000 - body.length} characters left`}
+                        className={classes.field}
                     />
                 </DialogContent>
                 <DialogActions>
