@@ -9,6 +9,7 @@ import {
     FilledInput,
     InputAdornment,
     IconButton,
+    useTheme,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 
@@ -50,7 +51,10 @@ type StyledTextFieldProps = TextFieldProps & {
 };
 export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
     const { last, style, InputProps, onDark, ...other } = props;
+
     const classes = useStyles();
+    const theme = useTheme();
+
     return (
         <TextField
             fullWidth
@@ -65,7 +69,7 @@ export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
                     : {},
                 InputProps
             )}
-            style={Object.assign({ marginBottom: last ? 0 : 16 }, style)}
+            style={Object.assign({ marginBottom: last ? 0 : theme.spacing(2) }, style)}
             {...other}
         />
     );
@@ -80,7 +84,10 @@ type StyledSelectProps = SelectProps & {
 };
 export const StyledSelect: React.FC<StyledSelectProps> = (props) => {
     const { last, style, ...other } = props;
+
     const classes = useStyles();
+    const theme = useTheme();
+
     return (
         <Select
             fullWidth
@@ -90,7 +97,7 @@ export const StyledSelect: React.FC<StyledSelectProps> = (props) => {
                     classes={{ root: props.value ? classes.focused : classes.input, focused: classes.focused }}
                 />
             }
-            style={Object.assign({ textAlign: 'left', marginBottom: last ? 0 : 16 }, style)}
+            style={Object.assign({ textAlign: 'left', marginBottom: last ? 0 : theme.spacing(2) }, style)}
             {...other}
         />
     );

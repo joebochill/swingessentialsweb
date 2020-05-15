@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link, LinkProps, makeStyles, createStyles, Theme } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
+import { Link, LinkProps, makeStyles, createStyles, Theme } from '@material-ui/core';
 import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -9,7 +9,6 @@ const useStyles = makeStyles((theme: Theme) =>
             fontWeight: 400,
             cursor: 'pointer',
             textDecoration: 'none',
-            // color: '#ffffff',
             userSelect: 'none',
             '&:not(:nth-of-type(1))': {
                 marginLeft: theme.spacing(2),

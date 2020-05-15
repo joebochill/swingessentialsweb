@@ -1,4 +1,12 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppState } from '../../__types__';
+import { OPEN_DRAWER } from '../../redux/actions/types';
+import { ROUTES } from '../../constants/routes';
+import { SimpleRouterLink } from '../navigation/SimpleLink';
+import { Spacer } from '@pxblue/react-components';
+import { UserMenu } from '../navigation/UserMenu';
 import {
     AppBar,
     Button,
@@ -10,15 +18,8 @@ import {
     Hidden,
     IconButton,
 } from '@material-ui/core';
-import logo from '../../assets/icons/logo-full-white.svg';
-import { Spacer } from '@pxblue/react-components';
-import { UserMenu } from '../navigation/UserMenu';
-import { useHistory } from 'react-router-dom';
 import { Menu } from '@material-ui/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { ROUTES } from '../../constants/routes';
-import { AppState } from '../../__types__';
-import { SimpleRouterLink } from '../navigation/SimpleLink';
+import logo from '../../assets/icons/logo-full-white.svg';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,10 +39,12 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const Toolbar: React.FC = (): JSX.Element => {
+
     const classes = useStyles();
     const theme = useTheme();
     const history = useHistory();
     const dispatch = useDispatch();
+
     const token = useSelector((state: AppState) => state.auth.token);
 
     return (
@@ -80,7 +83,7 @@ export const Toolbar: React.FC = (): JSX.Element => {
                     <IconButton
                         style={{ color: 'inherit', marginRight: theme.spacing(-2) }}
                         onClick={(): void => {
-                            dispatch({ type: 'OPEN_DRAWER' });
+                            dispatch({ type: OPEN_DRAWER });
                         }}
                     >
                         <Menu />

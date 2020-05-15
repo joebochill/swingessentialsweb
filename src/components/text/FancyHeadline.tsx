@@ -1,8 +1,8 @@
 import React, { HTMLAttributes } from 'react';
-import { makeStyles, createStyles, Typography, Theme } from '@material-ui/core';
-import { Headline, SubHeading } from './Typography';
-import clsx from 'clsx';
 import { Spacer } from '@pxblue/react-components';
+import { Headline, SubHeading } from './Typography';
+import { makeStyles, createStyles, Typography, Theme, useTheme } from '@material-ui/core';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -42,7 +42,9 @@ type FancyHeadlineProps = HTMLAttributes<HTMLDivElement> & {
 };
 export const FancyHeadline: React.FC<FancyHeadlineProps> = (props) => {
     const { jumbo, headline, subheading, icon, ...other } = props;
+
     const classes = useStyles();
+    const theme = useTheme();
 
     return !jumbo ? (
         <div className={classes.headline} {...other}>
@@ -57,7 +59,7 @@ export const FancyHeadline: React.FC<FancyHeadlineProps> = (props) => {
             {icon && (
                 <>
                     <div className={classes.headlineIcon}>{icon}</div>
-                    <Spacer flex={0} height={0} width={16} />
+                    <Spacer flex={0} height={0} width={theme.spacing(2)} />
                 </>
             )}
             <div>

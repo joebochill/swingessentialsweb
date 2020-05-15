@@ -1,14 +1,14 @@
 import React, { HTMLAttributes } from 'react';
-import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core';
 import { Body } from './Typography';
 import { FancyHeadline } from './FancyHeadline';
+import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         blurb: {
             maxWidth: 512,
             [theme.breakpoints.down('sm')]: {
-                marginBottom: 48,
+                marginBottom: theme.spacing(6),
                 maxWidth: 'initial',
             },
         },
@@ -24,6 +24,7 @@ type SectionBlurbProps = HTMLAttributes<HTMLDivElement> & {
 };
 export const SectionBlurb: React.FC<SectionBlurbProps> = (props) => {
     const { headline, subheading, body, icon, jumbo, ...other } = props;
+    
     const classes = useStyles();
 
     return (

@@ -3,6 +3,8 @@ import { createAction } from './utilities';
 /* Non-API actions */
 export const TOKEN_TIMEOUT = 'TOKEN_TIMEOUT';
 export const INITIAL_LOAD = 'INITIAL_LOAD';
+export const OPEN_DRAWER = 'OPEN_DRAWER';
+export const CLOSE_DRAWER = 'CLOSE_DRAWER';
 
 /* Login Actions */
 export const LOGIN = createAction('LOGIN', 'login');

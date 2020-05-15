@@ -1,19 +1,19 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, makeStyles, Theme, createStyles, IconButton } from '@material-ui/core';
+import { APP_VERSION, TWITTER_URL, FACEBOOK_URL, INSTAGRAM_URL, CONTACT_EMAIL } from '../../constants';
 import { ROUTES } from '../../constants/routes';
-import { Twitter, Instagram, Facebook, Email } from '@material-ui/icons';
-import { APP_VERSION } from '../../constants';
 import { SimpleRouterLink } from '../navigation/SimpleLink';
+import { AppBar, Toolbar, Typography, makeStyles, Theme, createStyles, IconButton } from '@material-ui/core';
+import { Twitter, Instagram, Facebook, Email } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         footer: {
             position: 'relative',
-            padding: 64,
+            padding: theme.spacing(8),
             background: theme.palette.primary.main,
             color: 'white',
             [theme.breakpoints.down('sm')]: {
-                padding: `64px 5%`,
+                padding: `${theme.spacing(8)}px 5%`,
                 flexDirection: 'column',
                 textAlign: 'center',
             },
@@ -25,11 +25,10 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         copyright: {
             flex: '1 1 0px',
-            // marginBottom: 16,
         },
         version: {
             position: 'absolute',
-            bottom: 16,
+            bottom: theme.spacing(2),
             left: 0,
             width: '100%',
             fontSize: 10,
@@ -50,7 +49,7 @@ export const Footer: React.FC = () => {
                         title={'@swingessentials'}
                         color={'inherit'}
                         onClick={(): void => {
-                            window.open('https://twitter.com/SwingEssentials', '_blank');
+                            window.open(TWITTER_URL, '_blank');
                         }}
                     >
                         <Twitter />
@@ -59,7 +58,7 @@ export const Footer: React.FC = () => {
                         title={'swingessentials'}
                         color={'inherit'}
                         onClick={(): void => {
-                            window.open('https://www.facebook.com/swingessentials/', '_blank');
+                            window.open(FACEBOOK_URL, '_blank');
                         }}
                     >
                         <Facebook />
@@ -68,7 +67,7 @@ export const Footer: React.FC = () => {
                         title={'@swingessentials'}
                         color={'inherit'}
                         onClick={(): void => {
-                            window.open('https://www.instagram.com/swingessentials/', '_blank');
+                            window.open(INSTAGRAM_URL, '_blank');
                         }}
                     >
                         <Instagram />
@@ -77,7 +76,7 @@ export const Footer: React.FC = () => {
                         title={'info@swingessentials.com'}
                         color={'inherit'}
                         onClick={(): void => {
-                            window.open('mailto: info@swingessentials.com', '_blank');
+                            window.open(`mailto: ${CONTACT_EMAIL}`, '_blank');
                         }}
                     >
                         <Email />
