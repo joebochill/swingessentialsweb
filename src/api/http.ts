@@ -1,6 +1,5 @@
 import { TOKEN } from './token-middleware';
 import { BASEURL, AUTH } from '../constants';
-// import { Logger } from '../utilities/logging';
 
 export enum HttpMethod {
     POST = 'POST',
@@ -108,7 +107,7 @@ export class HttpRequest<TResponses extends GeneralResponseMapping = {}> {
             }
             xhr.onload = (): void => res(xhr);
             xhr.onerror = rej;
-            if (xhr.upload && onProgress) xhr.upload.onprogress = onProgress; // event.loaded / event.total * 100 ; //event.lengthComputable
+            if (xhr.upload && onProgress) xhr.upload.onprogress = onProgress;
             xhr.send(this.body);
         })
             .then(
