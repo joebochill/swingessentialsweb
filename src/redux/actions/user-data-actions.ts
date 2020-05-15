@@ -1,8 +1,10 @@
+import { Dispatch } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+
+import * as ACTIONS from './types';
+
 import { HttpRequest } from '../../api/http';
 import { success, failure } from '../../api/http-helper';
-import { Dispatch } from 'redux';
-import * as ACTIONS from './types';
-import { ThunkDispatch } from 'redux-thunk';
 
 export function loadUserInfo() {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
@@ -34,13 +36,13 @@ export function getUsers() {
             .request();
     };
 }
+
 export type UserDataChange = {
     firstName?: string;
     lastName?: string;
     phone?: string;
     location?: string;
 };
-
 export function setUserData(data: UserDataChange) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.SET_USER_DATA.REQUEST });

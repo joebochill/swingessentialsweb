@@ -1,9 +1,12 @@
+import { Dispatch } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+
+import * as ACTIONS from './types';
+
+import { loadCredits } from './credit-actions';
+
 import { HttpRequest } from '../../api/http';
 import { success, failure, xhrfailure } from '../../api/http-helper';
-import { Dispatch } from 'redux';
-import * as ACTIONS from './types';
-import { ThunkDispatch } from 'redux-thunk';
-import { loadCredits } from './credit-actions';
 
 export function loadLessons() {
     return (dispatch: Dispatch): void => {

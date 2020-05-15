@@ -8,7 +8,6 @@ import { TipsReducer } from './data/tips';
 import { ProsReducer } from './data/pros';
 import { LessonsReducer } from './data/lessons';
 import { UsersReducer } from './data/users';
-import { RegistrationReducer } from './data/registration';
 import { UserSettingsReducer } from './data/userSettings';
 import { APIReducer } from './apis';
 import { PackagesReducer } from './data/packages';
@@ -30,7 +29,6 @@ export const rootReducer = (): any =>
         packages: PackagesReducer,
         pros: ProsReducer,
         lessons: LessonsReducer,
-        registration: RegistrationReducer,
         settings: UserSettingsReducer,
         testimonials: TestimonialsReducer,
     });

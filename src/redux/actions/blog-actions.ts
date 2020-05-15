@@ -1,9 +1,11 @@
+import { ThunkDispatch } from 'redux-thunk';
+import { Dispatch } from 'redux';
+
+import * as ACTIONS from './types';
+import { Blog } from '../../__types__';
+
 import { HttpRequest } from '../../api/http';
 import { success, failure } from '../../api/http-helper';
-import { Dispatch } from 'redux';
-import * as ACTIONS from './types';
-import { ThunkDispatch } from 'redux-thunk';
-import { Blog } from '../../__types__';
 
 export function loadBlogs() {
     return (dispatch: Dispatch): void => {
@@ -19,6 +21,7 @@ export function loadBlogs() {
             .request();
     };
 }
+
 export function updateBlog(blog: Blog) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.UPDATE_BLOG.REQUEST });

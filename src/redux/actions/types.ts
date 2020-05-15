@@ -80,4 +80,5 @@ export const RESET_PASSWORD_EMAIL = createAction('RESET_PASSWORD_EMAIL', 'reset'
 export const VERIFY_EMAIL = createAction('VERIFY_EMAIL', 'verify');
 export const VERIFY_RESET_PASSWORD_CODE = createAction('VERIFY_RESET_PASSWORD_CODE', 'verify');
 
+/* Testimonial Actions */
 export const GET_TESTIMONIALS = createAction('GET_TESTIMONIALS', 'testimonials');

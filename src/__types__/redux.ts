@@ -114,7 +114,6 @@ export type AppState = {
     lessons: LessonsState;
     packages: PackagesState;
     pros: ProsState;
-    registration: RegistrationState;
     settings: UserSettingsState;
     testimonials: TestimonialsState;
     tips: TipsState;

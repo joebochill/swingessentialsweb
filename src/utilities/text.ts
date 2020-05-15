@@ -4,10 +4,12 @@ export const splitDatabaseText = (string: string): string[] => {
     }
     return string.split('|:::|');
 };
+
 export const convertDatabaseTextToMultiline = (string: string): string => {
     const list = splitDatabaseText(string);
     return list.join('\r\n\r\n');
 };
+
 export const convertMultilineToDatabaseText = (string: string): string => {
     if (!string.length) {
         return '';

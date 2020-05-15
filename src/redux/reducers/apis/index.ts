@@ -1,3 +1,5 @@
+import { combineReducers } from 'redux';
+
 import { APIStatusState } from '../../../__types__';
 import {
     CREATE_ACCOUNT,
@@ -20,7 +22,7 @@ import {
     SUBMIT_LESSON,
     GET_DISCOUNTS,
 } from '../../actions/types';
-import { combineReducers } from 'redux';
+
 import { simpleReducer } from './simpleReducer';
 import { CheckEmailReducer, CheckUsernameReducer } from './registration';
 import { ValidatePasswordReducer, VerifyResetPasswordReducer } from './credentials';

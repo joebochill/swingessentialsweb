@@ -7,7 +7,6 @@ const initialState: BasicAPIStatus = {
 };
 export const simpleReducer = (ACTION: ReduxAction) => (state = initialState, action: any): BasicAPIStatus => {
     switch (action.type) {
-        /* Create Account */
         case ACTION.REQUEST:
             return {
                 ...state,
