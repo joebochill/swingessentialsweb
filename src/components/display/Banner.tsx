@@ -43,7 +43,7 @@ const useStyles = makeStyles<Theme, BannerProps>((theme: Theme) =>
             zIndex: 100,
             height: '100%',
             width: '100%',
-            padding: (props): number => (props.noPadding ? 0 : 64),
+            padding: (props): number => (props.noPadding ? 0 : theme.spacing(8)),
             '&$maintainRatio': {
                 position: 'absolute',
                 top: 0,
@@ -52,7 +52,7 @@ const useStyles = makeStyles<Theme, BannerProps>((theme: Theme) =>
                 bottom: 0,
             },
             [theme.breakpoints.down('sm')]: {
-                padding: (props): number | string => (props.noPadding ? 0 : `64px 10%`),
+                padding: (props): number | string => (props.noPadding ? 0 : `${theme.spacing(8)}px 10%`),
                 textAlign: 'center',
             },
         },

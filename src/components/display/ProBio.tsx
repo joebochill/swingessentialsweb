@@ -1,11 +1,11 @@
 import React, { HTMLAttributes, useState } from 'react';
-import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core';
-import { Edit } from '@material-ui/icons';
-import { Spacer } from '@pxblue/react-components';
-import { splitDatabaseText } from '../../utilities/text';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../__types__';
+import { splitDatabaseText } from '../../utilities/text';
+import { Spacer } from '@pxblue/react-components';
 import { EditProDialog } from '../dialogs/EditProDialog';
+import { makeStyles, Theme, createStyles, Typography, useTheme } from '@material-ui/core';
+import { Edit } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            marginTop: 8,
+            marginTop: theme.spacing(1),
         },
         bio: {
             flex: '1 1 0px',
@@ -55,12 +55,16 @@ type ProBioProps = HTMLAttributes<HTMLDivElement> & {
 };
 export const ProBio: React.FC<ProBioProps> = (props) => {
     const { image, name, title, background = {}, bio } = props;
+
+    const classes = useStyles();
+    const theme = useTheme();
+
     const admin = useSelector((state: AppState) => state.auth.admin);
 
     const [showEditDialog, setShowEditDialog] = useState(false);
 
     const descriptionParagraphs = splitDatabaseText(bio);
-    const classes = useStyles();
+    
     return (
         <>
             <div className={classes.root}>
@@ -88,7 +92,7 @@ export const ProBio: React.FC<ProBioProps> = (props) => {
                                 : undefined
                         }
                     >
-                        {admin && <Edit style={{ marginRight: 4 }} />}
+                        {admin && <Edit style={{ marginRight: theme.spacing(0.5) }} />}
                         <Typography variant={'h6'} style={{ lineHeight: 1 }}>
                             {name}
                         </Typography>
@@ -97,8 +101,9 @@ export const ProBio: React.FC<ProBioProps> = (props) => {
                         {title}
                     </Typography>
                 </div>
-                <Spacer flex={0} width={64} />
-                <Spacer flex={0} height={32} />
+
+                <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(4)}/>
+
                 <div className={classes.bio}>
                     {descriptionParagraphs.map((paragraph: string, index: number) => (
                         <Typography
@@ -111,6 +116,7 @@ export const ProBio: React.FC<ProBioProps> = (props) => {
                     ))}
                 </div>
             </div>
+            
             <EditProDialog
                 open={showEditDialog}
                 pro={{ ...props }}

@@ -72,24 +72,8 @@ export const Testimonial: React.FC<TestimonialProps> = (props) => {
 
     const classes = useStyles(props);
     return (
-        // <div className={classes.wrapper}>
-        //     <div className={classes.callout}>
-        //         <Typography>{`"${props.testimonial}"`}</Typography>
-        //     </div>
-        //     <div className={classes.captionWrapper}>
-        //         <Avatar className={classes.avatar}>{props.initials}</Avatar>
-        //         <div style={{ textAlign: 'left', marginLeft: 20 }}>
-        //             <Headline noWrap>{props.name}</Headline>
-        //             <SubHeading noWrap display={'block'}>
-        //                 {props.location}
-        //             </SubHeading>
-        //             <Typography noWrap variant={'caption'}>{`Member since ${props.joined}`}</Typography>
-        //         </div>
-        //     </div>
-        // </div>
         <div className={classes.root} {...divProps}>
             <div className={classes.quoteWrapper}>
-                {/* <Typography variant={'h5'} className={classes.punctuation}>“</Typography> */}
                 <Typography style={{ width: '100%' }}>
                     <Typography component={'span'} variant={'h5'} className={classes.punctuation}>
                         “
@@ -99,19 +83,16 @@ export const Testimonial: React.FC<TestimonialProps> = (props) => {
                     </Typography>
                     {testimonial}
                 </Typography>
-                {/* <Typography variant={'h5'} className={clsx(classes.punctuation, classes.right)}>”</Typography> */}
             </div>
             <div className={classes.attributionWrapper}>
                 <Avatar src={src} className={classes.avatar}>
                     {initials}
                 </Avatar>
                 <Headline noWrap>{name}</Headline>
-                {/* <Hidden xsUp> */}
                 <SubHeading noWrap display={'block'}>
                     {location}
                 </SubHeading>
                 <Typography noWrap variant={'caption'}>{`Member since ${joined}`}</Typography>
-                {/* </Hidden> */}
             </div>
         </div>
     );

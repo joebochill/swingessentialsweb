@@ -13,6 +13,7 @@ import {
     DialogContentText,
     DialogTitle,
     DialogActions,
+    useTheme,
 } from '@material-ui/core';
 import { AddAPhoto, Edit, AddCircle } from '@material-ui/icons';
 import clsx from 'clsx';
@@ -77,10 +78,12 @@ type PlaceholderVideoProps = HTMLAttributes<HTMLDivElement> & {
 };
 export const PlaceHolderVideo: React.FC<PlaceholderVideoProps> = (props) => {
     const { title, background, style, onVideoChange, ...divProps } = props;
+    
     const classes = useStyles(props);
+    const theme = useTheme();
+
     const [videoSrc, setVideoSrc] = useState<File | null>(null);
     const [videoSrcString, setVideoSrcString] = useState('');
-
     const [error, setError] = useState('');
     const [showError, setShowError] = useState(false);
 
@@ -131,8 +134,8 @@ export const PlaceHolderVideo: React.FC<PlaceholderVideoProps> = (props) => {
                     )}
                 </div>
                 <label htmlFor={`file-picker-${title}`}>
-                    <Button variant={'text'} color={'primary'} component={'span'} style={{ marginTop: 8 }}>
-                        {videoSrc ? <Edit style={{ marginRight: 4 }} /> : <AddAPhoto style={{ marginRight: 4 }} />}
+                    <Button variant={'text'} color={'primary'} component={'span'} style={{ marginTop: theme.spacing(1) }}>
+                        {videoSrc ? <Edit style={{ marginRight: theme.spacing(0.5) }} /> : <AddAPhoto style={{ marginRight: theme.spacing(0.5) }} />}
                         {`${videoSrc ? 'Change' : 'Add'} Video`}
                     </Button>
                 </label>
@@ -164,7 +167,9 @@ type PlaceholderTextProps = HTMLAttributes<HTMLDivElement> & {
 };
 export const PlaceHolderText: React.FC<PlaceholderTextProps> = (props) => {
     const { label, style, onTextChange, ...divProps } = props;
+
     const classes = useStyles(props);
+    const theme = useTheme();
 
     const [showField, setShowField] = useState(false);
     const [description, setDescription] = useState('');
@@ -173,7 +178,7 @@ export const PlaceHolderText: React.FC<PlaceholderTextProps> = (props) => {
         <div {...divProps} style={Object.assign({ textAlign: 'center' }, style)}>
             {!showField && (
                 <div className={clsx(classes.placeholder, classes.button)} onClick={(): void => setShowField(true)}>
-                    <AddCircle style={{ marginRight: 4 }} />
+                    <AddCircle style={{ marginRight: theme.spacing(0.5) }} />
                     <Typography variant={'button'} style={{ userSelect: 'none' }}>
                         {label}
                     </Typography>
