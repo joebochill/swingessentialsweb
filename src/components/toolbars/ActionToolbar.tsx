@@ -16,7 +16,7 @@ type ActionToolbarProps = AppBarProps & {
 };
 export const ActionToolbar: React.FC<ActionToolbarProps> = (props) => {
     const { show, ...barProps } = props;
-    
+
     const classes = useStyles();
 
     if (!show) return null;

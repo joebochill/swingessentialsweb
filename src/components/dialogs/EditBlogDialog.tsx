@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
         field: {
             '&:not(:last-child)': {
                 marginBottom: theme.spacing(2),
-            }
+            },
         },
     })
 );

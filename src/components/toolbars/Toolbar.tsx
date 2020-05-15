@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const Toolbar: React.FC = (): JSX.Element => {
-
     const classes = useStyles();
     const theme = useTheme();
     const history = useHistory();

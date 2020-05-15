@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
+import { SimpleRouterLink, SimpleLink } from '../components/navigation/SimpleLink';
 import { Banner } from '../components/display/Banner';
 import { SectionBlurb } from '../components/text/SectionBlurb';
-import { Gavel } from '@material-ui/icons';
 import { Section } from '../components/display/Section';
 import { Typography } from '@material-ui/core';
-import { SimpleRouterLink, SimpleLink } from '../components/navigation/SimpleLink';
+import { Gavel } from '@material-ui/icons';
 
 type TermsContent = {
     title: string;

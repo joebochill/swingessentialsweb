@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
-import bg from '../assets/images/banners/landing.jpg';
-
-import { makeStyles, createStyles, Button, Typography, CircularProgress } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../__types__';
-import { Banner } from '../components/display/Banner';
 import { verifyEmail } from '../redux/actions/registration-actions';
-import { ROUTES } from '../constants/routes';
 import { requestLogout } from '../redux/actions/auth-actions';
+import { ROUTES } from '../constants/routes';
+import { Banner } from '../components/display/Banner';
+import { makeStyles, createStyles, Button, Typography, CircularProgress, useTheme } from '@material-ui/core';
+import bg from '../assets/images/banners/landing.jpg';
 
 const _getRegistrationErrorMessage = (code: number | null): string => {
     switch (code) {
@@ -28,8 +27,6 @@ const useStyles = makeStyles(() =>
     createStyles({
         form: {
             position: 'absolute',
-            // top: '50%',
-            // transform: 'translateY(-50%)',
             zIndex: 100,
             width: '80%',
             maxWidth: 512,
@@ -42,6 +39,7 @@ const useStyles = makeStyles(() =>
 export const VerifyEmailPage: React.FC = () => {
     const history = useHistory();
     const dispatch = useDispatch();
+    const theme = useTheme();
     const classes = useStyles();
     const { key } = useParams();
 
@@ -63,14 +61,14 @@ export const VerifyEmailPage: React.FC = () => {
                     {loading && (
                         <>
                             <CircularProgress color={'inherit'} />
-                            <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
+                            <Typography variant={'h6'} align={'center'} style={{ marginBottom: theme.spacing(2) }}>
                                 Verifying your email address...
                             </Typography>
                         </>
                     )}
                     {verifyStatus === 'success' && (
                         <>
-                            <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
+                            <Typography variant={'h6'} align={'center'} style={{ marginBottom: theme.spacing(2) }}>
                                 Your email address has been confirmed!
                             </Typography>
                             <Button
@@ -87,7 +85,7 @@ export const VerifyEmailPage: React.FC = () => {
                     )}
                     {verifyStatus === 'failed' && (
                         <>
-                            <Typography variant={'h6'} align={'center'} style={{ marginBottom: 16 }}>
+                            <Typography variant={'h6'} align={'center'} style={{ marginBottom: theme.spacing(2) }}>
                                 {_getRegistrationErrorMessage(verification.code)}
                             </Typography>
                         </>

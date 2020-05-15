@@ -78,7 +78,7 @@ type PlaceholderVideoProps = HTMLAttributes<HTMLDivElement> & {
 };
 export const PlaceHolderVideo: React.FC<PlaceholderVideoProps> = (props) => {
     const { title, background, style, onVideoChange, ...divProps } = props;
-    
+
     const classes = useStyles(props);
     const theme = useTheme();
 
@@ -134,8 +134,17 @@ export const PlaceHolderVideo: React.FC<PlaceholderVideoProps> = (props) => {
                     )}
                 </div>
                 <label htmlFor={`file-picker-${title}`}>
-                    <Button variant={'text'} color={'primary'} component={'span'} style={{ marginTop: theme.spacing(1) }}>
-                        {videoSrc ? <Edit style={{ marginRight: theme.spacing(0.5) }} /> : <AddAPhoto style={{ marginRight: theme.spacing(0.5) }} />}
+                    <Button
+                        variant={'text'}
+                        color={'primary'}
+                        component={'span'}
+                        style={{ marginTop: theme.spacing(1) }}
+                    >
+                        {videoSrc ? (
+                            <Edit style={{ marginRight: theme.spacing(0.5) }} />
+                        ) : (
+                            <AddAPhoto style={{ marginRight: theme.spacing(0.5) }} />
+                        )}
                         {`${videoSrc ? 'Change' : 'Add'} Video`}
                     </Button>
                 </label>

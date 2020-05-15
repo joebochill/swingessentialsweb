@@ -16,12 +16,11 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const NavigationDrawer = (): JSX.Element => {
-    
     const classes = useStyles();
     const dispatch = useDispatch();
 
     const drawerOpen = useSelector((state: AppState) => state.app.drawerOpen);
-    
+
     return (
         <Drawer
             open={drawerOpen}

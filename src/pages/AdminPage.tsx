@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import bg from '../assets/images/banners/pros2.jpg';
+import { useSelector } from 'react-redux';
+import { AppState, Package, Discount } from '../__types__';
+
+import { ActionToolbar } from '../components/toolbars/ActionToolbar';
+import { Banner } from '../components/display/Banner';
+import { Section } from '../components/display/Section';
+import { SectionBlurb } from '../components/text/SectionBlurb';
+import { EditPackageDialog } from '../components/dialogs/EditPackageDialog';
+import { EditDiscountDialog } from '../components/dialogs/EditDiscountDialog';
+import { InfoListItem, Spacer, EmptyState, ListItemTag } from '@pxblue/react-components';
+
 import {
     makeStyles,
     createStyles,
@@ -11,18 +21,10 @@ import {
     CardHeader,
     Theme,
 } from '@material-ui/core';
-import { SectionBlurb } from '../components/text/SectionBlurb';
 import { AddCircle, Security, Edit, Assessment } from '@material-ui/icons';
-import { useSelector } from 'react-redux';
-import { AppState, Package, Discount } from '../__types__';
-import { Banner } from '../components/display/Banner';
-import { Section } from '../components/display/Section';
-import { ActionToolbar } from '../components/toolbars/ActionToolbar';
-import { InfoListItem, Spacer, EmptyState, ListItemTag } from '@pxblue/react-components';
 
 import * as Colors from '@pxblue/colors';
-import { EditPackageDialog } from '../components/dialogs/EditPackageDialog';
-import { EditDiscountDialog } from '../components/dialogs/EditDiscountDialog';
+import bg from '../assets/images/banners/pros2.jpg';
 
 const BlankPackage: Package = {
     id: -1,
@@ -66,7 +68,7 @@ const useStyles = makeStyles((theme: Theme) =>
         currentCredits: {
             // flex: '0 0 auto',
             textAlign: 'center',
-            padding: 32,
+            padding: theme.spacing(4),
             background: theme.palette.primary.light,
             border: `1px solid ${theme.palette.primary.main}`,
         },
@@ -102,20 +104,18 @@ export const AdminPage: React.FC = (): JSX.Element => {
             </Banner>
             <ActionToolbar show>
                 <Button variant={'text'} onClick={(): void => setShowPackageDialog({ open: true, isNew: true })}>
-                    <AddCircle style={{ marginRight: 4 }} />
+                    <AddCircle style={{ marginRight: theme.spacing(0.5) }} />
                     New Package
                 </Button>
                 <Button
                     variant={'text'}
-                    style={{ marginLeft: 16 }}
+                    style={{ marginLeft: theme.spacing(2) }}
                     onClick={(): void => setShowDiscountDialog({ open: true, isNew: true })}
                 >
-                    <AddCircle style={{ marginRight: 4 }} />
+                    <AddCircle style={{ marginRight: theme.spacing(0.5) }} />
                     New Discount
                 </Button>
             </ActionToolbar>
-
-            {/* <LoadingIndicator show={loadingPackages && packages.length < 1} /> */}
 
             <EditPackageDialog
                 isNew={showPackageDialog.isNew}
@@ -169,7 +169,9 @@ export const AdminPage: React.FC = (): JSX.Element => {
                     )}
                     {packagesStatus === 'loading' && <CircularProgress />}
                 </div>
-                <Spacer flex={0} width={64} height={64} />
+
+                <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(8)} />
+
                 <div className={classes.listCard}>
                     {discounts.length > 0 && (
                         <Card>
@@ -208,7 +210,7 @@ export const AdminPage: React.FC = (): JSX.Element => {
                                             {parseInt(discount.quantity, 10) !== -1 && (
                                                 <ListItemTag
                                                     label={`${discount.quantity} Left`}
-                                                    style={{ marginLeft: 4 }}
+                                                    style={{ marginLeft: theme.spacing(0.5) }}
                                                 />
                                             )}
                                         </>
@@ -217,6 +219,7 @@ export const AdminPage: React.FC = (): JSX.Element => {
                             ))}
                         </Card>
                     )}
+
                     {discountStatus === 'loading' && <CircularProgress />}
                 </div>
             </Section>

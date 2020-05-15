@@ -24,7 +24,7 @@ type SectionBlurbProps = HTMLAttributes<HTMLDivElement> & {
 };
 export const SectionBlurb: React.FC<SectionBlurbProps> = (props) => {
     const { headline, subheading, body, icon, jumbo, ...other } = props;
-    
+
     const classes = useStyles();
 
     return (

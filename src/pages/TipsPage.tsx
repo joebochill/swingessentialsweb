@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import bg from '../assets/images/banners/tips.jpg';
+import { useSelector } from 'react-redux';
+import { useHistory, useParams, Redirect } from 'react-router-dom';
+import { AppState, Tip } from '../__types__';
+import { ROUTES } from '../constants/routes';
+import { prettyDate } from '../utilities/date';
+import { splitDatabaseText } from '../utilities/text';
+import { SectionBlurb } from '../components/text/SectionBlurb';
+import { EditTipDialog } from '../components/dialogs/EditTipDialog';
+import { Banner } from '../components/display/Banner';
+import { Section } from '../components/display/Section';
+import { ActionToolbar } from '../components/toolbars/ActionToolbar';
+import { LoadingIndicator } from '../components/display/LoadingIndicator';
+import { FancyHeadline } from '../components/text/FancyHeadline';
+import { Spacer, InfoListItem } from '@pxblue/react-components';
+import YouTube from 'react-youtube';
 import {
     makeStyles,
     createStyles,
@@ -11,23 +25,8 @@ import {
     IconButton,
     useMediaQuery,
 } from '@material-ui/core';
-import { SectionBlurb } from '../components/text/SectionBlurb';
 import { AddCircle, Today, Edit, ChevronRight, ChevronLeft } from '@material-ui/icons';
-import YouTube from 'react-youtube';
-
-import { Spacer, InfoListItem } from '@pxblue/react-components';
-import { prettyDate } from '../utilities/date';
-import { splitDatabaseText } from '../utilities/text';
-import { FancyHeadline } from '../components/text/FancyHeadline';
-import { useSelector } from 'react-redux';
-import { AppState, Tip } from '../__types__';
-import { Banner } from '../components/display/Banner';
-import { Section } from '../components/display/Section';
-import { ActionToolbar } from '../components/toolbars/ActionToolbar';
-import { LoadingIndicator } from '../components/display/LoadingIndicator';
-import { useHistory, useParams, Redirect } from 'react-router-dom';
-import { ROUTES } from '../constants/routes';
-import { EditTipDialog } from '../components/dialogs/EditTipDialog';
+import bg from '../assets/images/banners/tips.jpg';
 
 const BlankTip: Tip = {
     id: -1,

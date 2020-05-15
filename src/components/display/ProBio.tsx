@@ -64,7 +64,7 @@ export const ProBio: React.FC<ProBioProps> = (props) => {
     const [showEditDialog, setShowEditDialog] = useState(false);
 
     const descriptionParagraphs = splitDatabaseText(bio);
-    
+
     return (
         <>
             <div className={classes.root}>
@@ -102,7 +102,7 @@ export const ProBio: React.FC<ProBioProps> = (props) => {
                     </Typography>
                 </div>
 
-                <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(4)}/>
+                <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(4)} />
 
                 <div className={classes.bio}>
                     {descriptionParagraphs.map((paragraph: string, index: number) => (
@@ -116,7 +116,7 @@ export const ProBio: React.FC<ProBioProps> = (props) => {
                     ))}
                 </div>
             </div>
-            
+
             <EditProDialog
                 open={showEditDialog}
                 pro={{ ...props }}

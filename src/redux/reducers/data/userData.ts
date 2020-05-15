@@ -29,7 +29,7 @@ export const UserDataReducer = (state = initialState, action: any): UserDataStat
                 ...state,
                 username: action.payload.personal.username,
                 email: action.payload.personal.email,
-                joined: Date.now()/1000,
+                joined: Date.now() / 1000,
             };
         case GET_USER_DATA.FAILURE:
         case LOGOUT.SUCCESS:

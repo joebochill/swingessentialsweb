@@ -191,7 +191,6 @@ export const AvatarPickerDialog: React.FC<AvatarDialogProps> = (props) => {
         if (dialogProps.open) setZoom(1.5);
     }, [dialogProps.open, setZoom]);
 
-
     return (
         <>
             <Dialog

@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import bg from '../assets/images/banners/landing.jpg';
-import swing from '../assets/images/banners/swing3.jpg';
-import order from '../assets/images/banners/order.jpg';
-import lessons from '../assets/images/banners/lessons2.jpg';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { Redirect, useHistory } from 'react-router-dom';
+import { AppState } from '../__types__';
+import { SET_USER_DATA, SET_USER_NOTIFICATIONS } from '../redux/actions/types';
+import { setUserData, UserDataChange } from '../redux/actions/user-data-actions';
+import { setUserNotifications } from '../redux/actions/user-settings-actions';
+import { ROUTES } from '../constants/routes';
+import { AvatarChanger } from '../components/dialogs/AvatarPicker';
+import { ChangePassword } from '../components/dialogs/ChangePassword';
+import { Section } from '../components/display/Section';
+import { InfoCard } from '../components/display/InfoCard';
+import { StyledTextField } from '../components/text/StyledInputs';
+import { Banner } from '../components/display/Banner';
+import { Spacer } from '@pxblue/react-components';
 import {
     makeStyles,
     createStyles,
@@ -14,23 +23,12 @@ import {
     Grid,
     Switch,
     FormControlLabel,
+    useTheme,
 } from '@material-ui/core';
-import { Redirect, useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from '../__types__';
-import { Banner } from '../components/display/Banner';
-import { ROUTES } from '../constants/routes';
-
-import { StyledTextField } from '../components/text/StyledInputs';
-import { Spacer } from '@pxblue/react-components';
-import { setUserData, UserDataChange } from '../redux/actions/user-data-actions';
-
-import { ChangePassword } from '../components/dialogs/ChangePassword';
-import { Section } from '../components/display/Section';
-import { InfoCard } from '../components/display/InfoCard';
-import { SET_USER_DATA, SET_USER_NOTIFICATIONS } from '../redux/actions/types';
-import { setUserNotifications } from '../redux/actions/user-settings-actions';
-import { AvatarChanger } from '../components/dialogs/AvatarPicker';
+import bg from '../assets/images/banners/landing.jpg';
+import swing from '../assets/images/banners/swing3.jpg';
+import order from '../assets/images/banners/order.jpg';
+import lessons from '../assets/images/banners/lessons2.jpg';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -60,6 +58,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export const ProfilePage: React.FC = () => {
     const classes = useStyles();
     const history = useHistory();
+    const theme = useTheme();
 
     const token = useSelector((state: AppState) => state.auth.token);
     const loaded = useSelector((state: AppState) => state.api.authentication.initialized);
@@ -99,11 +98,11 @@ export const ProfilePage: React.FC = () => {
                                 <Typography variant={'caption'} display={'block'}>
                                     {`Member since ${joined}`}
                                 </Typography>
-                                <ChangePassword style={{ marginTop: 16 }} />
+                                <ChangePassword style={{ marginTop: theme.spacing(2) }} />
                             </div>
                         </div>
 
-                        <Spacer flex={0} width={64} height={32} />
+                        <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(4)} />
 
                         <ProfileForm />
                     </div>
@@ -160,6 +159,7 @@ export const ProfilePage: React.FC = () => {
 export const ProfileForm: React.FC = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
+    const theme = useTheme();
 
     const auth = useSelector((state: AppState) => state.auth);
     const user = useSelector((state: AppState) => state.user);
@@ -179,7 +179,6 @@ export const ProfileForm: React.FC = () => {
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [sendEmails, setSendEmails] = useState(true);
-
     const [initialized, setInitialized] = useState(false);
 
     const changes =
@@ -207,7 +206,10 @@ export const ProfileForm: React.FC = () => {
             <Typography variant={'h5'}>Welcome to the Swing Essentials family!</Typography>
             <Typography paragraph>Help us get to know you by filling out your profile below.</Typography>
 
-            <Typography variant={'subtitle1'} style={{ fontWeight: 600, marginTop: 16, marginBottom: 16 }}>
+            <Typography
+                variant={'subtitle1'}
+                style={{ fontWeight: 600, marginTop: theme.spacing(2), marginBottom: theme.spacing(2) }}
+            >
                 About Me:
             </Typography>
             <StyledTextField
@@ -257,7 +259,10 @@ export const ProfileForm: React.FC = () => {
                     setEmail(e.target.value.substr(0, 128));
                 }}
             />
-            <Typography variant={'subtitle1'} style={{ fontWeight: 600, marginTop: 16, marginBottom: 16 }}>
+            <Typography
+                variant={'subtitle1'}
+                style={{ fontWeight: 600, marginTop: theme.spacing(2), marginBottom: theme.spacing(2) }}
+            >
                 Notifications:
             </Typography>
             <FormControlLabel
@@ -273,8 +278,8 @@ export const ProfileForm: React.FC = () => {
                 style={{ marginLeft: 0 }}
             />
 
-            <div style={{ textAlign: 'center', marginTop: 16, minHeight: 36 }}>
-                {initialized && changes && !loading /*(updateData === 'initial' && updateSettings === 'initial') && */ && (
+            <div style={{ textAlign: 'center', marginTop: theme.spacing(2), minHeight: 36 }}>
+                {initialized && changes && !loading && (
                     <Button
                         color={'primary'}
                         variant={'contained'}

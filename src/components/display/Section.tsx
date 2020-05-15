@@ -37,7 +37,7 @@ type SectionProps = HTMLAttributes<HTMLDivElement> & {
 };
 export const Section: React.FC<SectionProps> = (props): JSX.Element => {
     const { background = {}, style, textAlign, ...other } = props;
-    
+
     const classes = useStyles(props);
 
     return (

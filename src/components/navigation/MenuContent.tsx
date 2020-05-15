@@ -56,7 +56,6 @@ type MenuListItemProps = {
     divider?: boolean;
 };
 export const MenuListItem: React.FC<MenuListItemProps> = (props) => {
-
     const classes = useStyles();
     const theme = useTheme();
 
@@ -81,7 +80,7 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
     const history = useHistory();
     const classes = useStyles();
     const dispatch = useDispatch();
-    
+
     const user = useSelector((state: AppState) => state.user);
     const token = useSelector((state: AppState) => state.auth.token);
     const isAdmin = useSelector((state: AppState) => state.auth.admin);

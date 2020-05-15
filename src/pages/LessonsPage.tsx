@@ -1,7 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import bg from '../assets/images/banners/lessons2.jpg';
-import { makeStyles, createStyles, Button, Typography, IconButton, useMediaQuery, Theme } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
+import { Redirect, useParams, useHistory } from 'react-router-dom';
+
+import { AppState, Lesson } from '../__types__';
+import { SET_SELECTED_LESSON } from '../redux/actions/types';
+
+import { PlaceholderLesson } from '../constants/lessons';
+import { ROUTES } from '../constants/routes';
+
+import { prettyDate } from '../utilities/date';
+import { splitDatabaseText } from '../utilities/text';
+
 import { SectionBlurb } from '../components/text/SectionBlurb';
+import { FancyHeadline } from '../components/text/FancyHeadline';
+import { Banner } from '../components/display/Banner';
+import { Section } from '../components/display/Section';
+import { PendingLessonsCard } from '../components/lessons/PendingCard';
+import { CompletedLessonsCard } from '../components/lessons/CompletedCard';
+import { ActionToolbar } from '../components/toolbars/ActionToolbar';
+import { LoadingIndicator } from '../components/display/LoadingIndicator';
+import { FilterLessonsDialog } from '../components/dialogs/FilterLessonsDialog';
+import { EditLessonDialog } from '../components/dialogs/EditLessonDialog';
+import { NewLessonDialog } from '../components/dialogs/NewLessonDialog';
+import { Spacer, EmptyState } from '@pxblue/react-components';
+import YouTube from 'react-youtube';
+import {
+    makeStyles,
+    createStyles,
+    Button,
+    Typography,
+    IconButton,
+    useMediaQuery,
+    Theme,
+    useTheme,
+} from '@material-ui/core';
 import {
     AddCircle,
     Edit,
@@ -12,34 +44,14 @@ import {
     Warning,
     Update,
 } from '@material-ui/icons';
-import YouTube from 'react-youtube';
-
-import { Spacer, EmptyState } from '@pxblue/react-components';
-import { prettyDate } from '../utilities/date';
-import { splitDatabaseText } from '../utilities/text';
-import { FancyHeadline } from '../components/text/FancyHeadline';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState, Lesson } from '../__types__';
-import { Banner } from '../components/display/Banner';
-import { Section } from '../components/display/Section';
-import { PendingLessonsCard } from '../components/lessons/PendingCard';
-import { CompletedLessonsCard } from '../components/lessons/CompletedCard';
-import { PlaceholderLesson } from '../constants/lessons';
-import { Redirect, useParams, useHistory } from 'react-router-dom';
-import { ROUTES } from '../constants/routes';
-import { ActionToolbar } from '../components/toolbars/ActionToolbar';
-import { LoadingIndicator } from '../components/display/LoadingIndicator';
-import { FilterLessonsDialog } from '../components/dialogs/FilterLessonsDialog';
-import { EditLessonDialog } from '../components/dialogs/EditLessonDialog';
-import { NewLessonDialog } from '../components/dialogs/NewLessonDialog';
-import { SET_SELECTED_LESSON } from '../redux/actions/types';
+import bg from '../assets/images/banners/lessons2.jpg';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         actionBar: {
-            top: 64,
+            top: theme.spacing(8),
             [theme.breakpoints.down('xs')]: {
-                top: 56,
+                top: theme.spacing(7),
             },
         },
         cardContainer: {
@@ -51,7 +63,7 @@ const useStyles = makeStyles((theme: Theme) =>
             background: 'black',
             paddingTop: '56.25%',
             position: 'relative',
-            marginBottom: 32,
+            marginBottom: theme.spacing(4),
         },
         youtube: {
             position: 'absolute',
@@ -83,26 +95,24 @@ export const LessonsPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
-
+    const theme = useTheme();
     const { id } = useParams();
+    const isSmall = useMediaQuery('(max-width:959px)');
 
     const lessons = useSelector((state: AppState) => state.lessons);
     const apiStatus = useSelector((state: AppState) => state.api.loadLessons.status);
-    const loading = apiStatus === 'loading';
 
+    const loading = apiStatus === 'loading';
     const closedLessons = lessons.closed;
     const pendingLessons = lessons.pending;
     const activeLesson = lessons.selected;
 
-    // const token = useSelector((state: AppState) => state.auth.token);
     const admin = useSelector((state: AppState) => state.auth.admin);
 
     const [filter, setFilter] = useState('');
     const [showFilterDialog, setShowFilterDialog] = useState(false);
     const [showEditDialog, setShowEditDialog] = useState(false);
     const [showNewDialog, setShowNewDialog] = useState(false);
-
-    const isSmall = useMediaQuery('(max-width:959px)');
 
     // Filter the lessons by user
     let filteredLessons = closedLessons;
@@ -152,7 +162,6 @@ export const LessonsPage: React.FC = (): JSX.Element => {
         activeLesson && activeLesson.response_notes ? splitDatabaseText(activeLesson.response_notes) : [];
 
     // If we don't belong
-    // if (!token) return <Redirect to={ROUTES.HOME} />;
     if (id && paramIndexComplete === -1 && paramIndexPending === -1 && closedLessons.length > 0) {
         return <Redirect to={ROUTES.LESSONS} />;
     }
@@ -171,11 +180,11 @@ export const LessonsPage: React.FC = (): JSX.Element => {
             </Banner>
             <ActionToolbar show={admin}>
                 <Button variant={'text'} onClick={(): void => setShowNewDialog(true)}>
-                    <AddCircle style={{ marginRight: 4 }} />
+                    <AddCircle style={{ marginRight: theme.spacing(0.5) }} />
                     New In-Person Lesson
                 </Button>
                 <Button variant={'text'} onClick={(): void => setShowFilterDialog(true)}>
-                    <FilterList style={{ marginRight: 4 }} />
+                    <FilterList style={{ marginRight: theme.spacing(0.5) }} />
                     Filter By User
                 </Button>
             </ActionToolbar>
@@ -202,14 +211,19 @@ export const LessonsPage: React.FC = (): JSX.Element => {
             )}
             <Section align={isSmall ? 'stretch' : 'flex-start'}>
                 <div className={classes.cardContainer}>
-                    <PendingLessonsCard lessons={pendingLessons} hidden={isSmall} style={{ marginBottom: 32 }} />
+                    <PendingLessonsCard
+                        lessons={pendingLessons}
+                        hidden={isSmall}
+                        style={{ marginBottom: theme.spacing(4) }}
+                    />
                     <CompletedLessonsCard lessons={filteredLessons} hidden={isSmall} />
                 </div>
 
-                <Spacer flex={0} width={64} />
+                <Spacer flex={0} width={theme.spacing(8)} />
+
                 {activeLesson && (
                     <div style={{ flex: '1 1 0px' }}>
-                        <div style={{ marginBottom: 32 }}>
+                        <div style={{ marginBottom: theme.spacing(4) }}>
                             <div
                                 className={classes.videoWrapper}
                                 style={{
@@ -245,7 +259,10 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                                             setShowEditDialog(true);
                                                         }}
                                                     >
-                                                        <AddCircle color={'inherit'} style={{ marginRight: 4 }} />
+                                                        <AddCircle
+                                                            color={'inherit'}
+                                                            style={{ marginRight: theme.spacing(0.5) }}
+                                                        />
                                                         Add Response
                                                     </Button>
                                                 ) : undefined
@@ -337,7 +354,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                         </div>
                         {activeLesson && activeLesson.type !== 'in-person' && (
                             <>
-                                <Typography variant={'h6'} style={{ marginBottom: 16, lineHeight: 1.2 }}>
+                                <Typography variant={'h6'} style={{ marginBottom: theme.spacing(2), lineHeight: 1.2 }}>
                                     Your Submission
                                 </Typography>
                                 {activeLesson.fo_swing !== '' && activeLesson.dtl_swing !== '' && (
@@ -353,7 +370,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                                     Your browser does not support the video tag.
                                                 </video>
                                             </div>
-                                            <Spacer flex={0} width={16} height={16} />
+                                            <Spacer flex={0} width={theme.spacing(2)} height={theme.spacing(2)} />
                                             <div style={{ flex: '1 1 0px', background: 'black' }}>
                                                 <video
                                                     width="100%"
@@ -365,7 +382,8 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                                 </video>
                                             </div>
                                         </div>
-                                        <Spacer flex={0} height={16} />
+
+                                        <Spacer flex={0} height={theme.spacing(2)} />
                                     </>
                                 )}
                                 {splitDatabaseText(activeLesson.request_notes).map((par, pInd) => (

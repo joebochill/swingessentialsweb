@@ -20,7 +20,6 @@ import {
 import { CheckCircle, Error } from '@material-ui/icons';
 import * as Colors from '@pxblue/colors';
 
-
 type ChangePasswordProps = ButtonProps & {
     dialogProps?: DialogProps;
 };

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
         field: {
             '&:not(:last-child)': {
                 marginBottom: theme.spacing(2),
-            }
+            },
         },
     })
 );
@@ -52,8 +52,6 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
     const [comments, setComments] = useState(convertDatabaseTextToMultiline(tip.comments));
 
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-
-    
 
     const resetTip = useCallback(() => {
         setDate(tip.date);

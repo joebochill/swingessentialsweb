@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
         field: {
             '&:not(:last-child)': {
                 marginBottom: theme.spacing(2),
-            }
+            },
         },
     })
 );
@@ -53,8 +53,6 @@ export const EditPackageDialog: React.FC<EditPackageDialogProps> = (props) => {
     const [sku, setSku] = useState(pkg.app_sku);
 
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-
-    
 
     const resetPackage = useCallback(() => {
         setName(pkg.name);

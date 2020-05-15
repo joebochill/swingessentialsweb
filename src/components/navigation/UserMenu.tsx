@@ -29,7 +29,6 @@ const ForwardMenuContent = React.forwardRef((props: { onClose: Function }, ref) 
 ForwardMenuContent.displayName = 'ForwardRefMenuContent';
 
 export const UserMenu: React.FC = () => {
-
     const history = useHistory();
     const classes = useStyles();
 
@@ -75,14 +74,14 @@ export const UserMenu: React.FC = () => {
             </Menu>
         </>
     ) : (
-            <Button
-                variant={'outlined'}
-                color={'inherit'}
-                onClick={(): void => history.push(ROUTES.LOGIN, { from: { pathname: history.location.pathname } })}
-            >
-                SIGN IN
-            </Button>
-        );
+        <Button
+            variant={'outlined'}
+            color={'inherit'}
+            onClick={(): void => history.push(ROUTES.LOGIN, { from: { pathname: history.location.pathname } })}
+        >
+            SIGN IN
+        </Button>
+    );
 };
 
 UserMenu.displayName = 'UserMenu';
