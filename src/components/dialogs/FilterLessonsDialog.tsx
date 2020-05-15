@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState } from '../../__types__';
+import { getUsers } from '../../redux/actions/user-data-actions';
+import { sortUsers } from '../../utilities/user';
 import {
     DialogProps,
     Dialog,
@@ -12,11 +16,8 @@ import {
     capitalize,
     DialogActions,
     Button,
+    useTheme,
 } from '@material-ui/core';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from '../../__types__';
-import { getUsers } from '../../redux/actions/user-data-actions';
-import { sortUsers } from '../../utilities/user';
 
 type FilterLessonsDialogProps = DialogProps & {
     onFilterChange: (username: string) => void;
@@ -28,8 +29,11 @@ export const FilterLessonsDialog: React.FC<FilterLessonsDialogProps> = (props) =
             /* do nothing */
         },
     } = dialogProps;
-    const users = useSelector((state: AppState) => state.users.list);
+
     const dispatch = useDispatch();
+    const theme = useTheme();
+
+    const users = useSelector((state: AppState) => state.users.list);
     const [selected, setSelected] = useState<string>('-');
 
     useEffect(() => {
@@ -57,7 +61,7 @@ export const FilterLessonsDialog: React.FC<FilterLessonsDialogProps> = (props) =
                         ))}
                     </Select>
                 </FormControl>
-                <FormControl variant="filled" fullWidth style={{ marginTop: 16 }}>
+                <FormControl variant="filled" fullWidth style={{ marginTop: theme.spacing(2) }}>
                     <InputLabel id="fullname-label">{`Human Name`}</InputLabel>
                     <Select
                         labelId="fullname-label"

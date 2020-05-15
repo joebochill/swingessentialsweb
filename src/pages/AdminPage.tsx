@@ -81,7 +81,7 @@ export const AdminPage: React.FC = (): JSX.Element => {
     const packagesStatus = useSelector((state: AppState) => state.api.packages.status);
 
     const discounts = useSelector((state: AppState) => state.discounts.list);
-    const discountStatus = useSelector((state: AppState) => state.api.checkDiscount.status);
+    const discountStatus = useSelector((state: AppState) => state.api.getDiscounts.status);
 
     const [activePackage, setActivePackage] = useState<Package | null>(null);
     const [activeDiscount, setActiveDiscount] = useState<Discount | null>(null);

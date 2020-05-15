@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { Package } from '../../__types__';
+import { addPackage, updatePackage, removePackage } from '../../redux/actions/package-actions';
+import { ConfirmationDialog } from './ConfirmationDialog';
+import { Spacer } from '@pxblue/react-components';
 import {
     DialogProps,
     Dialog,
@@ -10,12 +15,20 @@ import {
     Button,
     TextField,
     InputAdornment,
+    makeStyles,
+    Theme,
+    createStyles,
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import { Package } from '../../__types__';
-import { ConfirmationDialog } from './ConfirmationDialog';
-import { addPackage, updatePackage, removePackage } from '../../redux/actions/package-actions';
-import { Spacer } from '@pxblue/react-components';
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        field: {
+            '&:not(:last-child)': {
+                marginBottom: theme.spacing(2),
+            }
+        },
+    })
+);
 
 type EditPackageDialogProps = DialogProps & {
     pkg: Package;
@@ -29,6 +42,9 @@ export const EditPackageDialog: React.FC<EditPackageDialogProps> = (props) => {
         },
     } = dialogProps;
 
+    const dispatch = useDispatch();
+    const classes = useStyles();
+
     const [name, setName] = useState(pkg.name);
     const [description, setDescription] = useState(pkg.description);
     const [short, setShort] = useState(pkg.shortcode);
@@ -38,7 +54,7 @@ export const EditPackageDialog: React.FC<EditPackageDialogProps> = (props) => {
 
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
-    const dispatch = useDispatch();
+    
 
     const resetPackage = useCallback(() => {
         setName(pkg.name);
@@ -76,7 +92,7 @@ export const EditPackageDialog: React.FC<EditPackageDialogProps> = (props) => {
                         onChange={(e): void => {
                             setName(e.target.value);
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
                     <TextField
                         fullWidth
@@ -87,7 +103,7 @@ export const EditPackageDialog: React.FC<EditPackageDialogProps> = (props) => {
                         onChange={(e): void => {
                             setDescription(e.target.value);
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
                     <TextField
                         fullWidth
@@ -98,7 +114,7 @@ export const EditPackageDialog: React.FC<EditPackageDialogProps> = (props) => {
                         onChange={(e): void => {
                             setCount(e.target.value.replace(/[^0-9]/gi, '').substr(0, 3));
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
                     <TextField
                         fullWidth
@@ -111,7 +127,7 @@ export const EditPackageDialog: React.FC<EditPackageDialogProps> = (props) => {
                         onChange={(e): void => {
                             setPrice(e.target.value.replace(/[^0-9.]/gi, '').substr(0, 6));
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
                     <TextField
                         fullWidth
@@ -123,7 +139,7 @@ export const EditPackageDialog: React.FC<EditPackageDialogProps> = (props) => {
                         onChange={(e): void => {
                             setSku(e.target.value);
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
                     <TextField
                         fullWidth
@@ -135,6 +151,7 @@ export const EditPackageDialog: React.FC<EditPackageDialogProps> = (props) => {
                         onChange={(e): void => {
                             setShort(e.target.value);
                         }}
+                        className={classes.field}
                     />
                 </DialogContent>
                 <DialogActions>

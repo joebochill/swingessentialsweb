@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import React, { useState, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState } from '../../__types__';
+import { putLessonResponse } from '../../redux/actions/lessons-actions';
+import { DATE_REGEX } from '../../constants';
+import { convertMultilineToDatabaseText } from '../../utilities/text';
+import { getDate } from '../../utilities/date';
+import { sortUsers } from '../../utilities/user';
 import {
     DialogProps,
     Dialog,
@@ -14,14 +21,20 @@ import {
     DialogActions,
     Button,
     TextField,
+    makeStyles,
+    Theme,
+    createStyles,
 } from '@material-ui/core';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from '../../__types__';
-import { convertMultilineToDatabaseText } from '../../utilities/text';
-import { putLessonResponse } from '../../redux/actions/lessons-actions';
-import { getDate } from '../../utilities/date';
-import { sortUsers } from '../../utilities/user';
-import { DATE_REGEX } from '../../constants';
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        field: {
+            '&:not(:last-child)': {
+                marginBottom: theme.spacing(2),
+            }
+        },
+    })
+);
 
 type NewLessonDialogProps = DialogProps & {};
 export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
@@ -32,6 +45,9 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
         },
     } = dialogProps;
 
+    const dispatch = useDispatch();
+    const classes = useStyles();
+
     const users = useSelector((state: AppState) => state.users.list);
     const usersByName = [...users].sort(sortUsers('last'));
 
@@ -40,8 +56,6 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
     const [date, setDate] = useState('');
     const [video, setVideo] = useState('');
     const [comments, setComments] = useState('');
-
-    const dispatch = useDispatch();
 
     const resetLesson = useCallback(() => {
         setUser('');
@@ -61,7 +75,7 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
             <DialogTitle>New In-Person Lesson</DialogTitle>
             <DialogContent>
                 <DialogContentText>{`Enter the new lesson information below:`}</DialogContentText>
-                <FormControl variant="filled" fullWidth style={{ marginBottom: 16 }}>
+                <FormControl variant="filled" fullWidth className={classes.field}>
                     <InputLabel id="username-label">{`User`}</InputLabel>
                     <Select
                         labelId="username-label"
@@ -87,7 +101,7 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                     onChange={(e): void => {
                         setDate(e.target.value);
                     }}
-                    style={{ marginBottom: 16 }}
+                    className={classes.field}
                 />
                 <TextField
                     fullWidth
@@ -99,7 +113,7 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                     onChange={(e): void => {
                         setVideo(e.target.value);
                     }}
-                    style={{ marginBottom: 16 }}
+                    className={classes.field}
                 />
                 <TextField
                     fullWidth
@@ -114,7 +128,7 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                     }}
                     inputProps={{ maxLength: 500, style: { minHeight: 64 } }}
                     helperText={`${500 - comments.length} characters left`}
-                    style={{ marginBottom: 16 }}
+                    className={classes.field}
                 />
             </DialogContent>
             <DialogActions>

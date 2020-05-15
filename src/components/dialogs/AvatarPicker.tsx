@@ -1,4 +1,7 @@
 import React, { useState, ChangeEvent, MouseEvent, useRef, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppState } from '../../__types__';
+import { setUserAvatar } from '../../redux/actions/user-settings-actions';
 import AvatarEditor from 'react-avatar-editor';
 import { usePinch } from 'react-use-gesture';
 import {
@@ -18,10 +21,7 @@ import {
     Theme,
     createStyles,
 } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
 import { Edit } from '@material-ui/icons';
-import { setUserAvatar } from '../../redux/actions/user-settings-actions';
-import { AppState } from '../../__types__';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,14 +29,14 @@ const useStyles = makeStyles((theme: Theme) =>
             height: 300,
             width: 300,
             borderRadius: 300,
-            color: 'white',
-            backgroundPosition: 'center center',
-            backgroundSize: '100%',
-            backgroundRepeat: 'no-repeat',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'flex-end',
+            color: 'white',
+            backgroundPosition: 'center center',
+            backgroundSize: '100%',
+            backgroundRepeat: 'no-repeat',
             boxShadow: theme.shadows[6],
         },
     })
@@ -51,7 +51,7 @@ export const AvatarChanger: React.FC = () => {
     const user = useSelector((state: AppState) => state.user);
 
     // avatar hash code
-    const _avatar = useSelector((state: AppState) => state.settings.avatar);
+    const avatarCode = useSelector((state: AppState) => state.settings.avatar);
     const [avatarInitialized, setAvatarInitialized] = useState(false);
     // full path to hosted image used by main display
     const [avatar, setAvatar] = useState('');
@@ -74,12 +74,13 @@ export const AvatarChanger: React.FC = () => {
         );
     };
 
+    // initialize the jumbo avatar
     useEffect(() => {
         if (settingsLoaded === 'success' && !avatarInitialized && user.username) {
             setAvatarInitialized(true);
             setAvatar(
                 `https://www.swingessentials.com/images/profiles/${
-                    _avatar ? `${user.username}/${_avatar}.png` : 'blank.png'
+                    avatarCode ? `${user.username}/${avatarCode}.png` : 'blank.png'
                 }`
             );
         }
@@ -150,11 +151,12 @@ export const AvatarPickerDialog: React.FC<AvatarDialogProps> = (props) => {
         },
     } = dialogProps;
 
-    const dispatch = useDispatch();
     const theme = useTheme();
+    const dispatch = useDispatch();
     const xs = useMediaQuery(theme.breakpoints.down('xs'));
-    const [zoom, setZoom] = useState(1.5);
     const preview = useRef<AvatarEditor>(null);
+
+    const [zoom, setZoom] = useState(1.5);
 
     const bind = usePinch(
         (state) => {
@@ -165,12 +167,6 @@ export const AvatarPickerDialog: React.FC<AvatarDialogProps> = (props) => {
         },
         { domTarget: window, eventOptions: { passive: false } }
     );
-
-    useEffect(bind, [bind, preview]);
-
-    useEffect(() => {
-        if (dialogProps.open) setZoom(1.5);
-    }, [dialogProps.open, setZoom]);
 
     const submitAvatar = useCallback(
         (imageURL: string) => {
@@ -186,6 +182,15 @@ export const AvatarPickerDialog: React.FC<AvatarDialogProps> = (props) => {
         },
         [dispatch]
     );
+
+    // link up pinch to zoom
+    useEffect(bind, [bind, preview]);
+
+    // reset the dialog on open
+    useEffect(() => {
+        if (dialogProps.open) setZoom(1.5);
+    }, [dialogProps.open, setZoom]);
+
 
     return (
         <>
@@ -217,7 +222,6 @@ export const AvatarPickerDialog: React.FC<AvatarDialogProps> = (props) => {
                         variant={'outlined'}
                         onClick={(e): void => {
                             onClose(e, 'backdropClick');
-                            // resetBlog();
                         }}
                     >
                         Cancel
@@ -225,7 +229,6 @@ export const AvatarPickerDialog: React.FC<AvatarDialogProps> = (props) => {
                     <Button
                         color="primary"
                         variant={'contained'}
-                        disabled={false /*!title || !date || !body || !DATE_REGEX.test(date)*/}
                         onClick={(e): void => {
                             if (preview && preview.current) {
                                 const imageURL = preview.current.getImageScaledToCanvas().toDataURL('image/png', 0.5);

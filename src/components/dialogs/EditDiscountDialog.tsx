@@ -1,4 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { Discount } from '../../__types__';
+import { addDiscount, updateDiscount, removeDiscount } from '../../redux/actions/discount-actions';
+import { DATE_REGEX } from '../../constants';
+import { ConfirmationDialog } from './ConfirmationDialog';
+import { Spacer } from '@pxblue/react-components';
 import {
     DialogProps,
     Dialog,
@@ -13,13 +19,21 @@ import {
     MenuItem,
     FormControlLabel,
     Checkbox,
+    makeStyles,
+    Theme,
+    createStyles,
+    useTheme,
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import { Discount } from '../../__types__';
-import { ConfirmationDialog } from './ConfirmationDialog';
-import { Spacer } from '@pxblue/react-components';
-import { addDiscount, updateDiscount, removeDiscount } from '../../redux/actions/discount-actions';
-import { DATE_REGEX } from '../../constants';
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        field: {
+            '&:not(:last-child)': {
+                marginBottom: theme.spacing(2),
+            }
+        },
+    })
+);
 
 type EditDiscountDialogProps = DialogProps & {
     discount: Discount;
@@ -33,6 +47,10 @@ export const EditDiscountDialog: React.FC<EditDiscountDialogProps> = (props) => 
         },
     } = dialogProps;
 
+    const dispatch = useDispatch();
+    const classes = useStyles();
+    const theme = useTheme();
+
     const [code, setCode] = useState(discount.code);
     const [description, setDescription] = useState(discount.description);
     const [type, setType] = useState<'percent' | 'amount'>(discount.type);
@@ -43,8 +61,6 @@ export const EditDiscountDialog: React.FC<EditDiscountDialogProps> = (props) => 
     const [never, setNever] = useState(parseInt(discount.expires, 10) === -1);
 
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-
-    const dispatch = useDispatch();
 
     const resetDiscount = useCallback(() => {
         setCode(discount.code);
@@ -83,7 +99,7 @@ export const EditDiscountDialog: React.FC<EditDiscountDialogProps> = (props) => 
                         onChange={(e): void => {
                             setCode(e.target.value);
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
                     <TextField
                         fullWidth
@@ -94,9 +110,9 @@ export const EditDiscountDialog: React.FC<EditDiscountDialogProps> = (props) => 
                         onChange={(e): void => {
                             setDescription(e.target.value);
                         }}
-                        style={{ marginBottom: 16 }}
+                        className={classes.field}
                     />
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+                    <div className={classes.field} style={{ display: 'flex', alignItems: 'center' }}>
                         <TextField
                             fullWidth
                             variant={'filled'}
@@ -108,7 +124,7 @@ export const EditDiscountDialog: React.FC<EditDiscountDialogProps> = (props) => 
                                 setValue(e.target.value);
                             }}
                         />
-                        <FormControl variant="filled" style={{ marginLeft: 16, minWidth: 150 }}>
+                        <FormControl variant="filled" style={{ marginLeft: theme.spacing(2), minWidth: 150 }}>
                             {/* <InputLabel id="type-label">{`Response Status`}</InputLabel> */}
                             <Select
                                 // labelId="type-label"
@@ -121,7 +137,7 @@ export const EditDiscountDialog: React.FC<EditDiscountDialogProps> = (props) => 
                         </FormControl>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+                    <div className={classes.field} style={{ display: 'flex', alignItems: 'center' }}>
                         <TextField
                             fullWidth
                             variant={'filled'}
@@ -134,7 +150,7 @@ export const EditDiscountDialog: React.FC<EditDiscountDialogProps> = (props) => 
                             }}
                         />
                         <FormControlLabel
-                            style={{ marginLeft: 8, marginRight: 0, minWidth: 158 }}
+                            style={{ marginLeft: theme.spacing(2), marginRight: 0, minWidth: 158 }}
                             control={
                                 <Checkbox
                                     color={'primary'}
@@ -162,7 +178,7 @@ export const EditDiscountDialog: React.FC<EditDiscountDialogProps> = (props) => 
                             }}
                         />
                         <FormControlLabel
-                            style={{ marginLeft: 8, marginRight: 0, minWidth: 158 }}
+                            style={{ marginLeft: theme.spacing(1), marginRight: 0, minWidth: 158 }}
                             control={
                                 <Checkbox
                                     color={'primary'}
