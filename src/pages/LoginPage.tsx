@@ -123,9 +123,9 @@ export const LoginPage: React.FC = () => {
                 dispatch({ type: CREATE_ACCOUNT.RESET });
             }
         }
-    }, [token, registration, history])
+    }, [token, registration, history, dispatch]);
 
-    if(token && registration !== 'success') return <Redirect to={from} />;
+    if (token && registration !== 'success') return <Redirect to={from} />;
 
     return (
         <>
@@ -233,10 +233,10 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref
                 onKeyPress={
                     username && password
                         ? (e): void => {
-                            if (e.key === 'Enter') {
-                                dispatch(requestLogin({ username, password }));
-                            }
-                        }
+                              if (e.key === 'Enter') {
+                                  dispatch(requestLogin({ username, password }));
+                              }
+                          }
                         : undefined
                 }
             />
@@ -248,8 +248,8 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref
                 onClick={
                     username && password
                         ? (): void => {
-                            dispatch(requestLogin({ username, password }));
-                        }
+                              dispatch(requestLogin({ username, password }));
+                          }
                         : (): void => setErrorMessage('You need to enter your username / password first.')
                 }
             >
@@ -408,15 +408,15 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
                 onClick={
                     email && EMAIL_REGEX.test(email) && !emailTaken && username && !usernameTaken && password
                         ? (): void => {
-                            dispatch(
-                                createAccount({
-                                    username,
-                                    email,
-                                    password,
-                                    heard: acquisition,
-                                })
-                            );
-                        }
+                              dispatch(
+                                  createAccount({
+                                      username,
+                                      email,
+                                      password,
+                                      heard: acquisition,
+                                  })
+                              );
+                          }
                         : (): void => setErrorMessage('Please make sure all fields are filled.')
                 }
             >
@@ -479,17 +479,17 @@ const ForgotForm = React.forwardRef<HTMLDivElement, ForgotFormProps>((props, ref
                 onClick={
                     complete
                         ? (): void => {
-                            onChangeForm('login' as Form);
-                            setComplete(false);
-                            setEmail('');
-                            setErrorMessage('');
-                        }
+                              onChangeForm('login' as Form);
+                              setComplete(false);
+                              setEmail('');
+                              setErrorMessage('');
+                          }
                         : email && EMAIL_REGEX.test(email)
-                            ? (): void => {
-                                dispatch(requestPasswordReset({ email }));
-                                setComplete(true);
-                            }
-                            : (): void => setErrorMessage('You need to enter a valid email address.')
+                        ? (): void => {
+                              dispatch(requestPasswordReset({ email }));
+                              setComplete(true);
+                          }
+                        : (): void => setErrorMessage('You need to enter a valid email address.')
                 }
             >
                 {complete ? ' Back to Sign In' : 'Send Reset Instructions'}
