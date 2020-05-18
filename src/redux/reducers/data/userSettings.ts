@@ -1,5 +1,5 @@
 import { UserSettingsState } from '../../../__types__';
-import { GET_SETTINGS, LOGOUT, TOKEN_TIMEOUT } from '../../actions/types';
+import { GET_SETTINGS, LOGOUT, TOKEN_TIMEOUT, CREATE_ACCOUNT } from '../../actions/types';
 
 const initialState: UserSettingsState = {
     notifications: undefined,
@@ -14,6 +14,11 @@ export const UserSettingsReducer = (state = initialState, action: any): UserSett
                 avatar: action.payload.avatar,
             };
         }
+        case CREATE_ACCOUNT.SUCCESS:
+            return {
+                ...state,
+                notifications: true,
+            };
         case LOGOUT.SUCCESS:
         case LOGOUT.FAILURE:
         case GET_SETTINGS.FAILURE:

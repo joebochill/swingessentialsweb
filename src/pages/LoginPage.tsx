@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { usePrevious } from '../hooks';
 
 import { AppState } from '../__types__';
-import { LOGIN } from '../redux/actions/types';
+import { LOGIN, CREATE_ACCOUNT } from '../redux/actions/types';
 import { requestLogin } from '../redux/actions/auth-actions';
 import {
     requestPasswordReset,
@@ -90,6 +90,7 @@ export const LoginPage: React.FC = () => {
     const location = useLocation();
     const history = useHistory();
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     const token = useSelector((state: AppState) => state.auth.token);
     const registration = useSelector((state: AppState) => state.api.createAccount.status);
@@ -115,10 +116,16 @@ export const LoginPage: React.FC = () => {
         }
     }
 
-    if (token) {
-        if (registration === 'success') history.push(ROUTES.PROFILE);
-        else return <Redirect to={from} />;
-    }
+    useEffect(() => {
+        if (token) {
+            if (registration === 'success') {
+                history.push(ROUTES.PROFILE);
+                dispatch({ type: CREATE_ACCOUNT.RESET });
+            }
+        }
+    }, [token, registration, history, dispatch]);
+
+    if (token && registration !== 'success') return <Redirect to={from} />;
 
     return (
         <>
@@ -311,7 +318,11 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
             );
             // }
         }
-    }, [createAccountStatus, setErrorMessage]);
+        // Registration finished
+        if (createAccountStatus === 'success') {
+            resetForm();
+        }
+    }, [createAccountStatus, setErrorMessage, resetForm]);
 
     return (
         <div className={classes.form} {...other} ref={ref}>
