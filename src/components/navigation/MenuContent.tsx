@@ -139,6 +139,12 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
             {token && (
                 <>
                     <MenuListItem
+                        title={'Your Profile'}
+                        icon={<Person />}
+                        divider
+                        onClick={(): void => clickMenuItem(ROUTES.PROFILE)}
+                    />
+                    <MenuListItem
                         title={'Your Lessons'}
                         icon={<Subscriptions />}
                         divider
@@ -184,14 +190,6 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
                     }}
                 />
             </Hidden>
-            {token && (
-                <MenuListItem
-                    title={'Your Profile'}
-                    icon={<Person />}
-                    divider
-                    onClick={(): void => clickMenuItem(ROUTES.PROFILE)}
-                />
-            )}
             {token ? (
                 <MenuListItem
                     title={'Sign Out'}
