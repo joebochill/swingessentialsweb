@@ -1,9 +1,10 @@
 import React from 'react';
-import { APP_VERSION, TWITTER_URL, FACEBOOK_URL, INSTAGRAM_URL, CONTACT_EMAIL } from '../../constants';
+import { TWITTER_URL, FACEBOOK_URL, INSTAGRAM_URL, CONTACT_EMAIL } from '../../constants';
 import { ROUTES } from '../../constants/routes';
 import { SimpleRouterLink } from '../navigation/SimpleLink';
 import { AppBar, Toolbar, Typography, makeStyles, Theme, createStyles, IconButton } from '@material-ui/core';
 import { Twitter, Instagram, Facebook, Email } from '@material-ui/icons';
+import packageJSON from '../../../package.json';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -84,7 +85,7 @@ export const Footer: React.FC = () => {
                 </div>
                 <SimpleRouterLink to={ROUTES.PRIVACY} label={'Privacy Policy'}></SimpleRouterLink>
                 <SimpleRouterLink to={ROUTES.TERMS} label={'Terms of Use'}></SimpleRouterLink>
-                <Typography variant={'caption'} className={classes.version}>{`v${APP_VERSION}`}</Typography>
+                <Typography variant={'caption'} className={classes.version}>{`v${packageJSON.version}`}</Typography>
             </Toolbar>
         </AppBar>
     );

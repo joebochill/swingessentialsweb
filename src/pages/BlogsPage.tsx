@@ -125,7 +125,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                     icon={<LocalBar fontSize={'inherit'} />}
                     headline={'The 19th Hole'}
                     subheading={'Stories from the field'}
-                    body={`The 19th Hole is where we talk shop about all things golf. We talk about stories from our adventures on the golf course, tips and tricks for maximizing your performance, and opportunities for you to get more involved in the golfing community. We’d love to hear from you as well! If you have ideas for a post,send us an email. Or better yet, if you'd like to be featured here, send a post!`}
+                    body={`The 19th Hole is where we talk shop about all things golf. We talk about stories from our adventures on the golf course, tips and tricks for maximizing your performance, and opportunities for you to get more involved in the golfing community. We’d love to hear from you as well! If you have ideas for a post, send us an email. Or better yet, if you'd like to be featured here, send a post!`}
                     style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
                 />
             </Banner>
