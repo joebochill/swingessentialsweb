@@ -69,7 +69,7 @@ export function updateUserPassword(password: string) {
             .onSuccess((response: any) => {
                 const token = response.headers.get('Token');
                 dispatch(success(ACTIONS.CHANGE_PASSWORD.SUCCESS, { token }));
-                // dispatch(loadUserInfo());
+                dispatch(loadUserInfo());
                 // dispatch(requestLogout());
             })
             .onFailure((response: Response) => {
