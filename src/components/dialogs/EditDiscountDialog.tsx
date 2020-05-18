@@ -24,6 +24,7 @@ import {
     createStyles,
     useTheme,
 } from '@material-ui/core';
+import { getDate } from '../../utilities/date';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -55,7 +56,7 @@ export const EditDiscountDialog: React.FC<EditDiscountDialogProps> = (props) => 
     const [description, setDescription] = useState(discount.description);
     const [type, setType] = useState<'percent' | 'amount'>(discount.type);
     const [value, setValue] = useState(discount.value);
-    const [expires, setExpires] = useState(discount.expires);
+    const [expires, setExpires] = useState(getDate(parseInt(discount.expires, 10) * 1000));
     const [quantity, setQuantity] = useState(discount.quantity);
     const [unlimited, setUnlimited] = useState(parseInt(discount.quantity, 10) === -1);
     const [never, setNever] = useState(parseInt(discount.expires, 10) === -1);
@@ -67,7 +68,7 @@ export const EditDiscountDialog: React.FC<EditDiscountDialogProps> = (props) => 
         setDescription(discount.description);
         setType(discount.type);
         setValue(discount.value);
-        setExpires(discount.expires);
+        setExpires(getDate(parseInt(discount.expires, 10) * 1000));
         setQuantity(discount.quantity);
         setUnlimited(parseInt(discount.quantity, 10) === -1);
         setNever(parseInt(discount.expires, 10) === -1);
