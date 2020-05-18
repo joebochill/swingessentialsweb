@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { usePrevious } from '../hooks';
 
 import { AppState } from '../__types__';
-import { LOGIN } from '../redux/actions/types';
+import { LOGIN, CREATE_ACCOUNT } from '../redux/actions/types';
 import { requestLogin } from '../redux/actions/auth-actions';
 import {
     requestPasswordReset,
@@ -90,6 +90,7 @@ export const LoginPage: React.FC = () => {
     const location = useLocation();
     const history = useHistory();
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     const token = useSelector((state: AppState) => state.auth.token);
     const registration = useSelector((state: AppState) => state.api.createAccount.status);
@@ -115,10 +116,16 @@ export const LoginPage: React.FC = () => {
         }
     }
 
-    if (token) {
-        if (registration === 'success') history.push(ROUTES.PROFILE);
-        else return <Redirect to={from} />;
-    }
+    useEffect(() => {
+        if (token) {
+            if (registration === 'success') {
+                history.push(ROUTES.PROFILE);
+                dispatch({ type: CREATE_ACCOUNT.RESET });
+            }
+        }
+    }, [token, registration, history])
+
+    if(token && registration !== 'success') return <Redirect to={from} />;
 
     return (
         <>
@@ -226,10 +233,10 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref
                 onKeyPress={
                     username && password
                         ? (e): void => {
-                              if (e.key === 'Enter') {
-                                  dispatch(requestLogin({ username, password }));
-                              }
-                          }
+                            if (e.key === 'Enter') {
+                                dispatch(requestLogin({ username, password }));
+                            }
+                        }
                         : undefined
                 }
             />
@@ -241,8 +248,8 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref
                 onClick={
                     username && password
                         ? (): void => {
-                              dispatch(requestLogin({ username, password }));
-                          }
+                            dispatch(requestLogin({ username, password }));
+                        }
                         : (): void => setErrorMessage('You need to enter your username / password first.')
                 }
             >
@@ -311,7 +318,11 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
             );
             // }
         }
-    }, [createAccountStatus, setErrorMessage]);
+        // Registration finished
+        if (createAccountStatus === 'success') {
+            resetForm();
+        }
+    }, [createAccountStatus, setErrorMessage, resetForm]);
 
     return (
         <div className={classes.form} {...other} ref={ref}>
@@ -397,15 +408,15 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
                 onClick={
                     email && EMAIL_REGEX.test(email) && !emailTaken && username && !usernameTaken && password
                         ? (): void => {
-                              dispatch(
-                                  createAccount({
-                                      username,
-                                      email,
-                                      password,
-                                      heard: acquisition,
-                                  })
-                              );
-                          }
+                            dispatch(
+                                createAccount({
+                                    username,
+                                    email,
+                                    password,
+                                    heard: acquisition,
+                                })
+                            );
+                        }
                         : (): void => setErrorMessage('Please make sure all fields are filled.')
                 }
             >
@@ -468,17 +479,17 @@ const ForgotForm = React.forwardRef<HTMLDivElement, ForgotFormProps>((props, ref
                 onClick={
                     complete
                         ? (): void => {
-                              onChangeForm('login' as Form);
-                              setComplete(false);
-                              setEmail('');
-                              setErrorMessage('');
-                          }
+                            onChangeForm('login' as Form);
+                            setComplete(false);
+                            setEmail('');
+                            setErrorMessage('');
+                        }
                         : email && EMAIL_REGEX.test(email)
-                        ? (): void => {
-                              dispatch(requestPasswordReset({ email }));
-                              setComplete(true);
-                          }
-                        : (): void => setErrorMessage('You need to enter a valid email address.')
+                            ? (): void => {
+                                dispatch(requestPasswordReset({ email }));
+                                setComplete(true);
+                            }
+                            : (): void => setErrorMessage('You need to enter a valid email address.')
                 }
             >
                 {complete ? ' Back to Sign In' : 'Send Reset Instructions'}
