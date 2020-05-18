@@ -87,8 +87,8 @@ export const PackagesPage: React.FC = (): JSX.Element => {
         !activePackage || !discount
             ? 0
             : discount.type === 'percent'
-            ? Math.min((parseInt(discount.value, 10) / 100) * activePrice, activePrice)
-            : Math.min(parseInt(discount.value), activePrice);
+            ? Math.min((parseFloat(discount.value) / 100) * activePrice, activePrice)
+            : Math.min(parseFloat(discount.value), activePrice);
 
     const currentTotal = roundNumber(activePrice - discountAmount, 2);
     const userAllowed = admin || role === 'customer';
