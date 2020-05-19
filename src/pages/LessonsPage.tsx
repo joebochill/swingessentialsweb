@@ -65,6 +65,12 @@ const useStyles = makeStyles((theme: Theme) =>
             position: 'relative',
             marginBottom: theme.spacing(4),
         },
+        emptyIcon: {
+            [theme.breakpoints.down('xs')]: {
+                fontSize: theme.spacing(6),
+                marginBottom: 0,
+            },
+        },
         youtube: {
             position: 'absolute',
             top: 0,
@@ -250,6 +256,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                             icon={<Update fontSize={'inherit'} />}
                                             title={'Swing Analysis In Progress'}
                                             description={`We're working on your lesson now. Check back soon!`}
+                                            classes={{ icon: classes.emptyIcon }}
                                             actions={
                                                 admin ? (
                                                     <Button
