@@ -1,50 +1,83 @@
 {
-  "name": "swingessentialsweb",
-  "homepage": "https://www.swingessentials.com",
-  "version": "2.1.1",
-  "private": true,
-  "dependencies": {
-    "connected-react-router": "^6.5.2",
-    "element-closest": "^2.0.2",
-    "history": "^4.9.0",
-    "paypal-checkout": "^4.0.281",
-    "react": "^16.8.6",
-    "react-app-polyfill": "^1.0.1",
-    "react-dom": "^16.8.6",
-    "react-redux": "^7.1.0",
-    "react-router": "^5.0.1",
-    "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1",
-    "react-youtube": "^7.9.0",
-    "redux": "^4.0.4",
-    "redux-thunk": "^2.3.0"
-  },
-  "devDependencies": {
-    "ftp": "^0.3.10",
-    "glob": "^7.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "node ./deploy.js"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "ie 11",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 2 chrome versions",
-      "last 2 firefox versions",
-      "last 2 safari versions",
-      "ie 11"
-    ]
-  }
+    "name": "swingessentialsweb",
+    "homepage": "https://www.swingessentials.com",
+    "version": "3.0.0",
+    "private": true,
+    "dependencies": {
+        "@material-ui/core": "^4.9.12",
+        "@material-ui/icons": "^4.9.1",
+        "@pxblue/colors": "^2.0.1",
+        "@pxblue/react-components": "^4.0.0",
+        "@pxblue/react-themes": "^4.0.0",
+        "clsx": "^1.1.0",
+        "react": "^16.13.1",
+        "react-app-polyfill": "^1.0.6",
+        "react-avatar-editor": "^11.0.9",
+        "react-dom": "^16.13.1",
+        "react-paypal-button-v2": "^2.6.2",
+        "react-redux": "^7.2.0",
+        "react-router-dom": "^5.1.2",
+        "react-scripts": "3.4.1",
+        "react-use-gesture": "^7.0.15",
+        "react-youtube": "^7.11.2",
+        "redux": "^4.0.5",
+        "redux-thunk": "^2.3.0",
+        "typeface-open-sans": "^0.0.75",
+        "typeface-roboto-mono": "^0.0.75",
+        "typescript": "~3.7.2"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "lint": "eslint \"src/**/**.{ts,tsx}\"",
+        "lint:fix": "eslint \"src/**/**.{ts,tsx}\" --fix",
+        "prettier": "prettier \"src/**/**.{ts,tsx,js,jsx,json,css,scss,html}\" --write",
+        "deploy": "node ./deploy.js"
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all",
+            "ie 11"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version",
+            "ie 11"
+        ]
+    },
+    "devDependencies": {
+        "@pxblue/eslint-config": "^1.1.5",
+        "@pxblue/prettier-config": "^1.0.2",
+        "@testing-library/jest-dom": "^4.2.4",
+        "@testing-library/react": "^9.3.2",
+        "@testing-library/user-event": "^7.1.2",
+        "@types/jest": "^24.0.0",
+        "@types/node": "^12.0.0",
+        "@types/react": "^16.9.0",
+        "@types/react-avatar-editor": "^10.3.5",
+        "@types/react-dom": "^16.9.0",
+        "@types/react-hammerjs": "^1.0.1",
+        "@types/react-image-crop": "^8.1.2",
+        "@types/react-redux": "^7.1.7",
+        "@types/react-router-dom": "^5.1.5",
+        "@typescript-eslint/eslint-plugin": "^2.29.0",
+        "@typescript-eslint/parser": "^2.29.0",
+        "enzyme": "^3.11.0",
+        "enzyme-adapter-react-16": "^1.15.2",
+        "eslint": "^6.8.0",
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-plugin-react": "^7.19.0",
+        "ftp": "^0.3.10",
+        "glob": "^7.1.6",
+        "prettier": "^2.0.5"
+    },
+    "prettier": "@pxblue/prettier-config"
 }
