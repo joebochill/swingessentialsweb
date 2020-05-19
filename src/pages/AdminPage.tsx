@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useGoogleAnalyticsPageView } from '../hooks';
 import { AppState, Package, Discount } from '../__types__';
 
 import { ActionToolbar } from '../components/toolbars/ActionToolbar';
@@ -78,6 +79,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export const AdminPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const theme = useTheme();
+    useGoogleAnalyticsPageView();
 
     const packages = useSelector((state: AppState) => state.packages.list);
     const packagesStatus = useSelector((state: AppState) => state.api.packages.status);

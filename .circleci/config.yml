@@ -41,14 +41,18 @@ jobs:
       # Build
       - run: 
           name: Build
-          command: yarn build
+          command: |
+            if [ $CIRCLE_BRANCH == $MASTER_BRANCH ]; then
+              yarn deploy --prod
+            fi 
+            yarn build
       
       # Deploy to web
       - deploy:
           name: Deploy
           command: |
             if [ $CIRCLE_BRANCH == $MASTER_BRANCH ]; then
-              yarn deploy --prod
+              yarn ga:prod
             fi 
             if [ $CIRCLE_BRANCH == $DEV_BRANCH ]; then
               yarn deploy --dev

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useGoogleAnalyticsPageView } from '../hooks';
 import { AppState } from '../__types__';
 import { resetUserPassword } from '../redux/actions/user-data-actions';
 import { requestLogout } from '../redux/actions/auth-actions';
@@ -52,6 +53,7 @@ export const ResetPasswordPage: React.FC = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const { key } = useParams();
+    useGoogleAnalyticsPageView();
 
     const [requestSent, setRequestSent] = useState(false);
 

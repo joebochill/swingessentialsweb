@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Redirect, useHistory } from 'react-router-dom';
+import { useGoogleAnalyticsPageView } from '../hooks';
 import { useSelector } from 'react-redux';
 import { AppState, Blog } from '../__types__';
 import { ROUTES } from '../constants/routes';
@@ -62,6 +63,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
     const history = useHistory();
     const { id } = useParams();
     const isSmall = useMediaQuery('(max-width:959px)');
+    useGoogleAnalyticsPageView();
 
     const blogs = useSelector((state: AppState) => state.blogs.blogList);
     const loadingStatus = useSelector((state: AppState) => state.api.blogs.status);

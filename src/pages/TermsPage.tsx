@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { useGoogleAnalyticsPageView } from '../hooks';
 import { SimpleRouterLink, SimpleLink } from '../components/navigation/SimpleLink';
 import { Banner } from '../components/display/Banner';
 import { SectionBlurb } from '../components/text/SectionBlurb';
@@ -94,27 +95,30 @@ const termsData: TermsContent[] = [
     },
 ];
 
-export const TermsPage: React.FC = () => (
-    <>
-        <Banner background={{ src: '', position: 'center 70%', opacity: 0.3 }}>
-            <SectionBlurb
-                jumbo
-                icon={<Gavel fontSize={'inherit'} />}
-                headline={'Terms of Use'}
-                subheading={'Effective March 1, 2018'}
-                body={`Swing Essentials, LLC  ("Swing Essentials" or "We") grants you the right to use this website ("Site") and mobile application ("App") subject to the terms and conditions of use ("Terms of Use" or "Agreement") set forth below. The purchase of any product or service through the site is governed by the terms of sale . Please read these terms of use carefully. By accessing the site, you agree to be bound by the terms of use. If you do not wish to be bound by these terms of use, you may not access or use this site or the app.`}
-                style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
-            />
-        </Banner>
-        {termsData.map((section, index) => (
-            <Section key={`terms_section_${index}`} style={{ display: 'block' }} textAlign={'left'}>
-                <Typography variant={'h6'}>{section.title}</Typography>
-                {section.contents.map((par, pInd) => (
-                    <Typography key={`p_${pInd}`} paragraph={pInd < section.contents.length - 1}>
-                        {par}
-                    </Typography>
-                ))}
-            </Section>
-        ))}
-    </>
-);
+export const TermsPage: React.FC = () => {
+    useGoogleAnalyticsPageView();
+    return (
+        <>
+            <Banner background={{ src: '', position: 'center 70%', opacity: 0.3 }}>
+                <SectionBlurb
+                    jumbo
+                    icon={<Gavel fontSize={'inherit'} />}
+                    headline={'Terms of Use'}
+                    subheading={'Effective March 1, 2018'}
+                    body={`Swing Essentials, LLC  ("Swing Essentials" or "We") grants you the right to use this website ("Site") and mobile application ("App") subject to the terms and conditions of use ("Terms of Use" or "Agreement") set forth below. The purchase of any product or service through the site is governed by the terms of sale . Please read these terms of use carefully. By accessing the site, you agree to be bound by the terms of use. If you do not wish to be bound by these terms of use, you may not access or use this site or the app.`}
+                    style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
+                />
+            </Banner>
+            {termsData.map((section, index) => (
+                <Section key={`terms_section_${index}`} style={{ display: 'block' }} textAlign={'left'}>
+                    <Typography variant={'h6'}>{section.title}</Typography>
+                    {section.contents.map((par, pInd) => (
+                        <Typography key={`p_${pInd}`} paragraph={pInd < section.contents.length - 1}>
+                            {par}
+                        </Typography>
+                    ))}
+                </Section>
+            ))}
+        </>
+    );
+};

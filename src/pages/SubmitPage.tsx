@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useGoogleAnalyticsPageView } from '../hooks';
 import { AppState } from '../__types__';
 import { SUBMIT_LESSON } from '../redux/actions/types';
 import { submitLesson } from '../redux/actions/lessons-actions';
@@ -41,6 +42,7 @@ export const SubmitPage: React.FC = (): JSX.Element => {
     const dispatch = useDispatch();
     const history = useHistory();
     const theme = useTheme();
+    useGoogleAnalyticsPageView();
 
     const role = useSelector((state: AppState) => state.auth.role);
     const lessons = useSelector((state: AppState) => state.lessons);
