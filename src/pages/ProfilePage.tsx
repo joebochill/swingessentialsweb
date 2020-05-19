@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useGoogleAnalyticsPageView } from '../hooks';
 import { Redirect, useHistory } from 'react-router-dom';
 import { AppState } from '../__types__';
 import { SET_USER_DATA, SET_USER_NOTIFICATIONS } from '../redux/actions/types';
@@ -59,6 +60,7 @@ export const ProfilePage: React.FC = () => {
     const classes = useStyles();
     const history = useHistory();
     const theme = useTheme();
+    useGoogleAnalyticsPageView();
 
     const token = useSelector((state: AppState) => state.auth.token);
     const loaded = useSelector((state: AppState) => state.api.authentication.initialized);

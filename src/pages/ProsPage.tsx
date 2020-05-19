@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useGoogleAnalyticsPageView } from '../hooks';
 import { AppState, Pro } from '../__types__';
 import { SectionBlurb } from '../components/text/SectionBlurb';
 import { ProBio } from '../components/display/ProBio';
@@ -23,6 +24,7 @@ const BlankPro: Pro = {
 
 export const ProsPage: React.FC = (): JSX.Element => {
     const theme = useTheme();
+    useGoogleAnalyticsPageView();
 
     const pros = useSelector((state: AppState) => state.pros.prosList);
     const status = useSelector((state: AppState) => state.api.pros.status);

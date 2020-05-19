@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useGoogleAnalyticsPageView } from '../hooks';
 import { AppState } from '../__types__';
 import { verifyEmail } from '../redux/actions/registration-actions';
 import { requestLogout } from '../redux/actions/auth-actions';
@@ -42,6 +43,7 @@ export const VerifyEmailPage: React.FC = () => {
     const theme = useTheme();
     const classes = useStyles();
     const { key } = useParams();
+    useGoogleAnalyticsPageView();
 
     const verification = useSelector((state: AppState) => state.api.verifyEmail);
     const verifyStatus = verification.status;
