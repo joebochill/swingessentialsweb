@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams, Redirect } from 'react-router-dom';
+import { useGoogleAnalyticsPageView } from '../hooks';
 import { AppState, Tip } from '../__types__';
 import { ROUTES } from '../constants/routes';
 import { prettyDate } from '../utilities/date';
@@ -68,6 +69,7 @@ export const TipsPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const theme = useTheme();
     const history = useHistory();
+    useGoogleAnalyticsPageView();
 
     const tips = useSelector((state: AppState) => state.tips.tipList);
     const loadingStatus = useSelector((state: AppState) => state.api.tips.status);

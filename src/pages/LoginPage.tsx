@@ -1,7 +1,7 @@
 import React, { useState, useEffect, HTMLAttributes, useCallback } from 'react';
 import { useLocation, Redirect, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { usePrevious } from '../hooks';
+import { usePrevious, useGoogleAnalyticsPageView } from '../hooks';
 
 import { AppState } from '../__types__';
 import { LOGIN, CREATE_ACCOUNT } from '../redux/actions/types';
@@ -91,6 +91,7 @@ export const LoginPage: React.FC = () => {
     const history = useHistory();
     const classes = useStyles();
     const dispatch = useDispatch();
+    useGoogleAnalyticsPageView();
 
     const token = useSelector((state: AppState) => state.auth.token);
     const registration = useSelector((state: AppState) => state.api.createAccount.status);

@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { useGoogleAnalyticsPageView } from '../hooks';
 import { SimpleLink } from '../components/navigation/SimpleLink';
 import { Banner } from '../components/display/Banner';
 import { SectionBlurb } from '../components/text/SectionBlurb';
@@ -148,27 +149,31 @@ const privacyData: PrivacyContent[] = [
     },
 ];
 
-export const PrivacyPage: React.FC = () => (
-    <>
-        <Banner background={{ src: '', position: 'center 70%', opacity: 0.3 }}>
-            <SectionBlurb
-                jumbo
-                icon={<Policy fontSize={'inherit'} />}
-                headline={'Privacy Policy'}
-                subheading={'Effective March 1, 2018'}
-                body={`By viewing and accessing this https://www.swingessentials.com/ web site (the "site"), the swing essentials mobile application (the "app") and/or purchasing any of the products available via the site and app, you ("you" or "your") represent that you have read and understood this entire privacy policy and you agree to all the terms of this privacy policy. If you do not consent to this privacy policy in its entirety, your sole and exclusive remedy is to immediately cease use of this site.`}
-                style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
-            />
-        </Banner>
-        {privacyData.map((section, index) => (
-            <Section key={`privacy_section_${index}`} style={{ display: 'block' }} textAlign={'left'}>
-                {section.title ? <Typography variant={'h6'}>{section.title}</Typography> : null}
-                {section.contents.map((par, pInd) => (
-                    <Typography key={`p_${pInd}`} paragraph={pInd < section.contents.length - 1}>
-                        {par}
-                    </Typography>
-                ))}
-            </Section>
-        ))}
-    </>
-);
+export const PrivacyPage: React.FC = () => {
+    useGoogleAnalyticsPageView();
+
+    return (
+        <>
+            <Banner background={{ src: '', position: 'center 70%', opacity: 0.3 }}>
+                <SectionBlurb
+                    jumbo
+                    icon={<Policy fontSize={'inherit'} />}
+                    headline={'Privacy Policy'}
+                    subheading={'Effective March 1, 2018'}
+                    body={`By viewing and accessing this https://www.swingessentials.com/ web site (the "site"), the swing essentials mobile application (the "app") and/or purchasing any of the products available via the site and app, you ("you" or "your") represent that you have read and understood this entire privacy policy and you agree to all the terms of this privacy policy. If you do not consent to this privacy policy in its entirety, your sole and exclusive remedy is to immediately cease use of this site.`}
+                    style={{ color: 'white', zIndex: 100, maxWidth: 960 }}
+                />
+            </Banner>
+            {privacyData.map((section, index) => (
+                <Section key={`privacy_section_${index}`} style={{ display: 'block' }} textAlign={'left'}>
+                    {section.title ? <Typography variant={'h6'}>{section.title}</Typography> : null}
+                    {section.contents.map((par, pInd) => (
+                        <Typography key={`p_${pInd}`} paragraph={pInd < section.contents.length - 1}>
+                            {par}
+                        </Typography>
+                    ))}
+                </Section>
+            ))}
+        </>
+    );
+};

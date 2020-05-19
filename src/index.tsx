@@ -17,6 +17,12 @@ import './index.css';
 import 'typeface-open-sans';
 import 'typeface-roboto-mono';
 
+import ReactGA from 'react-ga';
+import { gaID } from './__analytics__/ga.js';
+if (gaID) {
+    ReactGA.initialize(gaID);
+}
+
 const App: React.FC = () => {
     useEffect(() => {
         // @ts-ignore

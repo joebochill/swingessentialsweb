@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect, useParams, useHistory } from 'react-router-dom';
+import { useGoogleAnalyticsPageView } from '../hooks';
 
 import { AppState, Lesson } from '../__types__';
 import { SET_SELECTED_LESSON } from '../redux/actions/types';
@@ -104,6 +105,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
     const theme = useTheme();
     const { id } = useParams();
     const isSmall = useMediaQuery('(max-width:959px)');
+    useGoogleAnalyticsPageView();
 
     const lessons = useSelector((state: AppState) => state.lessons);
     const apiStatus = useSelector((state: AppState) => state.api.loadLessons.status);
