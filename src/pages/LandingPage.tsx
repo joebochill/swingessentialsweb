@@ -1,6 +1,7 @@
 import React, { HTMLAttributes } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useGoogleAnalyticsPageView } from '../hooks';
 
 import { AppState } from '../__types__/redux';
 import { ROUTES } from '../constants/routes';
@@ -148,6 +149,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const history = useHistory();
     const theme = useTheme();
+    useGoogleAnalyticsPageView();
 
     const testimonials = useSelector((state: AppState) => state.testimonials.list);
 

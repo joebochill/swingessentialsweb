@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useGoogleAnalyticsPageView } from '../hooks';
 import { AppState, Package } from '../__types__';
 import { CHECK_DISCOUNT, PURCHASE_CREDITS } from '../redux/actions/types';
 import { checkDiscount } from '../redux/actions/discount-actions';
@@ -60,6 +61,7 @@ export const PackagesPage: React.FC = (): JSX.Element => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const history = useHistory();
+    useGoogleAnalyticsPageView();
 
     const packagesStatus = useSelector((state: AppState) => state.api.packages.status);
     const discountStatus = useSelector((state: AppState) => state.api.checkDiscount.status);
