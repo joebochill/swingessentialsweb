@@ -43,7 +43,7 @@ jobs:
           name: Build
           command: |
             if [ $CIRCLE_BRANCH == $MASTER_BRANCH ]; then
-              yarn deploy --prod
+              yarn ga:prod
             fi 
             yarn build
       
@@ -52,7 +52,7 @@ jobs:
           name: Deploy
           command: |
             if [ $CIRCLE_BRANCH == $MASTER_BRANCH ]; then
-              yarn ga:prod
+              yarn deploy --prod
             fi 
             if [ $CIRCLE_BRANCH == $DEV_BRANCH ]; then
               yarn deploy --dev
