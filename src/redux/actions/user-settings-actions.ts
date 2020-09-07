@@ -14,7 +14,7 @@ export function getUserSettings() {
                 dispatch(success(ACTIONS.GET_SETTINGS.SUCCESS, body));
             })
             .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.SET_USER_NOTIFICATIONS.FAILURE, response, 'GetUserSettings'));
+                dispatch(failure(ACTIONS.GET_SETTINGS.FAILURE, response, 'GetUserSettings'));
             })
             .request();
     };

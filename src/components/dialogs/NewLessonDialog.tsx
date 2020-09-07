@@ -24,6 +24,7 @@ import {
     makeStyles,
     Theme,
     createStyles,
+    useTheme,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -45,6 +46,7 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
         },
     } = dialogProps;
 
+    const theme = useTheme();
     const dispatch = useDispatch();
     const classes = useStyles();
 
@@ -84,9 +86,16 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                         onChange={(e): void => setUser(e.target.value as string)}
                     >
                         {usersByName.map((_user) => (
-                            <MenuItem key={_user.username} value={_user.username}>{`${capitalize(
-                                _user.last
-                            )}, ${capitalize(_user.first)} (${_user.username})`}</MenuItem>
+                            <MenuItem
+                                key={_user.username}
+                                value={_user.username}
+                                style={{ color: _user.role === 'pending' ? theme.palette.error.main : 'inherit' }}
+                            >
+                                {_user.first && _user.last
+                                    ? `${capitalize(_user.last)}, ${capitalize(_user.first)} (${_user.username})`
+                                    : _user.username}
+                                {_user.role === 'pending' ? ' (unconfirmed)' : ''}
+                            </MenuItem>
                         ))}
                     </Select>
                 </FormControl>

@@ -69,8 +69,10 @@ export type Pro = {
     imageSize?: string;
     imagePosition?: string;
 };
+export type UserRole = 'pending' | 'customer' | 'administrator' | 'other';
 export type User = {
     username: string;
     first: string;
     last: string;
+    role: UserRole;
 };
