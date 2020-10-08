@@ -20,7 +20,7 @@ import { GetApp } from '@material-ui/icons';
 
 import bg from '../assets/images/banners/landing.jpg';
 import fullLogo from '../assets/images/logos/logo-full-white.svg';
-import pga from '../assets/images/logos/pga_p.svg';
+import pga from '../assets/images/logos/pga_sp.svg';
 import post1 from '../assets/icons/post-01.svg';
 import post2 from '../assets/icons/post-02.svg';
 import post3 from '../assets/icons/post-03.svg';
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
             position: 'absolute',
             top: theme.spacing(2),
             right: theme.spacing(2),
-            maxWidth: 150,
+            maxWidth: 180,
             width: '15%',
         },
         stores: {

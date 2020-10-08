@@ -12,7 +12,7 @@ import { EditProDialog } from '../components/dialogs/EditProDialog';
 import { Button, useTheme } from '@material-ui/core';
 import { AddCircle } from '@material-ui/icons';
 import bg from '../assets/images/banners/pros.jpg';
-import pga from '../assets/images/logos/pga_p.svg';
+import pga from '../assets/images/logos/pga_sp.svg';
 
 const BlankPro: Pro = {
     id: '-1',
