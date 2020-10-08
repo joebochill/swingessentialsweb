@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { useGoogleAnalyticsPageView } from '../hooks';
+import { googleAnalyticsConversion, useGoogleAnalyticsPageView } from '../hooks';
 import { AppState, Package } from '../__types__';
 import { CHECK_DISCOUNT, PURCHASE_CREDITS } from '../redux/actions/types';
 import { checkDiscount } from '../redux/actions/discount-actions';
@@ -97,6 +97,9 @@ export const PackagesPage: React.FC = (): JSX.Element => {
 
     useEffect(() => {
         if (purchaseStatus === 'success' || purchaseStatus === 'failed') {
+            if (purchaseStatus === 'success') {
+                googleAnalyticsConversion(`https://swingessentials.com/purchase-${activePackage?.shortcode || 'par'}`);
+            }
             setActivePackage(null);
             setDiscountCode('');
             setShowDiscount(false);

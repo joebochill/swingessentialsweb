@@ -1,7 +1,7 @@
 {
     "name": "swingessentialsweb",
     "homepage": "https://www.swingessentials.com",
-    "version": "3.0.2",
+    "version": "3.0.3",
     "private": true,
     "dependencies": {
         "@material-ui/core": "^4.9.12",
