@@ -105,7 +105,7 @@ export const PackagesPage: React.FC = (): JSX.Element => {
             setShowDiscount(false);
             dispatch({ type: CHECK_DISCOUNT.RESET });
         }
-    }, [purchaseStatus, setActivePackage, setDiscountCode, setShowDiscount, dispatch]);
+    }, [purchaseStatus, setActivePackage, setDiscountCode, setShowDiscount, dispatch, activePackage]);
 
     useEffect(() => {
         setActivePackage(null);
