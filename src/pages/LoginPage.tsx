@@ -1,7 +1,7 @@
 import React, { useState, useEffect, HTMLAttributes, useCallback } from 'react';
 import { useLocation, Redirect, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { usePrevious, useGoogleAnalyticsPageView } from '../hooks';
+import { usePrevious, useGoogleAnalyticsPageView, googleAnalyticsConversion } from '../hooks';
 
 import { AppState } from '../__types__';
 import { LOGIN, CREATE_ACCOUNT } from '../redux/actions/types';
@@ -121,6 +121,7 @@ export const LoginPage: React.FC = () => {
         if (token) {
             if (registration === 'success') {
                 history.push(ROUTES.PROFILE);
+                googleAnalyticsConversion(`https://swingessentials.com/register-complete`);
                 dispatch({ type: CREATE_ACCOUNT.RESET });
             }
         }

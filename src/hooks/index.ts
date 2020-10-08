@@ -18,3 +18,7 @@ export const useGoogleAnalyticsPageView = (): void => {
         ReactGA.pageview(window.location.pathname);
     }, []);
 };
+
+export const googleAnalyticsConversion = (conversionRoute: string = window.location.pathname): void => {
+    ReactGA.pageview(conversionRoute);
+};
