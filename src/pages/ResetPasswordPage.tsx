@@ -27,7 +27,7 @@ import bg from '../assets/images/banners/landing.jpg';
 const _getErrorMessage = (code: number | null): string => {
     switch (code) {
         case 400300:
-            return 'Oops! Your reset password link is invalid or may have already been used. Please check your the link in your email and try again. If you continue to have problems, please contact us.';
+            return 'Oops! Your reset password link is invalid or may have already been used. Please check the link in your email and try again. If you continue to have problems, please contact us.';
         case 400301:
             return 'Your reset password link has expired. You will need to re-request a password reset.';
         case -1:
