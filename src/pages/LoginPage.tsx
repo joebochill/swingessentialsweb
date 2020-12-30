@@ -419,11 +419,11 @@ export const LoginPage: React.FC = () => {
     const token = useSelector((state: AppState) => state.auth.token);
     const registration = useSelector((state: AppState) => state.api.createAccount.status);
 
-    const [form, setForm] = useState<Form>('login');
-    const previousForm = usePrevious(form);
-
     // @ts-ignore
-    const { from } = location && location.state ? location.state : { from: { pathname: ROUTES.HOME } };
+    const { from, initialPage } = location && location.state ? location.state : { from: { pathname: ROUTES.HOME } };
+
+    const [form, setForm] = useState<Form>(initialPage || 'login');
+    const previousForm = usePrevious(form);
 
     const isLogin = form === 'login';
     const isForgot = form === 'forgot';
