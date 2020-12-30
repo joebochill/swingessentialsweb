@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable @typescript-eslint/naming-convention */
 import React, { useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../../__types__';
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-type NewLessonDialogProps = DialogProps & {};
+type NewLessonDialogProps = DialogProps;
 export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
     const { ...dialogProps } = props;
     const {

@@ -24,7 +24,7 @@ import {
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import bg from '../assets/images/banners/landing.jpg';
 
-const _getErrorMessage = (code: number | null): string => {
+const getErrorMessage = (code: number | null): string => {
     switch (code) {
         case 400300:
             return 'Oops! Your reset password link is invalid or may have already been used. Please check the link in your email and try again. If you continue to have problems, please contact us.';
@@ -32,7 +32,7 @@ const _getErrorMessage = (code: number | null): string => {
             return 'Your reset password link has expired. You will need to re-request a password reset.';
         case -1:
         default:
-            return `Unknown Error: ${code}`;
+            return `Unknown Error: ${code || ''}`;
     }
 };
 
@@ -49,37 +49,8 @@ const useStyles = makeStyles(() =>
     })
 );
 
-export const ResetPasswordPage: React.FC = () => {
-    const dispatch = useDispatch();
-    const classes = useStyles();
-    const { key } = useParams();
-    useGoogleAnalyticsPageView();
-
-    const [requestSent, setRequestSent] = useState(false);
-
-    useEffect(() => {
-        if (key) {
-            dispatch(requestLogout());
-            dispatch(verifyResetPasswordCode(key));
-        }
-    }, [key, dispatch]);
-
-    if (!key) return <Redirect to={ROUTES.LOGIN} />;
-
-    return (
-        <>
-            <Banner background={{ src: bg, position: 'center 70%' }} justify={'center'}>
-                <div className={classes.form}>
-                    {requestSent && <PostRequest />}
-                    {!requestSent && <PreRequest onSubmit={(): void => setRequestSent(true)} />}
-                </div>
-            </Banner>
-        </>
-    );
-};
-
 type PreRequestProps = {
-    onSubmit: Function;
+    onSubmit: () => void;
 };
 const PreRequest: React.FC<PreRequestProps> = (props) => {
     const dispatch = useDispatch();
@@ -183,7 +154,7 @@ const PreRequest: React.FC<PreRequestProps> = (props) => {
             {status === 'failed' && (
                 <>
                     <Typography variant={'h6'} align={'center'} style={{ marginBottom: theme.spacing(2) }}>
-                        {_getErrorMessage(verification.code)}
+                        {getErrorMessage(verification.code)}
                     </Typography>
                 </>
             )}
@@ -234,6 +205,35 @@ const PostRequest: React.FC = () => {
                     </Typography>
                 </>
             )}
+        </>
+    );
+};
+
+export const ResetPasswordPage: React.FC = () => {
+    const dispatch = useDispatch();
+    const classes = useStyles();
+    const { key } = useParams<{ key: string }>();
+    useGoogleAnalyticsPageView();
+
+    const [requestSent, setRequestSent] = useState(false);
+
+    useEffect(() => {
+        if (key) {
+            dispatch(requestLogout());
+            dispatch(verifyResetPasswordCode(key));
+        }
+    }, [key, dispatch]);
+
+    if (!key) return <Redirect to={ROUTES.LOGIN} />;
+
+    return (
+        <>
+            <Banner background={{ src: bg, position: 'center 70%' }} justify={'center'}>
+                <div className={classes.form}>
+                    {requestSent && <PostRequest />}
+                    {!requestSent && <PreRequest onSubmit={(): void => setRequestSent(true)} />}
+                </div>
+            </Banner>
         </>
     );
 };

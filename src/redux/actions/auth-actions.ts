@@ -39,7 +39,7 @@ export function requestLogin(userCredentials: Credentials) {
                 switch (response.status) {
                     case 200: {
                         const token = response.headers.get('Token');
-                        response
+                        void response
                             .json()
                             .then((json) => {
                                 dispatch(success(ACTIONS.LOGIN.SUCCESS, { ...json, token: token }));
@@ -66,15 +66,15 @@ export function requestLogin(userCredentials: Credentials) {
 export function requestLogout() {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.LOGOUT.REQUEST });
-        HttpRequest.get(ACTIONS.LOGOUT.API)
+        void HttpRequest.get(ACTIONS.LOGOUT.API)
             .withFullResponse()
             .onSuccess(() => {
                 dispatch(success(ACTIONS.LOGOUT.SUCCESS));
                 dispatch(loadTips());
                 dispatch(loadBlogs());
             })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.LOGOUT.FAILURE, response, 'Logout'));
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.LOGOUT.FAILURE, response as Response, 'Logout'));
             })
             .request();
     };
@@ -83,14 +83,14 @@ export function requestLogout() {
 export function refreshToken() {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.REFRESH_TOKEN.REQUEST });
-        HttpRequest.get(ACTIONS.REFRESH_TOKEN.API)
+        void HttpRequest.get(ACTIONS.REFRESH_TOKEN.API)
             .withFullResponse()
-            .onSuccess((response: any) => {
+            .onSuccess((response) => {
                 const token = response.headers.get('Token');
                 dispatch(success(ACTIONS.REFRESH_TOKEN.SUCCESS, { token }));
             })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.REFRESH_TOKEN.FAILURE, response, 'TokenRefresh'));
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.REFRESH_TOKEN.FAILURE, response as Response, 'TokenRefresh'));
             })
             .request();
     };
@@ -112,7 +112,7 @@ export function setToken(token: string) {
 export function checkToken() {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.CHECK_TOKEN.REQUEST });
-        HttpRequest.get(ACTIONS.CHECK_TOKEN.API)
+        void HttpRequest.get(ACTIONS.CHECK_TOKEN.API)
             .withFullResponse()
             .onSuccess((response: any) => {
                 const token = response.headers.get('Token');
@@ -121,8 +121,8 @@ export function checkToken() {
                     dispatch(loadUserContent());
                 }
             })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.CHECK_TOKEN.FAILURE, response, 'Check Token'));
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.CHECK_TOKEN.FAILURE, response as Response, 'Check Token'));
             })
             .request();
     };
@@ -131,13 +131,13 @@ export function checkToken() {
 export function validateCurrentPassword(password: string) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.VALIDATE_PASSWORD.REQUEST });
-        HttpRequest.put(ACTIONS.VALIDATE_PASSWORD.API)
+        void HttpRequest.put(ACTIONS.VALIDATE_PASSWORD.API)
             .withBody({ password: btoa(password) })
             .onSuccess((response: any) => {
                 dispatch(success(ACTIONS.VALIDATE_PASSWORD.SUCCESS, response));
             })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.VALIDATE_PASSWORD.FAILURE, response, 'CheckPassword'));
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.VALIDATE_PASSWORD.FAILURE, response as Response, 'CheckPassword'));
             })
             .request();
     };
@@ -146,14 +146,14 @@ export function validateCurrentPassword(password: string) {
 export function changePassword(data: { currentPassword: string; newPassword: string }) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.VALIDATE_PASSWORD.REQUEST });
-        HttpRequest.put(ACTIONS.VALIDATE_PASSWORD.API)
+        void HttpRequest.put(ACTIONS.VALIDATE_PASSWORD.API)
             .withBody({ password: btoa(data.currentPassword) })
             .onSuccess((response: any) => {
                 dispatch(success(ACTIONS.VALIDATE_PASSWORD.SUCCESS, response));
                 dispatch(updateUserPassword(data.newPassword));
             })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.VALIDATE_PASSWORD.FAILURE, response, 'ChangePassword'));
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.VALIDATE_PASSWORD.FAILURE, response as Response, 'ChangePassword'));
             })
             .request();
     };

@@ -74,7 +74,7 @@ export const TipsPage: React.FC = (): JSX.Element => {
     const tips = useSelector((state: AppState) => state.tips.tipList);
     const loadingStatus = useSelector((state: AppState) => state.api.tips.status);
     const admin = useSelector((state: AppState) => state.auth.admin);
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
 
     const loading = loadingStatus === 'loading';
 

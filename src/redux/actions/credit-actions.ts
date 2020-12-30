@@ -10,12 +10,12 @@ export function loadCredits() {
     return (dispatch: Dispatch): void => {
         dispatch({ type: ACTIONS.GET_CREDITS.REQUEST });
 
-        HttpRequest.get(ACTIONS.GET_CREDITS.API)
+        void HttpRequest.get(ACTIONS.GET_CREDITS.API)
             .onSuccess((body: any) => {
                 dispatch(success(ACTIONS.GET_CREDITS.SUCCESS, body));
             })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.GET_CREDITS.FAILURE, response, 'LoadCredits'));
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.GET_CREDITS.FAILURE, response as Response, 'LoadCredits'));
             })
             .request();
     };
@@ -33,14 +33,14 @@ type PurchaseData = {
 export function purchaseCredits(data: PurchaseData) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.PURCHASE_CREDITS.REQUEST });
-        HttpRequest.put(ACTIONS.PURCHASE_CREDITS.API)
+        void HttpRequest.put(ACTIONS.PURCHASE_CREDITS.API)
             .withBody(data)
             .onSuccess((body: any) => {
                 dispatch(success(ACTIONS.PURCHASE_CREDITS.SUCCESS, body));
                 dispatch(loadCredits());
             })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.PURCHASE_CREDITS.FAILURE, response, 'PurchaseCredits'));
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.PURCHASE_CREDITS.FAILURE, response as Response, 'PurchaseCredits'));
             })
             .request();
     };

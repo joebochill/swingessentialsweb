@@ -11,12 +11,12 @@ export function loadPackages() {
     return (dispatch: Dispatch): void => {
         dispatch({ type: ACTIONS.GET_PACKAGES.REQUEST });
 
-        HttpRequest.get(ACTIONS.GET_PACKAGES.API)
+        void HttpRequest.get(ACTIONS.GET_PACKAGES.API)
             .onSuccess((body: any) => {
                 dispatch(success(ACTIONS.GET_PACKAGES.SUCCESS, body));
             })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.GET_PACKAGES.FAILURE, response, 'LoadPackages'));
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.GET_PACKAGES.FAILURE, response as Response, 'LoadPackages'));
             })
             .request();
     };
@@ -29,14 +29,14 @@ export function updatePackage(pkg: PartialPackage) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.UPDATE_PACKAGE.REQUEST });
 
-        HttpRequest.put(ACTIONS.UPDATE_PACKAGE.API)
+        void HttpRequest.put(ACTIONS.UPDATE_PACKAGE.API)
             .withBody(pkg)
             .onSuccess((body: any) => {
                 dispatch(success(ACTIONS.UPDATE_PACKAGE.SUCCESS, body));
                 dispatch(loadPackages());
             })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.UPDATE_PACKAGE.FAILURE, response, 'UpdatePackage'));
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.UPDATE_PACKAGE.FAILURE, response as Response, 'UpdatePackage'));
             })
             .request();
     };
@@ -46,14 +46,14 @@ export function addPackage(pkg: Omit<Package, 'id'>) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.ADD_PACKAGE.REQUEST });
 
-        HttpRequest.post(ACTIONS.ADD_PACKAGE.API)
+        void HttpRequest.post(ACTIONS.ADD_PACKAGE.API)
             .withBody(pkg)
             .onSuccess((body: any) => {
                 dispatch(success(ACTIONS.ADD_PACKAGE.SUCCESS, body));
                 dispatch(loadPackages());
             })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.ADD_PACKAGE.FAILURE, response, 'AddPackage'));
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.ADD_PACKAGE.FAILURE, response as Response, 'AddPackage'));
             })
             .request();
     };
@@ -63,14 +63,14 @@ export function removePackage(pkg: Package) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.REMOVE_PACKAGE.REQUEST });
 
-        HttpRequest.put(ACTIONS.REMOVE_PACKAGE.API)
+        void HttpRequest.put(ACTIONS.REMOVE_PACKAGE.API)
             .withBody(pkg)
             .onSuccess((body: any) => {
                 dispatch(success(ACTIONS.REMOVE_PACKAGE.SUCCESS, body));
                 dispatch(loadPackages());
             })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.REMOVE_PACKAGE.FAILURE, response, 'RemovePackage'));
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.REMOVE_PACKAGE.FAILURE, response as Response, 'RemovePackage'));
             })
             .request();
     };

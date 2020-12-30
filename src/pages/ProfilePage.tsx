@@ -64,108 +64,6 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export const ProfilePage: React.FC = () => {
-    const classes = useStyles();
-    const history = useHistory();
-    const theme = useTheme();
-    useGoogleAnalyticsPageView();
-
-    const token = useSelector((state: AppState) => state.auth.token);
-    const loaded = useSelector((state: AppState) => state.api.authentication.initialized);
-    const user = useSelector((state: AppState) => state.user);
-
-    const [initialized, setInitialized] = useState(false);
-
-    const joined = new Date(user.joined * 1000).getFullYear();
-
-    useEffect(() => {
-        if (!initialized && user.username) {
-            setInitialized(true);
-        }
-    }, [user, initialized, setInitialized]);
-
-    if (loaded && !token) return <Redirect to={ROUTES.LOGIN} />;
-
-    return (
-        <>
-            <Banner background={{ src: bg, position: 'center 70%', opacity: 0.5 }} justify={'center'}>
-                {!initialized && (
-                    <div style={{ color: 'white' }}>
-                        <CircularProgress color={'inherit'} />
-                    </div>
-                )}
-                {initialized && (
-                    <div className={classes.root}>
-                        <div className={classes.imageWrapper}>
-                            <AvatarChanger />
-                            <div className={classes.name}>
-                                <Typography variant={'h5'} style={{ fontWeight: 700, lineHeight: 1.3 }}>
-                                    {`${user.firstName} ${user.lastName}`}
-                                </Typography>
-                                <Typography variant={'h6'} style={{ lineHeight: 1.2 }}>
-                                    {user.username}
-                                </Typography>
-                                <Typography variant={'caption'} display={'block'}>
-                                    {`Member since ${joined}`}
-                                </Typography>
-                                <ChangePassword style={{ marginTop: theme.spacing(2) }} />
-                            </div>
-                        </div>
-
-                        <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(4)} />
-
-                        <ProfileForm />
-                    </div>
-                )}
-            </Banner>
-
-            <Section>
-                <Grid container spacing={10} justify={'center'}>
-                    <Grid item xs={12} md={4}>
-                        <InfoCard
-                            spacing={10}
-                            source={lessons}
-                            title={'Your Lessons'}
-                            aspectRatio={'16x9'}
-                            backgroundPosition={'right center'}
-                            description={'Check out all of your past lessons and see your progress.'}
-                            onClick={(): void => {
-                                history.push(ROUTES.LESSONS);
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                        <InfoCard
-                            spacing={10}
-                            source={order}
-                            title={'Order More'}
-                            aspectRatio={'16x9'}
-                            backgroundPosition={'center center'}
-                            description={'Buy a single lesson or purchase in bulk for a discount.'}
-                            onClick={(): void => {
-                                history.push(ROUTES.ORDER);
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                        <InfoCard
-                            spacing={10}
-                            source={swing}
-                            title={'Submit Your Swing'}
-                            aspectRatio={'16x9'}
-                            backgroundPosition={'left center'}
-                            description={'Send in your swing videos today to receive a professional analysis.'}
-                            onClick={(): void => {
-                                history.push(ROUTES.SUBMIT);
-                            }}
-                        />
-                    </Grid>
-                </Grid>
-            </Section>
-        </>
-    );
-};
-
 export const ProfileForm: React.FC = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
@@ -411,5 +309,107 @@ export const ProfileForm: React.FC = () => {
                 {failure && !changes && <Typography variant={'caption'}>Failed to update profile</Typography>}
             </div>
         </div>
+    );
+};
+
+export const ProfilePage: React.FC = () => {
+    const classes = useStyles();
+    const history = useHistory();
+    const theme = useTheme();
+    useGoogleAnalyticsPageView();
+
+    const token = useSelector((state: AppState) => state.auth.token);
+    const loaded = useSelector((state: AppState) => state.api.authentication.initialized);
+    const user = useSelector((state: AppState) => state.user);
+
+    const [initialized, setInitialized] = useState(false);
+
+    const joined = new Date(user.joined * 1000).getFullYear();
+
+    useEffect(() => {
+        if (!initialized && user.username) {
+            setInitialized(true);
+        }
+    }, [user, initialized, setInitialized]);
+
+    if (loaded && !token) return <Redirect to={ROUTES.LOGIN} />;
+
+    return (
+        <>
+            <Banner background={{ src: bg, position: 'center 70%', opacity: 0.5 }} justify={'center'}>
+                {!initialized && (
+                    <div style={{ color: 'white' }}>
+                        <CircularProgress color={'inherit'} />
+                    </div>
+                )}
+                {initialized && (
+                    <div className={classes.root}>
+                        <div className={classes.imageWrapper}>
+                            <AvatarChanger />
+                            <div className={classes.name}>
+                                <Typography variant={'h5'} style={{ fontWeight: 700, lineHeight: 1.3 }}>
+                                    {`${user.firstName} ${user.lastName}`}
+                                </Typography>
+                                <Typography variant={'h6'} style={{ lineHeight: 1.2 }}>
+                                    {user.username}
+                                </Typography>
+                                <Typography variant={'caption'} display={'block'}>
+                                    {`Member since ${joined}`}
+                                </Typography>
+                                <ChangePassword style={{ marginTop: theme.spacing(2) }} />
+                            </div>
+                        </div>
+
+                        <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(4)} />
+
+                        <ProfileForm />
+                    </div>
+                )}
+            </Banner>
+
+            <Section>
+                <Grid container spacing={10} justify={'center'}>
+                    <Grid item xs={12} md={4}>
+                        <InfoCard
+                            spacing={10}
+                            source={lessons}
+                            title={'Your Lessons'}
+                            aspectRatio={'16x9'}
+                            backgroundPosition={'right center'}
+                            description={'Check out all of your past lessons and see your progress.'}
+                            onClick={(): void => {
+                                history.push(ROUTES.LESSONS);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <InfoCard
+                            spacing={10}
+                            source={order}
+                            title={'Order More'}
+                            aspectRatio={'16x9'}
+                            backgroundPosition={'center center'}
+                            description={'Buy a single lesson or purchase in bulk for a discount.'}
+                            onClick={(): void => {
+                                history.push(ROUTES.ORDER);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <InfoCard
+                            spacing={10}
+                            source={swing}
+                            title={'Submit Your Swing'}
+                            aspectRatio={'16x9'}
+                            backgroundPosition={'left center'}
+                            description={'Send in your swing videos today to receive a professional analysis.'}
+                            onClick={(): void => {
+                                history.push(ROUTES.SUBMIT);
+                            }}
+                        />
+                    </Grid>
+                </Grid>
+            </Section>
+        </>
     );
 };

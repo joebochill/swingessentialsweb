@@ -61,7 +61,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const theme = useTheme();
     const history = useHistory();
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
     const isSmall = useMediaQuery('(max-width:959px)');
     useGoogleAnalyticsPageView();
 

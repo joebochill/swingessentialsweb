@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable @typescript-eslint/naming-convention */
 import React from 'react';
 import { PayPalButton as PPButton } from 'react-paypal-button-v2';
 import { Package } from '../../__types__';
@@ -7,9 +7,9 @@ type PayPalButtonProps = {
     pkg: Package;
     discount: number;
     onSuccess: (details: any) => void;
-    onClick?: Function;
-    onCanceled?: Function;
-    onError?: Function;
+    onClick?: () => void;
+    onCanceled?: () => void;
+    onError?: () => void;
 };
 export const PayPalButton: React.FC<PayPalButtonProps> = (props) => {
     const { pkg, discount, onSuccess } = props;
@@ -84,7 +84,7 @@ export const PayPalButton: React.FC<PayPalButtonProps> = (props) => {
                     },
                 })
             }
-            onError={(err: object): void => {
+            onError={(err: Record<string, unknown>): void => {
                 console.error('There was an error with your PayPal purchase', err);
                 if (props.onError) props.onError();
             }}

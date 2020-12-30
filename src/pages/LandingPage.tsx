@@ -35,19 +35,19 @@ import playstore from '../assets/images/logos/google-play.svg';
 const getAbbreviatedName = (username: string, first: string, last: string): string => {
     if (!first) return username;
 
-    const _first = first.charAt(0).toUpperCase() + first.substr(1);
-    const _last = last ? last.charAt(0).toUpperCase() : '';
+    const firstInitial = first.charAt(0).toUpperCase() + first.substr(1);
+    const lastInitial = last ? last.charAt(0).toUpperCase() : '';
 
-    return `${_first} ${_last}.`;
+    return `${firstInitial} ${lastInitial}.`;
 };
 
 const getInitials = (username: string, first: string, last: string): string => {
     if (!first) return username.charAt(0).toUpperCase();
 
-    const _first = first.charAt(0).toUpperCase();
-    const _last = last ? last.charAt(0).toUpperCase() : '';
+    const firstInitial = first.charAt(0).toUpperCase();
+    const lastInitial = last ? last.charAt(0).toUpperCase() : '';
 
-    return `${_first}${_last}`;
+    return `${firstInitial}${lastInitial}`;
 };
 
 const useStyles = makeStyles((theme: Theme) =>

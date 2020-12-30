@@ -34,7 +34,7 @@ type CompletedLessonsCardProps = CardProps & {
     lessons: Lesson[];
 };
 export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props) => {
-    const { hidden, lessons: _lessons, ...cardProps } = props;
+    const { hidden, lessons: lessonsProp, ...cardProps } = props;
 
     const classes = useStyles();
     const theme = useTheme();
@@ -48,13 +48,13 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
 
     const lessonsPerPage = 10;
     // Paginate the final lessons list
-    let lessons = _lessons;
+    let lessons = lessonsProp;
     if (lessons.length > lessonsPerPage) {
-        lessons = _lessons.slice(page * lessonsPerPage, (page + 1) * lessonsPerPage);
+        lessons = lessonsProp.slice(page * lessonsPerPage, (page + 1) * lessonsPerPage);
     }
 
     // Determine page navigation capabilities
-    const numPages = Math.ceil(_lessons.length / lessonsPerPage);
+    const numPages = Math.ceil(lessonsProp.length / lessonsPerPage);
     const canGoForward = page < numPages - 1;
     const canGoBack = page > 0;
 
@@ -77,7 +77,7 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
                                               setPage(page - 1);
                                               dispatch({
                                                   type: SET_SELECTED_LESSON,
-                                                  payload: _lessons[(page - 1) * lessonsPerPage],
+                                                  payload: lessonsProp[(page - 1) * lessonsPerPage],
                                               });
                                           }
                                         : undefined
@@ -92,7 +92,7 @@ export const CompletedLessonsCard: React.FC<CompletedLessonsCardProps> = (props)
                                               setPage(page + 1);
                                               dispatch({
                                                   type: SET_SELECTED_LESSON,
-                                                  payload: _lessons[(page + 1) * lessonsPerPage],
+                                                  payload: lessonsProp[(page + 1) * lessonsPerPage],
                                               });
                                           }
                                         : undefined

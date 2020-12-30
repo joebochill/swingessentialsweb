@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable @typescript-eslint/naming-convention */
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Lesson } from '../../__types__';
@@ -71,7 +71,9 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
         >
             <DialogTitle>Edit Lesson</DialogTitle>
             <DialogContent>
-                <DialogContentText>{`Enter the lesson information for ${lesson.username} below:`}</DialogContentText>
+                <DialogContentText>{`Enter the lesson information for ${
+                    lesson.username || '<ERROR>'
+                } below:`}</DialogContentText>
                 <TextField
                     fullWidth
                     variant={'filled'}

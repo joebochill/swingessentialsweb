@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Lesson } from '../__types__';
 import { getDate } from '../utilities/date';
 

@@ -10,7 +10,7 @@ import { Banner } from '../components/display/Banner';
 import { makeStyles, createStyles, Button, Typography, CircularProgress, useTheme } from '@material-ui/core';
 import bg from '../assets/images/banners/landing.jpg';
 
-const _getRegistrationErrorMessage = (code: number | null): string => {
+const getRegistrationErrorMessage = (code: number | null): string => {
     switch (code) {
         case 400302:
             return 'Oops! Your verification link is invalid. Please check your registration email and try again. If you continue to have problems, please contact us.';
@@ -20,7 +20,7 @@ const _getRegistrationErrorMessage = (code: number | null): string => {
         case -1:
             return 'Your your email address has already been verified. Sign in to view your account.';
         default:
-            return `Unknown Error: ${code}`;
+            return `Unknown Error: ${code || ''}`;
     }
 };
 
@@ -42,7 +42,7 @@ export const VerifyEmailPage: React.FC = () => {
     const dispatch = useDispatch();
     const theme = useTheme();
     const classes = useStyles();
-    const { key } = useParams();
+    const { key } = useParams<{ key: string }>();
     useGoogleAnalyticsPageView();
 
     const verification = useSelector((state: AppState) => state.api.verifyEmail);
@@ -88,7 +88,7 @@ export const VerifyEmailPage: React.FC = () => {
                     {verifyStatus === 'failed' && (
                         <>
                             <Typography variant={'h6'} align={'center'} style={{ marginBottom: theme.spacing(2) }}>
-                                {_getRegistrationErrorMessage(verification.code)}
+                                {getRegistrationErrorMessage(verification.code)}
                             </Typography>
                         </>
                     )}
