@@ -86,103 +86,6 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export const LoginPage: React.FC = () => {
-    const location = useLocation();
-    const history = useHistory();
-    const classes = useStyles();
-    const dispatch = useDispatch();
-    useGoogleAnalyticsPageView();
-
-    const token = useSelector((state: AppState) => state.auth.token);
-    const registration = useSelector((state: AppState) => state.api.createAccount.status);
-
-    const [form, setForm] = useState<Form>('login');
-    const previousForm = usePrevious(form);
-
-    // @ts-ignore
-    const { from } = location && location.state ? location.state : { from: { pathname: ROUTES.HOME } };
-
-    const isLogin = form === 'login';
-    const isForgot = form === 'forgot';
-    const isRegister = form === 'register';
-
-    let loginSlideDirection: SlideProps['direction'] = 'up';
-    if (previousForm !== undefined) {
-        if (previousForm === 'login') {
-            if (form === 'register') loginSlideDirection = 'right';
-            else if (form === 'forgot') loginSlideDirection = 'left';
-        } else {
-            if (previousForm === 'register') loginSlideDirection = 'right';
-            else if (previousForm === 'forgot') loginSlideDirection = 'left';
-        }
-    }
-
-    useEffect(() => {
-        if (token) {
-            if (registration === 'success') {
-                history.push(ROUTES.PROFILE);
-                googleAnalyticsConversion(`https://swingessentials.com/register-complete`);
-                dispatch({ type: CREATE_ACCOUNT.RESET });
-            }
-        }
-    }, [token, registration, history, dispatch]);
-
-    if (token && registration !== 'success') return <Redirect to={from} />;
-
-    return (
-        <>
-            <Banner background={{ src: bg, position: 'center 70%' }} justify={'center'}>
-                {
-                    <Slide
-                        direction={loginSlideDirection}
-                        in={isLogin}
-                        style={{ position: form === 'login' ? 'static' : 'absolute' }}
-                        timeout={{
-                            enter: 500,
-                            exit: 250,
-                        }}
-                    >
-                        <div className={classes.transformer}>
-                            <SignInForm onChangeForm={(f: Form): void => setForm(f)} />
-                        </div>
-                    </Slide>
-                }
-                {
-                    <Slide
-                        direction={'left'}
-                        in={isRegister}
-                        style={{ position: isRegister ? 'static' : 'absolute' }}
-                        timeout={{
-                            enter: 500,
-                            exit: 250,
-                        }}
-                    >
-                        <div className={classes.transformer}>
-                            <RegisterForm onChangeForm={(f: Form): void => setForm(f)} />
-                        </div>
-                    </Slide>
-                }
-                {
-                    <Slide
-                        direction={'right'}
-                        in={isForgot}
-                        style={{ position: isForgot ? 'static' : 'absolute' }}
-                        timeout={{
-                            enter: 500,
-                            exit: 250,
-                        }}
-                    >
-                        <div className={classes.transformer}>
-                            <ForgotForm onChangeForm={(f: Form): void => setForm(f)} />
-                        </div>
-                    </Slide>
-                }
-                {/* </div> */}
-            </Banner>
-        </>
-    );
-};
-
 type SignInFormProps = HTMLAttributes<HTMLDivElement> & {
     onChangeForm: (f: Form) => void;
 };
@@ -505,3 +408,100 @@ const ForgotForm = React.forwardRef<HTMLDivElement, ForgotFormProps>((props, ref
     );
 });
 ForgotForm.displayName = 'ForgotForm';
+
+export const LoginPage: React.FC = () => {
+    const location = useLocation();
+    const history = useHistory();
+    const classes = useStyles();
+    const dispatch = useDispatch();
+    useGoogleAnalyticsPageView();
+
+    const token = useSelector((state: AppState) => state.auth.token);
+    const registration = useSelector((state: AppState) => state.api.createAccount.status);
+
+    const [form, setForm] = useState<Form>('login');
+    const previousForm = usePrevious(form);
+
+    // @ts-ignore
+    const { from } = location && location.state ? location.state : { from: { pathname: ROUTES.HOME } };
+
+    const isLogin = form === 'login';
+    const isForgot = form === 'forgot';
+    const isRegister = form === 'register';
+
+    let loginSlideDirection: SlideProps['direction'] = 'up';
+    if (previousForm !== undefined) {
+        if (previousForm === 'login') {
+            if (form === 'register') loginSlideDirection = 'right';
+            else if (form === 'forgot') loginSlideDirection = 'left';
+        } else {
+            if (previousForm === 'register') loginSlideDirection = 'right';
+            else if (previousForm === 'forgot') loginSlideDirection = 'left';
+        }
+    }
+
+    useEffect(() => {
+        if (token) {
+            if (registration === 'success') {
+                history.push(ROUTES.PROFILE);
+                googleAnalyticsConversion(`https://swingessentials.com/register-complete`);
+                dispatch({ type: CREATE_ACCOUNT.RESET });
+            }
+        }
+    }, [token, registration, history, dispatch]);
+
+    if (token && registration !== 'success') return <Redirect to={from} />;
+
+    return (
+        <>
+            <Banner background={{ src: bg, position: 'center 70%' }} justify={'center'}>
+                {
+                    <Slide
+                        direction={loginSlideDirection}
+                        in={isLogin}
+                        style={{ position: form === 'login' ? 'static' : 'absolute' }}
+                        timeout={{
+                            enter: 500,
+                            exit: 250,
+                        }}
+                    >
+                        <div className={classes.transformer}>
+                            <SignInForm onChangeForm={(f: Form): void => setForm(f)} />
+                        </div>
+                    </Slide>
+                }
+                {
+                    <Slide
+                        direction={'left'}
+                        in={isRegister}
+                        style={{ position: isRegister ? 'static' : 'absolute' }}
+                        timeout={{
+                            enter: 500,
+                            exit: 250,
+                        }}
+                    >
+                        <div className={classes.transformer}>
+                            <RegisterForm onChangeForm={(f: Form): void => setForm(f)} />
+                        </div>
+                    </Slide>
+                }
+                {
+                    <Slide
+                        direction={'right'}
+                        in={isForgot}
+                        style={{ position: isForgot ? 'static' : 'absolute' }}
+                        timeout={{
+                            enter: 500,
+                            exit: 250,
+                        }}
+                    >
+                        <div className={classes.transformer}>
+                            <ForgotForm onChangeForm={(f: Form): void => setForm(f)} />
+                        </div>
+                    </Slide>
+                }
+                {/* </div> */}
+            </Banner>
+        </>
+    );
+};

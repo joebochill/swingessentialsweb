@@ -35,7 +35,7 @@ const BlankPackage: Package = {
     count: '',
     duration: 0,
     price: '',
-    //eslint-disable-next-line @typescript-eslint/camelcase
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     app_sku: '',
 };
 

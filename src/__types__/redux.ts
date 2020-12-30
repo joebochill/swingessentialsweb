@@ -1,3 +1,4 @@
+import { ThunkDispatch } from 'redux-thunk';
 import {
     UserRole,
     BasicAPIStatus,
@@ -8,6 +9,9 @@ import {
     DiscountStatus,
 } from '.';
 import { Lesson, Tip, User, Blog, Pro, Package, Discount, Testimonial, ScoreRange } from './data';
+
+/* MIDDLEWARE TYPES */
+export type ThunkFunction = (dispatch: ThunkDispatch<any, void, any>) => void;
 
 /*
     REDUX STATES TYPES

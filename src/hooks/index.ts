@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import ReactGA from 'react-ga';
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const usePrevious = <T extends {}>(value: T): T | undefined => {
     const ref = useRef<T>();
     useEffect(() => {

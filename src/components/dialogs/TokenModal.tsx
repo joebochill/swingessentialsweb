@@ -25,7 +25,7 @@ const Transition = React.forwardRef(
 );
 Transition.displayName = 'ZoomTransition';
 
-type TokenModalProps = Omit<DialogProps, 'open'> & {};
+type TokenModalProps = Omit<DialogProps, 'open'>;
 export const TokenModal: React.FC<TokenModalProps> = (props) => {
     const { ...dialogProps } = props;
     const {

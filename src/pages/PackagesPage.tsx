@@ -31,11 +31,6 @@ import { ShoppingCart, AddShoppingCart, CheckCircle, Error, Mail } from '@materi
 import bg from '../assets/images/banners/order.jpg';
 import * as Colors from '@pxblue/colors';
 
-type DialogOpen = {
-    open: boolean;
-    isNew: boolean;
-};
-
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         listCard: {

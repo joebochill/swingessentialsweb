@@ -60,7 +60,7 @@ export const SubmitPage: React.FC = (): JSX.Element => {
     const canShowForm =
         loaded && (role === 'customer' || role === 'administrator') && credits > 0 && lessons.pending.length < 1;
 
-    const _submitLesson = useCallback(() => {
+    const dispatchSubmitLesson = useCallback(() => {
         if (role !== 'customer' && role !== 'administrator') {
             // console.log('you are not verified');
             return;
@@ -172,7 +172,7 @@ export const SubmitPage: React.FC = (): JSX.Element => {
                                     color={'primary'}
                                     variant={'contained'}
                                     style={{ marginTop: theme.spacing(4) }}
-                                    onClick={(): void => _submitLesson()}
+                                    onClick={(): void => dispatchSubmitLesson()}
                                 >
                                     Submit
                                 </Button>
