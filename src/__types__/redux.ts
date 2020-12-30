@@ -7,7 +7,7 @@ import {
     AuthenticationStatus,
     DiscountStatus,
 } from '.';
-import { Lesson, Tip, User, Blog, Pro, Package, Discount, Testimonial } from './data';
+import { Lesson, Tip, User, Blog, Pro, Package, Discount, Testimonial, ScoreRange } from './data';
 
 /*
     REDUX STATES TYPES
@@ -67,7 +67,10 @@ export type UserDataState = {
     email: string;
     joined: number;
     location?: string;
-    phone?: string;
+    goals?: string;
+    birthday?: string;
+    // phone?: string;
+    average?: ScoreRange | '';
 };
 export type UserSettingsState = {
     notifications?: boolean;

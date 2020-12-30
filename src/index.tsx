@@ -11,6 +11,8 @@ import { store } from './redux/store';
 import { TokenModal } from './components/dialogs/TokenModal';
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 import { SETheme } from './themes';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import './index.css';
@@ -30,10 +32,12 @@ const App: React.FC = () => {
     }, []);
 
     return (
-        <Provider store={store}>
-            <MainRouter />
-            <TokenModal />
-        </Provider>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Provider store={store}>
+                <MainRouter />
+                <TokenModal />
+            </Provider>
+        </MuiPickersUtilsProvider>
     );
 };
 
