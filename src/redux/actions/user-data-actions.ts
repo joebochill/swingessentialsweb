@@ -5,6 +5,7 @@ import * as ACTIONS from './types';
 
 import { HttpRequest } from '../../api/http';
 import { success, failure } from '../../api/http-helper';
+import { UserDataState } from '../../__types__';
 
 export function loadUserInfo() {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
@@ -37,12 +38,7 @@ export function getUsers() {
     };
 }
 
-export type UserDataChange = {
-    firstName?: string;
-    lastName?: string;
-    phone?: string;
-    location?: string;
-};
+export type UserDataChange = Omit<Omit<Omit<Partial<UserDataState>, 'username'>, 'email'>, 'joined'>;
 export function setUserData(data: UserDataChange) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.SET_USER_DATA.REQUEST });

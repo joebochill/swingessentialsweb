@@ -11,6 +11,7 @@ import {
     IconButton,
     useTheme,
 } from '@material-ui/core';
+import { DatePicker, DatePickerProps } from '@material-ui/pickers';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 const useStyles = makeStyles(() =>
@@ -129,4 +130,38 @@ export const StyledPassword: React.FC<StyledTextFieldProps> = (props) => {
             {...textFieldProps}
         />
     );
+};
+
+type StyledDatePickerProps = DatePickerProps & {
+    last?: boolean;
+    onDark?: boolean;
+};
+export const StyledDatePicker: React.FC<StyledDatePickerProps> = (props) => {
+    const { last, style, InputProps, onDark, ...other } = props;
+
+    const classes = useStyles();
+    const theme = useTheme();
+
+    return (
+        <DatePicker
+            fullWidth
+            InputProps={Object.assign(
+                onDark
+                    ? {
+                          classes: {
+                              root: props.value ? classes.focused : classes.input,
+                              focused: classes.focused,
+                          },
+                      }
+                    : {},
+                InputProps
+            )}
+            style={Object.assign({ marginBottom: last ? 0 : theme.spacing(2) }, style)}
+            {...other}
+        />
+    );
+};
+StyledDatePicker.defaultProps = {
+    inputVariant: 'filled',
+    onDark: true,
 };

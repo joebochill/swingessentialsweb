@@ -1,5 +1,7 @@
 import { LessonType } from '.';
 
+export type ScoreRange = 60 | 70 | 80 | 90 | 100 | 150;
+
 export type Blog = {
     id: string | number;
     date: string;
