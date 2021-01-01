@@ -16,6 +16,7 @@ type GeneralResponseMapping = {
     [key: number]: (...args: any[]) => any;
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export class HttpRequest<TResponses extends GeneralResponseMapping = {}> {
     public static get(endpoint: string): HttpRequest {
         return new HttpRequest(HttpMethod.GET, endpoint);
@@ -28,12 +29,13 @@ export class HttpRequest<TResponses extends GeneralResponseMapping = {}> {
     }
     private readonly method: HttpMethod;
     private readonly endpoint: string;
-    private successCallback?: Function;
-    private failureCallback?: Function;
+    private successCallback?: (arg0: Record<string, unknown>) => void;
+    private failureCallback?: (arg0: Response | null | XMLHttpRequest) => void;
     private body?: any;
     private explicitToken?: string | null;
     private parseResponse?: boolean;
 
+    // eslint-disable-next-line @typescript-eslint/ban-types
     private constructor(method: HttpMethod, endpoint: string, optionals: Optionals = {}) {
         this.method = method;
         this.endpoint = endpoint;
@@ -51,11 +53,11 @@ export class HttpRequest<TResponses extends GeneralResponseMapping = {}> {
         this.explicitToken = token;
         return this;
     }
-    public onSuccess(callback: Function): HttpRequest<TResponses> {
+    public onSuccess(callback: (arg0: any) => void): HttpRequest<TResponses> {
         this.successCallback = callback;
         return this;
     }
-    public onFailure(callback: Function): HttpRequest<TResponses> {
+    public onFailure(callback: (arg0: Response | null | XMLHttpRequest) => void): HttpRequest<TResponses> {
         this.failureCallback = callback;
         return this;
     }

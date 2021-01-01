@@ -14,10 +14,6 @@ const purple: PXBlueColor = {
     700: '#1a174f',
     800: '#151245',
     900: '#0c0a33',
-    A100: '#726eff',
-    A200: '#413bff',
-    A400: '#0f08ff',
-    A700: '#0700ed',
     contrastDefaultColor: 'light',
 };
 const typography = {

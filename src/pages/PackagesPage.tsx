@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { useGoogleAnalyticsPageView } from '../hooks';
+import { googleAnalyticsConversion, useGoogleAnalyticsPageView } from '../hooks';
 import { AppState, Package } from '../__types__';
 import { CHECK_DISCOUNT, PURCHASE_CREDITS } from '../redux/actions/types';
 import { checkDiscount } from '../redux/actions/discount-actions';
@@ -30,11 +30,6 @@ import {
 import { ShoppingCart, AddShoppingCart, CheckCircle, Error, Mail } from '@material-ui/icons';
 import bg from '../assets/images/banners/order.jpg';
 import * as Colors from '@pxblue/colors';
-
-type DialogOpen = {
-    open: boolean;
-    isNew: boolean;
-};
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -97,12 +92,15 @@ export const PackagesPage: React.FC = (): JSX.Element => {
 
     useEffect(() => {
         if (purchaseStatus === 'success' || purchaseStatus === 'failed') {
+            if (purchaseStatus === 'success') {
+                googleAnalyticsConversion(`https://swingessentials.com/purchase-${activePackage?.shortcode || 'par'}`);
+            }
             setActivePackage(null);
             setDiscountCode('');
             setShowDiscount(false);
             dispatch({ type: CHECK_DISCOUNT.RESET });
         }
-    }, [purchaseStatus, setActivePackage, setDiscountCode, setShowDiscount, dispatch]);
+    }, [purchaseStatus, setActivePackage, setDiscountCode, setShowDiscount, dispatch, activePackage]);
 
     useEffect(() => {
         setActivePackage(null);

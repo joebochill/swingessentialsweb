@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ForwardMenuContent = React.forwardRef((props: { onClose: Function }, ref) => <MenuContent {...props} />);
+const ForwardMenuContent = React.forwardRef((props: { onClose: () => void }, ref) => <MenuContent {...props} />);
 ForwardMenuContent.displayName = 'ForwardRefMenuContent';
 
 export const UserMenu: React.FC = () => {

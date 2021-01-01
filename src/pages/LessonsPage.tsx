@@ -103,7 +103,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
     const dispatch = useDispatch();
     const history = useHistory();
     const theme = useTheme();
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
     const isSmall = useMediaQuery('(max-width:959px)');
     useGoogleAnalyticsPageView();
 

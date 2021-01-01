@@ -1,3 +1,4 @@
+import { ThunkDispatch } from 'redux-thunk';
 import {
     UserRole,
     BasicAPIStatus,
@@ -7,7 +8,10 @@ import {
     AuthenticationStatus,
     DiscountStatus,
 } from '.';
-import { Lesson, Tip, User, Blog, Pro, Package, Discount, Testimonial } from './data';
+import { Lesson, Tip, User, Blog, Pro, Package, Discount, Testimonial, ScoreRange } from './data';
+
+/* MIDDLEWARE TYPES */
+export type ThunkFunction = (dispatch: ThunkDispatch<any, void, any>) => void;
 
 /*
     REDUX STATES TYPES
@@ -67,7 +71,10 @@ export type UserDataState = {
     email: string;
     joined: number;
     location?: string;
-    phone?: string;
+    goals?: string;
+    birthday?: string;
+    // phone?: string;
+    average?: ScoreRange | '';
 };
 export type UserSettingsState = {
     notifications?: boolean;

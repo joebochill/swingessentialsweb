@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Dispatch } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
@@ -12,12 +13,12 @@ export function loadLessons() {
     return (dispatch: Dispatch): void => {
         dispatch({ type: ACTIONS.GET_LESSONS.REQUEST });
 
-        HttpRequest.get(ACTIONS.GET_LESSONS.API)
+        void HttpRequest.get(ACTIONS.GET_LESSONS.API)
             .onSuccess((body: any) => {
                 dispatch(success(ACTIONS.GET_LESSONS.SUCCESS, body));
             })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.GET_LESSONS.FAILURE, response, 'LoadLessons'));
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.GET_LESSONS.FAILURE, response as Response, 'LoadLessons'));
             })
             .request();
     };
@@ -28,15 +29,15 @@ export function submitLesson(data: FormData, onUpdateProgress: (this: XMLHttpReq
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.SUBMIT_LESSON.REQUEST });
 
-        HttpRequest.post(ACTIONS.SUBMIT_LESSON.API)
+        void HttpRequest.post(ACTIONS.SUBMIT_LESSON.API)
             .withBody(data, false)
             .onSuccess((body: any) => {
                 dispatch(success(ACTIONS.SUBMIT_LESSON.SUCCESS, body));
                 dispatch(loadLessons());
                 dispatch(loadCredits());
             })
-            .onFailure((response: XMLHttpRequest) => {
-                dispatch(xhrfailure(ACTIONS.SUBMIT_LESSON.FAILURE, response));
+            .onFailure((response) => {
+                dispatch(xhrfailure(ACTIONS.SUBMIT_LESSON.FAILURE, response as XMLHttpRequest));
             })
             .requestWithProgress(onUpdateProgress);
     };
@@ -47,14 +48,14 @@ export function markLessonViewed(lessonID: number) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.MARK_VIEWED.REQUEST });
 
-        HttpRequest.put(ACTIONS.MARK_VIEWED.API)
+        void HttpRequest.put(ACTIONS.MARK_VIEWED.API)
             .withBody({ id: lessonID })
             .onSuccess((body: any) => {
                 dispatch(success(ACTIONS.MARK_VIEWED.SUCCESS, body));
                 dispatch(loadLessons());
             })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.MARK_VIEWED.FAILURE, response, 'markViewed'));
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.MARK_VIEWED.FAILURE, response as Response, 'markViewed'));
             })
             .request();
     };
@@ -74,14 +75,14 @@ export function putLessonResponse(data: LessonUpdate) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.PUT_LESSON.REQUEST });
 
-        HttpRequest.put(ACTIONS.PUT_LESSON.API)
+        void HttpRequest.put(ACTIONS.PUT_LESSON.API)
             .withBody(data)
             .onSuccess((body: any) => {
                 dispatch(success(ACTIONS.PUT_LESSON.SUCCESS, body));
                 dispatch(loadLessons());
             })
-            .onFailure((response: Response) => {
-                dispatch(failure(ACTIONS.PUT_LESSON.FAILURE, response, 'markViewed'));
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.PUT_LESSON.FAILURE, response as Response, 'markViewed'));
             })
             .request();
     };

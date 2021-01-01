@@ -5,23 +5,23 @@ const initialState: BasicAPIStatus = {
     status: 'initial',
     code: null,
 };
-export const simpleReducer = (ACTION: ReduxAction) => (state = initialState, action: any): BasicAPIStatus => {
+export const simpleReducer = (reduxAction: ReduxAction) => (state = initialState, action: any): BasicAPIStatus => {
     switch (action.type) {
-        case ACTION.REQUEST:
+        case reduxAction.REQUEST:
             return {
                 ...state,
                 status: 'loading',
                 code: null,
             };
 
-        case ACTION.SUCCESS:
+        case reduxAction.SUCCESS:
             return {
                 ...state,
                 status: 'success',
                 code: null,
             };
 
-        case ACTION.FAILURE: {
+        case reduxAction.FAILURE: {
             const errorCode = parseInt(action.error, 10);
             return {
                 ...state,
@@ -29,7 +29,7 @@ export const simpleReducer = (ACTION: ReduxAction) => (state = initialState, act
                 code: isNaN(errorCode) ? -1 : errorCode,
             };
         }
-        case ACTION.RESET: {
+        case reduxAction.RESET: {
             return initialState;
         }
         default:

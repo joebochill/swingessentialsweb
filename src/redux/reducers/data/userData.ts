@@ -1,5 +1,5 @@
 import { LOGIN, LOGOUT, GET_USER_DATA, TOKEN_TIMEOUT, CREATE_ACCOUNT } from '../../actions/types';
-import { UserDataState } from '../../../__types__';
+import { ScoreRange, UserDataState } from '../../../__types__';
 
 const initialState: UserDataState = {
     username: '',
@@ -7,7 +7,10 @@ const initialState: UserDataState = {
     lastName: '',
     email: '',
     location: '',
-    phone: '',
+    // phone: '',
+    goals: '',
+    birthday: '',
+    average: '',
     joined: 0,
 };
 export const UserDataReducer = (state = initialState, action: any): UserDataState => {
@@ -21,7 +24,12 @@ export const UserDataReducer = (state = initialState, action: any): UserDataStat
                 lastName: action.payload.personal.last_name,
                 email: action.payload.personal.email,
                 location: action.payload.personal.location,
-                phone: action.payload.personal.phone,
+                // phone: action.payload.personal.phone,
+                goals: action.payload.personal.goals,
+                birthday: action.payload.personal.birthday,
+                average: !isNaN(parseInt(action.payload.personal.average, 10))
+                    ? (parseInt(action.payload.personal.average, 10) as ScoreRange)
+                    : '',
                 joined: action.payload.personal.joined,
             };
         case CREATE_ACCOUNT.SUCCESS:

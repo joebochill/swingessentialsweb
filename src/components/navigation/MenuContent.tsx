@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
 type MenuListItemProps = {
     icon?: JSX.Element;
     title: string;
-    onClick: Function;
+    onClick: () => void;
     divider?: boolean;
 };
 export const MenuListItem: React.FC<MenuListItemProps> = (props) => {
@@ -72,7 +72,7 @@ export const MenuListItem: React.FC<MenuListItemProps> = (props) => {
 };
 
 type MenuContentProps = {
-    onClose: Function;
+    onClose: () => void;
 };
 export const MenuContent: React.FC<MenuContentProps> = (props) => {
     const { onClose } = props;

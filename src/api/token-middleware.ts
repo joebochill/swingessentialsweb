@@ -11,7 +11,7 @@ import {
 import { ASYNC_PREFIX } from '../constants';
 
 export let TOKEN: string | null = null;
-const _setToken = (newToken: string | null): void => {
+const setToken = (newToken: string | null): void => {
     TOKEN = newToken;
 };
 
@@ -25,7 +25,7 @@ export const saveAuthToken = (store: any) => (next: any) => (action: any) => {
         action.type === RESET_USER_PASSWORD.SUCCESS ||
         action.type === CHANGE_PASSWORD.SUCCESS
     ) {
-        _setToken(action.payload.token);
+        setToken(action.payload.token);
         if (action.payload.token !== null) {
             localStorage.setItem(`${ASYNC_PREFIX}token`, action.payload.token);
         } else localStorage.removeItem(`${ASYNC_PREFIX}token`);
@@ -35,7 +35,7 @@ export const saveAuthToken = (store: any) => (next: any) => (action: any) => {
         action.type === LOGIN.FAILURE ||
         action.type === TOKEN_TIMEOUT
     ) {
-        _setToken(null);
+        setToken(null);
         localStorage.removeItem(`${ASYNC_PREFIX}token`);
     }
     // continue processing this action

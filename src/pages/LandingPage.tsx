@@ -15,12 +15,24 @@ import { Testimonial } from '../components/display/Testimonial';
 import { Banner } from '../components/display/Banner';
 import { Section } from '../components/display/Section';
 import { Spacer } from '@pxblue/react-components';
-import { makeStyles, Theme, createStyles, Grid, Typography, useTheme } from '@material-ui/core';
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+    Grid,
+    Typography,
+    useTheme,
+    Button,
+    ButtonProps,
+    useMediaQuery,
+    Fab,
+    FabProps,
+} from '@material-ui/core';
 import { GetApp } from '@material-ui/icons';
 
 import bg from '../assets/images/banners/landing.jpg';
 import fullLogo from '../assets/images/logos/logo-full-white.svg';
-import pga from '../assets/images/logos/pga_p.svg';
+import pga from '../assets/images/logos/pga_sp.svg';
 import post1 from '../assets/icons/post-01.svg';
 import post2 from '../assets/icons/post-02.svg';
 import post3 from '../assets/icons/post-03.svg';
@@ -35,19 +47,19 @@ import playstore from '../assets/images/logos/google-play.svg';
 const getAbbreviatedName = (username: string, first: string, last: string): string => {
     if (!first) return username;
 
-    const _first = first.charAt(0).toUpperCase() + first.substr(1);
-    const _last = last ? last.charAt(0).toUpperCase() : '';
+    const firstInitial = first.charAt(0).toUpperCase() + first.substr(1);
+    const lastInitial = last ? last.charAt(0).toUpperCase() : '';
 
-    return `${_first} ${_last}.`;
+    return `${firstInitial} ${lastInitial}.`;
 };
 
 const getInitials = (username: string, first: string, last: string): string => {
     if (!first) return username.charAt(0).toUpperCase();
 
-    const _first = first.charAt(0).toUpperCase();
-    const _last = last ? last.charAt(0).toUpperCase() : '';
+    const firstInitial = first.charAt(0).toUpperCase();
+    const lastInitial = last ? last.charAt(0).toUpperCase() : '';
 
-    return `${_first}${_last}`;
+    return `${firstInitial}${lastInitial}`;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -60,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) =>
             position: 'absolute',
             top: theme.spacing(2),
             right: theme.spacing(2),
-            maxWidth: 150,
+            maxWidth: 180,
             width: '15%',
         },
         stores: {
@@ -72,6 +84,23 @@ const useStyles = makeStyles((theme: Theme) =>
                 left: 0,
                 width: '100%',
             },
+        },
+        signUpButton: {
+            display: 'flex',
+            color: 'white',
+            border: '1px solid white',
+            borderRadius: theme.spacing(1),
+            margin: '0 auto',
+            minWidth: 270,
+        },
+        signUpFab: {
+            position: 'fixed',
+            bottom: theme.spacing(4),
+            right: theme.spacing(4),
+            color: 'white',
+            border: '1px solid white',
+            borderRadius: theme.spacing(1),
+            zIndex: 2000,
         },
         stepsWrapper: {
             marginLeft: theme.spacing(8),
@@ -145,12 +174,53 @@ const GoogleStoreIcon: React.FC<HTMLAttributes<HTMLImageElement>> = (props) => (
     />
 );
 
+const RegisterButton: React.FC<ButtonProps> = (props) => {
+    const classes = useStyles();
+    const history = useHistory();
+    const token = useSelector((state: AppState) => state.auth.token);
+
+    return !token ? (
+        <Button
+            variant={'contained'}
+            color={'primary'}
+            className={classes.signUpButton}
+            onClick={(): void =>
+                history.push(ROUTES.LOGIN, { from: { pathname: history.location.pathname }, initialPage: 'register' })
+            }
+            {...props}
+        >
+            Sign Up Today
+        </Button>
+    ) : null;
+};
+const RegisterFab: React.FC<Omit<FabProps, 'children'>> = (props) => {
+    const classes = useStyles();
+    const history = useHistory();
+    const token = useSelector((state: AppState) => state.auth.token);
+
+    return !token ? (
+        <Fab
+            variant={'extended'}
+            color={'primary'}
+            className={classes.signUpFab}
+            onClick={(): void =>
+                history.push(ROUTES.LOGIN, { from: { pathname: history.location.pathname }, initialPage: 'register' })
+            }
+            {...props}
+        >
+            Sign Up Today
+        </Fab>
+    ) : null;
+};
+
 export const LandingPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const history = useHistory();
     const theme = useTheme();
+    const xs = useMediaQuery(theme.breakpoints.down('xs'));
     useGoogleAnalyticsPageView();
 
+    const token = useSelector((state: AppState) => state.auth.token);
     const testimonials = useSelector((state: AppState) => state.testimonials.list);
 
     return (
@@ -166,9 +236,11 @@ export const LandingPage: React.FC = (): JSX.Element => {
                     <div className={classes.stores}>
                         <AppleStoreIcon style={{ cursor: 'pointer' }} />
                         <GoogleStoreIcon style={{ cursor: 'pointer' }} />
+                        {!xs && <RegisterButton />}
                     </div>
                 </div>
             </Banner>
+            {xs && <RegisterFab />}
             <div />
             <Section>
                 <SectionBlurb
@@ -305,6 +377,13 @@ export const LandingPage: React.FC = (): JSX.Element => {
                             </React.Fragment>
                         ))}
                     </div>
+                </Section>
+            )}
+
+            {!token && !xs && (
+                <Section style={{ display: 'block', textAlign: 'center' }}>
+                    <Headline>{`Let's Get Started!`}</Headline>
+                    <RegisterButton style={{ marginTop: theme.spacing(6), border: 'none' }} />
                 </Section>
             )}
         </>
