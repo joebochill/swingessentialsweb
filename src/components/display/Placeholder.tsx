@@ -112,12 +112,12 @@ export const PlaceHolderVideo: React.FC<PlaceholderVideoProps> = (props) => {
                         onChange={(evt: ChangeEvent<HTMLInputElement>): void => {
                             if (evt && evt.target && evt.target.files && evt.target.files.length > 0) {
                                 const size = evt.target.files[0].size;
-                                const tooBig = size > 10 * 1024 * 1024;
+                                const tooBig = size > 50 * 1024 * 1024;
                                 if (tooBig) {
                                     setError(
                                         `The video you have selected is too large (${(size / (1024 * 1024)).toFixed(
                                             1
-                                        )} MB). The maximum allowable file size is 10MB.`
+                                        )} MB). The maximum allowable file size is 50MB.`
                                     );
                                     setShowError(true);
                                 }
