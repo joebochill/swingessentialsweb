@@ -1,7 +1,7 @@
 {
     "name": "swingessentialsweb",
     "homepage": "https://www.swingessentials.com",
-    "version": "3.0.3",
+    "version": "3.0.4",
     "private": true,
     "dependencies": {
         "@date-io/date-fns": "1.x",
