@@ -22,10 +22,11 @@ import {
     CardHeader,
     Theme,
 } from '@material-ui/core';
-import { AddCircle, Security, Edit, Assessment } from '@material-ui/icons';
+import { AddCircle, Security, Edit, Assessment, Send } from '@material-ui/icons';
 
 import * as Colors from '@pxblue/colors';
 import bg from '../assets/images/banners/pros2.jpg';
+import { NewEmailBlastDialog } from '../components/dialogs/NewEmailBlastDialog';
 
 const BlankPackage: Package = {
     id: -1,
@@ -91,6 +92,7 @@ export const AdminPage: React.FC = (): JSX.Element => {
     const [activeDiscount, setActiveDiscount] = useState<Discount | null>(null);
     const [showPackageDialog, setShowPackageDialog] = useState<DialogOpen>({ open: false, isNew: true });
     const [showDiscountDialog, setShowDiscountDialog] = useState<DialogOpen>({ open: false, isNew: true });
+    const [showEmailBlastDialog, setShowEmailBlastDialog] = useState<boolean>(false);
 
     return (
         <>
@@ -117,6 +119,14 @@ export const AdminPage: React.FC = (): JSX.Element => {
                     <AddCircle style={{ marginRight: theme.spacing(0.5) }} />
                     New Discount
                 </Button>
+                <Button
+                    variant={'text'}
+                    style={{ marginLeft: theme.spacing(2) }}
+                    onClick={(): void => setShowEmailBlastDialog(true)}
+                >
+                    <Send style={{ marginRight: theme.spacing(0.5) }} />
+                    New Email Blast
+                </Button>
             </ActionToolbar>
 
             <EditPackageDialog
@@ -134,6 +144,13 @@ export const AdminPage: React.FC = (): JSX.Element => {
                 open={showDiscountDialog.open}
                 onClose={(): void => {
                     setShowDiscountDialog({ open: false, isNew: showDiscountDialog.isNew });
+                }}
+            />
+
+            <NewEmailBlastDialog
+                open={showEmailBlastDialog}
+                onClose={(): void => {
+                    setShowEmailBlastDialog(false);
                 }}
             />
 
