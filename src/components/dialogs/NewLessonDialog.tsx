@@ -167,6 +167,7 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                             })
                         );
                         onClose(e, 'escapeKeyDown');
+                        resetLesson();
                     }}
                 >
                     Create
