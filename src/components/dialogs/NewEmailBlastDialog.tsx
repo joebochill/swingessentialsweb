@@ -110,10 +110,10 @@ export const NewEmailBlastDialog: React.FC<NewEmailBlastDialogProps> = (props) =
                 />
             </DialogContent>
             <DialogActions>
-            <Button
+                <Button
                     color="primary"
                     variant={'outlined'}
-                    disabled={!subject || !headline || !body }
+                    disabled={!subject || !headline || !body}
                     onClick={(e): void => {
                         // dispatch(
                         //     putLessonResponse({
@@ -131,7 +131,7 @@ export const NewEmailBlastDialog: React.FC<NewEmailBlastDialogProps> = (props) =
                 >
                     Test
                 </Button>
-                <Spacer/>
+                <Spacer />
                 <Button
                     color="primary"
                     variant={'outlined'}
@@ -145,7 +145,7 @@ export const NewEmailBlastDialog: React.FC<NewEmailBlastDialogProps> = (props) =
                 <Button
                     color="primary"
                     variant={'contained'}
-                    disabled={!subject || !headline || !body }
+                    disabled={!subject || !headline || !body}
                     onClick={(e): void => {
                         // dispatch(
                         //     putLessonResponse({
