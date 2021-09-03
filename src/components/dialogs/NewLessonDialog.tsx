@@ -73,7 +73,10 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
 
     useEffect((): void => {
         // Check if the video code is valid/reachable
-        if (video.length !== 11) return;
+        if (video && video.length !== 11) {
+            setVideoValid(false);
+            return;
+        }
         fetch(`https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=${video}`, {
             method: 'GET',
         })
@@ -146,7 +149,7 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                     label={'Response Video ID'}
                     placeholder={'Youtube ID'}
                     name={'video'}
-                    error={!videoValid || (video.length !== 11 && video.length > 0)}
+                    error={!videoValid || (!!video && video.length !== 11 && video.length > 0)}
                     helperText={
                         video && video.length !== 11
                             ? 'Video id must be 11 characters'
@@ -198,7 +201,7 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                 <Button
                     color="primary"
                     variant={'contained'}
-                    disabled={!user || !date || !video || !comments || !DATE_REGEX.test(date)}
+                    disabled={!user || !date || !video || !videoValid || !comments || !DATE_REGEX.test(date)}
                     onClick={(e): void => {
                         dispatch(
                             putLessonResponse({
