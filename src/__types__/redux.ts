@@ -32,6 +32,7 @@ export type APIStatusState = {
     getCredits: BasicAPIStatus;
     getDiscounts: BasicAPIStatus;
     getUserData: BasicAPIStatus;
+    getUserProfile: BasicAPIStatus;
     getUserSettings: BasicAPIStatus;
     loadLessons: BasicAPIStatus;
     loadUsers: BasicAPIStatus;
@@ -125,5 +126,6 @@ export type AppState = {
     testimonials: TestimonialsState;
     tips: TipsState;
     user: UserDataState;
+    userProfile: UserDataState;
     users: UsersState;
 };

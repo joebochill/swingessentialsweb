@@ -21,6 +21,7 @@ import {
     PURCHASE_CREDITS,
     SUBMIT_LESSON,
     GET_DISCOUNTS,
+    GET_USER_PROFILE,
 } from '../../actions/types';
 
 import { simpleReducer } from './simpleReducer';
@@ -40,6 +41,7 @@ export const APIReducer = combineReducers<APIStatusState>({
     getCredits: simpleReducer(GET_CREDITS),
     getDiscounts: simpleReducer(GET_DISCOUNTS),
     getUserData: simpleReducer(GET_USER_DATA),
+    getUserProfile: simpleReducer(GET_USER_PROFILE),
     getUserSettings: simpleReducer(GET_SETTINGS),
     loadLessons: simpleReducer(GET_LESSONS),
     loadUsers: simpleReducer(GET_USERS),
