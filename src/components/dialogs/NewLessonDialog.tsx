@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../../__types__';
 import { putLessonResponse } from '../../redux/actions/lessons-actions';
@@ -25,7 +25,10 @@ import {
     Theme,
     createStyles,
     useTheme,
+    InputAdornment,
 } from '@material-ui/core';
+import { CheckCircle } from '@material-ui/icons';
+import * as Colors from '@pxblue/colors';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -57,14 +60,39 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
     const [user, setUser] = useState('');
     const [date, setDate] = useState('');
     const [video, setVideo] = useState('');
+    const [videoValid, setVideoValid] = useState(false);
     const [comments, setComments] = useState('');
 
     const resetLesson = useCallback(() => {
         setUser('');
         setDate(getDate(Date.now()));
         setVideo('');
+        setVideoValid(false);
         setComments('');
     }, []);
+
+    useEffect((): void => {
+        // Check if the video code is valid/reachable
+        if (video.length !== 11) return;
+        fetch(`https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=${video}`, {
+            method: 'GET',
+        })
+            .then((response: Response) => {
+                switch (response.status) {
+                    case 404:
+                    case 400: {
+                        setVideoValid(false);
+                        break;
+                    }
+                    default:
+                        setVideoValid(true);
+                        break;
+                }
+            })
+            .catch((error: Error) => {
+                console.error('Unable to determine video validity', error);
+            });
+    }, [video]);
 
     return (
         <Dialog
@@ -118,11 +146,27 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                     label={'Response Video ID'}
                     placeholder={'Youtube ID'}
                     name={'video'}
+                    error={!videoValid || (video.length !== 11 && video.length > 0)}
+                    helperText={
+                        video && video.length !== 11
+                            ? 'Video id must be 11 characters'
+                            : video && !videoValid
+                            ? 'Video id is invalid or private'
+                            : undefined
+                    }
                     value={video}
+                    inputProps={{ maxLength: 11 }}
                     onChange={(e): void => {
                         setVideo(e.target.value);
                     }}
                     className={classes.field}
+                    InputProps={{
+                        endAdornment: videoValid ? (
+                            <InputAdornment position="end">
+                                <CheckCircle style={{ color: Colors.green[500] }} />
+                            </InputAdornment>
+                        ) : undefined,
+                    }}
                 />
                 <TextField
                     fullWidth

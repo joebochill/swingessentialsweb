@@ -20,7 +20,10 @@ import {
     makeStyles,
     Theme,
     createStyles,
+    InputAdornment,
 } from '@material-ui/core';
+import { CheckCircle } from '@material-ui/icons';
+import * as Colors from '@pxblue/colors';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -47,6 +50,7 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
     const classes = useStyles();
 
     const [video, setVideo] = useState(lesson.response_video);
+    const [videoValid, setVideoValid] = useState(false);
     const [comments, setComments] = useState(convertDatabaseTextToMultiline(lesson.response_notes));
     const [status, setStatus] = useState(lesson.response_status);
 
@@ -59,6 +63,29 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
     useEffect(() => {
         resetLesson();
     }, [lesson, resetLesson]);
+
+    useEffect((): void => {
+        // Check if the video code is valid/reachable
+        if (video.length !== 11) return;
+        fetch(`https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=${video}`, {
+            method: 'GET',
+        })
+            .then((response: Response) => {
+                switch (response.status) {
+                    case 404:
+                    case 400: {
+                        setVideoValid(false);
+                        break;
+                    }
+                    default:
+                        setVideoValid(true);
+                        break;
+                }
+            })
+            .catch((error: Error) => {
+                console.error('Unable to determine video validity', error);
+            });
+    }, [video]);
 
     if (!lesson) return null;
     return (
@@ -81,6 +108,22 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
                     placeholder={'Youtube ID'}
                     name={'video'}
                     value={video}
+                    error={!videoValid || (video.length !== 11 && video.length > 0)}
+                    helperText={
+                        video && video.length !== 11
+                            ? 'Video id must be 11 characters'
+                            : video && !videoValid
+                            ? 'Video id is invalid or private'
+                            : undefined
+                    }
+                    inputProps={{ maxLength: 11 }}
+                    InputProps={{
+                        endAdornment: videoValid ? (
+                            <InputAdornment position="end">
+                                <CheckCircle style={{ color: Colors.green[500] }} />
+                            </InputAdornment>
+                        ) : undefined,
+                    }}
                     onChange={(e): void => {
                         setVideo(e.target.value);
                     }}
