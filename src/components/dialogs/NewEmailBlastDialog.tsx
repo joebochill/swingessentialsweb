@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import React, { useState, useCallback } from 'react';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { AppState } from '../../__types__';
-// import { convertMultilineToDatabaseText } from '../../utilities/text';
-// import { sortUsers } from '../../utilities/user';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState } from '../../__types__';
+import { sendBulkEmail } from '../../redux/actions/emailActions';
+import { convertMultilineToDatabaseText } from '../../utilities/text';
+
 import {
     DialogProps,
     Dialog,
@@ -39,12 +40,12 @@ export const NewEmailBlastDialog: React.FC<NewEmailBlastDialogProps> = (props) =
         },
     } = dialogProps;
 
-    // const theme = useTheme();
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
     const classes = useStyles();
 
     // const users = useSelector((state: AppState) => state.users.list);
     // const usersByName = [...users].sort(sortUsers('last'));
+    const currentUser = useSelector((state: AppState) => state.user);
 
     // Form fields
     const [subject, setSubject] = useState('');
@@ -58,13 +59,7 @@ export const NewEmailBlastDialog: React.FC<NewEmailBlastDialogProps> = (props) =
     }, []);
 
     return (
-        <Dialog
-            {...dialogProps}
-            onBackdropClick={(e): void => {
-                if (dialogProps.onBackdropClick) dialogProps.onBackdropClick(e);
-                resetEmail();
-            }}
-        >
+        <Dialog {...dialogProps}>
             <DialogTitle>New Email Blast</DialogTitle>
             <DialogContent>
                 <DialogContentText>{`Enter the marketing email details below:`}</DialogContentText>
@@ -115,21 +110,24 @@ export const NewEmailBlastDialog: React.FC<NewEmailBlastDialogProps> = (props) =
                     variant={'outlined'}
                     disabled={!subject || !headline || !body}
                     onClick={(e): void => {
-                        // dispatch(
-                        //     putLessonResponse({
-                        //         lesson_id: -1,
-                        //         username: user,
-                        //         date: date,
-                        //         response_video: video,
-                        //         response_notes: convertMultilineToDatabaseText(comments),
-                        //         response_status: 'good',
-                        //     })
-                        // );
+                        dispatch(
+                            sendBulkEmail({
+                                subject,
+                                title: headline,
+                                body: convertMultilineToDatabaseText(body),
+                                bcc: [
+                                    {
+                                        first: currentUser.firstName,
+                                        last: currentUser.lastName,
+                                        email: currentUser.email,
+                                    },
+                                ],
+                            })
+                        );
                         onClose(e, 'escapeKeyDown');
-                        resetEmail();
                     }}
                 >
-                    Test
+                    {`Send Test (${currentUser.email})`}
                 </Button>
                 <Spacer />
                 <Button
@@ -147,16 +145,13 @@ export const NewEmailBlastDialog: React.FC<NewEmailBlastDialogProps> = (props) =
                     variant={'contained'}
                     disabled={!subject || !headline || !body}
                     onClick={(e): void => {
-                        // dispatch(
-                        //     putLessonResponse({
-                        //         lesson_id: -1,
-                        //         username: user,
-                        //         date: date,
-                        //         response_video: video,
-                        //         response_notes: convertMultilineToDatabaseText(comments),
-                        //         response_status: 'good',
-                        //     })
-                        // );
+                        dispatch(
+                            sendBulkEmail({
+                                subject,
+                                title: headline,
+                                body: convertMultilineToDatabaseText(body),
+                            })
+                        );
                         onClose(e, 'escapeKeyDown');
                         resetEmail();
                     }}

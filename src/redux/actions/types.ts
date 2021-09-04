@@ -82,3 +82,6 @@ export const VERIFY_RESET_PASSWORD_CODE = createAction('VERIFY_RESET_PASSWORD_CO
 
 /* Testimonial Actions */
 export const GET_TESTIMONIALS = createAction('GET_TESTIMONIALS', 'testimonials');
+
+/* Email Actions */
+export const SEND_BULK_EMAIL = createAction('SEND_BULK_EMAIL', 'bulkEmail');
