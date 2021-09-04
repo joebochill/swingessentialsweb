@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useGoogleAnalyticsPageView } from '../hooks';
 import { AppState, Package, Discount } from '../__types__';
 
@@ -27,6 +27,7 @@ import { AddCircle, Security, Edit, Assessment, Send } from '@material-ui/icons'
 import * as Colors from '@pxblue/colors';
 import bg from '../assets/images/banners/pros2.jpg';
 import { NewEmailBlastDialog } from '../components/dialogs/NewEmailBlastDialog';
+import { getUsers } from '../redux/actions/user-data-actions';
 
 const BlankPackage: Package = {
     id: -1,
@@ -81,6 +82,7 @@ export const AdminPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const theme = useTheme();
     useGoogleAnalyticsPageView();
+    const dispatch = useDispatch();
 
     const packages = useSelector((state: AppState) => state.packages.list);
     const packagesStatus = useSelector((state: AppState) => state.api.packages.status);
@@ -93,6 +95,10 @@ export const AdminPage: React.FC = (): JSX.Element => {
     const [showPackageDialog, setShowPackageDialog] = useState<DialogOpen>({ open: false, isNew: true });
     const [showDiscountDialog, setShowDiscountDialog] = useState<DialogOpen>({ open: false, isNew: true });
     const [showEmailBlastDialog, setShowEmailBlastDialog] = useState<boolean>(false);
+
+    useEffect(() => {
+        dispatch(getUsers());
+    }, []);
 
     return (
         <>

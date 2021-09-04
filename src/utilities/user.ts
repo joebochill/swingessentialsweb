@@ -8,6 +8,12 @@ export const getUserRole = (token: string): UserRole => {
 };
 
 export const sortUsers =
-    (prop: keyof User) =>
+    (prop: keyof User, secondary: keyof User = 'username') =>
     (userA: User, userB: User): number =>
-        userA[prop].toLowerCase() < userB[prop].toLowerCase() ? -1 : 1;
+        userA[prop].toLowerCase() < userB[prop].toLowerCase()
+            ? -1
+            : userA[prop].toLowerCase() > userB[prop].toLowerCase()
+            ? 1
+            : userA[secondary].toLowerCase() < userB[secondary].toLowerCase()
+            ? -1
+            : 1;

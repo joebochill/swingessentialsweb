@@ -2,12 +2,15 @@ import { ThunkDispatch } from 'redux-thunk';
 import * as ACTIONS from './types';
 import { HttpRequest } from '../../api/http';
 import { success, failure } from '../../api/http-helper';
+import { Audience, EmailType } from '../../__types__';
 
 export function sendBulkEmail(email: {
     subject: string;
     title: string;
     body: string;
-    bcc?: Array<{ first: string; last: string; email: string }>;
+    type: EmailType;
+    audience: Audience;
+    bcc?: string[];
 }) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.SEND_BULK_EMAIL.REQUEST });

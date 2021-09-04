@@ -8,6 +8,9 @@ export type Credentials = {
     username: string;
     password: string;
 };
+export type EmailType = 'marketing' | 'newsletter' | 'reminder';
+export type Audience = 'all' | 'unconfirmed' | 'incomplete' | 'manual';
+
 export type LessonPackage = {
     name: string;
     description: string;
