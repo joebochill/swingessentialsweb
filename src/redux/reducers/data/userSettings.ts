@@ -1,6 +1,12 @@
-import { UserSettingsState } from '../../../__types__';
+import { NotificationSettings, UserSettingsState } from '../../../__types__';
 import { GET_SETTINGS, LOGOUT, TOKEN_TIMEOUT, CREATE_ACCOUNT } from '../../actions/types';
 
+const initialNotifications: NotificationSettings = {
+    lessons: true,
+    marketing: true,
+    newsletter: true,
+    reminders: true,
+};
 const initialState: UserSettingsState = {
     notifications: undefined,
     avatar: '',
@@ -10,14 +16,14 @@ export const UserSettingsReducer = (state = initialState, action: any): UserSett
         case GET_SETTINGS.SUCCESS: {
             return {
                 ...state,
-                notifications: action.payload.subbed,
+                notifications: action.payload.notifications,
                 avatar: action.payload.avatar,
             };
         }
         case CREATE_ACCOUNT.SUCCESS:
             return {
                 ...state,
-                notifications: true,
+                notifications: initialNotifications,
             };
         case LOGOUT.SUCCESS:
         case LOGOUT.FAILURE:

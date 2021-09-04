@@ -77,8 +77,14 @@ export type UserDataState = {
     // phone?: string;
     average?: ScoreRange | '';
 };
+export type NotificationSettings = {
+    lessons: boolean;
+    marketing: boolean;
+    newsletter: boolean;
+    reminders: boolean;
+};
 export type UserSettingsState = {
-    notifications?: boolean;
+    notifications?: NotificationSettings;
     avatar: string;
 };
 export type UsersState = {

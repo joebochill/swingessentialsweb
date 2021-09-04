@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { ThunkDispatch } from 'redux-thunk';
 
 import * as ACTIONS from './types';
@@ -20,7 +21,12 @@ export function getUserSettings() {
     };
 }
 
-export function setUserNotifications(data: { subscribe: boolean }) {
+export function setUserNotifications(data: {
+    notify_new_lessons: boolean;
+    notify_marketing: boolean;
+    notify_newsletter: boolean;
+    notify_reminders: boolean;
+}) {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
         dispatch({ type: ACTIONS.SET_USER_NOTIFICATIONS.REQUEST });
 
