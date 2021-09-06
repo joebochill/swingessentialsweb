@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { Lesson } from '../../__types__';
+import { Lesson, YoutubeVideoStatus } from '../../__types__';
 import { putLessonResponse } from '../../redux/actions/lessons-actions';
 import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
 import {
@@ -24,6 +24,8 @@ import {
 } from '@material-ui/core';
 import { CheckCircle } from '@material-ui/icons';
 import * as Colors from '@pxblue/colors';
+import { useVideoValid } from '../../hooks';
+import { getYoutubeVideoErrorMessage } from '../../utilities/video';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,7 +52,11 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
     const classes = useStyles();
 
     const [video, setVideo] = useState(lesson.response_video);
-    const [videoValid, setVideoValid] = useState(false);
+    const [videoStatus, setVideoStatus] = useState<YoutubeVideoStatus>('invalid');
+    const videoValid = videoStatus === 'valid';
+    // const [videoValid, setVideoValid] = useState(false);
+    useVideoValid(video, setVideoStatus);
+
     const [comments, setComments] = useState(convertDatabaseTextToMultiline(lesson.response_notes));
     const [status, setStatus] = useState(lesson.response_status);
 
@@ -63,32 +69,6 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
     useEffect(() => {
         resetLesson();
     }, [lesson, resetLesson]);
-
-    useEffect((): void => {
-        // Check if the video code is valid/reachable
-        if (video && video.length !== 11) {
-            setVideoValid(false);
-            return;
-        }
-        fetch(`https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=${video}`, {
-            method: 'GET',
-        })
-            .then((response: Response) => {
-                switch (response.status) {
-                    case 404:
-                    case 400: {
-                        setVideoValid(false);
-                        break;
-                    }
-                    default:
-                        setVideoValid(true);
-                        break;
-                }
-            })
-            .catch((error: Error) => {
-                console.error('Unable to determine video validity', error);
-            });
-    }, [video]);
 
     if (!lesson) return null;
     return (
@@ -110,15 +90,9 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
                     label={'Response Video ID'}
                     placeholder={'Youtube ID'}
                     name={'video'}
-                    value={video}
+                    value={video || ''}
                     error={!videoValid || (!!video && video.length !== 11 && video.length > 0)}
-                    helperText={
-                        video && video.length !== 11
-                            ? 'Video id must be 11 characters'
-                            : video && !videoValid
-                            ? 'Video id is invalid or private'
-                            : undefined
-                    }
+                    helperText={getYoutubeVideoErrorMessage(video, videoStatus)}
                     inputProps={{ maxLength: 11 }}
                     InputProps={{
                         endAdornment: videoValid ? (
@@ -151,7 +125,7 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
                     <InputLabel id="status-label">{`Response Status`}</InputLabel>
                     <Select
                         labelId="status-label"
-                        value={status}
+                        value={status || 'good'}
                         onChange={(e): void => setStatus(e.target.value as 'good' | 'bad')}
                     >
                         <MenuItem value="good">Accepted</MenuItem>

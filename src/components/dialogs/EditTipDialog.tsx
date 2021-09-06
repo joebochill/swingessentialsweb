@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { Tip } from '../../__types__';
+import { Tip, YoutubeVideoStatus } from '../../__types__';
 import { updateTip, addTip, removeTip } from '../../redux/actions/tip-actions';
 import { DATE_REGEX } from '../../constants';
 import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
@@ -19,7 +19,12 @@ import {
     makeStyles,
     Theme,
     createStyles,
+    InputAdornment,
 } from '@material-ui/core';
+import { useVideoValid } from '../../hooks';
+import { CheckCircle } from '@material-ui/icons';
+import * as Colors from '@pxblue/colors';
+import { getYoutubeVideoErrorMessage } from '../../utilities/video';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -49,6 +54,10 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
     const [date, setDate] = useState(tip.date);
     const [title, setTitle] = useState(tip.title);
     const [video, setVideo] = useState(tip.video);
+    const [videoStatus, setVideoStatus] = useState<YoutubeVideoStatus>('invalid');
+    const videoValid = videoStatus === 'valid';
+    // const [videoValid, setVideoValid] = useState(false);
+    useVideoValid(video, setVideoStatus);
     const [comments, setComments] = useState(convertDatabaseTextToMultiline(tip.comments));
 
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
@@ -106,9 +115,19 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                         fullWidth
                         variant={'filled'}
                         label={'Video ID'}
-                        placeholder={'Youtube ID'}
                         name={'video'}
                         value={video}
+                        placeholder={'Youtube ID'}
+                        error={!videoValid || (!!video && video.length !== 11 && video.length > 0)}
+                        helperText={getYoutubeVideoErrorMessage(video, videoStatus)}
+                        inputProps={{ maxLength: 11 }}
+                        InputProps={{
+                            endAdornment: videoValid ? (
+                                <InputAdornment position="end">
+                                    <CheckCircle style={{ color: Colors.green[500] }} />
+                                </InputAdornment>
+                            ) : undefined,
+                        }}
                         onChange={(e): void => {
                             setVideo(e.target.value);
                         }}

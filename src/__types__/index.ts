@@ -10,7 +10,7 @@ export type Credentials = {
 };
 export type EmailType = 'marketing' | 'newsletter' | 'reminder';
 export type Audience = 'all' | 'unconfirmed' | 'incomplete' | 'manual';
-
+export type YoutubeVideoStatus = 'malformed' | 'invalid' | 'private' | 'valid';
 export type LessonPackage = {
     name: string;
     description: string;

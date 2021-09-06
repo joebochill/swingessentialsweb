@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from '../../__types__';
+import { AppState, YoutubeVideoStatus } from '../../__types__';
 import { putLessonResponse } from '../../redux/actions/lessons-actions';
 import { DATE_REGEX } from '../../constants';
 import { convertMultilineToDatabaseText } from '../../utilities/text';
@@ -29,6 +29,8 @@ import {
 } from '@material-ui/core';
 import { CheckCircle } from '@material-ui/icons';
 import * as Colors from '@pxblue/colors';
+import { useVideoValid } from '../../hooks';
+import { getYoutubeVideoErrorMessage } from '../../utilities/video';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -60,42 +62,19 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
     const [user, setUser] = useState('');
     const [date, setDate] = useState('');
     const [video, setVideo] = useState('');
-    const [videoValid, setVideoValid] = useState(false);
+    const [videoStatus, setVideoStatus] = useState<YoutubeVideoStatus>('invalid');
+    const videoValid = videoStatus === 'valid';
+    // const [videoValid, setVideoValid] = useState(false);
+    useVideoValid(video, setVideoStatus);
     const [comments, setComments] = useState('');
 
     const resetLesson = useCallback(() => {
         setUser('');
         setDate(getDate(Date.now()));
         setVideo('');
-        setVideoValid(false);
+        setVideoStatus('invalid');
         setComments('');
     }, []);
-
-    useEffect((): void => {
-        // Check if the video code is valid/reachable
-        if (video && video.length !== 11) {
-            setVideoValid(false);
-            return;
-        }
-        fetch(`https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=${video}`, {
-            method: 'GET',
-        })
-            .then((response: Response) => {
-                switch (response.status) {
-                    case 404:
-                    case 400: {
-                        setVideoValid(false);
-                        break;
-                    }
-                    default:
-                        setVideoValid(true);
-                        break;
-                }
-            })
-            .catch((error: Error) => {
-                console.error('Unable to determine video validity', error);
-            });
-    }, [video]);
 
     return (
         <Dialog
@@ -150,13 +129,7 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                     placeholder={'Youtube ID'}
                     name={'video'}
                     error={!videoValid || (!!video && video.length !== 11 && video.length > 0)}
-                    helperText={
-                        video && video.length !== 11
-                            ? 'Video id must be 11 characters'
-                            : video && !videoValid
-                            ? 'Video id is invalid or private'
-                            : undefined
-                    }
+                    helperText={getYoutubeVideoErrorMessage(video, videoStatus)}
                     value={video}
                     inputProps={{ maxLength: 11 }}
                     onChange={(e): void => {
