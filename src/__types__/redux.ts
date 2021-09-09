@@ -32,6 +32,7 @@ export type APIStatusState = {
     getCredits: BasicAPIStatus;
     getDiscounts: BasicAPIStatus;
     getUserData: BasicAPIStatus;
+    getUserProfile: BasicAPIStatus;
     getUserSettings: BasicAPIStatus;
     loadLessons: BasicAPIStatus;
     loadUsers: BasicAPIStatus;
@@ -76,8 +77,14 @@ export type UserDataState = {
     // phone?: string;
     average?: ScoreRange | '';
 };
+export type NotificationSettings = {
+    lessons: boolean;
+    marketing: boolean;
+    newsletter: boolean;
+    reminders: boolean;
+};
 export type UserSettingsState = {
-    notifications?: boolean;
+    notifications?: NotificationSettings;
     avatar: string;
 };
 export type UsersState = {
@@ -125,5 +132,6 @@ export type AppState = {
     testimonials: TestimonialsState;
     tips: TipsState;
     user: UserDataState;
+    userProfile: UserDataState;
     users: UsersState;
 };

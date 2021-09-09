@@ -112,25 +112,23 @@ export class HttpRequest<TResponses extends GeneralResponseMapping = {}> {
             if (xhr.upload && onProgress) xhr.upload.onprogress = onProgress;
             xhr.send(this.body);
         })
-            .then(
-                async (response: XMLHttpRequest): Promise<any> => {
-                    switch (response.status) {
-                        case 200: {
-                            let reply = {};
-                            if (this.method === HttpMethod.PUT) {
-                                reply = response;
-                            } else if (this.method === HttpMethod.GET) {
-                                reply = await JSON.parse(response.response);
-                            }
-                            if (this.successCallback) this.successCallback(reply);
-                            break;
+            .then(async (response: XMLHttpRequest): Promise<any> => {
+                switch (response.status) {
+                    case 200: {
+                        let reply = {};
+                        if (this.method === HttpMethod.PUT) {
+                            reply = response;
+                        } else if (this.method === HttpMethod.GET) {
+                            reply = await JSON.parse(response.response);
                         }
-                        default:
-                            if (this.failureCallback) this.failureCallback(response);
-                            break;
+                        if (this.successCallback) this.successCallback(reply);
+                        break;
                     }
+                    default:
+                        if (this.failureCallback) this.failureCallback(response);
+                        break;
                 }
-            )
+            })
             .catch((error: Error) => {
                 // TODO: Log an error
                 console.error('Encountered an error', error.message);

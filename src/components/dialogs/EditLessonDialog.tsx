@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { Lesson } from '../../__types__';
+import { Lesson, YoutubeVideoStatus } from '../../__types__';
 import { putLessonResponse } from '../../redux/actions/lessons-actions';
 import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
 import {
@@ -20,7 +20,12 @@ import {
     makeStyles,
     Theme,
     createStyles,
+    InputAdornment,
 } from '@material-ui/core';
+import { CheckCircle } from '@material-ui/icons';
+import * as Colors from '@pxblue/colors';
+import { useVideoValid } from '../../hooks';
+import { getYoutubeVideoErrorMessage } from '../../utilities/video';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -47,6 +52,11 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
     const classes = useStyles();
 
     const [video, setVideo] = useState(lesson.response_video);
+    const [videoStatus, setVideoStatus] = useState<YoutubeVideoStatus>('invalid');
+    const videoValid = videoStatus === 'valid';
+    // const [videoValid, setVideoValid] = useState(false);
+    useVideoValid(video, setVideoStatus);
+
     const [comments, setComments] = useState(convertDatabaseTextToMultiline(lesson.response_notes));
     const [status, setStatus] = useState(lesson.response_status);
 
@@ -80,7 +90,17 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
                     label={'Response Video ID'}
                     placeholder={'Youtube ID'}
                     name={'video'}
-                    value={video}
+                    value={video || ''}
+                    error={!videoValid || (!!video && video.length !== 11 && video.length > 0)}
+                    helperText={getYoutubeVideoErrorMessage(video, videoStatus)}
+                    inputProps={{ maxLength: 11 }}
+                    InputProps={{
+                        endAdornment: videoValid ? (
+                            <InputAdornment position="end">
+                                <CheckCircle style={{ color: Colors.green[500] }} />
+                            </InputAdornment>
+                        ) : undefined,
+                    }}
                     onChange={(e): void => {
                         setVideo(e.target.value);
                     }}
@@ -105,7 +125,7 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
                     <InputLabel id="status-label">{`Response Status`}</InputLabel>
                     <Select
                         labelId="status-label"
-                        value={status}
+                        value={status || 'good'}
                         onChange={(e): void => setStatus(e.target.value as 'good' | 'bad')}
                     >
                         <MenuItem value="good">Accepted</MenuItem>
@@ -127,7 +147,7 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
                 <Button
                     color="primary"
                     variant={'contained'}
-                    disabled={!video || !comments || !status}
+                    disabled={!video || !comments || !status || !videoValid}
                     onClick={(e): void => {
                         dispatch(
                             putLessonResponse({

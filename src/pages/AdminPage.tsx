@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useGoogleAnalyticsPageView } from '../hooks';
 import { AppState, Package, Discount } from '../__types__';
 
@@ -22,10 +22,12 @@ import {
     CardHeader,
     Theme,
 } from '@material-ui/core';
-import { AddCircle, Security, Edit, Assessment } from '@material-ui/icons';
+import { AddCircle, Security, Edit, Assessment, Send } from '@material-ui/icons';
 
 import * as Colors from '@pxblue/colors';
 import bg from '../assets/images/banners/pros2.jpg';
+import { NewEmailBlastDialog } from '../components/dialogs/NewEmailBlastDialog';
+import { getUsers } from '../redux/actions/user-data-actions';
 
 const BlankPackage: Package = {
     id: -1,
@@ -80,6 +82,7 @@ export const AdminPage: React.FC = (): JSX.Element => {
     const classes = useStyles();
     const theme = useTheme();
     useGoogleAnalyticsPageView();
+    const dispatch = useDispatch();
 
     const packages = useSelector((state: AppState) => state.packages.list);
     const packagesStatus = useSelector((state: AppState) => state.api.packages.status);
@@ -91,6 +94,11 @@ export const AdminPage: React.FC = (): JSX.Element => {
     const [activeDiscount, setActiveDiscount] = useState<Discount | null>(null);
     const [showPackageDialog, setShowPackageDialog] = useState<DialogOpen>({ open: false, isNew: true });
     const [showDiscountDialog, setShowDiscountDialog] = useState<DialogOpen>({ open: false, isNew: true });
+    const [showEmailBlastDialog, setShowEmailBlastDialog] = useState<boolean>(false);
+
+    useEffect(() => {
+        dispatch(getUsers());
+    }, []);
 
     return (
         <>
@@ -117,6 +125,14 @@ export const AdminPage: React.FC = (): JSX.Element => {
                     <AddCircle style={{ marginRight: theme.spacing(0.5) }} />
                     New Discount
                 </Button>
+                <Button
+                    variant={'text'}
+                    style={{ marginLeft: theme.spacing(2) }}
+                    onClick={(): void => setShowEmailBlastDialog(true)}
+                >
+                    <Send style={{ marginRight: theme.spacing(0.5) }} />
+                    New Email Blast
+                </Button>
             </ActionToolbar>
 
             <EditPackageDialog
@@ -134,6 +150,13 @@ export const AdminPage: React.FC = (): JSX.Element => {
                 open={showDiscountDialog.open}
                 onClose={(): void => {
                     setShowDiscountDialog({ open: false, isNew: showDiscountDialog.isNew });
+                }}
+            />
+
+            <NewEmailBlastDialog
+                open={showEmailBlastDialog}
+                onClose={(): void => {
+                    setShowEmailBlastDialog(false);
                 }}
             />
 

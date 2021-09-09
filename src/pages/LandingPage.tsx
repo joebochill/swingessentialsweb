@@ -245,7 +245,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
             <Section>
                 <SectionBlurb
                     jumbo
-                    headline={'Lessons On Your Schedule'}
+                    headline={'Lessons on your schedule'}
                     body={
                         <span>
                             Swing Essentials<sup>®</sup> provides you with affordable, individualized one-on-one lessons
@@ -328,8 +328,8 @@ export const LandingPage: React.FC = (): JSX.Element => {
                     <SectionBlurb
                         jumbo
                         icon={<GetApp fontSize={'inherit'} />}
-                        headline={'Download Our App!'}
-                        subheading={'Available in the App Store and Google Play'}
+                        headline={'Download our app!'}
+                        subheading={'Available from the App Store and Google Play'}
                         body={
                             <>
                                 <span>
@@ -357,7 +357,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
 
             {testimonials.length > 0 && (
                 <Section style={{ display: 'block', textAlign: 'center' }}>
-                    <Headline>{`Here's What Our Customers Are Saying`}</Headline>
+                    <Headline>{`Here's what our customers are saying`}</Headline>
                     <div className={classes.testimonialWrapper}>
                         {testimonials.slice(0, 3).map((testimonial, ind) => (
                             <React.Fragment key={`testimonial_${ind}`}>
@@ -382,7 +382,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
 
             {!token && !xs && (
                 <Section style={{ display: 'block', textAlign: 'center' }}>
-                    <Headline>{`Let's Get Started!`}</Headline>
+                    <Headline>{`Let's get started!`}</Headline>
                     <RegisterButton style={{ marginTop: theme.spacing(6), border: 'none' }} />
                 </Section>
             )}

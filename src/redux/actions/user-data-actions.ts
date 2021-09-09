@@ -9,7 +9,7 @@ import { UserDataState } from '../../__types__';
 
 export function loadUserInfo() {
     return (dispatch: ThunkDispatch<any, void, any>): void => {
-        dispatch({ type: ACTIONS.GET_BLOGS.REQUEST });
+        dispatch({ type: ACTIONS.GET_USER_DATA.REQUEST });
 
         void HttpRequest.get(ACTIONS.GET_USER_DATA.API)
             .onSuccess((body: any) => {
@@ -33,6 +33,22 @@ export function getUsers() {
             })
             .onFailure((response) => {
                 dispatch(failure(ACTIONS.GET_USERS.FAILURE, response as Response, 'loadUsers'));
+            })
+            .request();
+    };
+}
+
+/* Retrieves the profile details for a single user (admin only) */
+export function getUserProfile(user: string) {
+    return (dispatch: ThunkDispatch<any, void, any>): void => {
+        dispatch({ type: ACTIONS.GET_USER_PROFILE.REQUEST });
+
+        void HttpRequest.get(`${ACTIONS.GET_USER_PROFILE.API}?user=${user}`)
+            .onSuccess((body: any) => {
+                dispatch(success(ACTIONS.GET_USER_PROFILE.SUCCESS, body));
+            })
+            .onFailure((response) => {
+                dispatch(failure(ACTIONS.GET_USER_PROFILE.FAILURE, response as Response, 'userProfile'));
             })
             .request();
     };

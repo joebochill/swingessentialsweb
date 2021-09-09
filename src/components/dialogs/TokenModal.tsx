@@ -106,6 +106,7 @@ export const TokenModal: React.FC<TokenModalProps> = (props) => {
             transitionDuration={500}
             TransitionComponent={Transition}
             open={token !== null && timeRemaining <= 3 * 60 && timeRemaining > 0}
+            style={{ zIndex: 100000 }}
         >
             <DialogTitle disableTypography>
                 <Typography variant={'h6'} style={{ display: 'flex', alignItems: 'center' }}>

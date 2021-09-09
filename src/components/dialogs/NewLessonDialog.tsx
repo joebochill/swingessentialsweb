@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import React, { useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from '../../__types__';
+import { AppState, YoutubeVideoStatus } from '../../__types__';
 import { putLessonResponse } from '../../redux/actions/lessons-actions';
 import { DATE_REGEX } from '../../constants';
 import { convertMultilineToDatabaseText } from '../../utilities/text';
@@ -25,7 +25,12 @@ import {
     Theme,
     createStyles,
     useTheme,
+    InputAdornment,
 } from '@material-ui/core';
+import { CheckCircle } from '@material-ui/icons';
+import * as Colors from '@pxblue/colors';
+import { useVideoValid } from '../../hooks';
+import { getYoutubeVideoErrorMessage } from '../../utilities/video';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -57,12 +62,17 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
     const [user, setUser] = useState('');
     const [date, setDate] = useState('');
     const [video, setVideo] = useState('');
+    const [videoStatus, setVideoStatus] = useState<YoutubeVideoStatus>('invalid');
+    const videoValid = videoStatus === 'valid';
+    // const [videoValid, setVideoValid] = useState(false);
+    useVideoValid(video, setVideoStatus);
     const [comments, setComments] = useState('');
 
     const resetLesson = useCallback(() => {
         setUser('');
         setDate(getDate(Date.now()));
         setVideo('');
+        setVideoStatus('invalid');
         setComments('');
     }, []);
 
@@ -118,11 +128,21 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                     label={'Response Video ID'}
                     placeholder={'Youtube ID'}
                     name={'video'}
+                    error={!videoValid || (!!video && video.length !== 11 && video.length > 0)}
+                    helperText={getYoutubeVideoErrorMessage(video, videoStatus)}
                     value={video}
+                    inputProps={{ maxLength: 11 }}
                     onChange={(e): void => {
                         setVideo(e.target.value);
                     }}
                     className={classes.field}
+                    InputProps={{
+                        endAdornment: videoValid ? (
+                            <InputAdornment position="end">
+                                <CheckCircle style={{ color: Colors.green[500] }} />
+                            </InputAdornment>
+                        ) : undefined,
+                    }}
                 />
                 <TextField
                     fullWidth
@@ -154,7 +174,7 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                 <Button
                     color="primary"
                     variant={'contained'}
-                    disabled={!user || !date || !video || !comments || !DATE_REGEX.test(date)}
+                    disabled={!user || !date || !video || !videoValid || !comments || !DATE_REGEX.test(date)}
                     onClick={(e): void => {
                         dispatch(
                             putLessonResponse({
@@ -167,6 +187,7 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                             })
                         );
                         onClose(e, 'escapeKeyDown');
+                        resetLesson();
                     }}
                 >
                     Create

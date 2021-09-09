@@ -17,6 +17,7 @@ export const CHANGE_PASSWORD = createAction('CHANGE_PASSWORD', 'credentials');
 
 /* User Actions */
 export const GET_USER_DATA = createAction('GET_USER_DATA', 'user');
+export const GET_USER_PROFILE = createAction('GET_USER_PROFILE', 'userProfile');
 export const SET_USER_DATA = createAction('SET_USER_DATA', 'details');
 export const GET_USERS = createAction('GET_USERS', 'users');
 export const RESET_USER_PASSWORD = createAction('RESET_USER_PASSWORD', 'credentials');
@@ -81,3 +82,6 @@ export const VERIFY_RESET_PASSWORD_CODE = createAction('VERIFY_RESET_PASSWORD_CO
 
 /* Testimonial Actions */
 export const GET_TESTIMONIALS = createAction('GET_TESTIMONIALS', 'testimonials');
+
+/* Email Actions */
+export const SEND_BULK_EMAIL = createAction('SEND_BULK_EMAIL', 'bulkEmail');

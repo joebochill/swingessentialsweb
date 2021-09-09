@@ -44,8 +44,11 @@ import {
     FilterList,
     Warning,
     Update,
+    Person,
 } from '@material-ui/icons';
 import bg from '../assets/images/banners/lessons2.jpg';
+import { FlexFlipper } from '../components/display/FlexFlipper';
+import { UserDetailsDialog } from '../components/dialogs/UserDetailsDialog';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -54,6 +57,11 @@ const useStyles = makeStyles((theme: Theme) =>
             [theme.breakpoints.down('xs')]: {
                 top: theme.spacing(7),
             },
+        },
+        actions: {
+            alignSelf: 'stretch',
+            marginLeft: theme.spacing(2),
+            marginRight: theme.spacing(2),
         },
         cardContainer: {
             flex: '1 1 0px',
@@ -121,6 +129,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
     const [showFilterDialog, setShowFilterDialog] = useState(false);
     const [showEditDialog, setShowEditDialog] = useState(false);
     const [showNewDialog, setShowNewDialog] = useState(false);
+    const [showUserDialog, setShowUserDialog] = useState(false);
 
     // Filter the lessons by user
     let filteredLessons = closedLessons;
@@ -215,6 +224,11 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                         />
                     )}
                     <NewLessonDialog open={showNewDialog} onClose={(): void => setShowNewDialog(false)} />
+                    <UserDetailsDialog
+                        username={activeLesson?.username}
+                        open={showUserDialog}
+                        onClose={(): void => setShowUserDialog(false)}
+                    />
                 </>
             )}
             <Section align={isSmall ? 'stretch' : 'flex-start'}>
@@ -258,22 +272,40 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                             icon={<Update fontSize={'inherit'} />}
                                             title={'Swing Analysis In Progress'}
                                             description={`We're working on your lesson now. Check back soon!`}
-                                            classes={{ icon: classes.emptyIcon }}
+                                            classes={{ icon: classes.emptyIcon, actions: classes.actions }}
                                             actions={
                                                 admin ? (
-                                                    <Button
-                                                        variant={'contained'}
-                                                        color={'primary'}
-                                                        onClick={(): void => {
-                                                            setShowEditDialog(true);
-                                                        }}
-                                                    >
-                                                        <AddCircle
-                                                            color={'inherit'}
-                                                            style={{ marginRight: theme.spacing(0.5) }}
-                                                        />
-                                                        Add Response
-                                                    </Button>
+                                                    <FlexFlipper flipAt={'xs'}>
+                                                        <Button
+                                                            style={{ flex: '1 1 0px' }}
+                                                            variant={'outlined'}
+                                                            color={'primary'}
+                                                            onClick={(): void => {
+                                                                setShowUserDialog(true);
+                                                            }}
+                                                        >
+                                                            <Person
+                                                                color={'inherit'}
+                                                                style={{ marginRight: theme.spacing(0.5) }}
+                                                            />
+                                                            View Profile
+                                                        </Button>
+                                                        <Spacer flex={0} width={16} height={16} />
+                                                        <Button
+                                                            style={{ flex: '1 1 0px' }}
+                                                            variant={'contained'}
+                                                            color={'primary'}
+                                                            onClick={(): void => {
+                                                                setShowEditDialog(true);
+                                                            }}
+                                                        >
+                                                            <AddCircle
+                                                                color={'inherit'}
+                                                                style={{ marginRight: theme.spacing(0.5) }}
+                                                            />
+                                                            Add Response
+                                                        </Button>
+                                                    </FlexFlipper>
                                                 ) : undefined
                                             }
                                         />
@@ -332,27 +364,42 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                             </div>
                             {activeLesson.response_video && (
                                 <>
-                                    <FancyHeadline
-                                        icon={admin ? <Edit fontSize={'inherit'} /> : undefined}
-                                        headline={
-                                            admin ? activeLesson.username || '' : prettyDate(activeLesson.request_date)
-                                        }
-                                        subheading={
-                                            admin
-                                                ? prettyDate(activeLesson.request_date)
-                                                : activeLesson.type === 'in-person'
-                                                ? 'In-Person Lesson'
-                                                : 'Remote Lesson'
-                                        }
-                                        style={admin ? { cursor: 'pointer' } : {}}
-                                        onClick={
-                                            admin
-                                                ? (): void => {
-                                                      setShowEditDialog(true);
-                                                  }
-                                                : undefined
-                                        }
-                                    />
+                                    <div style={{ display: 'flex' }}>
+                                        <FancyHeadline
+                                            icon={admin ? <Edit fontSize={'inherit'} /> : undefined}
+                                            headline={
+                                                admin
+                                                    ? activeLesson.username || ''
+                                                    : prettyDate(activeLesson.request_date)
+                                            }
+                                            subheading={
+                                                admin
+                                                    ? prettyDate(activeLesson.request_date)
+                                                    : activeLesson.type === 'in-person'
+                                                    ? 'In-Person Lesson'
+                                                    : 'Remote Lesson'
+                                            }
+                                            style={admin ? { cursor: 'pointer' } : {}}
+                                            onClick={
+                                                admin
+                                                    ? (): void => {
+                                                          setShowEditDialog(true);
+                                                      }
+                                                    : undefined
+                                            }
+                                        />
+                                        <Spacer />
+                                        {admin && (
+                                            <IconButton
+                                                style={{ marginBottom: 16 }}
+                                                onClick={(): void => {
+                                                    setShowUserDialog(true);
+                                                }}
+                                            >
+                                                <Person />
+                                            </IconButton>
+                                        )}
+                                    </div>
                                     {description.map((par, pInd) => (
                                         <Typography key={`par_${pInd}`} paragraph style={{ lineHeight: 1.8 }}>
                                             {par}

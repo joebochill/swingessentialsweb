@@ -30,11 +30,12 @@ import {
     MenuItem,
     useMediaQuery,
     FormHelperText,
+    Tooltip,
 } from '@material-ui/core';
 import bg from '../assets/images/banners/landing.jpg';
 import swing from '../assets/images/banners/swing3.jpg';
 import order from '../assets/images/banners/order.jpg';
-import lessons from '../assets/images/banners/lessons2.jpg';
+import lessonsImg from '../assets/images/banners/lessons2.jpg';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { FlexFlipper } from '../components/display/FlexFlipper';
 import { format } from 'date-fns';
@@ -61,6 +62,10 @@ const useStyles = makeStyles((theme: Theme) =>
         aboutMe: {
             flex: '1 1 0px',
         },
+        tooltip: {
+            backgroundColor: '#231f61',
+            margin: 0,
+        },
     })
 );
 
@@ -73,6 +78,12 @@ export const ProfileForm: React.FC = () => {
     const auth = useSelector((state: AppState) => state.auth);
     const user = useSelector((state: AppState) => state.user);
     const settings = useSelector((state: AppState) => state.settings);
+    const { lessons, marketing, newsletter, reminders } = settings.notifications || {
+        lessons: true,
+        marketing: true,
+        newsletter: true,
+        reminders: true,
+    };
     const updateData = useSelector((state: AppState) => state.api.updateUserData.status);
     const updateSettings = useSelector((state: AppState) => state.api.updateUserSettings.status);
 
@@ -93,7 +104,11 @@ export const ProfileForm: React.FC = () => {
 
     const [goals, setGoals] = useState('');
 
-    const [sendEmails, setSendEmails] = useState(true);
+    // const [sendEmails, setSendEmails] = useState(true);
+    const [sendLessons, setSendLessons] = useState(true);
+    const [sendMarketing, setSendMarketing] = useState(true);
+    const [sendNewsletter, setSendNewsletter] = useState(true);
+    const [sendReminders, setSendReminders] = useState(true);
 
     const [initialized, setInitialized] = useState(false);
 
@@ -106,7 +121,10 @@ export const ProfileForm: React.FC = () => {
         goals !== user.goals ||
         birthdayString !== user.birthday ||
         average !== user.average ||
-        sendEmails !== settings.notifications;
+        sendLessons !== lessons ||
+        sendMarketing !== marketing ||
+        sendNewsletter !== newsletter ||
+        sendReminders !== reminders;
 
     useEffect(() => {
         if (!initialized && user.username && settings.notifications !== undefined) {
@@ -119,7 +137,10 @@ export const ProfileForm: React.FC = () => {
             setAverage(user.average || '');
             setBirthday(user.birthday ? new Date(user.birthday) : null);
             setBirthdayString(user.birthday ? format(new Date(user.birthday), 'MM/dd/yyyy') : '');
-            setSendEmails(settings.notifications !== undefined ? settings.notifications : false);
+            setSendLessons(lessons || false);
+            setSendMarketing(marketing || false);
+            setSendNewsletter(newsletter || false);
+            setSendReminders(reminders || false);
             setInitialized(true);
         }
     }, [user, settings, initialized]);
@@ -253,22 +274,87 @@ export const ProfileForm: React.FC = () => {
                 variant={'subtitle1'}
                 style={{ fontWeight: 600, marginTop: theme.spacing(2), marginBottom: theme.spacing(2) }}
             >
-                Notifications:
+                Email Notifications:
             </Typography>
-            <FormControlLabel
-                labelPlacement="start"
-                control={
-                    <Checkbox
-                        checked={sendEmails}
-                        color={'default'}
-                        style={{ color: 'white' }}
-                        onChange={(e): void => setSendEmails(e.target.checked)}
-                    />
-                }
-                label="New Lesson Emails"
-                style={{ marginLeft: 0 }}
-            />
 
+            <div>
+                <Tooltip
+                    title={'Whenever a swing analysis is posted or updated'}
+                    classes={{ tooltip: classes.tooltip }}
+                    placement={'bottom'}
+                >
+                    <FormControlLabel
+                        labelPlacement="start"
+                        control={
+                            <Checkbox
+                                checked={sendLessons}
+                                color={'default'}
+                                style={{ color: 'white' }}
+                                onChange={(e): void => setSendLessons(e.target.checked)}
+                            />
+                        }
+                        label="Lessons"
+                        style={{ margin: 8 }}
+                    />
+                </Tooltip>
+                <Tooltip
+                    title={'Messages about upcoming sales, events, etc.'}
+                    classes={{ tooltip: classes.tooltip }}
+                    placement={'bottom'}
+                >
+                    <FormControlLabel
+                        labelPlacement="start"
+                        control={
+                            <Checkbox
+                                checked={sendMarketing}
+                                color={'default'}
+                                style={{ color: 'white' }}
+                                onChange={(e): void => setSendMarketing(e.target.checked)}
+                            />
+                        }
+                        label="Marketing"
+                        style={{ margin: 8 }}
+                    />
+                </Tooltip>
+                <Tooltip
+                    title={'Periodic messages with news, tips, or other goings on'}
+                    classes={{ tooltip: classes.tooltip }}
+                    placement={'bottom'}
+                >
+                    <FormControlLabel
+                        labelPlacement="start"
+                        control={
+                            <Checkbox
+                                checked={sendNewsletter}
+                                color={'default'}
+                                style={{ color: 'white' }}
+                                onChange={(e): void => setSendNewsletter(e.target.checked)}
+                            />
+                        }
+                        label="Newsletters"
+                        style={{ margin: 8 }}
+                    />
+                </Tooltip>
+                <Tooltip
+                    title={'Friendly reminders about things you may have missed'}
+                    classes={{ tooltip: classes.tooltip }}
+                    placement={'bottom'}
+                >
+                    <FormControlLabel
+                        labelPlacement="start"
+                        control={
+                            <Checkbox
+                                checked={sendReminders}
+                                color={'default'}
+                                style={{ color: 'white' }}
+                                onChange={(e): void => setSendReminders(e.target.checked)}
+                            />
+                        }
+                        label="Reminders"
+                        style={{ margin: 8 }}
+                    />
+                </Tooltip>
+            </div>
             <div style={{ textAlign: 'center', marginTop: theme.spacing(2), minHeight: 36 }}>
                 {initialized && changes && !loading && (
                     <Button
@@ -294,8 +380,22 @@ export const ProfileForm: React.FC = () => {
                                       if (email !== user.email) {
                                           // dispatch change email request
                                       }
-                                      if (sendEmails !== settings.notifications) {
-                                          dispatch(setUserNotifications({ subscribe: sendEmails }));
+                                      if (
+                                          sendLessons !== lessons ||
+                                          sendMarketing !== marketing ||
+                                          sendNewsletter !== newsletter ||
+                                          sendReminders !== reminders
+                                      ) {
+                                          dispatch(
+                                              setUserNotifications({
+                                                  /* eslint-disable @typescript-eslint/naming-convention */
+                                                  notify_new_lessons: sendLessons,
+                                                  notify_marketing: sendMarketing,
+                                                  notify_newsletter: sendNewsletter,
+                                                  notify_reminders: sendReminders,
+                                                  /* eslint-enable @typescript-eslint/naming-convention */
+                                              })
+                                          );
                                       }
                                   }
                                 : undefined
@@ -372,7 +472,7 @@ export const ProfilePage: React.FC = () => {
                     <Grid item xs={12} md={4}>
                         <InfoCard
                             spacing={10}
-                            source={lessons}
+                            source={lessonsImg}
                             title={'Your Lessons'}
                             aspectRatio={'16x9'}
                             backgroundPosition={'right center'}
