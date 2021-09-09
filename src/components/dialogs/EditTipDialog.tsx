@@ -56,7 +56,6 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
     const [video, setVideo] = useState(tip.video);
     const [videoStatus, setVideoStatus] = useState<YoutubeVideoStatus>('invalid');
     const videoValid = videoStatus === 'valid';
-    // const [videoValid, setVideoValid] = useState(false);
     useVideoValid(video, setVideoStatus);
     const [comments, setComments] = useState(convertDatabaseTextToMultiline(tip.comments));
 

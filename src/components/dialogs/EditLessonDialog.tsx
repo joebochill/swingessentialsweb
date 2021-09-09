@@ -54,16 +54,15 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
     const [video, setVideo] = useState(lesson.response_video);
     const [videoStatus, setVideoStatus] = useState<YoutubeVideoStatus>('invalid');
     const videoValid = videoStatus === 'valid';
-    // const [videoValid, setVideoValid] = useState(false);
     useVideoValid(video, setVideoStatus);
 
     const [comments, setComments] = useState(convertDatabaseTextToMultiline(lesson.response_notes));
-    const [status, setStatus] = useState(lesson.response_status);
+    const [status, setStatus] = useState(lesson.response_status || 'good');
 
     const resetLesson = useCallback(() => {
         setVideo(lesson.response_video);
         setComments(convertDatabaseTextToMultiline(lesson.response_notes));
-        setStatus(lesson.response_status);
+        setStatus(lesson.response_status || 'good');
     }, [lesson]);
 
     useEffect(() => {
@@ -125,7 +124,7 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
                     <InputLabel id="status-label">{`Response Status`}</InputLabel>
                     <Select
                         labelId="status-label"
-                        value={status || 'good'}
+                        value={status}
                         onChange={(e): void => setStatus(e.target.value as 'good' | 'bad')}
                     >
                         <MenuItem value="good">Accepted</MenuItem>

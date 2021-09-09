@@ -64,7 +64,6 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
     const [video, setVideo] = useState('');
     const [videoStatus, setVideoStatus] = useState<YoutubeVideoStatus>('invalid');
     const videoValid = videoStatus === 'valid';
-    // const [videoValid, setVideoValid] = useState(false);
     useVideoValid(video, setVideoStatus);
     const [comments, setComments] = useState('');
 
