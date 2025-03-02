@@ -1,29 +1,24 @@
-import React from 'react';
-import { makeStyles, createStyles, Toolbar, AppBar, Theme, AppBarProps } from '@material-ui/core';
+import React from "react";
+import { Toolbar, AppBar, AppBarProps } from "@mui/material";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        actionBar: {
-            top: theme.spacing(8),
-            [theme.breakpoints.down('xs')]: {
-                top: theme.spacing(7),
-            },
-        },
-    })
-);
 type ActionToolbarProps = AppBarProps & {
-    show: boolean;
+  show: boolean;
 };
 export const ActionToolbar: React.FC<ActionToolbarProps> = (props) => {
-    const { show, ...barProps } = props;
+  const { show, ...barProps } = props;
 
-    const classes = useStyles();
+  if (!show) return null;
 
-    if (!show) return null;
-
-    return (
-        <AppBar position={'sticky'} color={'default'} className={classes.actionBar} {...barProps}>
-            <Toolbar style={{ justifyContent: 'center' }}>{props.children}</Toolbar>
-        </AppBar>
-    );
+  return (
+    <AppBar
+      position={"sticky"}
+      color={"default"}
+      sx={{
+        top: { xs: (t) => t.spacing(7), md: (t) => t.spacing(8) },
+      }}
+      {...barProps}
+    >
+      <Toolbar sx={{ justifyContent: "center", color: 'text.primary' }}>{props.children}</Toolbar>
+    </AppBar>
+  );
 };

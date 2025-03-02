@@ -1,29 +1,30 @@
-import React, { HTMLAttributes } from 'react';
-import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core';
+import React from "react";
+import { BoxProps, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        errorBox: {
-            padding: theme.spacing(2),
-            background: theme.palette.error.main,
-            color: 'white',
-            textAlign: 'center',
-            marginBottom: theme.spacing(2),
-        },
-    })
-);
-type ErrorBoxProps = HTMLAttributes<HTMLDivElement> & {
-    show?: boolean;
-    message?: string;
+type ErrorBoxProps = BoxProps & {
+  show?: boolean;
+  message?: string;
 };
 export const ErrorBox: React.FC<ErrorBoxProps> = (props) => {
-    const { show = true, message, ...other } = props;
-    const classes = useStyles(props);
+  const { show = true, message, sx, ...other } = props;
 
-    if (!message || message === '' || !show) return null;
-    return (
-        <div className={classes.errorBox} {...other}>
-            <Typography>{message}</Typography>
-        </div>
-    );
+  if (!message || message === "" || !show) return null;
+  return (
+    <Box
+      sx={[
+        {
+          p: 2,
+          backgroundColor: "error.main",
+          color: "error.contrastText",
+          textAlign: "center",
+          mb: 2,
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+      {...other}
+    >
+      <Typography>{message}</Typography>
+    </Box>
+  );
 };

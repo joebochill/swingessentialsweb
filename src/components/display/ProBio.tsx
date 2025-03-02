@@ -1,129 +1,102 @@
-import React, { HTMLAttributes, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { AppState } from '../../__types__';
-import { splitDatabaseText } from '../../utilities/text';
-import { Spacer } from '@pxblue/react-components';
-import { EditProDialog } from '../dialogs/EditProDialog';
-import { makeStyles, Theme, createStyles, Typography, useTheme } from '@material-ui/core';
-import { Edit } from '@material-ui/icons';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            width: '100%',
-            maxWidth: 1024,
-            [theme.breakpoints.down('sm')]: {
-                flexDirection: 'column',
-                alignItems: 'center',
-            },
-        },
-        imageWrapper: {
-            flex: '0 0 auto',
-            textAlign: 'center',
-        },
-        avatar: {
-            height: 200,
-            width: 200,
-            borderRadius: 200,
-            backgroundPosition: 'center center',
-            backgroundSize: '100%',
-            backgroundRepeat: 'no-repeat',
-        },
-        name: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: theme.spacing(1),
-        },
-        bio: {
-            flex: '1 1 0px',
-        },
-    })
-);
+import React, { HTMLAttributes, useState } from "react";
+import { useSelector } from "react-redux";
+import { AppState } from "../../__types__";
+import { splitDatabaseText } from "../../utilities/text";
+import { Box, Stack, Typography } from "@mui/material";
+import { Edit } from "@mui/icons-material";
+import { RootState } from "../../redux/store";
+import { EditProDialog } from "../dialogs/EditProDialog";
 
 type ProBioProps = HTMLAttributes<HTMLDivElement> & {
-    id: string | number;
-    image: string;
-    background?: {
-        position?: string;
-        size?: string;
-    };
-    name: string;
-    title: string;
-    bio: string;
+  id: string | number;
+  image: string;
+  background?: {
+    position?: string;
+    size?: string;
+  };
+  name: string;
+  title: string;
+  bio: string;
 };
 export const ProBio: React.FC<ProBioProps> = (props) => {
-    const { image, name, title, background = {}, bio } = props;
+  const { image, name, title, background = {}, bio } = props;
 
-    const classes = useStyles();
-    const theme = useTheme();
+  const admin = useSelector((state: RootState) => state.auth.admin);
 
-    const admin = useSelector((state: AppState) => state.auth.admin);
+  const [showEditDialog, setShowEditDialog] = useState(false);
 
-    const [showEditDialog, setShowEditDialog] = useState(false);
+  const descriptionParagraphs = splitDatabaseText(bio);
 
-    const descriptionParagraphs = splitDatabaseText(bio);
+  return (
+    <>
+      <Stack
+        sx={{
+          width: "100%",
+          maxWidth: 1024,
+          alignItems: { xs: "center", md: "flex-start" },
+          flexDirection: { xs: "column", md: "row" },
+          gap: { xs: 4, md: 8 },
+        }}
+      >
+        <Stack sx={{ flex: 0, textAlign: "center" }}>
+          <Box
+            sx={{
+              height: 200,
+              width: 200,
+              borderRadius: "200px",
+              backgroundRepeat: "no-repeat",
+              backgroundImage: `url(${
+                image.startsWith("http")
+                  ? image
+                  : `https://www.swingessentials.com/images/pros/${image}`
+              })`,
+              backgroundPosition: background.position || "center center",
+              backgroundSize: background.size || "100%",
+            }}
+          />
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            sx={{
+              mt: 1,
+              cursor: admin ? "pointer" : "initial",
+            }}
+            onClick={
+              admin
+                ? (): void => {
+                    setShowEditDialog(true);
+                  }
+                : undefined
+            }
+          >
+            {admin && <Edit sx={{ mr: 0.5 }} />}
+            <Typography variant={"h6"} sx={{ lineHeight: 1 }}>
+              {name}
+            </Typography>
+          </Stack>
+          <Typography variant={"caption"} display={"block"}>
+            {title}
+          </Typography>
+        </Stack>
 
-    return (
-        <>
-            <div className={classes.root}>
-                <div className={classes.imageWrapper}>
-                    <div
-                        className={classes.avatar}
-                        style={{
-                            backgroundImage: `url(${
-                                image.startsWith('http')
-                                    ? image
-                                    : `https://www.swingessentials.com/images/pros/${image}`
-                            })`,
-                            backgroundPosition: background.position,
-                            backgroundSize: background.size,
-                        }}
-                    />
-                    <div
-                        className={classes.name}
-                        style={admin ? { cursor: 'pointer' } : {}}
-                        onClick={
-                            admin
-                                ? (): void => {
-                                      setShowEditDialog(true);
-                                  }
-                                : undefined
-                        }
-                    >
-                        {admin && <Edit style={{ marginRight: theme.spacing(0.5) }} />}
-                        <Typography variant={'h6'} style={{ lineHeight: 1 }}>
-                            {name}
-                        </Typography>
-                    </div>
-                    <Typography variant={'caption'} display={'block'}>
-                        {title}
-                    </Typography>
-                </div>
+        <Stack sx={{ flex: "1 1 0px", gap: 2 }}>
+          {descriptionParagraphs.map((paragraph: string, index: number) => (
+            <Typography key={`p_${index}`} sx={{ lineHeight: 1.8 }}>
+              {paragraph}
+            </Typography>
+          ))}
+        </Stack>
+      </Stack>
 
-                <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(4)} />
-
-                <div className={classes.bio}>
-                    {descriptionParagraphs.map((paragraph: string, index: number) => (
-                        <Typography
-                            key={`p_${index}`}
-                            paragraph={index < descriptionParagraphs.length - 1}
-                            style={{ lineHeight: 1.8 }}
-                        >
-                            {paragraph}
-                        </Typography>
-                    ))}
-                </div>
-            </div>
-
-            <EditProDialog
-                open={showEditDialog}
-                pro={{ ...props }}
-                onClose={(): void => {
-                    setShowEditDialog(false);
-                }}
-            />
-        </>
-    );
+      <EditProDialog
+        open={showEditDialog}
+        pro={{ ...props }}
+        onClose={(): void => {
+          setShowEditDialog(false);
+        }}
+        closeAfterTransition={true}
+      />
+    </>
+  );
 };

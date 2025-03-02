@@ -1,167 +1,158 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
-    makeStyles,
-    createStyles,
-    TextFieldProps,
-    TextField,
-    SelectProps,
-    Select,
-    FilledInput,
-    InputAdornment,
-    IconButton,
-    useTheme,
-} from '@material-ui/core';
-import { DatePicker, DatePickerProps } from '@material-ui/pickers';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
+  TextFieldProps,
+  TextField,
+  SelectProps,
+  Select,
+  FilledInput,
+  InputAdornment,
+  IconButton,
+  SxProps,
+  Theme,
+  Tooltip,
+} from "@mui/material";
+import { DatePicker, DatePickerProps } from "@mui/x-date-pickers";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-const useStyles = makeStyles(() =>
-    createStyles({
-        input: {
-            background: 'rgba(255,255,255,0.6)',
-            '&:hover': {
-                background: 'rgba(255,255,255,0.8)',
-            },
-            '&$focused': {
-                background: 'rgba(255,255,255,1)',
-            },
-        },
-        focused: {
-            background: 'rgba(255,255,255,1)',
-            '&:hover': {
-                background: 'rgba(255,255,255,1)',
-            },
-            '&$focused': {
-                background: 'rgba(255,255,255,1)',
-            },
-        },
-        selectRoot: {
-            background: 'rgba(255,255,255,0.6)',
-            '&:hover': {
-                background: 'rgba(255,255,255,0.8)',
-            },
-            '&$focused': {
-                background: 'rgba(255,255,255,1)',
-            },
-        },
-    })
-);
-
-type StyledTextFieldProps = TextFieldProps & {
-    last?: boolean;
-    onDark?: boolean;
+const styles = {
+  input: {
+    background: "rgba(var(--inputBackgroundColor),0.6)",
+    "&:hover": {
+      background: "rgba(var(--inputBackgroundColor),0.8)",
+    },
+    "&:focus-visible": {
+      background: "rgba(var(--inputBackgroundColor),1)",
+    },
+  },
+  focused: {
+    background: "rgba(var(--inputBackgroundColor),1)",
+    "&:hover": {
+      background: "rgba(var(--inputBackgroundColor),1)",
+    },
+    "&:focus-visible": {
+      background: "rgba(var(--inputBackgroundColor),1)",
+    },
+  },
 };
+
+type StyledTextFieldProps = TextFieldProps;
 export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
-    const { last, style, InputProps, onDark, ...other } = props;
+  const { sx, slotProps = {}, variant = "filled", ...other } = props;
 
-    const classes = useStyles();
-    const theme = useTheme();
-
-    return (
-        <TextField
-            fullWidth
-            InputProps={Object.assign(
-                onDark
-                    ? {
-                          classes: {
-                              root: props.value ? classes.focused : classes.input,
-                              focused: classes.focused,
-                          },
-                      }
-                    : {},
-                InputProps
-            )}
-            style={Object.assign({ marginBottom: last ? 0 : theme.spacing(2) }, style)}
-            {...other}
-        />
-    );
-};
-StyledTextField.defaultProps = {
-    variant: 'filled',
-    onDark: true,
+  return (
+    <TextField
+      fullWidth
+      variant={variant}
+      slotProps={{
+        input: {
+          ...slotProps.input,
+          sx: (theme) => ({
+            textAlign: "left",
+            "--inputBackgroundColor": "255,255,255",
+            ...styles.input,
+            "&.Mui-focused": styles.focused,
+            ...theme.applyStyles("dark", {
+              "--inputBackgroundColor": "0,0,0",
+            }),
+          }),
+        },
+      }}
+      {...other}
+    />
+  );
 };
 
-type StyledSelectProps = SelectProps & {
-    last?: boolean;
-};
-export const StyledSelect: React.FC<StyledSelectProps> = (props) => {
-    const { last, style, ...other } = props;
+// TODO We don't need this anymore because of select=true on textfield
+// type StyledSelectProps = SelectProps & {
+//   last?: boolean;
+// };
+// export const StyledSelect: React.FC<StyledSelectProps> = (props) => {
+//   const { last, sx, ...other } = props;
 
-    const classes = useStyles();
-    const theme = useTheme();
-
-    return (
-        <Select
-            fullWidth
-            variant={'filled'}
-            input={
-                <FilledInput
-                    classes={{ root: props.value ? classes.focused : classes.input, focused: classes.focused }}
-                />
-            }
-            style={Object.assign({ textAlign: 'left', marginBottom: last ? 0 : theme.spacing(2) }, style)}
-            {...other}
-        />
-    );
-};
+//   return (
+//     <Select
+//       fullWidth
+//       variant={"filled"}
+//       input={
+//         <StyledTextField
+//           // slotProps={{
+//           //   input: {
+//           //     sx: {
+//           //       ...(props.value ? styles.focused : styles.input),
+//           //       // @ts-ignore
+//           //       "&.Mui-focused": styles.focused,
+//           //     },
+//           //   },
+//           // }}
+//         />
+//       }
+//       {...other}
+//     />
+//   );
+// };
 
 export const StyledPassword: React.FC<StyledTextFieldProps> = (props) => {
-    const { type, InputProps, ...textFieldProps } = props;
-    const [showPassword, setShowPassword] = useState(false);
+  const { type, ...textFieldProps } = props;
+  const [showPassword, setShowPassword] = useState(false);
 
-    return (
-        <StyledTextField
-            type={type ? type : showPassword ? 'text' : 'password'}
-            InputProps={Object.assign(
-                {
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={(): void => setShowPassword(!showPassword)}
-                                onMouseDown={(e): void => e.preventDefault()}
-                            >
-                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>
-                    ),
-                },
-                InputProps
-            )}
-            {...textFieldProps}
-        />
-    );
+  return (
+    <StyledTextField
+      type={type ? type : showPassword ? "text" : "password"}
+      slotProps={{
+        input: {
+          endAdornment: (
+            <InputAdornment position="end">
+              <Tooltip title={showPassword ? "Hide Password" : "Show Password"}>
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={(): void => setShowPassword(!showPassword)}
+                  onMouseDown={(e): void => e.preventDefault()}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </Tooltip>
+            </InputAdornment>
+          ),
+        },
+      }}
+      {...textFieldProps}
+    />
+  );
 };
 
-type StyledDatePickerProps = DatePickerProps & {
-    last?: boolean;
-    onDark?: boolean;
+type StyledDatePickerProps<TDate extends Date> = DatePickerProps<TDate> & {
+  last?: boolean;
+  onDark?: boolean;
 };
-export const StyledDatePicker: React.FC<StyledDatePickerProps> = (props) => {
-    const { last, style, InputProps, onDark, ...other } = props;
+export const StyledDatePicker: React.FC<StyledDatePickerProps<any>> = (
+  props
+) => {
+  const { last, sx, slotProps, onDark = true, ...other } = props;
 
-    const classes = useStyles();
-    const theme = useTheme();
+  return (
+    <DatePicker
+      //     slotProps={{
+      //         input: onDark ?  {
 
-    return (
-        <DatePicker
-            fullWidth
-            InputProps={Object.assign(
-                onDark
-                    ? {
-                          classes: {
-                              root: props.value ? classes.focused : classes.input,
-                              focused: classes.focused,
-                          },
-                      }
-                    : {},
-                InputProps
-            )}
-            style={Object.assign({ marginBottom: last ? 0 : theme.spacing(2) }, style)}
-            {...other}
-        />
-    );
+      //         } : slotProps.input
+      //     }}
+      //   InputProps={Object.assign(
+      //     onDark
+      //       ? {
+      //           classes: {
+      //             root: props.value ? classes.focused : classes.input,
+      //             focused: classes.focused,
+      //           },
+      //         }
+      //       : {},
+      //     InputProps
+      //   )}
+      sx={[{ mb: last ? 0 : 2 }, ...(Array.isArray(sx) ? sx : [sx])]}
+      {...other}
+    />
+  );
 };
-StyledDatePicker.defaultProps = {
-    inputVariant: 'filled',
-    onDark: true,
-};
+// StyledDatePicker.defaultProps = {
+//   inputVariant: "filled",
+//   onDark: true,
+// };

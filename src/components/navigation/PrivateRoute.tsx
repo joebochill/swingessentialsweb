@@ -1,29 +1,21 @@
-import React from 'react';
-import { Route, Redirect, RouteProps } from 'react-router-dom';
-import { ROUTES } from '../../constants/routes';
+import React from "react";
+import { Navigate, useLocation, Outlet } from "react-router-dom";
+import { ROUTES } from "../../constants/routes";
 
-type PrivateRouteProps = RouteProps & {
-    component: React.ComponentType<any>;
-    canActivate: boolean | (() => boolean);
+type PrivateRouteProps = {
+  canActivate: boolean | (() => boolean);
 };
 export const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
-    const { component, canActivate, ...rest } = props;
-    const Component = component;
+  const { canActivate } = props;
+  const location = useLocation();
 
-    let active = false;
-    if (typeof canActivate === 'function') active = canActivate();
-    else active = canActivate;
+  let active = false;
+  if (typeof canActivate === "function") active = canActivate();
+  else active = canActivate;
 
-    return (
-        <Route
-            {...rest}
-            render={(_props): JSX.Element =>
-                active ? (
-                    <Component {..._props} />
-                ) : (
-                    <Redirect to={{ pathname: ROUTES.LOGIN, state: { from: _props.location } }} />
-                )
-            }
-        />
-    );
+  return active ? (
+    <Outlet />
+  ) : (
+    <Navigate to={ROUTES.LOGIN} state={{ from: location }} />
+  );
 };

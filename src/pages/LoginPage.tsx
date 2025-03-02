@@ -1,507 +1,575 @@
-import React, { useState, useEffect, HTMLAttributes, useCallback } from 'react';
-import { useLocation, Redirect, useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { usePrevious, useGoogleAnalyticsPageView, googleAnalyticsConversion } from '../hooks';
-
-import { AppState } from '../__types__';
-import { LOGIN, CREATE_ACCOUNT } from '../redux/actions/types';
-import { requestLogin } from '../redux/actions/auth-actions';
+import React, { useState, useEffect, useCallback } from "react";
+import { useLocation, Navigate, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import {
-    requestPasswordReset,
-    createAccount,
-    checkUsernameAvailability,
-    checkEmailAvailability,
-    resetRegistrationAvailabilityChecks,
-} from '../redux/actions/registration-actions';
-import { ROUTES } from '../constants/routes';
-import { EMAIL_REGEX } from '../constants';
+  usePrevious /*useGoogleAnalyticsPageView, googleAnalyticsConversion*/,
+} from "../../src/hooks";
 
-import { StyledTextField, StyledSelect } from '../components/text/StyledInputs';
-import { Banner } from '../components/display/Banner';
-import { ErrorBox } from '../components/display/ErrorBox';
-import { SimpleLink } from '../components/navigation/SimpleLink';
+import { ROUTES } from "../../src/constants/routes";
+import { Banner } from "../components/display/Banner";
 import {
-    makeStyles,
-    createStyles,
-    Button,
-    Slide,
-    Theme,
-    Typography,
-    InputAdornment,
-    MenuItem,
-    FormControl,
-    InputLabel,
-    IconButton,
-    Tooltip,
-    SlideProps,
-    useTheme,
-} from '@material-ui/core';
-import { Visibility, VisibilityOff, Info } from '@material-ui/icons';
+  Button,
+  Slide,
+  Typography,
+  InputAdornment,
+  MenuItem,
+  IconButton,
+  Tooltip,
+  SlideProps,
+  Stack,
+  CircularProgress,
+  StackProps,
+} from "@mui/material";
+import { Visibility, VisibilityOff, Info } from "@mui/icons-material";
 
-import bg from '../assets/images/banners/landing.jpg';
+import bg from "../assets/images/banners/landing.jpg";
+import {
+  StyledPassword,
+  StyledTextField,
+} from "../components/text/StyledInputs";
+import { ErrorBox } from "../components/display/ErrorBox";
+import { SimpleLink } from "../components/navigation/SimpleLinks";
+import { RootState } from "../redux/store";
+import {
+  useLoginMutation,
+  useSendResetPasswordEmailMutation,
+} from "../redux/apiServices/authService";
+import { resetLoginFailures } from "../redux/slices/authSlice";
+import { EMAIL_REGEX } from "../constants";
+import {
+  useCheckEmailAvailabilityMutation,
+  useCheckUsernameAvailabilityMutation,
+  useCreateNewUserAccountMutation,
+  UserRegistrationDetails,
+} from "../redux/apiServices/registrationService";
 
-type Form = 'login' | 'register' | 'forgot';
+type Form = "login" | "register" | "forgot";
 type Acquisition =
-    | 'In-person Lesson'
-    | 'From a Friend'
-    | 'Google Search'
-    | 'Online Ad'
-    | 'Golf Course Ad'
-    | 'Social Media'
-    | 'Youtube'
-    | 'Other';
+  | "In-person Lesson"
+  | "From a Friend"
+  | "Google Search"
+  | "Online Ad"
+  | "Golf Course Ad"
+  | "Social Media"
+  | "Youtube"
+  | "Other";
 
 const acquisitionMenuItems: Acquisition[] = [
-    'In-person Lesson',
-    'From a Friend',
-    'Google Search',
-    'Online Ad',
-    'Golf Course Ad',
-    'Social Media',
-    'Youtube',
-    'Other',
+  "In-person Lesson",
+  "From a Friend",
+  "Google Search",
+  "Online Ad",
+  "Golf Course Ad",
+  "Social Media",
+  "Youtube",
+  "Other",
 ];
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        transformer: {
-            height: '100%',
-            maxWidth: '100%',
-            margin: '0 auto',
-            top: 0,
-            display: 'flex',
-            alignItems: 'center',
-        },
-        form: {
-            zIndex: 100,
-            width: '100%',
-            maxWidth: 512,
-            color: 'white',
-        },
-        linkContainer: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: theme.spacing(2),
-        },
-    })
-);
-
-type SignInFormProps = HTMLAttributes<HTMLDivElement> & {
-    onChangeForm: (f: Form) => void;
+const formStyle = {
+  zIndex: 100,
+  width: "100%",
+  maxWidth: 512,
+  color: "white",
 };
-const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref) => {
+const transformerStyle = {
+  position: "absolute",
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+};
+
+type SignInFormProps = StackProps & {
+  onChangeForm: (f: Form) => void;
+};
+const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>(
+  (props, ref) => {
     const { onChangeForm, ...other } = props;
 
-    const classes = useStyles();
     const dispatch = useDispatch();
+    const location = useLocation();
+    const [login, { data: loggedIn, isLoading }] = useLoginMutation();
 
-    const failCount = useSelector((state: AppState) => state.api.authentication.data.failures);
+    const loginFailures = useSelector(
+      (state: RootState) => state.auth.loginFailures
+    );
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const { from } =
+      location && location.state
+        ? location.state
+        : { from: { pathname: ROUTES.HOME } };
 
     const resetForm = useCallback(() => {
-        setUsername('');
-        setPassword('');
-        setPassword('');
-        setErrorMessage('');
-        dispatch({ type: LOGIN.RESET });
+      setUsername("");
+      setPassword("");
+      setPassword("");
+      setErrorMessage("");
+      dispatch(resetLoginFailures());
     }, [setUsername, setPassword, setErrorMessage, dispatch]);
 
     useEffect(() => {
-        if (failCount > 0) {
-            setPassword('');
-            setErrorMessage('Your username / password was not correct. Please try again.');
-        }
-    }, [failCount, setPassword, setErrorMessage]);
+      if (loginFailures > 0) {
+        setPassword("");
+        setErrorMessage(
+          "Your username / password was not correct. Please try again."
+        );
+      }
+    }, [loginFailures]);
 
+    if (loggedIn) {
+      return <Navigate to={from} replace />;
+    }
     return (
-        <div className={classes.form} ref={ref} {...other}>
-            <StyledTextField
-                label={'Username'}
-                placeholder={'Username or Email'}
-                name={'username'}
-                value={username}
-                onChange={(e): void => {
-                    setUsername(e.target.value);
-                }}
-            />
-            <StyledTextField
-                type={'password'}
-                label={'Password'}
-                name={'password'}
-                value={password}
-                onChange={(e): void => {
-                    setPassword(e.target.value);
-                }}
-                onKeyPress={
-                    username && password
-                        ? (e): void => {
-                              if (e.key === 'Enter') {
-                                  dispatch(requestLogin({ username, password }));
-                              }
-                          }
-                        : undefined
+      <Stack sx={formStyle} spacing={2} ref={ref} {...other}>
+        <StyledTextField
+          label={"Username"}
+          placeholder={"Username or Email"}
+          name={"username"}
+          value={username}
+          onChange={(e): void => {
+            setUsername(e.target.value);
+          }}
+          color={"secondary"}
+        />
+        <StyledPassword
+          label={"Password"}
+          name={"password"}
+          value={password}
+          onChange={(e): void => {
+            setPassword(e.target.value);
+          }}
+          onKeyDown={
+            username && password
+              ? (e): void => {
+                  if (e.key === "Enter") {
+                    login({ username, password });
+                  }
                 }
-            />
-            <ErrorBox message={errorMessage} />
-            <Button
-                fullWidth
-                variant={'contained'}
-                color={'primary'}
-                onClick={
-                    username && password
-                        ? (): void => {
-                              dispatch(requestLogin({ username, password }));
-                          }
-                        : (): void => setErrorMessage('You need to enter your username / password first.')
-                }
-            >
-                Sign In
-            </Button>
-            <div className={classes.linkContainer}>
-                <SimpleLink
-                    label={'Forgot Password?'}
-                    onClick={(): void => {
-                        onChangeForm('forgot' as Form);
-                        resetForm();
-                    }}
-                />
-                <SimpleLink
-                    label={'Need an Account?'}
-                    onClick={(): void => {
-                        onChangeForm('register' as Form);
-                        resetForm();
-                    }}
-                />
-            </div>
-        </div>
+              : undefined
+          }
+          color={"secondary"}
+        />
+        <ErrorBox message={errorMessage} />
+        <Button
+          fullWidth
+          variant={"contained"}
+          color={"primary"}
+          onClick={
+            !isLoading
+              ? username && password
+                ? (): void => {
+                    login({ username, password });
+                  }
+                : (): void =>
+                    setErrorMessage(
+                      "You need to enter your username / password first."
+                    )
+              : undefined
+          }
+        >
+          {isLoading ? (
+            <CircularProgress color={"inherit"} size={28} />
+          ) : (
+            "Sign In"
+          )}
+        </Button>
+        <Stack direction={"row"} justifyContent={"space-between"}>
+          <SimpleLink
+            label={"Forgot Password?"}
+            onClick={(): void => {
+              onChangeForm("forgot" as Form);
+              resetForm();
+            }}
+          />
+          <SimpleLink
+            label={"Need an Account?"}
+            onClick={(): void => {
+              onChangeForm("register" as Form);
+              resetForm();
+            }}
+          />
+        </Stack>
+      </Stack>
     );
-});
-SignInForm.displayName = 'SignInForm';
+  }
+);
+SignInForm.displayName = "SignInForm";
 
-type RegisterFormProps = HTMLAttributes<HTMLDivElement> & {
-    onChangeForm: (f: Form) => void;
+type RegisterFormProps = StackProps & {
+  onChangeForm: (f: Form) => void;
 };
-const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props, ref) => {
+const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>(
+  (props, ref) => {
     const { onChangeForm, ...other } = props;
 
-    const classes = useStyles();
-    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const createAccountStatus = useSelector((state: AppState) => state.api.createAccount.status);
-    const usernameStatus = useSelector((state: AppState) => state.api.checkUsername);
-    const emailStatus = useSelector((state: AppState) => state.api.checkEmail);
-
-    const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [acquisition, setAcquisition] = useState<Acquisition | ''>('');
+    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [acquisition, setAcquisition] = useState<Acquisition | "">("");
     const [showPassword, setShowPassword] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState("");
 
-    const usernameTaken = usernameStatus.status === 'success' && !usernameStatus.data.available;
-    const emailTaken = emailStatus.status === 'success' && !emailStatus.data.available;
+    const [
+      checkUsernameAvailability,
+      { data: usernameAvailable, reset: resetUsernameCheck },
+    ] = useCheckUsernameAvailabilityMutation();
+    const [
+      checkEmailAvailability,
+      { data: emailAvailable, reset: resetEmailCheck },
+    ] = useCheckEmailAvailabilityMutation();
+    const [
+      createNewUserAccount,
+      { data: registeredSuccessfully, isLoading, error: registrationError },
+    ] = useCreateNewUserAccountMutation();
+
+    const usernameTaken = username !== "" && usernameAvailable === false;
+    const emailTaken = email !== "" && emailAvailable === false;
 
     const resetForm = useCallback(() => {
-        setEmail('');
-        setUsername('');
-        setPassword('');
-        setAcquisition('');
-        setShowPassword(false);
-        setErrorMessage('');
-        dispatch(resetRegistrationAvailabilityChecks());
-    }, [setEmail, setUsername, setPassword, setAcquisition, setShowPassword, setErrorMessage, dispatch]);
+      setEmail("");
+      setUsername("");
+      setPassword("");
+      setAcquisition("");
+      setShowPassword(false);
+      setErrorMessage("");
+    }, []);
 
     useEffect(() => {
-        // Registration finished
-        if (createAccountStatus === 'failed') {
-            // if (!registration.success) {
-            setErrorMessage(
-                'Your account registration has failed. Please try again later and contact us if the problem continues.'
-            );
-            // }
-        }
-        // Registration finished
-        if (createAccountStatus === 'success') {
-            resetForm();
-        }
-    }, [createAccountStatus, setErrorMessage, resetForm]);
+      if (registeredSuccessfully === false) {
+        setErrorMessage(
+          "Your account registration has failed. Please try again later and contact us if the problem continues."
+        );
+      } else if (registeredSuccessfully === true) {
+        navigate(ROUTES.PROFILE);
+        // googleAnalyticsConversion(`https://swingessentials.com/register-complete`);
+        resetForm();
+        resetEmailCheck();
+        resetUsernameCheck();
+      }
+    }, [registeredSuccessfully, registrationError, resetForm]);
 
     return (
-        <div className={classes.form} {...other} ref={ref}>
-            <StyledTextField
-                label={'Username'}
-                name={'new-username'}
-                value={username}
-                error={username !== '' && usernameTaken}
-                helperText={username !== '' && usernameTaken ? 'Username is already registered.' : undefined}
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <Tooltip
-                                title={`Username may contain Letters, Numbers, and Special Characters (-_.$#@!+). Spaces are NOT permitted.`}
-                            >
-                                <Info style={{ cursor: 'context-menu' }} />
-                            </Tooltip>
-                        </InputAdornment>
-                    ),
-                }}
-                onChange={(e): void => {
-                    setUsername(e.target.value.replace(/[^A-Z0-9-_.$#@!+]/gi, '').substr(0, 32));
-                }}
-                onBlur={(): void => {
-                    if (username) dispatch(checkUsernameAvailability(username));
-                }}
-            />
-            <StyledTextField
-                label={'Email Address'}
-                name={'email'}
-                value={email}
-                error={email !== '' && emailTaken}
-                helperText={email !== '' && emailTaken ? 'Email address is already registered.' : undefined}
-                onChange={(e): void => {
-                    setEmail(e.target.value.substr(0, 128));
-                }}
-                onBlur={(): void => {
-                    if (email) dispatch(checkEmailAvailability(email));
-                }}
-            />
-            <StyledTextField
-                type={showPassword ? 'text' : 'password'}
-                label={'Password'}
-                name={'password'}
-                value={password}
-                onChange={(e): void => {
-                    setPassword(e.target.value);
-                }}
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={(): void => setShowPassword(!showPassword)}
-                                onMouseDown={(e): void => e.preventDefault()}
-                            >
-                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>
-                    ),
-                }}
-            />
-            <FormControl variant="filled" fullWidth>
-                <InputLabel id="acquisition-label">{`How'd you find us?`}</InputLabel>
-                <StyledSelect
-                    labelId="acquisition-label"
-                    value={acquisition}
-                    onChange={(e): void => setAcquisition(e.target.value as Acquisition)}
-                >
-                    {acquisitionMenuItems.map((item, index) => (
-                        <MenuItem key={`option_${index}`} value={item}>
-                            {item}
-                        </MenuItem>
-                    ))}
-                </StyledSelect>
-            </FormControl>
+      <Stack sx={formStyle} spacing={2} {...other} ref={ref}>
+        <StyledTextField
+          label={"Username"}
+          name={"new-username"}
+          value={username}
+          error={usernameTaken}
+          helperText={
+            usernameTaken ? "Username is already registered." : undefined
+          }
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip
+                    title={`Username may contain Letters, Numbers, and Special Characters (-_.$#@!+). Spaces are NOT permitted.`}
+                  >
+                    <Info style={{ cursor: "context-menu" }} />
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            },
+          }}
+          onChange={(e): void => {
+            setUsername(
+              e.target.value.replace(/[^A-Z0-9-_.$#@!+]/gi, "").substring(0, 32)
+            );
+          }}
+          onBlur={(): void => {
+            if (username) checkUsernameAvailability(username);
+          }}
+          color={"secondary"}
+        />
+        <StyledTextField
+          label={"Email Address"}
+          name={"email"}
+          value={email}
+          error={emailTaken}
+          helperText={
+            emailTaken ? "Email address is already registered." : undefined
+          }
+          onChange={(e): void => {
+            setEmail(e.target.value.substr(0, 128));
+          }}
+          onBlur={(): void => {
+            if (email) checkEmailAvailability(email);
+          }}
+          color={"secondary"}
+        />
+        <StyledTextField
+          type={showPassword ? "text" : "password"}
+          label={"Password"}
+          name={"password"}
+          value={password}
+          onChange={(e): void => {
+            setPassword(e.target.value);
+          }}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={(): void => setShowPassword(!showPassword)}
+                    onMouseDown={(e): void => e.preventDefault()}
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+          color={"secondary"}
+        />
+        <StyledTextField
+          select
+          label={`How'd you find us?`}
+          name={"acquisition"}
+          value={acquisition}
+          onChange={(e): void => setAcquisition(e.target.value as Acquisition)}
+          color={"secondary"}
+        >
+          {acquisitionMenuItems.map((item, index) => (
+            <MenuItem key={`option_${index}`} value={item}>
+              {item}
+            </MenuItem>
+          ))}
+        </StyledTextField>
 
-            <ErrorBox message={errorMessage} />
-            <Button
-                fullWidth
-                variant={'contained'}
-                color={'primary'}
-                onClick={
-                    email && EMAIL_REGEX.test(email) && !emailTaken && username && !usernameTaken && password
-                        ? (): void => {
-                              dispatch(
-                                  createAccount({
-                                      username,
-                                      email,
-                                      password,
-                                      heard: acquisition,
-                                  })
-                              );
-                          }
-                        : (): void => setErrorMessage('Please make sure all fields are filled.')
-                }
-            >
-                Create Account
-            </Button>
-            <div className={classes.linkContainer}>
-                <SimpleLink
-                    label={'Back to Sign In'}
-                    onClick={(): void => {
-                        onChangeForm('login' as Form);
-                        resetForm();
-                    }}
-                />
-            </div>
-        </div>
+        <ErrorBox message={errorMessage} />
+        <Button
+          fullWidth
+          variant={"contained"}
+          color={"primary"}
+          onClick={
+            !isLoading
+              ? email &&
+                EMAIL_REGEX.test(email) &&
+                !emailTaken &&
+                !usernameTaken &&
+                password &&
+                acquisition
+                ? (): void => {
+                    createNewUserAccount({
+                      username,
+                      email,
+                      password,
+                      heard: acquisition,
+                    });
+                  }
+                : (): void =>
+                    setErrorMessage("Please make sure all fields are filled.")
+              : undefined
+          }
+        >
+          {isLoading ? (
+            <CircularProgress color={"inherit"} size={28} />
+          ) : (
+            `Create Account`
+          )}
+        </Button>
+        <Stack direction={"row"} justifyContent={"flex-start"}>
+          <SimpleLink
+            label={"Back to Sign In"}
+            onClick={(): void => {
+              onChangeForm("login" as Form);
+              resetForm();
+              resetEmailCheck();
+              resetUsernameCheck();
+            }}
+          />
+        </Stack>
+      </Stack>
     );
-});
-RegisterForm.displayName = 'RegisterForm';
+  }
+);
+RegisterForm.displayName = "RegisterForm";
 
-type ForgotFormProps = HTMLAttributes<HTMLDivElement> & {
-    onChangeForm: (f: Form) => void;
+type ForgotFormProps = StackProps & {
+  onChangeForm: (f: Form) => void;
 };
-const ForgotForm = React.forwardRef<HTMLDivElement, ForgotFormProps>((props, ref) => {
+const ForgotForm = React.forwardRef<HTMLDivElement, ForgotFormProps>(
+  (props, ref) => {
     const { onChangeForm, ...other } = props;
 
-    const classes = useStyles();
-    const dispatch = useDispatch();
-    const theme = useTheme();
+    const [sendResetPasswordEmail] = useSendResetPasswordEmailMutation();
 
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState("");
     const [complete, setComplete] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState("");
 
     return (
-        <div className={classes.form} {...other} ref={ref}>
-            {!complete && (
-                <>
-                    <StyledTextField
-                        fullWidth
-                        label={'Email Address'}
-                        placeholder={'Enter your email address'}
-                        name={'email'}
-                        value={email}
-                        onChange={(e): void => {
-                            setEmail(e.target.value);
-                        }}
-                    />
-                    <ErrorBox message={errorMessage} />
-                </>
-            )}
-            {complete && (
-                <Typography variant={'h6'} align={'center'} style={{ marginBottom: theme.spacing(2) }}>
-                    Your password reset request was received. Check your email for further instructions.
-                </Typography>
-            )}
-            <Button
-                fullWidth
-                variant={'contained'}
-                color={'primary'}
-                onClick={
-                    complete
-                        ? (): void => {
-                              onChangeForm('login' as Form);
-                              setComplete(false);
-                              setEmail('');
-                              setErrorMessage('');
-                          }
-                        : email && EMAIL_REGEX.test(email)
-                        ? (): void => {
-                              dispatch(requestPasswordReset({ email }));
-                              setComplete(true);
-                          }
-                        : (): void => setErrorMessage('You need to enter a valid email address.')
+      <Stack sx={formStyle} spacing={2} {...other} ref={ref}>
+        {!complete && (
+          <>
+            <StyledTextField
+              fullWidth
+              label={"Email Address"}
+              placeholder={"Enter your email address"}
+              name={"email"}
+              value={email}
+              onChange={(e): void => {
+                setEmail(e.target.value);
+              }}
+              color={"secondary"}
+            />
+            <ErrorBox message={errorMessage} />
+          </>
+        )}
+        {complete && (
+          <Typography variant={"h6"} align={"center"}>
+            Your password reset request was received. Check your email for
+            further instructions.
+          </Typography>
+        )}
+        <Button
+          fullWidth
+          variant={"contained"}
+          color={"primary"}
+          onClick={
+            complete
+              ? (): void => {
+                  onChangeForm("login" as Form);
+                  setComplete(false);
+                  setEmail("");
+                  setErrorMessage("");
                 }
-            >
-                {complete ? ' Back to Sign In' : 'Send Reset Instructions'}
-            </Button>
-            {!complete && (
-                <div className={classes.linkContainer} style={{ justifyContent: 'flex-end' }}>
-                    <SimpleLink label={'Back to Sign In'} onClick={(): void => onChangeForm('login' as Form)} />
-                </div>
-            )}
-        </div>
+              : email && EMAIL_REGEX.test(email)
+              ? (): void => {
+                  sendResetPasswordEmail(email);
+                  setComplete(true);
+                }
+              : (): void =>
+                  setErrorMessage("You need to enter a valid email address.")
+          }
+        >
+          {complete ? " Back to Sign In" : "Send Reset Instructions"}
+        </Button>
+        {!complete && (
+          <Stack direction={"row"} justifyContent={"flex-end"}>
+            <SimpleLink
+              label={"Back to Sign In"}
+              onClick={(): void => onChangeForm("login" as Form)}
+            />
+          </Stack>
+        )}
+        {/* {!complete && (
+          <div
+            className={classes.linkContainer}
+            style={{ justifyContent: "flex-end" }}
+          ></div>
+        )} */}
+      </Stack>
     );
-});
-ForgotForm.displayName = 'ForgotForm';
+  }
+);
+ForgotForm.displayName = "ForgotForm";
 
 export const LoginPage: React.FC = () => {
-    const location = useLocation();
-    const history = useHistory();
-    const classes = useStyles();
-    const dispatch = useDispatch();
-    useGoogleAnalyticsPageView();
+  const location = useLocation();
+  // const navigate = useNavigate();
+  // useGoogleAnalyticsPageView();
 
-    const token = useSelector((state: AppState) => state.auth.token);
-    const registration = useSelector((state: AppState) => state.api.createAccount.status);
+  // const token = useSelector((state: RootState) => state.auth.token);
+  // const [
+  //   createNewUserAccount,
+  //   { data: registeredSuccessfully, isLoading: registering },
+  // ] = useCreateNewUserAccountMutation();
 
-    // @ts-ignore
-    const { from, initialPage } = location && location.state ? location.state : { from: { pathname: ROUTES.HOME } };
+  const { initialPage } =
+    location && location.state ? location.state : { initialPage: "login" };
 
-    const [form, setForm] = useState<Form>(initialPage || 'login');
-    const previousForm = usePrevious(form);
+  const [form, setForm] = useState<Form>(initialPage || "login");
+  const previousForm = usePrevious(form);
 
-    const isLogin = form === 'login';
-    const isForgot = form === 'forgot';
-    const isRegister = form === 'register';
+  const isLogin = form === "login";
+  const isForgot = form === "forgot";
+  const isRegister = form === "register";
 
-    let loginSlideDirection: SlideProps['direction'] = 'up';
-    if (previousForm !== undefined) {
-        if (previousForm === 'login') {
-            if (form === 'register') loginSlideDirection = 'right';
-            else if (form === 'forgot') loginSlideDirection = 'left';
-        } else {
-            if (previousForm === 'register') loginSlideDirection = 'right';
-            else if (previousForm === 'forgot') loginSlideDirection = 'left';
-        }
+  let loginSlideDirection: SlideProps["direction"] = "up";
+  if (previousForm !== undefined) {
+    if (previousForm === "login") {
+      if (form === "register") loginSlideDirection = "right";
+      else if (form === "forgot") loginSlideDirection = "left";
+    } else {
+      if (previousForm === "register") loginSlideDirection = "right";
+      else if (previousForm === "forgot") loginSlideDirection = "left";
     }
+  }
 
-    useEffect(() => {
-        if (token) {
-            if (registration === 'success') {
-                history.push(ROUTES.PROFILE);
-                googleAnalyticsConversion(`https://swingessentials.com/register-complete`);
-                dispatch({ type: CREATE_ACCOUNT.RESET });
-            }
+  return (
+    <>
+      <Banner
+        background={{ src: bg, position: "center 70%" }}
+        className={"banner"}
+        sx={{ overflow: "hidden" }}
+      >
+        {
+          <Slide
+            direction={loginSlideDirection}
+            in={isLogin}
+            timeout={{
+              enter: 500,
+              exit: 250,
+            }}
+          >
+            <Stack
+              direction={"row"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              className={"slideStack"}
+              sx={[transformerStyle]}
+            >
+              <SignInForm onChangeForm={(f: Form): void => setForm(f)} />
+            </Stack>
+          </Slide>
         }
-    }, [token, registration, history, dispatch]);
-
-    if (token && registration !== 'success') return <Redirect to={from} />;
-
-    return (
-        <>
-            <Banner background={{ src: bg, position: 'center 70%' }} justify={'center'}>
-                {
-                    <Slide
-                        direction={loginSlideDirection}
-                        in={isLogin}
-                        style={{ position: form === 'login' ? 'static' : 'absolute' }}
-                        timeout={{
-                            enter: 500,
-                            exit: 250,
-                        }}
-                    >
-                        <div className={classes.transformer}>
-                            <SignInForm onChangeForm={(f: Form): void => setForm(f)} />
-                        </div>
-                    </Slide>
-                }
-                {
-                    <Slide
-                        direction={'left'}
-                        in={isRegister}
-                        style={{ position: isRegister ? 'static' : 'absolute' }}
-                        timeout={{
-                            enter: 500,
-                            exit: 250,
-                        }}
-                    >
-                        <div className={classes.transformer}>
-                            <RegisterForm onChangeForm={(f: Form): void => setForm(f)} />
-                        </div>
-                    </Slide>
-                }
-                {
-                    <Slide
-                        direction={'right'}
-                        in={isForgot}
-                        style={{ position: isForgot ? 'static' : 'absolute' }}
-                        timeout={{
-                            enter: 500,
-                            exit: 250,
-                        }}
-                    >
-                        <div className={classes.transformer}>
-                            <ForgotForm onChangeForm={(f: Form): void => setForm(f)} />
-                        </div>
-                    </Slide>
-                }
-                {/* </div> */}
-            </Banner>
-        </>
-    );
+        {
+          <Slide
+            direction={"left"}
+            in={isRegister}
+            timeout={{
+              enter: 500,
+              exit: 250,
+            }}
+          >
+            <Stack
+              direction={"row"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              sx={transformerStyle}
+            >
+              <RegisterForm onChangeForm={(f: Form): void => setForm(f)} />
+            </Stack>
+          </Slide>
+        }
+        {
+          <Slide
+            direction={"right"}
+            in={isForgot}
+            timeout={{
+              enter: 500,
+              exit: 250,
+            }}
+          >
+            <Stack
+              direction={"row"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              sx={transformerStyle}
+            >
+              <ForgotForm onChangeForm={(f: Form): void => setForm(f)} />
+            </Stack>
+          </Slide>
+        }
+      </Banner>
+    </>
+  );
 };

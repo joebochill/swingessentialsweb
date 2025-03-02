@@ -1,71 +1,51 @@
-import React, { HTMLAttributes } from 'react';
-import { Spacer } from '@pxblue/react-components';
-import { Headline, SubHeading } from './Typography';
-import { makeStyles, createStyles, Typography, Theme, useTheme } from '@material-ui/core';
-import clsx from 'clsx';
+import React, { JSX } from "react";
+import { Box, Stack, StackProps, Typography } from "@mui/material";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        headline: {
-            display: 'inline-flex',
-            alignItems: 'center',
-            textAlign: 'left',
-            marginBottom: theme.spacing(2),
-            [theme.breakpoints.down('sm')]: {
-                textAlign: 'center',
-                display: 'block',
-            },
-            '&$jumbo': {
-                [theme.breakpoints.down('sm')]: {
-                    textAlign: 'center',
-                },
-            },
-        },
-        headlineIcon: {
-            fontSize: 48,
-            display: 'inline-flex',
-        },
-        smallHeadlineIcon: {
-            display: 'inline-flex',
-            marginRight: theme.spacing(0.5),
-            fontSize: 24,
-        },
-        jumbo: {},
-    })
-);
-
-type FancyHeadlineProps = HTMLAttributes<HTMLDivElement> & {
-    headline: string;
-    subheading?: string;
-    icon?: JSX.Element;
-    jumbo?: boolean;
+type FancyHeadlineProps = StackProps & {
+  headline: string;
+  subheading?: string;
+  icon?: JSX.Element;
 };
 export const FancyHeadline: React.FC<FancyHeadlineProps> = (props) => {
-    const { jumbo, headline, subheading, icon, ...other } = props;
+  const { headline, subheading, icon, ...other } = props;
 
-    const classes = useStyles();
-    const theme = useTheme();
+  return (
+    <Stack
+      alignItems={"center"}
+      // gap={2}
+      sx={[
+        {
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: "center",
+          textAlign: { xs: "center", md: "left" },
+          mb: 2,
+          gap: 2,
+        },
+      ]}
+      {...other}
+    >
+      {icon && (
+        <Box
+          sx={{
+            fontSize: 48,
+            display: "inline-block",
+            lineHeight: 1
+          }}
+        >
+          {icon}
+        </Box>
+      )}
 
-    return !jumbo ? (
-        <div className={classes.headline} {...other}>
-            {icon && <div className={classes.smallHeadlineIcon}>{icon}</div>}
-            <div>
-                <Typography variant={'h6'}>{headline}</Typography>
-                {subheading && <Typography variant={'caption'}>{subheading}</Typography>}
-            </div>
-        </div>
-    ) : (
-        <div className={clsx(classes.headline, { [classes.jumbo]: !icon })} {...other}>
-            {icon && (
-                <>
-                    <div className={classes.headlineIcon}>{icon}</div>
-                    <Spacer flex={0} height={0} width={theme.spacing(2)} />
-                </>
-            )}
-            <div>
-                <Headline>{headline}</Headline>
-                {subheading && <SubHeading>{subheading}</SubHeading>}
-            </div>
-        </div>
-    );
+      <Stack>
+        <Typography variant={"h4"} fontWeight={600}>
+          {headline}
+        </Typography>
+        {subheading && (
+          <Typography variant={"subtitle2"} fontWeight={400}>
+            {subheading}
+          </Typography>
+        )}
+      </Stack>
+    </Stack>
+  );
 };

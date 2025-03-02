@@ -1,391 +1,403 @@
-import React, { HTMLAttributes } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useGoogleAnalyticsPageView } from '../hooks';
-
-import { AppState } from '../__types__/redux';
-import { ROUTES } from '../constants/routes';
-import { APP_STORE_LINK, PLAY_STORE_LINK } from '../constants';
-
-import { SectionBlurb } from '../components/text/SectionBlurb';
-import { InfoCard } from '../components/display/InfoCard';
-import { ScreenShot } from '../components/display/ScreenShot';
-import { Headline } from '../components/text/Typography';
-import { Testimonial } from '../components/display/Testimonial';
-import { Banner } from '../components/display/Banner';
-import { Section } from '../components/display/Section';
-import { Spacer } from '@pxblue/react-components';
+import React, { JSX } from "react";
+import { useSelector } from "react-redux";
 import {
-    makeStyles,
-    Theme,
-    createStyles,
-    Grid,
-    Typography,
-    useTheme,
-    Button,
-    ButtonProps,
-    useMediaQuery,
-    Fab,
-    FabProps,
-} from '@material-ui/core';
-import { GetApp } from '@material-ui/icons';
+  Box,
+  BoxProps,
+  Button,
+  ButtonProps,
+  Fab,
+  FabProps,
+  Grid2,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 
-import bg from '../assets/images/banners/landing.jpg';
-import fullLogo from '../assets/images/logos/logo-full-white.svg';
-import pga from '../assets/images/logos/pga_sp.svg';
-import post1 from '../assets/icons/post-01.svg';
-import post2 from '../assets/icons/post-02.svg';
-import post3 from '../assets/icons/post-03.svg';
-import tips from '../assets/images/banners/tips.jpg';
-import nineteen from '../assets/images/banners/19th.jpg';
-import pros from '../assets/images/banners/nelson.jpeg';
-import cart from '../assets/images/banners/download.jpg';
-import screenshot from '../assets/images/screenshot/home.png';
-import appstore from '../assets/images/logos/app-store.svg';
-import playstore from '../assets/images/logos/google-play.svg';
+import bg from "../assets/images/banners/landing.jpg";
+import fullLogo from "../assets/images/logos/logo-full-white.svg";
+import pga from "../assets/images/logos/pga-member.svg";
+import pgaWhite from "../assets/images/logos/pga-member-white.svg";
+import tips from "../assets/images/banners/tips.jpg";
+import nineteen from "../assets/images/banners/19th.jpg";
+import pros from "../assets/images/banners/nelson.jpeg";
+import cart from "../assets/images/banners/download.jpg";
+import screenshot from "../assets/images/screenshot/home.png";
+import appstore from "../assets/images/logos/app-store.svg";
+import playstore from "../assets/images/logos/google-play.svg";
+import { RootState } from "../redux/store";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ROUTES } from "../constants/routes";
+import { Banner } from "../components/display/Banner";
+import { APP_STORE_LINK, PLAY_STORE_LINK } from "../constants";
+import { SectionBlurb } from "../components/text/SectionBlurb";
+import { Section } from "../components/display/Section";
+import { InfoCard } from "../components/display/InfoCard";
+import { GetApp } from "@mui/icons-material";
+import { ScreenShot } from "../components/display/ScreenShot";
+import { useGetTestimonialsQuery } from "../redux/apiServices/testimonialsService";
+import { getAbbreviatedName, getInitials } from "../utilities/strings";
+import { Testimonial } from "../components/display/Testimonial";
+import { useDarkMode } from "../hooks";
 
-const getAbbreviatedName = (username: string, first: string, last: string): string => {
-    if (!first) return username;
+const AppleStoreIcon: React.FC<BoxProps> = (props) => (
+  <Box
+    component={"img"}
+    src={appstore}
+    alt={"Apple App Store Icon"}
+    onClick={(): void => {
+      window.open(APP_STORE_LINK, "blank");
+    }}
+    {...props}
+  />
+);
 
-    const firstInitial = first.charAt(0).toUpperCase() + first.substr(1);
-    const lastInitial = last ? last.charAt(0).toUpperCase() : '';
+const GoogleStoreIcon: React.FC<BoxProps> = (props) => (
+  <Box
+    component={"img"}
+    src={playstore}
+    alt={"Google Play Store Icon"}
+    onClick={(): void => {
+      window.open(PLAY_STORE_LINK, "blank");
+    }}
+    {...props}
+  />
+);
 
-    return `${firstInitial} ${lastInitial}.`;
+const RegisterButton: React.FC<ButtonProps> = (props) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const token = useSelector((state: RootState) => state.auth.token);
+
+  const { sx, ...other } = props;
+
+  return !token ? (
+    <Button
+      variant={"contained"}
+      color={"primary"}
+      sx={[
+        {
+          display: "flex",
+          color: "primary.contrastText",
+          border: "1px solid",
+          borderColor: "primary.contrastText",
+          borderRadius: (t) => t.spacing(1),
+          margin: "0 auto",
+          minWidth: 270,
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+      onClick={(): void => {
+        navigate(ROUTES.LOGIN, {
+          state: {
+            from: { pathname: location.pathname },
+            initialPage: "register",
+          },
+        });
+      }}
+      {...other}
+    >
+      Sign Up Today
+    </Button>
+  ) : null;
+};
+const RegisterFab: React.FC<Omit<FabProps, "children">> = (props) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const token = useSelector((state: RootState) => state.auth.token);
+
+  return !token ? (
+    <Fab
+      variant={"extended"}
+      color={"primary"}
+      sx={{
+        position: "fixed",
+        bottom: (t) => t.spacing(4),
+        right: (t) => t.spacing(4),
+        border: "1px solid white",
+        borderRadius: (t) => t.spacing(1),
+        zIndex: 2000,
+      }}
+      onClick={(): void => {
+        navigate(ROUTES.LOGIN, {
+          state: {
+            from: { pathname: location.pathname },
+            initialPage: "register",
+          },
+        });
+      }}
+      {...props}
+    >
+      Sign Up Today
+    </Fab>
+  ) : null;
 };
 
-const getInitials = (username: string, first: string, last: string): string => {
-    if (!first) return username.charAt(0).toUpperCase();
+export const LandingPage: React.FC = (): JSX.Element => {
+  const navigate = useNavigate();
 
-    const firstInitial = first.charAt(0).toUpperCase();
-    const lastInitial = last ? last.charAt(0).toUpperCase() : '';
+  const smDown = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const { isDarkMode } = useDarkMode();
+  //   useGoogleAnalyticsPageView();
 
-    return `${firstInitial}${lastInitial}`;
-};
+  // TODO
+  const token = useSelector((state: RootState) => state.auth.token);
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        seLogo: {
-            width: '60%',
-            maxWidth: 600,
-        },
-        pgaLogo: {
-            position: 'absolute',
-            top: theme.spacing(2),
-            right: theme.spacing(2),
-            maxWidth: 180,
-            width: '15%',
-        },
-        stores: {
-            marginTop: theme.spacing(2),
-            textAlign: 'center',
-            [theme.breakpoints.down('xs')]: {
-                marginTop: 0,
-                position: 'absolute',
-                left: 0,
-                width: '100%',
-            },
-        },
-        signUpButton: {
-            display: 'flex',
-            color: 'white',
-            border: '1px solid white',
-            borderRadius: theme.spacing(1),
-            margin: '0 auto',
-            minWidth: 270,
-        },
-        signUpFab: {
-            position: 'fixed',
-            bottom: theme.spacing(4),
-            right: theme.spacing(4),
-            color: 'white',
-            border: '1px solid white',
-            borderRadius: theme.spacing(1),
-            zIndex: 2000,
-        },
-        stepsWrapper: {
-            marginLeft: theme.spacing(8),
-            maxWidth: 512,
-            [theme.breakpoints.down('sm')]: {
-                marginLeft: 0,
-            },
-        },
-        stepIcon: {
-            marginRight: theme.spacing(4),
-            flex: '0 0 auto',
-            [theme.breakpoints.down('sm')]: {
-                marginRight: 0,
-                marginBottom: theme.spacing(1),
-                width: theme.spacing(8),
-            },
-        },
-        step: {
-            display: 'flex',
-            alignItems: 'center',
-            '&:not(:first-child)': {
-                marginTop: theme.spacing(2),
-            },
-            [theme.breakpoints.down('sm')]: {
-                flexDirection: 'column',
-            },
-        },
-        cartBackground: {
-            position: 'absolute',
+  const {
+    data: testimonials = []
+  } = useGetTestimonialsQuery();
+
+  return (
+    <>
+      <Banner
+        background={{
+          src: bg,
+          position: "center 70%",
+        }}
+        noPadding
+        justifyContent={"center"}
+        lockAspectRatio
+      >
+        <Box
+          component={"img"}
+          src={isDarkMode ? pgaWhite : pga}
+          alt={"PGA Logo"}
+          sx={{
+            position: "absolute",
+            bottom: (t) => t.spacing(2),
+            right: (t) => t.spacing(2),
+            maxWidth: 120,
+            width: "15%",
+          }}
+        />
+        <Box sx={{ width: "60%", maxWidth: 600 }}>
+          <img
+            src={fullLogo}
+            alt={"Swing Essentials banner logo"}
+            style={{ width: "100%" }}
+          />
+          <Box
+            sx={{
+              left: 0,
+              width: "100%",
+              textAlign: "center",
+              mt: { xs: 0, sm: 2 },
+            }}
+          >
+            <AppleStoreIcon style={{ cursor: "pointer" }} />
+            <GoogleStoreIcon style={{ cursor: "pointer" }} />
+            {!smDown && <RegisterButton />}
+          </Box>
+        </Box>
+      </Banner>
+
+      {smDown && <RegisterFab />}
+
+      <Section
+        sx={{
+          gap: { xs: 0, md: 8 },
+          alignItems: "center",
+          textAlign: { xs: "center", md: "initial" },
+        }}
+      >
+        <SectionBlurb
+          headline={"Lessons on your schedule"}
+          body={
+            <span>
+              Swing Essentials<sup>®</sup> provides you with affordable,
+              individualized one-on-one lessons from a PGA-certified golf
+              professional from the comfort and convenience of your home.
+            </span>
+          }
+        />
+        <Stack sx={{ maxWidth: 512, gap: 4 }}>
+          {[
+            "Pull out your smart phone and snap a short video of your swing using your camera.",
+            "Preview your swing and when you're ready, submit your videos for professional analysis",
+            "Within 48 hours, you will receive a personalized video highlighting what you're doing well plus areas of your swing that could be improved.",
+          ].map((text, i) => (
+            <Stack
+              key={`step${i}`}
+              alignItems={"center"}
+              gap={2}
+              sx={{
+                flexDirection: { xs: "column", md: "row" },
+              }}
+            >
+              <Box
+                sx={{
+                  flex: "0 0 auto",
+                  height: 80,
+                  width: 80,
+                  borderRadius: "65px",
+                  backgroundColor: "primary.main",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography variant={"h4"} fontWeight={"700"}>
+                  {i + 1}
+                </Typography>
+              </Box>
+              <Typography>{text}</Typography>
+            </Stack>
+          ))}
+        </Stack>
+      </Section>
+
+      <Section>
+        <Grid2
+          container
+          justifyContent={"center"}
+          alignContent={"stretch"}
+          sx={{ m: -6 }}
+        >
+          <Grid2 size={{ xs: 12, md: 4 }}>
+            <InfoCard
+              src={tips}
+              title={"Tip of the Month"}
+              aspectRatio={"16x9"}
+              description={
+                "Each month we bring you a new video to help you bring your golf game to the next level."
+              }
+              onClick={(): void => {
+                navigate(ROUTES.TIPS);
+              }}
+            />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 4 }}>
+            <InfoCard
+              src={nineteen}
+              title={"The 19th Hole"}
+              aspectRatio={"16x9"}
+              description={
+                "Check out our golf blog where we share stories from the field and talk about all things golf."
+              }
+              onClick={(): void => {
+                navigate(ROUTES.BLOG);
+              }}
+            />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 4 }}>
+            <InfoCard
+              src={pros}
+              title={"Meet the Pros"}
+              aspectRatio={"16x9"}
+              backgroundPosition={"center 25%"}
+              description={
+                "Get to know the folks behind the lessons and the experience they bring to the table."
+              }
+              onClick={(): void => {
+                navigate(ROUTES.PROS);
+              }}
+            />
+          </Grid2>
+        </Grid2>
+      </Section>
+
+      <Section
+        sx={{
+          gap: 8,
+          position: "relative",
+          backgroundColor: "#000000",
+          alignItems: "center",
+        }}
+      >
+        {/* Background Graphic */}
+        <Box
+          sx={{
+            position: "absolute",
             zIndex: 0,
             top: 0,
             bottom: 0,
             left: 0,
             right: 0,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center center',
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center center",
             opacity: 0.3,
-        },
-        testimonialWrapper: {
-            display: 'flex',
-            alignItems: 'stretch',
-            justifyContent: 'center',
-            marginTop: theme.spacing(4),
-            [theme.breakpoints.down('sm')]: {
-                display: 'block',
-            },
-        },
-    })
-);
-
-const AppleStoreIcon: React.FC<HTMLAttributes<HTMLImageElement>> = (props) => (
-    <img
-        src={appstore}
-        alt={'Apple App Store Icon'}
-        onClick={(): void => {
-            window.open(APP_STORE_LINK, 'blank');
-        }}
-        {...props}
-    />
-);
-
-const GoogleStoreIcon: React.FC<HTMLAttributes<HTMLImageElement>> = (props) => (
-    <img
-        src={playstore}
-        alt={'Google Play Store Icon'}
-        onClick={(): void => {
-            window.open(PLAY_STORE_LINK, 'blank');
-        }}
-        {...props}
-    />
-);
-
-const RegisterButton: React.FC<ButtonProps> = (props) => {
-    const classes = useStyles();
-    const history = useHistory();
-    const token = useSelector((state: AppState) => state.auth.token);
-
-    return !token ? (
-        <Button
-            variant={'contained'}
-            color={'primary'}
-            className={classes.signUpButton}
-            onClick={(): void =>
-                history.push(ROUTES.LOGIN, { from: { pathname: history.location.pathname }, initialPage: 'register' })
+            backgroundImage: `url(${cart})`,
+          }}
+        />
+        <Box sx={{ zIndex: 100, textAlign: { xs: "center", md: "initial" } }}>
+          <SectionBlurb
+            icon={<GetApp fontSize={"inherit"} />}
+            headline={"Download our app!"}
+            subheading={"Available from the App Store and Google Play"}
+            body={
+              <>
+                <span>
+                  Our mobile app lets you take Swing Essentials on the go. Use
+                  it to record your swing, view your lessons, and keep up to
+                  date with the latest news and tips from Swing Essentials.
+                </span>
+                <br />
+                <br />
+                <span>Sign up and get your first lesson free!</span>
+              </>
             }
-            {...props}
-        >
-            Sign Up Today
-        </Button>
-    ) : null;
-};
-const RegisterFab: React.FC<Omit<FabProps, 'children'>> = (props) => {
-    const classes = useStyles();
-    const history = useHistory();
-    const token = useSelector((state: AppState) => state.auth.token);
+            sx={{ color: "primary.contrastText", mb: 0 }}
+          />
+          <Box sx={{ display: "inline-flex", mt: 2 }}>
+            <AppleStoreIcon sx={{ cursor: "pointer" }} />
+            <GoogleStoreIcon sx={{ cursor: "pointer", ml: 2 }} />
+          </Box>
+        </Box>
 
-    return !token ? (
-        <Fab
-            variant={'extended'}
-            color={'primary'}
-            className={classes.signUpFab}
-            onClick={(): void =>
-                history.push(ROUTES.LOGIN, { from: { pathname: history.location.pathname }, initialPage: 'register' })
-            }
-            {...props}
-        >
-            Sign Up Today
-        </Fab>
-    ) : null;
-};
+        <ScreenShot src={screenshot} alt={"Swing Essentials app screenshot"} />
+      </Section>
 
-export const LandingPage: React.FC = (): JSX.Element => {
-    const classes = useStyles();
-    const history = useHistory();
-    const theme = useTheme();
-    const xs = useMediaQuery(theme.breakpoints.down('xs'));
-    useGoogleAnalyticsPageView();
+      {testimonials.length > 0 && (
+        <Section style={{ display: "block", textAlign: "center" }}>
+          <Typography
+            variant={"h4"}
+          >{`Here's what our customers are saying`}</Typography>
+          <Stack
+            sx={{
+              display: { xs: "block", md: "flex" },
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "stretch",
+              mt: 4,
+              gap: 8,
+            }}
+          >
+            {testimonials.slice(0, 3).map((testimonial, ind) => (
+              <Testimonial
+                key={`testimonial_${ind}`}
+                name={getAbbreviatedName(
+                  testimonial.username,
+                  testimonial.first,
+                  testimonial.last
+                )}
+                initials={getInitials(
+                  testimonial.username,
+                  testimonial.first,
+                  testimonial.last
+                )}
+                location={testimonial.location}
+                joined={
+                  parseInt(testimonial.joined, 10) > 0
+                    ? new Date(parseInt(testimonial.joined, 10) * 1000)
+                        .getFullYear()
+                        .toString()
+                    : ""
+                }
+                testimonial={testimonial.review}
+                sx={{ flex: "1 1 0", margin: "0 auto" }}
+              />
+            ))}
+          </Stack>
+        </Section>
+      )}
 
-    const token = useSelector((state: AppState) => state.auth.token);
-    const testimonials = useSelector((state: AppState) => state.testimonials.list);
-
-    return (
-        <>
-            <Banner
-                background={{ src: bg, position: 'center 70%', maintainAspectRatio: true }}
-                noPadding
-                justify={'center'}
-            >
-                <img src={pga} alt={'PGA Logo'} className={classes.pgaLogo} />
-                <div className={classes.seLogo}>
-                    <img src={fullLogo} alt={'Swing Essentials banner logo'} style={{ width: '100%' }} />
-                    <div className={classes.stores}>
-                        <AppleStoreIcon style={{ cursor: 'pointer' }} />
-                        <GoogleStoreIcon style={{ cursor: 'pointer' }} />
-                        {!xs && <RegisterButton />}
-                    </div>
-                </div>
-            </Banner>
-            {xs && <RegisterFab />}
-            <div />
-            <Section>
-                <SectionBlurb
-                    jumbo
-                    headline={'Lessons on your schedule'}
-                    body={
-                        <span>
-                            Swing Essentials<sup>®</sup> provides you with affordable, individualized one-on-one lessons
-                            from a PGA-certified golf professional from the comfort and convenience of your home.
-                        </span>
-                    }
-                />
-                <div className={classes.stepsWrapper}>
-                    <div className={classes.step}>
-                        <img src={post1} alt={'Step one icon'} className={classes.stepIcon} />
-                        <Typography>
-                            Pull out your smart phone and snap a short video of your swing using your camera.
-                        </Typography>
-                    </div>
-                    <div className={classes.step}>
-                        <img src={post2} alt={'Step two icon'} className={classes.stepIcon} />
-                        <Typography>
-                            Preview your swing and when you’re ready, submit your videos for professional analysis.
-                        </Typography>
-                    </div>
-                    <div className={classes.step}>
-                        <img src={post3} alt={'Step three icon'} className={classes.stepIcon} />
-                        <Typography>
-                            Within 48 hours, you will receive a personalized video highlighting what you’re doing well
-                            plus areas of your swing that could be improved.
-                        </Typography>
-                    </div>
-                </div>
-            </Section>
-            <Section>
-                <Grid container spacing={10} justify={'center'}>
-                    <Grid item xs={12} md={4}>
-                        <InfoCard
-                            spacing={10}
-                            source={tips}
-                            title={'Tip of the Month'}
-                            aspectRatio={'16x9'}
-                            description={
-                                'Each month we bring you a new video to help you bring your golf game to the next level.'
-                            }
-                            onClick={(): void => {
-                                history.push(ROUTES.TIPS);
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                        <InfoCard
-                            spacing={10}
-                            source={nineteen}
-                            title={'The 19th Hole'}
-                            aspectRatio={'16x9'}
-                            description={
-                                'Check out our golf blog where we share stories from the field and talk about all things golf.'
-                            }
-                            onClick={(): void => {
-                                history.push(ROUTES.BLOG);
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                        <InfoCard
-                            spacing={10}
-                            source={pros}
-                            title={'Meet the Pros'}
-                            aspectRatio={'16x9'}
-                            backgroundPosition={'center 25%'}
-                            description={
-                                'Get to know the folks behind the lessons and the experience they bring to the table.'
-                            }
-                            onClick={(): void => {
-                                history.push(ROUTES.PROS);
-                            }}
-                        />
-                    </Grid>
-                </Grid>
-            </Section>
-            <Section background={{ color: 'black' }} style={{ position: 'relative' }}>
-                <div className={classes.cartBackground} style={{ backgroundImage: `url(${cart})` }} />
-                <div style={{ zIndex: 100 }}>
-                    <SectionBlurb
-                        jumbo
-                        icon={<GetApp fontSize={'inherit'} />}
-                        headline={'Download our app!'}
-                        subheading={'Available from the App Store and Google Play'}
-                        body={
-                            <>
-                                <span>
-                                    Our mobile app lets you take Swing Essentials on the go. Use it to record your
-                                    swing, view your lessons, and keep up to date with the latest news and tips from
-                                    Swing Essentials.
-                                </span>
-                                <br />
-                                <br />
-                                <span>Sign up and get your first lesson free!</span>
-                            </>
-                        }
-                        style={{ color: 'white' }}
-                    />
-                    <div style={{ marginTop: theme.spacing(2), display: 'inline-flex' }}>
-                        <AppleStoreIcon style={{ cursor: 'pointer' }} />
-                        <GoogleStoreIcon style={{ cursor: 'pointer', marginLeft: theme.spacing(2) }} />
-                    </div>
-                </div>
-
-                <Spacer flex={0} width={theme.spacing(8)} height={theme.spacing(8)} />
-
-                <ScreenShot src={screenshot} alt={'Swing Essentials app screenshot'} style={{ flex: '0 0 auto' }} />
-            </Section>
-
-            {testimonials.length > 0 && (
-                <Section style={{ display: 'block', textAlign: 'center' }}>
-                    <Headline>{`Here's what our customers are saying`}</Headline>
-                    <div className={classes.testimonialWrapper}>
-                        {testimonials.slice(0, 3).map((testimonial, ind) => (
-                            <React.Fragment key={`testimonial_${ind}`}>
-                                <Testimonial
-                                    name={getAbbreviatedName(testimonial.username, testimonial.first, testimonial.last)}
-                                    initials={getInitials(testimonial.username, testimonial.first, testimonial.last)}
-                                    location={testimonial.location}
-                                    joined={
-                                        parseInt(testimonial.joined, 10) > 0
-                                            ? new Date(parseInt(testimonial.joined, 10) * 1000).getFullYear().toString()
-                                            : ''
-                                    }
-                                    testimonial={testimonial.review}
-                                    style={{ flex: '1 1 0', margin: '0 auto' }}
-                                />
-                                {ind < testimonials.length - 1 && ind < 2 && <Spacer flex={0} height={64} width={64} />}
-                            </React.Fragment>
-                        ))}
-                    </div>
-                </Section>
-            )}
-
-            {!token && !xs && (
-                <Section style={{ display: 'block', textAlign: 'center' }}>
-                    <Headline>{`Let's get started!`}</Headline>
-                    <RegisterButton style={{ marginTop: theme.spacing(6), border: 'none' }} />
-                </Section>
-            )}
-        </>
-    );
+      {!token && !smDown && (
+        <Section style={{ display: "block", textAlign: "center" }}>
+          <Typography variant={"h4"}>{`Let's get started!`}</Typography>
+          <RegisterButton sx={{ mt: 6, border: "none" }} />
+        </Section>
+      )}
+    </>
+  );
 };

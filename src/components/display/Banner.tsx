@@ -1,109 +1,97 @@
-import React from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core';
-import clsx from 'clsx';
+import React, { JSX, PropsWithChildren } from "react";
+import {
+  Box,
+  Stack,
+  StackProps,
+  Theme,
+  useMediaQuery,
+} from "@mui/material";
+import { useDarkMode } from "../../hooks";
 
-const useStyles = makeStyles<Theme, BannerProps>((theme: Theme) =>
-    createStyles({
-        bannerWrapper: {
-            minHeight: 540,
-            width: '100%',
-            position: 'relative',
-            backgroundColor: theme.palette.primary.main,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            '&$maintainRatio': {
-                [theme.breakpoints.down('sm')]: {
-                    minHeight: 'initial',
-                    paddingTop: '56.25%',
-                },
-            },
-        },
-        maintainRatio: {},
-        coloredBackdrop: {
-            height: '100%',
-            width: '100%',
-            top: 0,
-            left: 0,
-            position: 'absolute',
-            backgroundColor: theme.palette.primary.main,
-        },
-        imageBackdrop: {
-            height: '100%',
-            width: '100%',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center center',
-            backgroundRepeat: 'no-repeat',
-            opacity: 0.5,
-        },
-        contentWrapper: {
-            zIndex: 100,
-            height: '100%',
-            width: '100%',
-            padding: (props): number => (props.noPadding ? 0 : theme.spacing(8)),
-            '&$maintainRatio': {
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-            },
-            [theme.breakpoints.down('sm')]: {
-                padding: (props): number | string => (props.noPadding ? 0 : `${theme.spacing(8)}px 10%`),
-                textAlign: 'center',
-            },
-        },
-        content: {
-            position: 'relative',
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            alignItems: (props): string => props.align || 'center',
-            justifyContent: (props): string => props.justify || 'flex-start',
-        },
-    })
-);
-type BannerProps = {
-    background: {
-        src: string;
-        color?: string;
-        opacity?: number;
-        position?: string;
-        size?: string;
-        maintainAspectRatio?: boolean;
-    };
-    align?: 'flex-start' | 'center' | 'stretch';
-    justify?: 'flex-start' | 'center' | 'stretch';
-    noPadding?: boolean;
+type BannerProps = StackProps & {
+  overlayColor?: string;
+  overlayOpacity?: number;
+  lockAspectRatio?: boolean;
+  background?: {
+    src: string;
+    position?: string;
+    size?: string;
+  };
+  noPadding?: boolean;
 };
-export const Banner: React.FC<BannerProps> = (props): JSX.Element => {
-    const { background } = props;
-    const classes = useStyles(props);
 
-    return (
-        <div
-            className={clsx(classes.bannerWrapper, {
-                [classes.maintainRatio]: background.maintainAspectRatio,
-            })}
-            style={{ backgroundColor: background.color }}
+export const Banner: React.FC<PropsWithChildren<BannerProps>> = (
+  props
+): JSX.Element => {
+  const { isDarkMode: dark } = useDarkMode();
+  const {
+    background: { src = "", position = "center center", size = "cover" } = {},
+    sx,
+    overlayColor = dark ? "primary.dark" : "primary.main",
+    overlayOpacity = dark ? 0.35 : 0.5,
+    lockAspectRatio,
+    noPadding,
+    alignItems = "center",
+    justifyContent = "flex-start",
+    ...other
+  } = props;
+
+  const mdDown = useMediaQuery((theme: Theme) => theme.breakpoints.down("md"));
+
+  return (
+    <Stack
+      sx={[
+        {
+          minHeight: 506,
+          width: "100%",
+          position: "relative",
+          backgroundColor: overlayColor,
+        },
+        lockAspectRatio && mdDown ? { minHeight: "initial", pt: "56.25%" } : {},
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+      {...other}
+    >
+      <Box
+        sx={{
+          height: "100%",
+          width: "100%",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          backgroundImage: `url(${src})`,
+          backgroundSize: size,
+          backgroundPosition: position,
+          backgroundRepeat: "no-repeat",
+          opacity: overlayOpacity,
+        }}
+      />
+      <Box
+        sx={{
+          zIndex: 100,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          px: noPadding ? 0 : { xs: "10%", md: 8 },
+          py: noPadding ? 0 : { xs: 1, md: 8 },
+          textAlign: { xs: "center", md: "inherit" },
+        }}
+      >
+        <Stack
+          direction={"row"}
+          justifyContent={justifyContent}
+          alignItems={alignItems}
+          sx={{
+            position: "relative",
+            height: "100%",
+            width: "100%",
+          }}
         >
-            <div
-                className={classes.imageBackdrop}
-                style={{
-                    backgroundImage: `url(${background.src})`,
-                    backgroundSize: background.size,
-                    backgroundPosition: background.position,
-                    opacity: background.opacity,
-                }}
-            />
-            <div className={clsx(classes.contentWrapper, { [classes.maintainRatio]: background.maintainAspectRatio })}>
-                <div className={clsx(classes.content, { [classes.content]: background.maintainAspectRatio })}>
-                    {props.children}
-                </div>
-            </div>
-        </div>
-    );
+          {props.children}
+        </Stack>
+      </Box>
+    </Stack>
+  );
 };

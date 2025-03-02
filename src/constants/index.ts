@@ -11,7 +11,8 @@ export const AUTH = 'Message';
 export const EMAIL_REGEX = new RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 export const DATE_REGEX = new RegExp(/^[0-9]{4}-[0-9]{2}-[0-9]{2}/);
 
-export const TWITTER_URL = 'https://twitter.com/SwingEssentials';
+export const TWITTER_URL = 'https://x.com/swingessentials';
+export const THREADS_URL = 'https://www.threads.net/@swingessentials';
 export const FACEBOOK_URL = 'https://www.facebook.com/swingessentials/';
 export const INSTAGRAM_URL = 'https://www.instagram.com/swingessentials/';
 export const CONTACT_EMAIL = 'info@swingessentials.com';

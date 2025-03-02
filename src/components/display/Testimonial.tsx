@@ -1,99 +1,149 @@
-import React, { HTMLAttributes } from 'react';
-import { Typography, Avatar, makeStyles, Theme, createStyles } from '@material-ui/core';
-import { Headline, SubHeading } from '../text/Typography';
-import clsx from 'clsx';
+import React from "react";
+import {
+  Typography,
+  Avatar,
+  Theme,
+  SxProps,
+  BoxProps,
+  Box,
+} from "@mui/material";
+import { Headline, SubHeading } from "../text/_Typography";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            border: `1px solid ${theme.palette.primary.main}`,
-            borderRadius: theme.spacing(4),
-            borderBottomLeftRadius: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'hidden',
-            maxWidth: 512,
-        },
-        avatar: {
-            height: 80,
-            width: 80,
-            backgroundColor: (props: TestimonialProps): string =>
-                props.src ? 'transparent' : theme.palette.background.paper,
-            color: theme.palette.text.primary,
-            fontSize: 32,
-            position: 'absolute',
-            top: -40,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            border: (props): string =>
-                `${theme.spacing(0.5)}px solid ${props.src ? 'rgba(255,255,255,0.25)' : theme.palette.primary.main}`,
-        },
-        quoteWrapper: {
-            background: theme.palette.primary.light,
-            padding: theme.spacing(4),
-            paddingBottom: theme.spacing(6),
-            display: 'flex',
-            flex: '1 1 auto',
-        },
-        punctuation: {
-            fontSize: '5em',
-            lineHeight: 1,
-            marginRight: theme.spacing(2),
-            display: 'inline-block',
-            marginTop: -10,
-            float: 'left',
-            '&$right': {
-                marginLeft: theme.spacing(2),
-                marginRight: 0,
-                float: 'right',
-            },
-        },
-        right: {},
-        attributionWrapper: {
-            padding: theme.spacing(4),
-            paddingTop: theme.spacing(6),
-            background: theme.palette.primary.main,
-            color: 'white',
-            position: 'relative',
-        },
-    })
-);
-
-type TestimonialProps = HTMLAttributes<HTMLDivElement> & {
-    initials: string;
-    src?: string;
-    name: string;
-    testimonial: string;
-    location: string;
-    joined: string;
+type TestimonialProps = BoxProps & {
+  initials: string;
+  src?: string;
+  name: string;
+  testimonial: string;
+  location: string;
+  joined: string;
 };
 export const Testimonial: React.FC<TestimonialProps> = (props) => {
-    const { initials, src, name, testimonial, location, joined, ...divProps } = props;
+  const {
+    initials,
+    sx,
+    src,
+    name,
+    testimonial,
+    location,
+    joined,
+    ...boxProps
+  } = props;
 
-    const classes = useStyles(props);
-    return (
-        <div className={classes.root} {...divProps}>
-            <div className={classes.quoteWrapper}>
-                <Typography style={{ width: '100%' }}>
-                    <Typography component={'span'} variant={'h5'} className={classes.punctuation}>
-                        “
-                    </Typography>
-                    <Typography component={'span'} variant={'h5'} className={clsx(classes.punctuation, classes.right)}>
-                        ”
-                    </Typography>
-                    {testimonial}
-                </Typography>
-            </div>
-            <div className={classes.attributionWrapper}>
-                <Avatar src={src} className={classes.avatar}>
-                    {initials}
-                </Avatar>
-                <Headline noWrap>{name}</Headline>
-                <SubHeading noWrap display={'block'}>
-                    {location}
-                </SubHeading>
-                <Typography noWrap variant={'caption'}>{`Member since ${joined}`}</Typography>
-            </div>
-        </div>
-    );
+  const quoteStyle: SxProps = {
+    fontSize: "5em",
+    lineHeight: 1,
+    display: "inline-block",
+    marginTop: -2,
+  };
+
+  return (
+    <Box
+      sx={[
+        {
+          borderWidth: (t) => t.spacing(0.25),
+          borderStyle: "solid",
+          borderColor: "primary.main",
+          borderRadius: (t) => t.spacing(4),
+          borderBottomLeftRadius: 0,
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          maxWidth: 512,
+        },
+        (theme) =>
+          theme.applyStyles("dark", {
+            borderWidth: theme.spacing(0.5),
+          }),
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+      {...boxProps}
+    >
+      <Box
+        sx={[
+          {
+            backgroundColor: "primary.light",
+            p: 4,
+            pb: 6,
+            display: "flex",
+            flex: "1 1 auto",
+          },
+          (theme) =>
+            theme.applyStyles("dark", {
+              backgroundColor: "background.paper",
+            }),
+        ]}
+      >
+        <Typography style={{ width: "100%" }}>
+          <Typography
+            component={"span"}
+            variant={"h5"}
+            sx={[
+              quoteStyle,
+              {
+                mr: 2,
+                ml: 0,
+                float: "left",
+              },
+            ]}
+          >
+            “
+          </Typography>
+          <Typography
+            component={"span"}
+            variant={"h5"}
+            sx={
+              [
+                quoteStyle,
+                {
+                  ml: 2,
+                  mr: 0,
+                  float: "right",
+                },
+              ] as SxProps<Theme>
+            }
+          >
+            ”
+          </Typography>
+          {testimonial}
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          p: 4,
+          pt: 6,
+          backgroundColor: "primary.main",
+          color: "primary.contrastText",
+          position: "relative",
+        }}
+      >
+        <Avatar
+          src={src}
+          sx={{
+            height: 80,
+            width: 80,
+            backgroundColor: src ? "transparent" : "background.paper",
+            color: "text.primary",
+            fontSize: 32,
+            position: "absolute",
+            top: -40,
+            left: "50%",
+            transform: "translateX(-50%)",
+            borderWidth: (t) => t.spacing(0.5),
+            borderStyle: "solid",
+            borderColor: src ? "rgba(255,255,255,0.25)" : "primary.main",
+          }}
+        >
+          {initials}
+        </Avatar>
+        <Headline noWrap>{name}</Headline>
+        <SubHeading noWrap display={"block"}>
+          {location}
+        </SubHeading>
+        <Typography
+          noWrap
+          variant={"caption"}
+        >{`Member since ${joined}`}</Typography>
+      </Box>
+    </Box>
+  );
 };

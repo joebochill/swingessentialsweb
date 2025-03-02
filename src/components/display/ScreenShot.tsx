@@ -1,42 +1,51 @@
-import React, { HTMLAttributes } from 'react';
-import { makeStyles, createStyles } from '@material-ui/core';
-import iphone from '../../assets/images/screenshot/iphone.png';
+import React from "react";
+import { Box, BoxProps } from "@mui/material";
+import iphone from "../../assets/images/screenshot/iphone16-pro-frame.svg";
 
-const useStyles = makeStyles(() =>
-    createStyles({
-        wrapper: {
-            position: 'relative',
-            width: 260,
-            height: 511.03,
-            overflow: 'hidden',
-        },
-        image: {
-            position: 'absolute',
-            left: 21,
-            top: 20,
-            width: 218,
-            zIndex: 99,
-        },
-        frame: {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            zIndex: 100,
-        },
-    })
-);
-
-type ScreenShotProps = HTMLAttributes<HTMLDivElement> & {
-    src: string;
-    alt: string;
+type ScreenShotProps = BoxProps & {
+  src: string;
+  alt: string;
 };
 export const ScreenShot: React.FC<ScreenShotProps> = (props) => {
-    const { src, alt, ...other } = props;
-    const classes = useStyles();
-    return (
-        <div className={classes.wrapper} {...other}>
-            <img src={src} alt={alt} className={classes.image} />
-            <img src={iphone} alt={'Iphone device frame'} className={classes.frame} width={260} />
-        </div>
-    );
+  const { src, alt, sx, ...other } = props;
+  return (
+    <Box
+      sx={[
+        {
+          position: "relative",
+          width: 240,
+          height: 511.03,
+          overflow: "hidden",
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+      {...other}
+    >
+      <Box
+        component={"img"}
+        src={src}
+        alt={alt}
+        sx={{
+          position: "absolute",
+          left: 9,
+          top: 8,
+          width: 222,
+          zIndex: 99,
+          borderRadius: (t) => t.spacing(4),
+        }}
+      />
+      <Box
+        component={"img"}
+        src={iphone}
+        alt={"Iphone device frame"}
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          zIndex: 100,
+        }}
+        width={240}
+      />
+    </Box>
+  );
 };

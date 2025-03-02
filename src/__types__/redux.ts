@@ -55,7 +55,7 @@ export type AuthState = {
     token: string | null;
     admin: boolean;
     role: UserRole;
-    modalWarning: boolean;
+    loginFailures: number;
 };
 export type LessonsState = {
     pending: Lesson[];
@@ -74,7 +74,7 @@ export type UserDataState = {
     location?: string;
     goals?: string;
     birthday?: string;
-    // phone?: string;
+    phone?: string;
     average?: ScoreRange | '';
 };
 export type NotificationSettings = {
