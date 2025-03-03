@@ -7,7 +7,6 @@ import {
   setToken,
 } from "../slices/authSlice";
 import { loadUserData } from "../thunks";
-import { changePassword } from "../actions/auth-actions";
 
 const authApi = createApi({
   reducerPath: "authApi",
@@ -121,7 +120,10 @@ const authApi = createApi({
         body: { email },
       }),
     }),
-    verifyResetPasswordCode: builder.mutation<{username: string, auth: string}, string>({
+    verifyResetPasswordCode: builder.mutation<
+      { username: string; auth: string },
+      string
+    >({
       query: (code) => ({
         url: "/verify",
         method: "PUT",
@@ -194,6 +196,49 @@ const authApi = createApi({
         return message;
       },
     }),
+    verifyPassword: builder.mutation<boolean, string>({
+      query: (password) => ({
+        url: "/validate",
+        method: "PUT",
+        headers: {
+          [AUTH]: `Bearer ${localStorage.getItem(`${ASYNC_PREFIX}token`)}`,
+        },
+        body: {
+          password,
+        },
+      }),
+      transformResponse: () => {
+        return true;
+      },
+    }),
+    changePassword: builder.mutation<boolean, string>({
+      query: (password) => ({
+        url: "/credentials",
+        method: "PUT",
+        headers: {
+          [AUTH]: `Bearer ${localStorage.getItem(`${ASYNC_PREFIX}token`)}`,
+        },
+        body: {
+          password,
+        },
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { meta } = await queryFulfilled;
+          const token = meta?.response?.headers.get("Token") ?? "";
+          if (token) {
+            localStorage.setItem(`${ASYNC_PREFIX}token`, token);
+            dispatch(setToken(token));
+            dispatch(loadUserData());
+          }
+        } catch (error) {
+          console.error("Change Password failed:", error);
+        }
+      },
+      transformResponse: () => {
+        return true;
+      },
+    }),
   }),
 });
 
@@ -205,5 +250,7 @@ export const {
   useCheckRegistrationTokenMutation,
   useVerifyResetPasswordCodeMutation,
   useResetPasswordMutation,
+  useVerifyPasswordMutation,
+  useChangePasswordMutation,
 } = authApi;
 export default authApi;

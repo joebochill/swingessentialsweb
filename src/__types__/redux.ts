@@ -52,6 +52,7 @@ export type APIStatusState = {
 
 // Data Reducers
 export type AuthState = {
+    initialized: boolean;
     token: string | null;
     admin: boolean;
     role: UserRole;

@@ -133,7 +133,6 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>(
           onChange={(e): void => {
             setUsername(e.target.value);
           }}
-          color={"secondary"}
         />
         <StyledPassword
           label={"Password"}
@@ -285,7 +284,6 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>(
           onBlur={(): void => {
             if (username) checkUsernameAvailability(username);
           }}
-          color={"secondary"}
         />
         <StyledTextField
           label={"Email Address"}
@@ -301,7 +299,6 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>(
           onBlur={(): void => {
             if (email) checkEmailAvailability(email);
           }}
-          color={"secondary"}
         />
         <StyledTextField
           type={showPassword ? "text" : "password"}
@@ -326,7 +323,6 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>(
               ),
             },
           }}
-          color={"secondary"}
         />
         <StyledTextField
           select
@@ -334,7 +330,6 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>(
           name={"acquisition"}
           value={acquisition}
           onChange={(e): void => setAcquisition(e.target.value as Acquisition)}
-          color={"secondary"}
         >
           {acquisitionMenuItems.map((item, index) => (
             <MenuItem key={`option_${index}`} value={item}>
@@ -418,7 +413,6 @@ const ForgotForm = React.forwardRef<HTMLDivElement, ForgotFormProps>(
               onChange={(e): void => {
                 setEmail(e.target.value);
               }}
-              color={"secondary"}
             />
             <ErrorBox message={errorMessage} />
           </>

@@ -5,3 +5,4 @@ export * from "./ProsPage";
 export * from "./LoginPage";
 export * from "./VerifyEmailPage";
 export * from "./ResetPasswordPage";
+export * from "./ProfilePage";

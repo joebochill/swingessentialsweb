@@ -43,7 +43,7 @@ export const SwingEssentialsTheme = createTheme({
           theme.unstable_sx({
             ml: 0,
             mr: 0,
-            color: "main.dark",
+            color: "primary.dark",
             "&.Mui-error": {
               color: "error.contrastText",
               m: 0,

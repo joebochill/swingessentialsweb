@@ -4,6 +4,7 @@ import { AuthState } from "../../__types__";
 import { getUserRole } from "../../utilities/user";
 
 const initialState: AuthState = {
+  initialized: false,
   token: null,
   admin: false,
   role: "anonymous",
@@ -33,6 +34,9 @@ export const authSlice = createSlice({
     resetLoginFailures: (state) => {
       state.loginFailures = 0;
     },
+    initialize: (state) => {
+      state.initialized = true;
+    }
   },
 });
 
@@ -42,6 +46,7 @@ export const {
   clearToken,
   incrementLoginFailures,
   resetLoginFailures,
+  initialize
 } = authSlice.actions;
 
 export default authSlice.reducer;

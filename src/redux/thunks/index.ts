@@ -3,7 +3,7 @@ import { userDetailsApi } from "../apiServices/userDetailsService";
 import { setUserDetails } from "../slices/userDetailsSlice";
 import { UserDataState } from "../../__types__";
 import { ASYNC_PREFIX } from "../../constants";
-import { setToken } from "../slices/authSlice";
+import { initialize, setToken } from "../slices/authSlice";
 
 export const loadUserData = createAsyncThunk(
   "auth/loadUserData",
@@ -43,6 +43,7 @@ export const initializeData = createAsyncThunk(
         dispatch(setToken(token));
         dispatch(loadUserData());
       }
+      dispatch(initialize());
       // dispatch(loadTips());
       // dispatch(loadBlogs());
       // dispatch(loadDiscounts()); // TODO should we be loading these or only for admin on the admin portal

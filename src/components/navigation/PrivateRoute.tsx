@@ -4,9 +4,10 @@ import { ROUTES } from "../../constants/routes";
 
 type PrivateRouteProps = {
   canActivate: boolean | (() => boolean);
+  fallbackRoute?: string;
 };
 export const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
-  const { canActivate } = props;
+  const { canActivate, fallbackRoute = ROUTES.LOGIN } = props;
   const location = useLocation();
 
   let active = false;
@@ -16,6 +17,6 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
   return active ? (
     <Outlet />
   ) : (
-    <Navigate to={ROUTES.LOGIN} state={{ from: location }} />
+    <Navigate to={fallbackRoute} state={{ from: location }} />
   );
 };

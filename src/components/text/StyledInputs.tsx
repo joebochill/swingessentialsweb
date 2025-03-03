@@ -37,12 +37,19 @@ const styles = {
 
 type StyledTextFieldProps = TextFieldProps;
 export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
-  const { sx, slotProps = {}, variant = "filled", ...other } = props;
+  const {
+    sx,
+    slotProps = {},
+    variant = "filled",
+    color = "secondary",
+    ...other
+  } = props;
 
   return (
     <TextField
       fullWidth
       variant={variant}
+      color={color}
       slotProps={{
         input: {
           ...slotProps.input,
@@ -62,35 +69,6 @@ export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
   );
 };
 
-// TODO We don't need this anymore because of select=true on textfield
-// type StyledSelectProps = SelectProps & {
-//   last?: boolean;
-// };
-// export const StyledSelect: React.FC<StyledSelectProps> = (props) => {
-//   const { last, sx, ...other } = props;
-
-//   return (
-//     <Select
-//       fullWidth
-//       variant={"filled"}
-//       input={
-//         <StyledTextField
-//           // slotProps={{
-//           //   input: {
-//           //     sx: {
-//           //       ...(props.value ? styles.focused : styles.input),
-//           //       // @ts-ignore
-//           //       "&.Mui-focused": styles.focused,
-//           //     },
-//           //   },
-//           // }}
-//         />
-//       }
-//       {...other}
-//     />
-//   );
-// };
-
 export const StyledPassword: React.FC<StyledTextFieldProps> = (props) => {
   const { type, ...textFieldProps } = props;
   const [showPassword, setShowPassword] = useState(false);
@@ -102,7 +80,10 @@ export const StyledPassword: React.FC<StyledTextFieldProps> = (props) => {
         input: {
           endAdornment: (
             <InputAdornment position="end">
-              <Tooltip title={showPassword ? "Hide Password" : "Show Password"}>
+              <Tooltip
+                placement="right"
+                title={showPassword ? "Hide Password" : "Show Password"}
+              >
                 <IconButton
                   aria-label="toggle password visibility"
                   onClick={(): void => setShowPassword(!showPassword)}

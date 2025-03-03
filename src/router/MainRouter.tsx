@@ -12,6 +12,7 @@ import {
   PrivacyPage,
   VerifyEmailPage,
   ResetPasswordPage,
+  ProfilePage,
 } from "../pages";
 import { ScrollToTop } from "./ScrollToTop";
 import { NavigationDrawer } from "../components/navigation/NavigationDrawer";
@@ -20,9 +21,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 
 export const MainRouter = (): ReactNode => {
-  const token = useSelector((state: RootState) => state.auth.token);
-  const admin = useSelector((state: RootState) => state.auth.admin);
+  const { token, admin, initialized } = useSelector(
+    (state: RootState) => state.auth
+  );
   const loggedIn = token !== null;
+
+  if (!initialized) return null;
 
   return (
     <BrowserRouter>
@@ -30,7 +34,15 @@ export const MainRouter = (): ReactNode => {
       <NavigationToolbar />
       <Routes>
         <Route path={`${ROUTES.HOME}`} element={<LandingPage />} />
-        <Route path={`${ROUTES.LOGIN}`} element={<LoginPage />} />
+
+        <Route
+          element={
+            <PrivateRoute canActivate={!loggedIn} fallbackRoute={ROUTES.HOME} />
+          }
+        >
+          <Route path={`${ROUTES.LOGIN}`} element={<LoginPage />} />
+        </Route>
+
         <Route path={`${ROUTES.REGISTER}/:key`} element={<VerifyEmailPage />} />
         <Route path={`${ROUTES.RESET}/:key`} element={<ResetPasswordPage />} />
 
@@ -42,7 +54,7 @@ export const MainRouter = (): ReactNode => {
         <Route path={`${ROUTES.PRIVACY}`} element={<PrivacyPage />} />
 
         <Route element={<PrivateRoute canActivate={loggedIn} />}>
-          <Route path={`${ROUTES.PROFILE}`} element={<span>Profile</span>} />
+          <Route path={`${ROUTES.PROFILE}`} element={<ProfilePage />} />
           {/* <Route path={`${ROUTES.LESSONS}/:id?`} element={<LessonsPage />} /> */}
           {/* <Route path={`${ROUTES.ORDER}`} element={<PackagesPage />} /> */}
           {/* <Route path={`${ROUTES.SUBMIT}`} element={<SubmitPage />} /> */}
