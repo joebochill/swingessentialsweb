@@ -74,6 +74,15 @@ export const SwingEssentialsTheme = createTheme({
         },
       },
     },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: ({ theme }) => theme.unstable_sx({
+          px: 3,
+          py: 2,
+          justifyContent: "space-between",
+        }),
+      },
+    },
   },
   colorSchemes: {
     light: {

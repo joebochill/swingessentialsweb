@@ -7,6 +7,7 @@ import {
   setToken,
 } from "../slices/authSlice";
 import { loadUserData } from "../thunks";
+import { storeToken } from "./utils/storeToken";
 
 const authApi = createApi({
   reducerPath: "authApi",
@@ -27,12 +28,7 @@ const authApi = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { meta } = await queryFulfilled;
-          const token = meta?.response?.headers.get("Token") ?? "";
-          if (token) {
-            localStorage.setItem(`${ASYNC_PREFIX}token`, token);
-            dispatch(setToken(token));
-            dispatch(loadUserData());
-          }
+          storeToken(meta, dispatch);
         } catch (error) {
           console.error("Login failed:", error);
           dispatch(incrementLoginFailures());
@@ -81,11 +77,7 @@ const authApi = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { meta } = await queryFulfilled;
-          const token = meta?.response?.headers.get("Token") ?? "";
-          if (token) {
-            localStorage.setItem(`${ASYNC_PREFIX}token`, token);
-            dispatch(setToken(token));
-          }
+          storeToken(meta, dispatch, false);
         } catch (error) {
           console.error("Check token failed:", error);
         }
@@ -103,11 +95,7 @@ const authApi = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { meta } = await queryFulfilled;
-          const token = meta?.response?.headers.get("Token") ?? "";
-          if (token) {
-            localStorage.setItem(`${ASYNC_PREFIX}token`, token);
-            dispatch(setToken(token));
-          }
+          storeToken(meta, dispatch, false);
         } catch (error) {
           console.error("Login failed:", error);
         }
@@ -172,12 +160,7 @@ const authApi = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { meta } = await queryFulfilled;
-          const token = meta?.response?.headers.get("Token") ?? "";
-          if (token) {
-            localStorage.setItem(`${ASYNC_PREFIX}token`, token);
-            dispatch(setToken(token));
-            dispatch(loadUserData());
-          }
+          storeToken(meta, dispatch);
         } catch (error) {
           console.error("Reset Password failed:", error);
         }
@@ -225,12 +208,7 @@ const authApi = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { meta } = await queryFulfilled;
-          const token = meta?.response?.headers.get("Token") ?? "";
-          if (token) {
-            localStorage.setItem(`${ASYNC_PREFIX}token`, token);
-            dispatch(setToken(token));
-            dispatch(loadUserData());
-          }
+          storeToken(meta, dispatch);
         } catch (error) {
           console.error("Change Password failed:", error);
         }

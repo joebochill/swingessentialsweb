@@ -2,7 +2,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Blog } from '../../__types__'
 import { BASEURL } from '../../constants';
-import { prepareHeaders } from './utils';
+import { prepareHeaders } from './utils/prepareHeaders';
 
 // Define a service using a base URL and expected endpoints
 export const blogApi = createApi({

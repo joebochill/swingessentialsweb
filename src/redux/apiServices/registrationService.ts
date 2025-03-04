@@ -7,9 +7,10 @@ import { /*ASYNC_PREFIX, AUTH,*/ ASYNC_PREFIX, BASEURL } from "../../constants";
 //   setToken,
 // } from "../slices/authSlice";
 // import { loadUserData } from "../thunks";
-import { prepareHeaders } from "./utils";
+import { prepareHeaders } from "./utils/prepareHeaders";
 import { setToken } from "../slices/authSlice";
 import { loadUserData } from "../thunks";
+import { storeToken } from "./utils/storeToken";
 
 export type UserRegistrationDetails = {
   username: string;
@@ -59,12 +60,7 @@ const registrationApi = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { meta } = await queryFulfilled;
-          const token = meta?.response?.headers.get("Token") ?? "";
-          if (token) {
-            localStorage.setItem(`${ASYNC_PREFIX}token`, token);
-            dispatch(setToken(token));
-            dispatch(loadUserData());
-          }
+          storeToken(meta, dispatch);
         } catch (error) {
           console.error("Registration failed:", error);
         }
@@ -88,12 +84,7 @@ const registrationApi = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { meta } = await queryFulfilled;
-          const token = meta?.response?.headers.get("Token") ?? "";
-          if (token) {
-            localStorage.setItem(`${ASYNC_PREFIX}token`, token);
-            dispatch(setToken(token));
-            dispatch(loadUserData());
-          }
+          storeToken(meta, dispatch);
         } catch (error) {
           console.error("Registration failed:", error);
         }

@@ -25,7 +25,7 @@ REWRITE
 - [ ] Blogs [2]
 - [ ] Tips [3]
 - [ ] Lessons [3]
-- [ ] Profile [2]
+- [X] Profile
 - [ ] Submit [3]
 - [ ] Order [3]
 - [ ] Admin Portal [2]
@@ -39,3 +39,5 @@ Clear up / polish console.error / console.logs
 Positive and negative test all major apis (login, register, submit, purchase, etc.) to make sure appropriate error messages are displayed
 
 Dialog background colors in dark theme
+Fix isLoading vs isFetching
+isSuccess (instead of transforming results to boolean)

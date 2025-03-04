@@ -1,8 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-// import { AppState } from '../../__types__';
-// import { CHANGE_PASSWORD } from '../../redux/actions/types';
-// import { changePassword } from '../../redux/actions/auth-actions';
+import React, { useState, useCallback } from "react";
 import { StyledPassword } from "../text/StyledInputs";
 import {
   ButtonProps,
@@ -14,7 +10,6 @@ import {
   DialogContentText,
   CircularProgress,
   DialogActions,
-  useTheme,
   Stack,
   Box,
 } from "@mui/material";
@@ -31,20 +26,9 @@ type ChangePasswordProps = ButtonProps & {
 export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
   const { dialogProps, ...buttonProps } = props;
 
-  //   const theme = useTheme();
-
   const [showDialog, setShowDialog] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-
-  // const validateStatus = useSelector((state: AppState) => state.api.validatePassword);
-  // const changeStatus = useSelector((state: AppState) => state.api.changePassword);
-
-  // const validLoading = validateStatus.status === 'loading';
-  // const changeLoading = changeStatus.status === 'loading';
-
-  // const validateRequestStatus = validateStatus.status;
-  // const changeRequestStatus = changeStatus.status;
 
   const [
     verifyPassword,
@@ -101,8 +85,6 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
       >
         <DialogTitle>{`Change Password`}</DialogTitle>
         <DialogContent>
-          {/* {changeRequestStatus === "initial" &&
-            validateRequestStatus !== "loading" && ( */}
           {!isLoading && !changeError && !changed && (
             <Stack spacing={2}>
               <DialogContentText>{`To change your password, enter your current password and new password below.`}</DialogContentText>
@@ -153,13 +135,7 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
             />
           )}
         </DialogContent>
-        <DialogActions
-          sx={{
-            px: 3,
-            py: 2,
-            justifyContent: "space-between",
-          }}
-        >
+        <DialogActions>
           {!isLoading && changed === undefined && !changeError && (
             <>
               <Button

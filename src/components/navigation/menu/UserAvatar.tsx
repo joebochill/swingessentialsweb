@@ -32,7 +32,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = (props) => {
           width: (t) => t.spacing(5),
 
           fontWeight: 600,
-          fontFamily: "Roboto Mono",
+          fontFamily: `Roboto Mono`,
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}

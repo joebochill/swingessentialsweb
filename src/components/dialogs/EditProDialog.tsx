@@ -133,8 +133,6 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
         </DialogContent>
         <DialogActions
           sx={{
-            px: 3,
-            py: 2,
             justifyContent: isNew ? "flex-end" : "space-between",
           }}
         >

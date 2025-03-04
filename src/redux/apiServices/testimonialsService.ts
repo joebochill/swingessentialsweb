@@ -1,7 +1,7 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASEURL } from "../../constants";
-import { prepareHeaders } from "./utils";
+import { prepareHeaders } from "./utils/prepareHeaders";
 import { Testimonial } from "../../__types__";
 
 type TestimonialsApiResponse = Testimonial[]

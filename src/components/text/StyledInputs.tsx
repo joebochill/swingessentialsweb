@@ -23,6 +23,10 @@ const styles = {
     "&:focus-visible": {
       background: "rgba(var(--inputBackgroundColor),1)",
     },
+    '&.Mui-disabled': {
+      pointerEvents: 'none',
+      background: "rgba(var(--inputBackgroundColor),0.3)",
+    },
   },
   focused: {
     background: "rgba(var(--inputBackgroundColor),1)",
@@ -38,12 +42,14 @@ const styles = {
 type StyledTextFieldProps = TextFieldProps;
 export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
   const {
-    sx,
     slotProps = {},
+    InputProps,
     variant = "filled",
     color = "secondary",
     ...other
   } = props;
+
+  const { input: inputSlotProps, ...otherSlotProps } = slotProps;
 
   return (
     <TextField
@@ -52,17 +58,21 @@ export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
       color={color}
       slotProps={{
         input: {
-          ...slotProps.input,
-          sx: (theme) => ({
+          ...inputSlotProps,
+          ...InputProps,
+          sx: (theme: Theme) => ({
+            // ...(InputProps?.sx ?? {}),
             textAlign: "left",
             "--inputBackgroundColor": "255,255,255",
             ...styles.input,
             "&.Mui-focused": styles.focused,
-            ...theme.applyStyles("dark", {
-              "--inputBackgroundColor": "0,0,0",
-            }),
+            ...(theme.applyStyles &&
+              theme.applyStyles("dark", {
+                "--inputBackgroundColor": "0,0,0",
+              })),
           }),
         },
+        ...otherSlotProps,
       }}
       {...other}
     />
@@ -101,39 +111,16 @@ export const StyledPassword: React.FC<StyledTextFieldProps> = (props) => {
   );
 };
 
-type StyledDatePickerProps<TDate extends Date> = DatePickerProps<TDate> & {
-  last?: boolean;
-  onDark?: boolean;
-};
+type StyledDatePickerProps<TDate extends Date> = DatePickerProps<TDate>;
 export const StyledDatePicker: React.FC<StyledDatePickerProps<any>> = (
   props
 ) => {
-  const { last, sx, slotProps, onDark = true, ...other } = props;
-
   return (
     <DatePicker
-      //     slotProps={{
-      //         input: onDark ?  {
-
-      //         } : slotProps.input
-      //     }}
-      //   InputProps={Object.assign(
-      //     onDark
-      //       ? {
-      //           classes: {
-      //             root: props.value ? classes.focused : classes.input,
-      //             focused: classes.focused,
-      //           },
-      //         }
-      //       : {},
-      //     InputProps
-      //   )}
-      sx={[{ mb: last ? 0 : 2 }, ...(Array.isArray(sx) ? sx : [sx])]}
-      {...other}
+      slots={{
+        textField: StyledTextField,
+      }}
+      {...props}
     />
   );
 };
-// StyledDatePicker.defaultProps = {
-//   inputVariant: "filled",
-//   onDark: true,
-// };

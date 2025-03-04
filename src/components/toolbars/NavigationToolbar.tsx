@@ -54,7 +54,12 @@ export const NavigationToolbar: React.FC = (): JSX.Element => {
   return (
     <AppBar position={"sticky"}>
       <Toolbar
-        sx={{ minHeight: 64, px: 3, py: 0, justifyContent: "space-between" }}
+        sx={{
+          minHeight: { xs: 64 },
+          px: { xs: 2 },
+          py: 0,
+          justifyContent: "space-between",
+        }}
       >
         <Box
           component={"img"}

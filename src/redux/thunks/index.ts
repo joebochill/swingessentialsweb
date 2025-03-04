@@ -4,6 +4,7 @@ import { setUserDetails } from "../slices/userDetailsSlice";
 import { UserDataState } from "../../__types__";
 import { ASYNC_PREFIX } from "../../constants";
 import { initialize, setToken } from "../slices/authSlice";
+import { userSettingsApi } from "../apiServices/userSettingsService";
 
 export const loadUserData = createAsyncThunk(
   "auth/loadUserData",
@@ -12,19 +13,21 @@ export const loadUserData = createAsyncThunk(
       // dispatch(loadLessons());
       // dispatch(loadCredits());
       // dispatch(loadUserSettings());
-      const { data } = await dispatch(
+      /*const { data } = await */ dispatch(
         userDetailsApi.endpoints.getUserDetails.initiate()
       );
-      if (data) {
-        const { first_name, last_name, ...other } = data.personal;
-        const newData = {
-          ...other,
-          firstName: first_name,
-          lastName: last_name,
-        } as UserDataState;
+      // if (data) {
+      //   const { first_name, last_name, ...other } = data.personal;
+      //   const newData = {
+      //     ...other,
+      //     firstName: first_name,
+      //     lastName: last_name,
+      //   } as UserDataState;
 
-        dispatch(setUserDetails(newData));
-      }
+      //   dispatch(setUserDetails(newData));
+      // }
+      // initialize the user settings
+      dispatch(userSettingsApi.endpoints.getUserSettings.initiate());
     } catch (error) {
       // TODO
       console.log("Error loading data after login:", error);

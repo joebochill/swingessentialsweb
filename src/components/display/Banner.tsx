@@ -18,6 +18,7 @@ type BannerProps = StackProps & {
     size?: string;
   };
   noPadding?: boolean;
+  contentPosition?: 'static' | 'absolute'
 };
 
 export const Banner: React.FC<PropsWithChildren<BannerProps>> = (
@@ -33,6 +34,7 @@ export const Banner: React.FC<PropsWithChildren<BannerProps>> = (
     noPadding,
     alignItems = "center",
     justifyContent = "flex-start",
+    contentPosition = 'absolute',
     ...other
   } = props;
 
@@ -69,7 +71,7 @@ export const Banner: React.FC<PropsWithChildren<BannerProps>> = (
       <Box
         sx={{
           zIndex: 100,
-          position: "absolute",
+          position: contentPosition,
           top: 0,
           left: 0,
           right: 0,
