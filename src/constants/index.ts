@@ -2,7 +2,7 @@ export const YOUTUBE_API_KEY = 'AIzaSyBLUJUqz7E3Z5XNcXbMYO9gVmXd0zYAR4U';
 
 export const ASYNC_PREFIX = '@SwingEssentials:';
 
-export const BASEURL_DEV = 'https://www.swingessentials.com/dev_apis/swingessentials.php';
+export const BASEURL_DEV = 'http://localhost:3000';
 export const BASEURL_PROD = 'https://www.swingessentials.com/apis/swingessentials.php';
 
 export const BASEURL = BASEURL_PROD;

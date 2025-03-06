@@ -13,6 +13,7 @@ import {
   VerifyEmailPage,
   ResetPasswordPage,
   ProfilePage,
+  TipsPage,
 } from "../pages";
 import { ScrollToTop } from "./ScrollToTop";
 import { NavigationDrawer } from "../components/navigation/NavigationDrawer";
@@ -48,7 +49,7 @@ export const MainRouter = (): ReactNode => {
 
         <Route path={`${ROUTES.PROS}`} element={<ProsPage />} />
         {/* <Route exact path={`${ROUTES.BLOG}/:id?`} component={BlogsPage} /> */}
-        {/* <Route exact path={`${ROUTES.TIPS}/:id?`} component={TipsPage} /> */}
+        <Route path={`${ROUTES.TIPS}/:id?`} element={<TipsPage />} />
 
         <Route path={`${ROUTES.TERMS}`} element={<TermsPage />} />
         <Route path={`${ROUTES.PRIVACY}`} element={<PrivacyPage />} />

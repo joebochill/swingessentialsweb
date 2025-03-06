@@ -52,12 +52,6 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
 
   if (!pro) return null;
 
-  const fieldStyle = {
-    "&:not(:last-child)": {
-      mb: 2,
-    },
-  };
-
   return (
     <>
       <Dialog
@@ -70,66 +64,64 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
         <DialogTitle>{`${isNew ? "New" : "Edit"} Pro Bio`}</DialogTitle>
         <DialogContent>
           <DialogContentText>{`Enter the instructor information below:`}</DialogContentText>
-          <TextField
-            fullWidth
-            variant={"filled"}
-            label={"Name"}
-            placeholder={""}
-            name={"name"}
-            value={name}
-            onChange={(e): void => {
-              setName(e.target.value);
-            }}
-            color="secondary"
-            sx={fieldStyle}
-          />
-          <TextField
-            fullWidth
-            variant={"filled"}
-            label={"Title"}
-            placeholder={"e.g., Associate Instructor"}
-            name={"title"}
-            value={title}
-            onChange={(e): void => {
-              setTitle(e.target.value);
-            }}
-            color="secondary"
-            sx={fieldStyle}
-          />
-          <TextField
-            fullWidth
-            variant={"filled"}
-            label={"Headshot Filename"}
-            placeholder={"e.g., YourName.png"}
-            name={"image"}
-            value={image}
-            onChange={(e): void => {
-              setImage(e.target.value);
-            }}
-            color="secondary"
-            sx={fieldStyle}
-          />
-          <TextField
-            fullWidth
-            multiline
-            variant={"filled"}
-            label={"Bio"}
-            placeholder={"Describe yourself..."}
-            name={"bio"}
-            value={bio}
-            onChange={(e): void => {
-              setBio(e.target.value);
-            }}
-            slotProps={{
-              htmlInput: {
-                maxLength: 65000,
-                style: { minHeight: 64 },
-              },
-            }}
-            helperText={`${65000 - bio.length} characters left`}
-            color="secondary"
-            sx={fieldStyle}
-          />
+          <Stack spacing={2}>
+            <TextField
+              fullWidth
+              variant={"filled"}
+              label={"Name"}
+              placeholder={""}
+              name={"name"}
+              value={name}
+              onChange={(e): void => {
+                setName(e.target.value);
+              }}
+              color="secondary"
+            />
+            <TextField
+              fullWidth
+              variant={"filled"}
+              label={"Title"}
+              placeholder={"e.g., Associate Instructor"}
+              name={"title"}
+              value={title}
+              onChange={(e): void => {
+                setTitle(e.target.value);
+              }}
+              color="secondary"
+            />
+            <TextField
+              fullWidth
+              variant={"filled"}
+              label={"Headshot Filename"}
+              placeholder={"e.g., YourName.png"}
+              name={"image"}
+              value={image}
+              onChange={(e): void => {
+                setImage(e.target.value);
+              }}
+              color="secondary"
+            />
+            <TextField
+              fullWidth
+              multiline
+              variant={"filled"}
+              label={"Bio"}
+              placeholder={"Describe yourself..."}
+              name={"bio"}
+              value={bio}
+              onChange={(e): void => {
+                setBio(e.target.value);
+              }}
+              slotProps={{
+                htmlInput: {
+                  maxLength: 65000,
+                  style: { minHeight: 64 },
+                },
+              }}
+              helperText={`${65000 - bio.length} characters left`}
+              color="secondary"
+            />
+          </Stack>
         </DialogContent>
         <DialogActions
           sx={{

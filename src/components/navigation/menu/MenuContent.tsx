@@ -22,7 +22,10 @@ import {
 } from "@mui/icons-material";
 import { MenuListItem } from "./MenuListItem";
 import { RootState } from "../../../redux/store";
-import { useLogoutMutation } from "../../../redux/apiServices/authService";
+// import { useLogoutMutation } from "../../../redux/apiServices/authService";
+import {
+  useLogoutMutation,
+} from "../../../redux/apiServices/newAuthService";
 import { UserAvatar } from "./UserAvatar";
 
 type MenuContentProps = {

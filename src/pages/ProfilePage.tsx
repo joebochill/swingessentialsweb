@@ -69,8 +69,7 @@ export const ProfileForm: React.FC = () => {
   useEffect(() => {
     let timeout: number | undefined;
     if (
-      updatedSettings &&
-      updatedDetails &&
+      (updatedSettings || updatedDetails) &&
       !updatingDetails &&
       !updatingSettings
     ) {

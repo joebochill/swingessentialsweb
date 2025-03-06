@@ -16,9 +16,12 @@ import { Update } from "@mui/icons-material";
 import { RootState } from "../../redux/store";
 import {
   useCheckRegistrationTokenMutation,
-  useLogoutMutation,
+  // useLogoutMutation,
   useRefreshTokenMutation,
 } from "../../redux/apiServices/authService";
+import {
+  useLogoutMutation,
+} from "../../redux/apiServices/newAuthService";
 
 type TokenModalProps = Omit<DialogProps, "open">;
 export const TokenModal: React.FC<TokenModalProps> = (props) => {

@@ -1,18 +1,27 @@
 import React, { JSX } from "react";
-import { Box, Stack, StackProps, Typography } from "@mui/material";
+import {
+  Box,
+  Stack,
+  StackProps,
+  Typography,
+  TypographyProps,
+} from "@mui/material";
 
 type FancyHeadlineProps = StackProps & {
   headline: string;
   subheading?: string;
   icon?: JSX.Element;
+  slotProps?: {
+    headline?: TypographyProps;
+    subheading?: TypographyProps;
+  };
 };
 export const FancyHeadline: React.FC<FancyHeadlineProps> = (props) => {
-  const { headline, subheading, icon, ...other } = props;
+  const { headline, subheading, icon, sx, slotProps = {}, ...other } = props;
 
   return (
     <Stack
-      alignItems={"center"}
-      // gap={2}
+      className={"fancyHeader"}
       sx={[
         {
           flexDirection: { xs: "column", md: "row" },
@@ -21,6 +30,7 @@ export const FancyHeadline: React.FC<FancyHeadlineProps> = (props) => {
           mb: 2,
           gap: 2,
         },
+        ...(Array.isArray(sx) ? sx : [sx]),
       ]}
       {...other}
     >
@@ -29,7 +39,7 @@ export const FancyHeadline: React.FC<FancyHeadlineProps> = (props) => {
           sx={{
             fontSize: 48,
             display: "inline-block",
-            lineHeight: 1
+            lineHeight: 0,
           }}
         >
           {icon}
@@ -37,11 +47,15 @@ export const FancyHeadline: React.FC<FancyHeadlineProps> = (props) => {
       )}
 
       <Stack>
-        <Typography variant={"h4"} fontWeight={600}>
+        <Typography variant={"h4"} fontWeight={600} {...slotProps.headline}>
           {headline}
         </Typography>
         {subheading && (
-          <Typography variant={"subtitle2"} fontWeight={400}>
+          <Typography
+            variant={"subtitle2"}
+            fontWeight={400}
+            {...slotProps.subheading}
+          >
             {subheading}
           </Typography>
         )}

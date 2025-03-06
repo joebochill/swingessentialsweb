@@ -115,7 +115,7 @@ export const TermsPage: React.FC = () => {
           sx={{
             color: "primary.contrastText",
             zIndex: 100,
-            maxWidth: { xs: 960, md: 960 },
+            maxWidth: { xs: 900, md: 900 },
           }}
         />
       </Banner>

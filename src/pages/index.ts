@@ -6,3 +6,4 @@ export * from "./LoginPage";
 export * from "./VerifyEmailPage";
 export * from "./ResetPasswordPage";
 export * from "./ProfilePage";
+export * from "./TipsPage";

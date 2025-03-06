@@ -37,6 +37,12 @@ export const SwingEssentialsTheme = createTheme({
     borderRadius: 0,
   },
   components: {
+    MuiDialog: {
+      defaultProps: {
+        fullWidth: true,
+        maxWidth: "sm",
+      },
+    },
     MuiFormHelperText: {
       styleOverrides: {
         contained: ({ theme }) =>
@@ -76,11 +82,12 @@ export const SwingEssentialsTheme = createTheme({
     },
     MuiDialogActions: {
       styleOverrides: {
-        root: ({ theme }) => theme.unstable_sx({
-          px: 3,
-          py: 2,
-          justifyContent: "space-between",
-        }),
+        root: ({ theme }) =>
+          theme.unstable_sx({
+            px: 3,
+            py: 2,
+            justifyContent: "space-between",
+          }),
       },
     },
   },
@@ -114,6 +121,7 @@ export const SwingEssentialsTheme = createTheme({
         },
         action: {
           hover: purple[50],
+          selected: purple[50],
         },
       },
     },
@@ -146,6 +154,7 @@ export const SwingEssentialsTheme = createTheme({
         },
         action: {
           hover: "rgba(255,255,255,0.05)",
+          selected: "rgba(255,255,255,0.08)",
         },
       },
     },

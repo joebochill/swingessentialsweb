@@ -41,3 +41,5 @@ Positive and negative test all major apis (login, register, submit, purchase, et
 Dialog background colors in dark theme
 Fix isLoading vs isFetching
 isSuccess (instead of transforming results to boolean)
+
+When you log out, reload data in case what you are loooking at is not accessibkle anymore(Like tips_)
