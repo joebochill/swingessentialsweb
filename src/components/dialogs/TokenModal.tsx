@@ -15,13 +15,10 @@ import {
 import { Update } from "@mui/icons-material";
 import { RootState } from "../../redux/store";
 import {
-  useCheckRegistrationTokenMutation,
-  // useLogoutMutation,
+  useLogoutMutation,
+  useGetRoleMutation,
   useRefreshTokenMutation,
 } from "../../redux/apiServices/authService";
-import {
-  useLogoutMutation,
-} from "../../redux/apiServices/newAuthService";
 
 type TokenModalProps = Omit<DialogProps, "open">;
 export const TokenModal: React.FC<TokenModalProps> = (props) => {
@@ -32,7 +29,7 @@ export const TokenModal: React.FC<TokenModalProps> = (props) => {
   const token = useSelector((state: RootState) => state.auth.token);
   const role = useSelector((state: RootState) => state.auth.role);
   const [refreshToken] = useRefreshTokenMutation();
-  const [checkRegistrationToken] = useCheckRegistrationTokenMutation();
+  const [getUserRole, { data: dbRole }] = useGetRoleMutation();
   const [logout] = useLogoutMutation();
 
   const [timeRemaining, setTimeRemaining] = useState(-1);
@@ -55,12 +52,19 @@ export const TokenModal: React.FC<TokenModalProps> = (props) => {
     // timer to check for pending user registration
     if (role === "pending") {
       const interval = setInterval(() => {
-        checkRegistrationToken();
+        getUserRole();
       }, 20 * 1000);
       return (): void => clearInterval(interval);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
+
+  // Get a new token after registration is complete
+  useEffect(() => {
+    if (role && dbRole && role !== dbRole) {
+      refreshToken();
+    }
+  }, [role, dbRole, refreshToken]);
 
   useEffect(() => {
     // set the time remaining on login/logout

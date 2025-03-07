@@ -1,25 +1,26 @@
 import React from "react";
 import { Avatar, AvatarProps } from "@mui/material";
 import { Person } from "@mui/icons-material";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
 import { getInitials } from "../../../utilities/strings";
-import { useGetUserSettingsQuery } from "../../../redux/apiServices/userSettingsService";
+import {
+  BLANK_USER,
+  useGetUserDetailsQuery,
+} from "../../../redux/apiServices/userDetailsService";
 
 type UserAvatarProps = AvatarProps;
 export const UserAvatar: React.FC<UserAvatarProps> = (props) => {
   const { sx, ...other } = props;
 
-  const user = useSelector((state: RootState) => state.userDetails);
-  const { data: { avatar } = {} } = useGetUserSettingsQuery();
+  const { data: user = BLANK_USER, isSuccess } = useGetUserDetailsQuery();
+  const initials = getInitials(user.username, user.first, user.last);
 
-  const initials = getInitials(user.username, user.firstName, user.lastName);
-
-  return (
+  return !isSuccess ? (
+    <Avatar />
+  ) : (
     <Avatar
       src={
-        avatar
-          ? `https://www.swingessentials.com/images/profiles/${user.username}/${avatar}.png`
+        user.avatar
+          ? `https://www.swingessentials.com/images/profiles/${user.username}/${user.avatar}.png`
           : undefined
       }
       sx={[

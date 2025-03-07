@@ -142,9 +142,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
   // TODO
   const token = useSelector((state: RootState) => state.auth.token);
 
-  const {
-    data: testimonials = []
-  } = useGetTestimonialsQuery();
+  const { data: testimonials = [] } = useGetTestimonialsQuery();
 
   return (
     <>
@@ -355,10 +353,9 @@ export const LandingPage: React.FC = (): JSX.Element => {
           >{`Here's what our customers are saying`}</Typography>
           <Stack
             sx={{
-              display: { xs: "block", md: "flex" },
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "stretch",
+              flexDirection: { xs: "column", md: "row" },
+              justifyContent: { xs: "flex-start", md: "center" },
+              alignItems: { xs: "center", md: "stretch" },
               mt: 4,
               gap: 8,
             }}
@@ -385,7 +382,7 @@ export const LandingPage: React.FC = (): JSX.Element => {
                     : ""
                 }
                 testimonial={testimonial.review}
-                sx={{ flex: "1 1 0", margin: "0 auto" }}
+                sx={{ flex: { xs: "1 1 auto", md: "1 1 0" }, margin: "0 auto" }}
               />
             ))}
           </Stack>

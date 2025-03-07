@@ -3,6 +3,7 @@ export const getInitials = (
   first: string,
   last: string
 ): string => {
+  if(!username) return '--';
   if (!first) return username.charAt(0).toUpperCase();
 
   const firstInitial = first.charAt(0).toUpperCase();

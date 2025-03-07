@@ -10,10 +10,9 @@ import {
   Stack,
 } from "@mui/material";
 import bg from "../assets/images/banners/landing.jpg";
-// import { useLogoutMutation } from "../redux/apiServices/authService";
 import {
   useLogoutMutation,
-} from "../redux/apiServices/newAuthService";
+} from "../redux/apiServices/authService";
 import { useVerifyUserEmailMutation } from "../redux/apiServices/registrationService";
 
 export const VerifyEmailPage: React.FC = () => {

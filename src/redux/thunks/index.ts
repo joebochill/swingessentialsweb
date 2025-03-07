@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { userDetailsApi } from "../apiServices/userDetailsService";
-import { setUserDetails } from "../slices/userDetailsSlice";
+// import { setUserDetails } from "../slices/userDetailsSlice";
 import { UserDataState } from "../../__types__";
 import { ASYNC_PREFIX } from "../../constants";
 import { initialize, setToken } from "../slices/authSlice";
@@ -10,24 +10,9 @@ export const loadUserData = createAsyncThunk(
   "auth/loadUserData",
   async (_, { dispatch, getState }) => {
     try {
+      dispatch(userDetailsApi.endpoints.getUserDetails.initiate());
       // dispatch(loadLessons());
-      // dispatch(loadCredits());
-      // dispatch(loadUserSettings());
-      /*const { data } = await */ dispatch(
-        userDetailsApi.endpoints.getUserDetails.initiate()
-      );
-      // if (data) {
-      //   const { first_name, last_name, ...other } = data.personal;
-      //   const newData = {
-      //     ...other,
-      //     firstName: first_name,
-      //     lastName: last_name,
-      //   } as UserDataState;
-
-      //   dispatch(setUserDetails(newData));
-      // }
-      // initialize the user settings
-      dispatch(userSettingsApi.endpoints.getUserSettings.initiate());
+      // dispatch(loadCredits());      
     } catch (error) {
       // TODO
       console.log("Error loading data after login:", error);

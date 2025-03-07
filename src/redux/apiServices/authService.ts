@@ -1,12 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ASYNC_PREFIX, AUTH, BASEURL } from "../../constants";
-import { Credentials } from "../../__types__";
-import {
-  clearToken,
-  incrementLoginFailures,
-  setToken,
-} from "../slices/authSlice";
-import { loadUserData } from "../thunks";
+import { Credentials, UserRole } from "../../__types__";
+import { clearToken, incrementLoginFailures } from "../slices/authSlice";
+// import { loadUserData } from "../thunks";
 import { storeToken } from "./utils/storeToken";
 
 const authApi = createApi({
@@ -15,10 +11,10 @@ const authApi = createApi({
     baseUrl: BASEURL,
   }),
   endpoints: (builder) => ({
-    login: builder.mutation<boolean, Credentials>({
+    login: builder.mutation<void, Credentials>({
       query: (credentials) => ({
-        url: "/login",
-        method: "GET",
+        url: "auth/login",
+        method: "POST",
         headers: {
           [AUTH]: `Basic ${btoa(credentials.username)}.${btoa(
             credentials.password
@@ -34,23 +30,11 @@ const authApi = createApi({
           dispatch(incrementLoginFailures());
         }
       },
-      transformResponse: () => {
-        return true;
-      },
-      transformErrorResponse: (
-        response: { status: string | number },
-        meta,
-        arg
-      ) => {
-        // TODO
-        console.error("Login failed:", response.status);
-        return false;
-      },
     }),
     logout: builder.mutation<void, void>({
       query: () => ({
-        url: "/logout",
-        method: "GET",
+        url: "auth/logout",
+        method: "POST",
         headers: {
           [AUTH]: `Bearer ${localStorage.getItem(`${ASYNC_PREFIX}token`)}`,
         },
@@ -66,41 +50,36 @@ const authApi = createApi({
         }
       },
     }),
-    checkRegistrationToken: builder.mutation<void, void>({
+    getRole: builder.mutation<UserRole, void>({
       query: () => ({
-        url: "/checkToken",
+        url: "auth/role",
         method: "GET",
         headers: {
           [AUTH]: `Bearer ${localStorage.getItem(`${ASYNC_PREFIX}token`)}`,
         },
       }),
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          const { meta } = await queryFulfilled;
-          storeToken(meta, dispatch, false);
-        } catch (error) {
-          console.error("Check token failed:", error);
-        }
+      transformResponse: (response: { role: UserRole }) => {
+        return response.role;
       },
     }),
     refreshToken: builder.mutation<void, void>({
       query: () => ({
-        url: "/refresh",
-        method: "GET",
+        url: "auth/refresh-token",
+        method: "post",
         headers: {
           [AUTH]: `Bearer ${localStorage.getItem(`${ASYNC_PREFIX}token`)}`,
         },
       }),
-      // TODO Make this general and reusable logic
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { meta } = await queryFulfilled;
           storeToken(meta, dispatch, false);
         } catch (error) {
-          console.error("Login failed:", error);
+          console.error("Refresh token failed:", error);
         }
       },
     }),
+    // TODO Fix the below
     sendResetPasswordEmail: builder.mutation<void, string>({
       query: (email) => ({
         url: "/reset",
@@ -224,8 +203,10 @@ export const {
   useLoginMutation,
   useRefreshTokenMutation,
   useLogoutMutation,
+  useGetRoleMutation,
+
   useSendResetPasswordEmailMutation,
-  useCheckRegistrationTokenMutation,
+  // useCheckRegistrationTokenMutation,
   useVerifyResetPasswordCodeMutation,
   useResetPasswordMutation,
   useVerifyPasswordMutation,

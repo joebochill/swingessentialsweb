@@ -22,17 +22,17 @@ import {
 } from "@mui/icons-material";
 import { MenuListItem } from "./MenuListItem";
 import { RootState } from "../../../redux/store";
-// import { useLogoutMutation } from "../../../redux/apiServices/authService";
-import {
-  useLogoutMutation,
-} from "../../../redux/apiServices/newAuthService";
+import { useLogoutMutation } from "../../../redux/apiServices/authService";
 import { UserAvatar } from "./UserAvatar";
+import { BLANK_USER, useGetUserDetailsQuery } from "../../../redux/apiServices/userDetailsService";
 
 type MenuContentProps = {
   onClose: () => void;
 };
 export const MenuContent: React.FC<MenuContentProps> = (props) => {
   const { onClose } = props;
+
+  const { data: user = BLANK_USER } = useGetUserDetailsQuery();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,7 +41,6 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
   const [logout] = useLogoutMutation();
 
   const token = useSelector((state: RootState) => state.auth.token);
-  const user = useSelector((state: RootState) => state.userDetails);
   const isAdmin = useSelector((state: RootState) => state.auth.admin);
 
   const clickMenuItem = useCallback(
@@ -62,9 +61,9 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
           <ListItemText
             primary={user.username}
             secondary={
-              !user.firstName && !user.lastName
+              !user.first && !user.last
                 ? "Welcome User"
-                : `${user.firstName} ${user.lastName}`
+                : `${user.first} ${user.last}`
             }
             slotProps={{
               primary: {

@@ -9,12 +9,9 @@ import { Button, Typography, CircularProgress, Stack } from "@mui/material";
 import bg from "../assets/images/banners/landing.jpg";
 import {
   useResetPasswordMutation,
-  // useLogoutMutation,
+  useLogoutMutation,
   useVerifyResetPasswordCodeMutation,
 } from "../redux/apiServices/authService";
-import {
-  useLogoutMutation,
-} from "../redux/apiServices/newAuthService";
 
 export const ResetPasswordPage: React.FC = () => {
   const { key } = useParams<{ key: string }>();

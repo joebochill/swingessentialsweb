@@ -31,13 +31,9 @@ import { ErrorBox } from "../components/display/ErrorBox";
 import { SimpleLink } from "../components/navigation/SimpleLinks";
 import { RootState } from "../redux/store";
 import {
-  // useLoginMutation,
+  useLoginMutation,
   useSendResetPasswordEmailMutation,
 } from "../redux/apiServices/authService";
-import {
-  useLoginMutation,
-  // useSendResetPasswordEmailMutation,
-} from "../redux/apiServices/newAuthService";
 import { resetLoginFailures } from "../redux/slices/authSlice";
 import { EMAIL_REGEX } from "../constants";
 import {
@@ -91,7 +87,7 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>(
 
     const dispatch = useDispatch();
     const location = useLocation();
-    const [login, {isSuccess: loggedIn, isLoading}] = useLoginMutation();
+    const [login, { isSuccess: loggedIn, isLoading }] = useLoginMutation();
 
     const loginFailures = useSelector(
       (state: RootState) => state.auth.loginFailures

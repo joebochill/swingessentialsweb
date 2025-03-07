@@ -33,19 +33,18 @@ import { ChangePassword } from "../components/dialogs/ChangePassword";
 import { AvatarChanger } from "../components/dialogs/AvatarPicker";
 import { ScoreRange } from "../__types__";
 import {
-  useGetUserSettingsQuery,
-  useUpdateUserNotificationsMutation,
-} from "../redux/apiServices/userSettingsService";
-import {
-  UserDataChange,
+  BLANK_USER,
+  Level2UserDetailsApiResponse,
+  useGetUserDetailsQuery,
   useUpdateUserDetailsMutation,
 } from "../redux/apiServices/userDetailsService";
 
 // TODO: simplify settings logic to be locally scoped and use skeletons on first load
 export const ProfileForm: React.FC = () => {
   const auth = useSelector((state: RootState) => state.auth);
-  const user = useSelector((state: RootState) => state.userDetails);
-  const { data: settings } = useGetUserSettingsQuery();
+
+  const { data: user = BLANK_USER, isSuccess: hasUserData } =
+    useGetUserDetailsQuery();
 
   const [success, setSuccess] = useState(false);
 
@@ -57,22 +56,10 @@ export const ProfileForm: React.FC = () => {
       isSuccess: updatedDetails,
     },
   ] = useUpdateUserDetailsMutation();
-  const [
-    updateUserNotifications,
-    {
-      isLoading: updatingSettings,
-      isError: settingsError,
-      isSuccess: updatedSettings,
-    },
-  ] = useUpdateUserNotificationsMutation();
 
   useEffect(() => {
     let timeout: number | undefined;
-    if (
-      (updatedSettings || updatedDetails) &&
-      !updatingDetails &&
-      !updatingSettings
-    ) {
+    if (updatedDetails && !updatingDetails) {
       setSuccess(true);
       timeout = setTimeout(() => {
         setSuccess(false);
@@ -83,18 +70,17 @@ export const ProfileForm: React.FC = () => {
     return () => {
       clearTimeout(timeout);
     };
-  }, [updatedDetails, updatedSettings, updatingDetails, updatingSettings]);
+  }, [updatedDetails, updatingDetails]);
 
-  const isLoading = updatingSettings || updatingDetails;
+  const isLoading = updatingDetails;
 
-  const error = settingsError || detailsError;
-  const { lessons, marketing, newsletter, reminders } =
-    settings?.notifications || {
-      lessons: true,
-      marketing: true,
-      newsletter: true,
-      reminders: true,
-    };
+  const error = detailsError;
+  const {
+    notify_new_lesson: lessons,
+    notify_marketing: marketing,
+    notify_newsletter: newsletter,
+    notify_reminders: reminders,
+  } = user;
 
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
@@ -106,16 +92,16 @@ export const ProfileForm: React.FC = () => {
 
   const [goals, setGoals] = useState("");
 
-  const [sendLessons, setSendLessons] = useState(true);
-  const [sendMarketing, setSendMarketing] = useState(true);
-  const [sendNewsletter, setSendNewsletter] = useState(true);
-  const [sendReminders, setSendReminders] = useState(true);
+  const [sendLessons, setSendLessons] = useState<0 | 1>(0);
+  const [sendMarketing, setSendMarketing] = useState<0 | 1>(0);
+  const [sendNewsletter, setSendNewsletter] = useState<0 | 1>(0);
+  const [sendReminders, setSendReminders] = useState<0 | 1>(0);
 
   const [initialized, setInitialized] = useState(false);
 
   const changes =
-    first !== user.firstName ||
-    last !== user.lastName ||
+    first !== user.first ||
+    last !== user.last ||
     location !== user.location ||
     email !== user.email ||
     goals !== user.goals ||
@@ -127,9 +113,9 @@ export const ProfileForm: React.FC = () => {
     sendReminders !== reminders;
 
   useEffect(() => {
-    if (!initialized && user && settings) {
-      setFirst(user.firstName);
-      setLast(user.lastName);
+    if (!initialized && hasUserData) {
+      setFirst(user.first);
+      setLast(user.last);
       setLocation(user.location || "");
       setEmail(user.email);
       setGoals(user.goals || "");
@@ -138,13 +124,13 @@ export const ProfileForm: React.FC = () => {
       setBirthdayString(
         user.birthday ? format(new Date(user.birthday), "MM/dd/yyyy") : ""
       );
-      setSendLessons(lessons || false);
-      setSendMarketing(marketing || false);
-      setSendNewsletter(newsletter || false);
-      setSendReminders(reminders || false);
+      setSendLessons(lessons ?? false);
+      setSendMarketing(marketing ?? false);
+      setSendNewsletter(newsletter ?? false);
+      setSendReminders(reminders ?? false);
       setInitialized(true);
     }
-  }, [user.username, settings, initialized]);
+  }, [hasUserData, initialized]);
 
   return (
     <Stack sx={{ flex: "1 1 0px", gap: 2 }}>
@@ -297,10 +283,10 @@ export const ProfileForm: React.FC = () => {
             labelPlacement="start"
             control={
               <Checkbox
-                checked={sendLessons}
+                checked={Boolean(sendLessons)}
                 color={"default"}
                 sx={{ color: "primary.contrastText" }}
-                onChange={(e): void => setSendLessons(e.target.checked)}
+                onChange={(e): void => setSendLessons(e.target.checked ? 1 : 0)}
               />
             }
             sx={{ m: 0 }}
@@ -315,10 +301,12 @@ export const ProfileForm: React.FC = () => {
             labelPlacement="start"
             control={
               <Checkbox
-                checked={sendMarketing}
+                checked={Boolean(sendMarketing)}
                 color={"default"}
                 sx={{ color: "primary.contrastText" }}
-                onChange={(e): void => setSendMarketing(e.target.checked)}
+                onChange={(e): void =>
+                  setSendMarketing(e.target.checked ? 1 : 0)
+                }
               />
             }
             sx={{ m: 0 }}
@@ -333,10 +321,12 @@ export const ProfileForm: React.FC = () => {
             labelPlacement="start"
             control={
               <Checkbox
-                checked={sendNewsletter}
+                checked={Boolean(sendNewsletter)}
                 color={"default"}
                 sx={{ color: "primary.contrastText" }}
-                onChange={(e): void => setSendNewsletter(e.target.checked)}
+                onChange={(e): void =>
+                  setSendNewsletter(e.target.checked ? 1 : 0)
+                }
               />
             }
             sx={{ m: 0 }}
@@ -351,10 +341,12 @@ export const ProfileForm: React.FC = () => {
             labelPlacement="start"
             control={
               <Checkbox
-                checked={sendReminders}
+                checked={Boolean(sendReminders)}
                 color={"default"}
                 sx={{ color: "primary.contrastText" }}
-                onChange={(e): void => setSendReminders(e.target.checked)}
+                onChange={(e): void =>
+                  setSendReminders(e.target.checked ? 1 : 0)
+                }
               />
             }
             sx={{ m: 0 }}
@@ -375,31 +367,29 @@ export const ProfileForm: React.FC = () => {
             onClick={
               changes
                 ? (): void => {
-                    const newChanges: UserDataChange = {};
-                    if (first !== user.firstName) newChanges.firstName = first;
-                    if (last !== user.lastName) newChanges.lastName = last;
+                    const newChanges: Partial<Level2UserDetailsApiResponse> =
+                      {};
+                    if (first !== user.first) newChanges.first = first;
+                    if (last !== user.last) newChanges.last = last;
                     if (location !== user.location)
                       newChanges.location = location;
                     if (goals !== user.goals) newChanges.goals = goals;
-                    if (average !== user.average) newChanges.average = average;
+                    if (average !== user.average)
+                      newChanges.average = average as ScoreRange;
                     if (birthdayString !== user.birthday)
                       newChanges.birthday = birthdayString;
+                    if (email !== user.email) newChanges.email = email;
+                    if (sendLessons !== lessons)
+                      newChanges.notify_new_lesson = sendLessons;
+                    if (sendMarketing !== marketing)
+                      newChanges.notify_marketing = sendMarketing;
+                    if (sendNewsletter !== newsletter)
+                      newChanges.notify_newsletter = sendNewsletter;
+                    if (sendReminders !== reminders)
+                      newChanges.notify_reminders = sendReminders;
 
                     if (Object.keys(newChanges).length > 0) {
                       updateUserDetails(newChanges);
-                    }
-                    if (
-                      sendLessons !== lessons ||
-                      sendMarketing !== marketing ||
-                      sendNewsletter !== newsletter ||
-                      sendReminders !== reminders
-                    ) {
-                      updateUserNotifications({
-                        notify_new_lessons: sendLessons,
-                        notify_marketing: sendMarketing,
-                        notify_newsletter: sendNewsletter,
-                        notify_reminders: sendReminders,
-                      });
                     }
                   }
                 : undefined
@@ -426,7 +416,7 @@ export const ProfilePage: React.FC = () => {
 
   const { token, initialized } = useSelector((state: RootState) => state.auth);
 
-  const user = useSelector((state: RootState) => state.userDetails);
+  const { data: user = BLANK_USER } = useGetUserDetailsQuery();
 
   const joined = new Date(user.joined * 1000).getFullYear();
 
@@ -467,7 +457,7 @@ export const ProfilePage: React.FC = () => {
                   variant={"h5"}
                   sx={{ fontWeight: 700, lineHeight: 1.3 }}
                 >
-                  {`${user.firstName} ${user.lastName}`}
+                  {`${user.first} ${user.last}`}
                 </Typography>
                 <Typography variant={"h6"} sx={{ lineHeight: 1.2 }}>
                   {user.username}

@@ -1,6 +1,6 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BASEURL, BASEURL_DEV } from "../../constants";
+import { BASEURL } from "../../constants";
 import { prepareHeaders } from "./utils/prepareHeaders";
 
 export type TipDetails = {
@@ -28,7 +28,7 @@ export type TipDetailsWithYear = TipDetails & {
 export const tipsApi = createApi({
   reducerPath: "tipsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: BASEURL_DEV,
+    baseUrl: BASEURL,
     prepareHeaders,
   }),
   tagTypes: ["tips"],

@@ -26,10 +26,9 @@ import {
 } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 import {
-  useChangeUserAvatarMutation,
-  useGetUserSettingsQuery,
-} from "../../redux/apiServices/userSettingsService";
-import { RootState } from "../../redux/store";
+  useGetUserDetailsQuery,
+  useUpdateUserDetailsMutation,
+} from "../../redux/apiServices/userDetailsService";
 
 type AvatarDialogProps = DialogProps & {
   src: string;
@@ -48,7 +47,7 @@ export const AvatarPickerDialog: React.FC<AvatarDialogProps> = (props) => {
 
   const preview = useRef<AvatarEditor>(null);
 
-  const [changeUserAvatar] = useChangeUserAvatarMutation();
+  const [updateUserDetails] = useUpdateUserDetailsMutation();
 
   usePinch(
     (state) => {
@@ -66,12 +65,11 @@ export const AvatarPickerDialog: React.FC<AvatarDialogProps> = (props) => {
       if (!imageURL) {
         return;
       }
-      changeUserAvatar({
-        useAvatar: true,
+      updateUserDetails({
         avatar: imageURL,
       });
     },
-    [changeUserAvatar]
+    [updateUserDetails]
   );
 
   // reset the dialog on open
@@ -132,12 +130,8 @@ export const AvatarPickerDialog: React.FC<AvatarDialogProps> = (props) => {
 };
 
 export const AvatarChanger: React.FC = () => {
-  const { data: userSettings, isLoading } = useGetUserSettingsQuery();
-  const userDetails = useSelector((state: RootState) => state.userDetails);
-  const [changeUserAvatar] = useChangeUserAvatarMutation();
-
-  // avatar hash code
-  const avatarCode = userSettings?.avatar ?? "";
+  const { data: userDetails, isLoading } = useGetUserDetailsQuery();
+  const [updateUserDetails] = useUpdateUserDetailsMutation();
 
   // full path to hosted image used by main display
   const [avatar, setAvatar] = useState("");
@@ -150,13 +144,13 @@ export const AvatarChanger: React.FC = () => {
 
   // reinitialize the avatar when the user settings are loaded
   useEffect(() => {
-    if (!avatarInitialized && userSettings?.avatar) {
+    if (!avatarInitialized && userDetails?.avatar) {
       setAvatar(
-        `https://www.swingessentials.com/images/profiles/${userDetails.username}/${userSettings.avatar}.png`
+        `https://www.swingessentials.com/images/profiles/${userDetails.username}/${userDetails.avatar}.png`
       );
       setAvatarInitialized(true);
     }
-  }, [userSettings, userDetails.username, avatarInitialized]);
+  }, [userDetails, avatarInitialized]);
 
   const handleClose = (): void => {
     setAnchorEl(null);
@@ -164,8 +158,7 @@ export const AvatarChanger: React.FC = () => {
   const removePhoto = (): void => {
     setAnchorEl(null);
     setAvatar("");
-    changeUserAvatar({
-      useAvatar: false,
+    updateUserDetails({
       avatar: "",
     });
   };

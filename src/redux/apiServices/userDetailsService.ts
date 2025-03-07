@@ -1,27 +1,48 @@
-// Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASEURL } from "../../constants";
 import { prepareHeaders } from "./utils/prepareHeaders";
-import { UserDataState } from "../../__types__";
-import { setUserDetails } from "../slices/userDetailsSlice";
+import { ScoreRange, UserDataState } from "../../__types__";
 
 export type UserDataChange = Omit<
   Partial<UserDataState>,
   "username" | "email" | "joined"
 >;
-type UserDetailsApiResponse = {
-  personal: {
-    username: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    location: string;
-    phone: string;
-    goals: string;
-    birthday: string;
-    average: string;
-    joined: number;
-  };
+type BasicUserDetailsApiResponse = {
+  username: string;
+  first: string;
+  last: string;
+  email: string;
+  avatar: string;
+};
+export type Level2UserDetailsApiResponse = BasicUserDetailsApiResponse & {
+  location: string;
+  phone: string;
+  goals: string;
+  birthday: string;
+  average: ScoreRange;
+  joined: number;
+  notify_new_lesson: 0 | 1;
+  notify_marketing: 0 | 1;
+  notify_newsletter: 0 | 1;
+  notify_reminders: 0 | 1;
+};
+
+export const BLANK_USER: Level2UserDetailsApiResponse = {
+  username: "",
+  first: "",
+  last: "",
+  email: "",
+  avatar: "",
+  location: "",
+  phone: "",
+  goals: "",
+  birthday: "",
+  average: "150",
+  joined: 0,
+  notify_new_lesson: 0,
+  notify_marketing: 0,
+  notify_newsletter: 0,
+  notify_reminders: 0,
 };
 
 // Define a service using a base URL and expected endpoints
@@ -31,47 +52,31 @@ export const userDetailsApi = createApi({
     baseUrl: BASEURL,
     prepareHeaders,
   }),
+  tagTypes: ["userDetails"],
   endpoints: (builder) => ({
-    getUserDetails: builder.mutation<UserDetailsApiResponse, void>({
-      query: () => `user`,
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          const { first_name, last_name, ...other } = data.personal;
-          const newData = {
-            ...other,
-            firstName: first_name,
-            lastName: last_name,
-          } as UserDataState;
-
-          dispatch(setUserDetails(newData));
-        } catch (error) {
-          console.error("Load User Details Failed:", error);
-        }
-      },
+    getUserDetails: builder.query<Level2UserDetailsApiResponse, void>({
+      providesTags: ["userDetails"],
+      query: () => ({
+        url: `user`,
+        method: "GET",
+        params: { detailLevel: 2 },
+      }),
     }),
-    updateUserDetails: builder.mutation<boolean, UserDataChange>({
+    updateUserDetails: builder.mutation<
+      boolean,
+      Partial<Level2UserDetailsApiResponse>
+    >({
       query: (body) => ({
-        url: `details`,
-        method: "PUT",
+        url: `user`,
+        method: "PATCH",
         body,
       }),
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          dispatch(setUserDetails(arg));
-        } catch (error) {
-          console.error("Update User Details Failed:", error);
-        }
-      },
-      transformResponse: () => {
-        return true;
-      },
+      invalidatesTags: ["userDetails"],
     }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetUserDetailsMutation, useUpdateUserDetailsMutation } =
+export const { useGetUserDetailsQuery, useUpdateUserDetailsMutation } =
   userDetailsApi;
