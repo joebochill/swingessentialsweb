@@ -25,8 +25,13 @@ export const ResetPasswordPage: React.FC = () => {
     { isLoading: verifying, error: verifyError, data: { auth } = {} },
   ] = useVerifyResetPasswordCodeMutation();
   const [
-    changePassword,
-    { isLoading: changingPassword, data: changed, error: changeError },
+    resetPassword,
+    {
+      isLoading: changingPassword,
+      isUninitialized,
+      isSuccess,
+      error: changeError,
+    },
   ] = useResetPasswordMutation();
 
   const [password, setPassword] = useState("");
@@ -70,7 +75,7 @@ export const ResetPasswordPage: React.FC = () => {
                 </Typography>
               </>
             )}
-            {auth && !changed && !loading && (
+            {auth && isUninitialized && !loading && (
               <>
                 <Typography variant={"h6"} align={"center"}>
                   Enter your new password below:
@@ -107,7 +112,7 @@ export const ResetPasswordPage: React.FC = () => {
                   onClick={
                     confirm !== "" && password !== "" && password === confirm
                       ? (): void => {
-                          changePassword({
+                          resetPassword({
                             password: btoa(password),
                             token: auth,
                           });
@@ -119,7 +124,7 @@ export const ResetPasswordPage: React.FC = () => {
                 </Button>
               </>
             )}
-            {changed && (
+            {!isUninitialized && isSuccess && (
               <>
                 <Typography variant={"h6"} align={"center"}>
                   Your password was successfully changed!

@@ -79,11 +79,10 @@ const authApi = createApi({
         }
       },
     }),
-    // TODO Fix the below
     sendResetPasswordEmail: builder.mutation<void, string>({
       query: (email) => ({
-        url: "/reset",
-        method: "PUT",
+        url: "auth/password/reset",
+        method: "POST",
         body: { email },
       }),
     }),
@@ -91,44 +90,44 @@ const authApi = createApi({
       { username: string; auth: string },
       string
     >({
-      query: (code) => ({
-        url: "/verify",
-        method: "PUT",
+      query: (resetPasswordKey) => ({
+        url: "auth/password/reset/verify",
+        method: "POST",
         body: {
-          type: "reset",
-          code,
+          resetPasswordKey,
         },
       }),
-      // transformResponse: () => {
-      //   return {};
-      // },
-      transformErrorResponse: (_response, meta) => {
-        const code = meta?.response?.headers.get("Error") ?? "";
+      transformErrorResponse: (response: {
+        status: number;
+        data: { code: number; error: string };
+      }) => {
+        const { code } = response.data;
         let message = "";
 
         switch (code) {
-          case "400300":
+          case 400300:
             message =
               "Oops! Your reset password link is invalid or may have already been used. Please check the link in your email and try again. If you continue to have problems, please contact us.";
             break;
-          case "400301":
+          case 400301:
             message =
               "Your reset password link has expired. You will need to re-request a password reset.";
             break;
-          case "-1":
+          case -1:
           default:
             message = `Unknown Error: ${code || ""}`;
         }
         return message;
       },
     }),
+
     resetPassword: builder.mutation<
       boolean,
-      { token: string; password: string }
+      { password: string; token: string }
     >({
       query: ({ password, token }) => ({
-        url: "/credentials",
-        method: "PUT",
+        url: "auth/password/reset",
+        method: "PATCH",
         headers: {
           [AUTH]: `Bearer ${token}`,
         },
@@ -144,44 +143,21 @@ const authApi = createApi({
           console.error("Reset Password failed:", error);
         }
       },
-      transformResponse: () => {
-        return true;
+      transformErrorResponse: () => {
+        return `Failed to change your password. Please try again later. If the problem persists, please contact us.`;
       },
-      transformErrorResponse: (_response, meta) => {
-        const code = meta?.response?.headers.get("Error") ?? "";
-        let message = "";
+    }),
 
-        switch (code) {
-          default:
-            message = `Failed to change your password. Please try again later. If the problem persists, please contact us.`;
-        }
-        return message;
-      },
-    }),
-    verifyPassword: builder.mutation<boolean, string>({
-      query: (password) => ({
-        url: "/validate",
-        method: "PUT",
+    changePassword: builder.mutation<
+      void,
+      { oldPassword: string; newPassword: string }
+    >({
+      query: (credentials) => ({
+        url: "auth/password",
+        method: "PATCH",
+        body: credentials,
         headers: {
           [AUTH]: `Bearer ${localStorage.getItem(`${ASYNC_PREFIX}token`)}`,
-        },
-        body: {
-          password,
-        },
-      }),
-      transformResponse: () => {
-        return true;
-      },
-    }),
-    changePassword: builder.mutation<boolean, string>({
-      query: (password) => ({
-        url: "/credentials",
-        method: "PUT",
-        headers: {
-          [AUTH]: `Bearer ${localStorage.getItem(`${ASYNC_PREFIX}token`)}`,
-        },
-        body: {
-          password,
         },
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
@@ -191,9 +167,6 @@ const authApi = createApi({
         } catch (error) {
           console.error("Change Password failed:", error);
         }
-      },
-      transformResponse: () => {
-        return true;
       },
     }),
   }),
@@ -209,7 +182,6 @@ export const {
   // useCheckRegistrationTokenMutation,
   useVerifyResetPasswordCodeMutation,
   useResetPasswordMutation,
-  useVerifyPasswordMutation,
   useChangePasswordMutation,
 } = authApi;
 export default authApi;

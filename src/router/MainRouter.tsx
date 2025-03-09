@@ -38,7 +38,7 @@ export const MainRouter = (): ReactNode => {
 
         <Route
           element={
-            <PrivateRoute canActivate={!loggedIn} fallbackRoute={ROUTES.HOME} />
+            <PrivateRoute canActivate={!loggedIn} fallbackRoute={ROUTES.PROFILE} />
           }
         >
           <Route path={`${ROUTES.LOGIN}`} element={<LoginPage />} />

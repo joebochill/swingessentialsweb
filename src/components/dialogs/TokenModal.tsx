@@ -61,10 +61,10 @@ export const TokenModal: React.FC<TokenModalProps> = (props) => {
 
   // Get a new token after registration is complete
   useEffect(() => {
-    if (role && dbRole && role !== dbRole) {
+    if (token && role && dbRole && role !== dbRole) {
       refreshToken();
     }
-  }, [role, dbRole, refreshToken]);
+  }, [token, role, dbRole, refreshToken]);
 
   useEffect(() => {
     // set the time remaining on login/logout

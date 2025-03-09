@@ -23,8 +23,8 @@ const styles = {
     "&:focus-visible": {
       background: "rgba(var(--inputBackgroundColor),1)",
     },
-    '&.Mui-disabled': {
-      pointerEvents: 'none',
+    "&.Mui-disabled": {
+      pointerEvents: "none",
       background: "rgba(var(--inputBackgroundColor),0.3)",
     },
   },
@@ -39,11 +39,12 @@ const styles = {
   },
 };
 
-type StyledTextFieldProps = TextFieldProps;
+type StyledTextFieldProps = TextFieldProps & { darkStyle?: boolean };
 export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
   const {
     slotProps = {},
     InputProps,
+    darkStyle = true,
     variant = "filled",
     color = "secondary",
     ...other
@@ -60,17 +61,19 @@ export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
         input: {
           ...inputSlotProps,
           ...InputProps,
-          sx: (theme: Theme) => ({
-            // ...(InputProps?.sx ?? {}),
-            textAlign: "left",
-            "--inputBackgroundColor": "255,255,255",
-            ...styles.input,
-            "&.Mui-focused": styles.focused,
-            ...(theme.applyStyles &&
-              theme.applyStyles("dark", {
-                "--inputBackgroundColor": "0,0,0",
-              })),
-          }),
+          sx: darkStyle
+            ? (theme: Theme) => ({
+                // ...(InputProps?.sx ?? {}),
+                textAlign: "left",
+                "--inputBackgroundColor": "255,255,255",
+                ...styles.input,
+                "&.Mui-focused": styles.focused,
+                ...(theme.applyStyles &&
+                  theme.applyStyles("dark", {
+                    "--inputBackgroundColor": "0,0,0",
+                  })),
+              })
+            : {},
         },
         ...otherSlotProps,
       }}

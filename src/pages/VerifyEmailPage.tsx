@@ -3,23 +3,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { ROUTES } from "../../src/constants/routes";
 import { Banner } from "../components/display/Banner";
-import {
-  Button,
-  Typography,
-  CircularProgress,
-  Stack,
-} from "@mui/material";
+import { Button, Typography, CircularProgress, Stack } from "@mui/material";
 import bg from "../assets/images/banners/landing.jpg";
-import {
-  useLogoutMutation,
-} from "../redux/apiServices/authService";
+import { useLogoutMutation } from "../redux/apiServices/authService";
 import { useVerifyUserEmailMutation } from "../redux/apiServices/registrationService";
 
 export const VerifyEmailPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [logout] = useLogoutMutation();
-  const [verifyUserEmail, { isLoading, error, data: verified }] =
+  const [verifyUserEmail, { isLoading, error, isUninitialized, isSuccess }] =
     useVerifyUserEmailMutation();
 
   const { key } = useParams<{ key: string }>();
@@ -56,7 +49,7 @@ export const VerifyEmailPage: React.FC = () => {
               </Typography>
             </>
           )}
-          {verified && (
+          {!isUninitialized && !isLoading && isSuccess && (
             <>
               <Typography variant={"h6"} align={"center"} sx={{ mb: 2 }}>
                 Your email address has been confirmed!
@@ -73,7 +66,7 @@ export const VerifyEmailPage: React.FC = () => {
               </Button>
             </>
           )}
-          {error && (
+          {!isUninitialized && !isLoading && error && (
             <>
               <Typography variant={"h6"} align={"center"}>
                 {error as string}

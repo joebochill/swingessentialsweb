@@ -14,11 +14,9 @@ import {
   Box,
 } from "@mui/material";
 import { CheckCircle, Error } from "@mui/icons-material";
-import {
-  useChangePasswordMutation,
-  useVerifyPasswordMutation,
-} from "../../redux/apiServices/authService";
+import { useChangePasswordMutation } from "../../redux/apiServices/authService";
 import { EmptyState } from "../display/EmptyState";
+import { useDarkMode } from "../../hooks";
 
 type ChangePasswordProps = ButtonProps & {
   dialogProps?: DialogProps;
@@ -31,27 +29,19 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
   const [newPassword, setNewPassword] = useState("");
 
   const [
-    verifyPassword,
-    { isLoading: verifying, error: verifyError, reset: resetVerify },
-  ] = useVerifyPasswordMutation();
-  const [
     changePassword,
-    {
-      isLoading: changing,
-      data: changed,
-      error: changeError,
-      reset: resetChange,
-    },
+    { isLoading, isSuccess: changed, error: changeError, reset: resetChange },
   ] = useChangePasswordMutation();
-
-  const isLoading = verifying || changing;
 
   const resetDialog = useCallback(() => {
     setCurrentPassword("");
     setNewPassword("");
-    resetVerify();
     resetChange();
-  }, []);
+  }, [resetChange]);
+
+  const incorrectPassword = (changeError as any)?.data?.code === 400150;
+
+  const { isDarkMode } = useDarkMode();
 
   return (
     <>
@@ -85,20 +75,22 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
       >
         <DialogTitle>{`Change Password`}</DialogTitle>
         <DialogContent>
-          {!isLoading && !changeError && !changed && (
+          {!isLoading && (!changeError || incorrectPassword) && !changed && (
             <Stack spacing={2}>
               <DialogContentText>{`To change your password, enter your current password and new password below.`}</DialogContentText>
               <StyledPassword
+                darkStyle={isDarkMode}
                 label={"Current Password"}
                 name={"current"}
-                error={Boolean(verifyError)}
-                helperText={Boolean(verifyError) ? "Password is incorrect" : ""}
+                error={incorrectPassword}
+                helperText={incorrectPassword ? "Password is incorrect" : ""}
                 value={currentPassword}
                 onChange={(e): void => {
                   setCurrentPassword(e.target.value);
                 }}
               />
               <StyledPassword
+                darkStyle={isDarkMode}
                 label={"New Password"}
                 name={"new"}
                 value={newPassword}
@@ -125,7 +117,7 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
               description={"Your password was changed successfully"}
             />
           )}
-          {changeError && (
+          {changeError && !incorrectPassword && (
             <EmptyState
               icon={<Error fontSize={"inherit"} sx={{ color: "error.main" }} />}
               title={"Password Change Failed"}
@@ -136,13 +128,14 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
           )}
         </DialogContent>
         <DialogActions>
-          {!isLoading && changed === undefined && !changeError && (
+          {!isLoading && (!changeError || incorrectPassword) && !changed && (
             <>
               <Button
                 color={"inherit"}
                 variant={"outlined"}
                 onClick={(): void => {
                   setShowDialog(false);
+                  resetDialog();
                 }}
               >
                 Cancel
@@ -153,8 +146,10 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
                 variant={"contained"}
                 onClick={async (): Promise<void> => {
                   try {
-                    await verifyPassword(btoa(currentPassword)).unwrap();
-                    changePassword(btoa(newPassword));
+                    changePassword({
+                      oldPassword: btoa(currentPassword),
+                      newPassword: btoa(newPassword),
+                    });
                   } catch (error) {
                     console.error("Error:", error);
                   }
@@ -164,7 +159,7 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
               </Button>
             </>
           )}
-          {(changed || changeError) && (
+          {(changed || (changeError && !incorrectPassword)) && (
             <Button
               fullWidth
               disabled={!currentPassword || !newPassword}
@@ -172,6 +167,7 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
               variant={"contained"}
               onClick={(): void => {
                 setShowDialog(false);
+                resetDialog();
               }}
             >
               Done

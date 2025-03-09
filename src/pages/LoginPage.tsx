@@ -223,7 +223,12 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>(
     ] = useCheckEmailAvailabilityMutation();
     const [
       createNewUserAccount,
-      { data: registeredSuccessfully, isLoading, error: registrationError },
+      {
+        isSuccess: registeredSuccessfully,
+        isUninitialized,
+        isLoading,
+        reset: resetRegistration,
+      },
     ] = useCreateNewUserAccountMutation();
 
     const usernameTaken = username !== "" && usernameAvailable === false;
@@ -239,18 +244,22 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>(
     }, []);
 
     useEffect(() => {
-      if (registeredSuccessfully === false) {
+      if (isUninitialized || isLoading) {
+        return;
+      }
+      if (!registeredSuccessfully) {
         setErrorMessage(
           "Your account registration has failed. Please try again later and contact us if the problem continues."
         );
-      } else if (registeredSuccessfully === true) {
+      } else if (registeredSuccessfully) {
         navigate(ROUTES.PROFILE);
         // googleAnalyticsConversion(`https://swingessentials.com/register-complete`);
         resetForm();
         resetEmailCheck();
         resetUsernameCheck();
+        resetRegistration();
       }
-    }, [registeredSuccessfully, registrationError, resetForm]);
+    }, [registeredSuccessfully, isUninitialized, isLoading, resetForm]);
 
     return (
       <Stack sx={formStyle} spacing={2} {...other} ref={ref}>
@@ -355,7 +364,7 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>(
                       username,
                       email,
                       password,
-                      heard: acquisition,
+                      acquisition,
                     });
                   }
                 : (): void =>
@@ -418,8 +427,7 @@ const ForgotForm = React.forwardRef<HTMLDivElement, ForgotFormProps>(
         )}
         {complete && (
           <Typography variant={"h6"} align={"center"}>
-            Your password reset request was received. Check your email for
-            further instructions.
+            {`Your request was received — if there is an account registered to that email address, you will receive an email with instructions to reset your password.`}
           </Typography>
         )}
         <Button

@@ -1,28 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { /*ASYNC_PREFIX, AUTH,*/ ASYNC_PREFIX, BASEURL } from "../../constants";
-// import { Credentials } from "../../__types__";
-// import {
-//   clearToken,
-//   incrementLoginFailures,
-//   setToken,
-// } from "../slices/authSlice";
-// import { loadUserData } from "../thunks";
+import { BASEURL } from "../../constants";
 import { prepareHeaders } from "./utils/prepareHeaders";
-import { setToken } from "../slices/authSlice";
-import { loadUserData } from "../thunks";
 import { storeToken } from "./utils/storeToken";
 
 export type UserRegistrationDetails = {
   username: string;
   email: string;
   password: string;
-  heard: string;
+  acquisition: string;
 };
-
-// type VerifyEmailRequestBody = {
-//   type: 'email',
-//   code: code
-// }
 
 const registrationApi = createApi({
   reducerPath: "registrationApi",
@@ -33,28 +19,30 @@ const registrationApi = createApi({
   endpoints: (builder) => ({
     checkUsernameAvailability: builder.mutation<boolean, string>({
       query: (username) => ({
-        url: "/checkUser",
-        method: "GET",
-        params: { username },
+        url: "user/exists",
+        method: "POST",
+        body: { username },
       }),
-      transformResponse: (response: { available: boolean }): boolean => {
-        return response.available;
+      transformResponse: (response: {
+        usernameAvailable: boolean;
+      }): boolean => {
+        return response.usernameAvailable;
       },
     }),
     checkEmailAvailability: builder.mutation<boolean, string>({
       query: (email) => ({
-        url: "/checkEmail",
-        method: "GET",
-        params: { email },
+        url: "/user/exists",
+        method: "POST",
+        body: { email },
       }),
-      transformResponse: (response: { available: boolean }): boolean => {
-        return response.available;
+      transformResponse: (response: { emailAvailable: boolean }): boolean => {
+        return response.emailAvailable;
       },
     }),
-    createNewUserAccount: builder.mutation<boolean, UserRegistrationDetails>({
+    createNewUserAccount: builder.mutation<void, UserRegistrationDetails>({
       query: (details) => ({
-        url: "/user",
-        method: "PUT",
+        url: "user/register",
+        method: "POST",
         body: details,
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
@@ -65,47 +53,32 @@ const registrationApi = createApi({
           console.error("Registration failed:", error);
         }
       },
-      transformResponse: () => {
-        return true;
-      },
-      transformErrorResponse: () => {
-        return false;
-      },
     }),
-    verifyUserEmail: builder.mutation<boolean, string>({
-      query: (code) => ({
-        url: "/verify",
-        method: "PUT",
+    verifyUserEmail: builder.mutation<void, string>({
+      query: (registrationKey) => ({
+        url: "user/register/verify-email",
+        method: "POST",
         body: {
-          type: "email",
-          code: code,
+          registrationKey,
         },
       }),
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          const { meta } = await queryFulfilled;
-          storeToken(meta, dispatch);
-        } catch (error) {
-          console.error("Registration failed:", error);
-        }
-      },
-      transformResponse: () => {
-        return true;
-      },
-      transformErrorResponse: (_response, meta): string => {
-        const code = meta?.response?.headers.get("Error") ?? "";
+      transformErrorResponse: (response: {
+        status: number;
+        data: { code: number; error: string };
+      }): string => {
+        const { code } = response.data;
         let message = "";
         switch (code) {
-          case "400302":
+          case 400302:
             message =
               "Oops! Your verification link is invalid. Please check your registration email and try again. If you continue to have problems, please contact us.";
             break;
-          case "400303":
+          case 400303:
             message =
               "Your verification link has expired. You will need to re-register.";
             break;
-          case "400304":
-          case "-1":
+          case 400304:
+          case -1:
             message =
               "Your your email address has already been verified. Sign in to view your account.";
             break;
