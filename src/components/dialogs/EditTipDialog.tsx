@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useDispatch } from "react-redux";
 import { DATE_REGEX } from "../../constants";
 import {
   convertDatabaseTextToMultiline,
@@ -21,8 +20,14 @@ import {
 import { useVideoValid } from "../../hooks";
 import { CheckCircle } from "@mui/icons-material";
 import { getYoutubeVideoErrorMessage } from "../../utilities/video";
-import { TipDetails } from "../../redux/apiServices/tipsService";
+import {
+  TipDetails,
+  useAddTipMutation,
+  useRemoveTipMutation,
+  useUpdateTipMutation,
+} from "../../redux/apiServices/tipsService";
 import { YoutubeVideoStatus } from "../../__types__";
+import { format, isValid, parseISO } from "date-fns";
 
 type EditTipDialogProps = DialogProps & {
   tip: TipDetails;
@@ -32,7 +37,9 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
   const { isNew, tip, ...dialogProps } = props;
   const { onClose = (): void => {} } = dialogProps;
 
-  const dispatch = useDispatch();
+  const [addTip] = useAddTipMutation();
+  const [updateTip] = useUpdateTipMutation();
+  const [removeTip] = useRemoveTipMutation();
 
   const [date, setDate] = useState(tip.date);
   const [title, setTitle] = useState(tip.title);
@@ -49,7 +56,12 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
   const resetTip = useCallback(() => {
-    setDate(tip.date);
+    const parsedDate = parseISO(tip.date);
+    setDate(
+      isValid(parsedDate)
+        ? format(new Date(tip.date), "yyyy-MM-dd")
+        : format(new Date(), "yyyy-MM-dd")
+    );
     setTitle(tip.title);
     setVideo(tip.video);
     setComments(convertDatabaseTextToMultiline(tip.comments));
@@ -174,24 +186,20 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
               }
               onClick={(e): void => {
                 if (isNew) {
-                  //   dispatch(
-                  //     addTip({
-                  //       title: title,
-                  //       date: date,
-                  //       video: video,
-                  //       comments: convertMultilineToDatabaseText(comments),
-                  //     })
-                  //   );
+                  addTip({
+                    title: title,
+                    date: date,
+                    video: video,
+                    comments: convertMultilineToDatabaseText(comments),
+                  });
                 } else {
-                  //   dispatch(
-                  //     updateTip({
-                  //       id: tip.id,
-                  //       title: title,
-                  //       date: date,
-                  //       video: video,
-                  //       comments: convertMultilineToDatabaseText(comments),
-                  //     })
-                  //   );
+                  updateTip({
+                    id: tip.id,
+                    title: title,
+                    date: date,
+                    video: video,
+                    comments: convertMultilineToDatabaseText(comments),
+                  });
                 }
                 onClose(e, "escapeKeyDown");
               }}
@@ -209,7 +217,8 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
           }
           onOkay={(e): void => {
             setShowConfirmationDialog(false);
-            // dispatch(removeTip(tip));
+            removeTip({ id: tip.id });
+            
             onClose(e, "escapeKeyDown");
           }}
           onCancel={(): void => {

@@ -17,10 +17,10 @@ import {
 } from "../../utilities/text";
 import { ConfirmationDialog } from "./ConfirmationDialog";
 import {
-  useAddProBioMutation,
-  useRemoveProBioMutation,
-  useUpdateProBioMutation,
-} from "../../redux/apiServices/proBiosService";
+  useAddProMutation,
+  useRemoveProMutation,
+  useUpdateProMutation,
+} from "../../redux/apiServices/prosService";
 
 type EditProDialogProps = DialogProps & {
   pro: Pro;
@@ -29,9 +29,9 @@ type EditProDialogProps = DialogProps & {
 export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
   const { isNew, pro, onClose, ...dialogProps } = props;
 
-  const [addProBio] = useAddProBioMutation();
-  const [removeProBio] = useRemoveProBioMutation();
-  const [updateProBio] = useUpdateProBioMutation();
+  const [addPro] = useAddProMutation();
+  const [removePro] = useRemoveProMutation();
+  const [updatePro] = useUpdateProMutation();
 
   const [name, setName] = useState(pro.name);
   const [title, setTitle] = useState(pro.title);
@@ -157,14 +157,14 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
               disabled={!name || !title || !image || !bio}
               onClick={(e): void => {
                 if (isNew) {
-                  addProBio({
+                  addPro({
                     name: name,
                     title: title ?? "",
                     image: image,
                     bio: convertMultilineToDatabaseText(bio),
                   });
                 } else {
-                  updateProBio({
+                  updatePro({
                     id: pro.id,
                     name: name,
                     title: title || "",
@@ -188,7 +188,7 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
           }
           onOkay={(e): void => {
             setShowConfirmationDialog(false);
-            removeProBio({ id: pro.id });
+            removePro({ id: pro.id });
             onClose?.(e, "escapeKeyDown");
           }}
           onCancel={(): void => {

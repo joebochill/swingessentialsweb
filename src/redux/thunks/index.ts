@@ -1,10 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { userDetailsApi } from "../apiServices/userDetailsService";
-// import { setUserDetails } from "../slices/userDetailsSlice";
-import { UserDataState } from "../../__types__";
 import { ASYNC_PREFIX } from "../../constants";
 import { initialize, setToken } from "../slices/authSlice";
-import { userSettingsApi } from "../apiServices/userSettingsService";
+import { tipsApi } from "../apiServices/tipsService";
 
 export const loadUserData = createAsyncThunk(
   "auth/loadUserData",
@@ -12,7 +10,7 @@ export const loadUserData = createAsyncThunk(
     try {
       dispatch(userDetailsApi.endpoints.getUserDetails.initiate());
       // dispatch(loadLessons());
-      // dispatch(loadCredits());      
+      // dispatch(loadCredits());
     } catch (error) {
       // TODO
       console.log("Error loading data after login:", error);
@@ -32,7 +30,7 @@ export const initializeData = createAsyncThunk(
         dispatch(loadUserData());
       }
       dispatch(initialize());
-      // dispatch(loadTips());
+      dispatch(tipsApi.endpoints.getTips.initiate());
       // dispatch(loadBlogs());
       // dispatch(loadDiscounts()); // TODO should we be loading these or only for admin on the admin portal
     } catch (error) {

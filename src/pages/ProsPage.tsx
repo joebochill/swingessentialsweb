@@ -12,7 +12,7 @@ import pga from "../assets/images/logos/pga-member.svg";
 import pgaWhite from "../assets/images/logos/pga-member-white.svg";
 import { useDarkMode } from "../hooks";
 import { RootState } from "../redux/store";
-import { useGetProBiosQuery } from "../redux/apiServices/proBiosService";
+import { useGetProsQuery } from "../redux/apiServices/prosService";
 import { ProBio } from "../components/display/ProBio";
 import { ActionToolbar } from "../components/toolbars/ActionToolbar";
 import { LoadingIndicator } from "../components/display/LoadingIndicator";
@@ -29,7 +29,7 @@ const BlankPro: Pro = {
 export const ProsPage: React.FC = (): JSX.Element => {
   // useGoogleAnalyticsPageView();
 
-  const { data: pros = [], isLoading, error } = useGetProBiosQuery();
+  const { data: pros = [], isLoading } = useGetProsQuery();
   const admin = useSelector((state: RootState) => state.auth.admin);
   const { isDarkMode } = useDarkMode();
   const [showNewDialog, setShowNewDialog] = useState(false);

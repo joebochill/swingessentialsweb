@@ -5,7 +5,7 @@ type ActionToolbarProps = AppBarProps & {
   show: boolean;
 };
 export const ActionToolbar: React.FC<ActionToolbarProps> = (props) => {
-  const { show, ...barProps } = props;
+  const { show, sx, ...barProps } = props;
 
   if (!show) return null;
 
@@ -13,12 +13,17 @@ export const ActionToolbar: React.FC<ActionToolbarProps> = (props) => {
     <AppBar
       position={"sticky"}
       color={"default"}
-      sx={{
-        top: { xs: (t) => t.spacing(7), md: (t) => t.spacing(8) },
-      }}
+      sx={[
+        (t) => ({
+          top: { xs: t.spacing(7), md: t.spacing(8) },
+        }),
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
       {...barProps}
     >
-      <Toolbar sx={{ justifyContent: "center", color: 'text.primary' }}>{props.children}</Toolbar>
+      <Toolbar sx={{ justifyContent: "center", color: "text.primary" }}>
+        {props.children}
+      </Toolbar>
     </AppBar>
   );
 };

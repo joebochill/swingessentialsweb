@@ -15,41 +15,40 @@ type ProBio = {
 type ProBiosAPIResponse = ProBio[];
 
 // Define a service using a base URL and expected endpoints
-export const proBiosApi = createApi({
-  reducerPath: "proBiosApi",
+export const prosApi = createApi({
+  reducerPath: "prosApi",
   baseQuery: fetchBaseQuery({
     baseUrl: BASEURL,
     prepareHeaders,
   }),
-  tagTypes: ["bios"],
+  tagTypes: ["pros"],
   endpoints: (builder) => ({
-    getProBios: builder.query<ProBiosAPIResponse, void>({
-      query: () => `bios`,
-      providesTags: ["bios"],
+    getPros: builder.query<ProBiosAPIResponse, void>({
+      query: () => `pros`,
+      providesTags: ["pros"],
     }),
-    addProBio: builder.mutation<void, Omit<ProBio, "id">>({
+    addPro: builder.mutation<void, Omit<ProBio, "id">>({
       query: (newProBio) => ({
-        url: `bio`,
+        url: `pros`,
         method: "POST",
         body: newProBio,
       }),
-      invalidatesTags: ["bios"],
+      invalidatesTags: ["pros"],
     }),
-    updateProBio: builder.mutation<void, ProBio>({
+    updatePro: builder.mutation<void, ProBio>({
       query: (updatedProBio) => ({
-        url: `bio`,
-        method: "PUT",
+        url: `pros/${updatedProBio.id}`,
+        method: "PATCH",
         body: updatedProBio,
       }),
-      invalidatesTags: ["bios"],
+      invalidatesTags: ["pros"],
     }),
-    removeProBio: builder.mutation<void, { id: string }>({
+    removePro: builder.mutation<void, { id: string }>({
       query: (deletedBio) => ({
-        url: `removebio`,
-        method: "PUT",
-        body: deletedBio,
+        url: `pros/${deletedBio.id}`,
+        method: "DELETE",
       }),
-      invalidatesTags: ["bios"],
+      invalidatesTags: ["pros"],
     }),
   }),
 });
@@ -57,8 +56,8 @@ export const proBiosApi = createApi({
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
 export const {
-  useGetProBiosQuery,
-  useAddProBioMutation,
-  useUpdateProBioMutation,
-  useRemoveProBioMutation,
-} = proBiosApi;
+  useGetProsQuery,
+  useAddProMutation,
+  useUpdateProMutation,
+  useRemoveProMutation,
+} = prosApi;

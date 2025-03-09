@@ -13,16 +13,6 @@ export type TipDetails = {
 export type TipDetailsWithYear = TipDetails & {
   year: number;
 };
-// type ProBio = {
-//   id: string;
-//   name: string;
-//   title: string;
-//   bio: string;
-//   image: string;
-//   imagePosition?: string;
-//   imageSize?: string;
-// };
-// type ProBiosAPIResponse = ProBio[];
 
 // Define a service using a base URL and expected endpoints
 export const tipsApi = createApi({
@@ -31,7 +21,7 @@ export const tipsApi = createApi({
     baseUrl: BASEURL,
     prepareHeaders,
   }),
-  tagTypes: ["tips"],
+  tagTypes: ["tips", "tip"],
   endpoints: (builder) => ({
     getTips: builder.query<TipDetailsWithYear[], void>({
       query: () => `tips`,
@@ -45,26 +35,42 @@ export const tipsApi = createApi({
         });
       },
     }),
-    getTipsByYear: builder.query<TipDetailsWithYear[], string | number>({
-      query: (year) => `tips/year/${year}`,
-      providesTags: ["tips"],
-      transformResponse: (response: TipDetails[]) => {
-        return response.map((tip) => {
-          return {
-            ...tip,
-            year: new Date(tip.date).getFullYear(),
-          };
-        });
-      },
-    }),
     getTipById: builder.query<TipDetails, string | number>({
       query: (id) => `tips/${id}`,
-      // providesTags: ["tips"],
+      providesTags: ["tip"],
+    }),
+    addTip: builder.mutation<void, Omit<TipDetails, "id">>({
+      query: (newTip) => ({
+        url: `tips`,
+        method: "POST",
+        body: newTip,
+      }),
+      invalidatesTags: ["tips"],
+    }),
+    updateTip: builder.mutation<void, TipDetails>({
+      query: (updatedTip) => ({
+        url: `tips/${updatedTip.id}`,
+        method: "PATCH",
+        body: updatedTip,
+      }),
+      invalidatesTags: ["tips", "tip"],
+    }),
+    removeTip: builder.mutation<void, { id: string | number }>({
+      query: (deletedTip) => ({
+        url: `tips/${deletedTip.id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["tips","tip"],
     }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetTipsQuery, useGetTipsByYearQuery, useGetTipByIdQuery } =
-  tipsApi;
+export const {
+  useGetTipsQuery,
+  useGetTipByIdQuery,
+  useAddTipMutation,
+  useUpdateTipMutation,
+  useRemoveTipMutation,
+} = tipsApi;

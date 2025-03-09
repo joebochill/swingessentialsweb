@@ -30,7 +30,6 @@ import {
   Edit,
   ChevronRight,
   ChevronLeft,
-  Image,
 } from "@mui/icons-material";
 import bg from "../assets/images/banners/tips.jpg";
 import {
@@ -199,6 +198,7 @@ const TipDetailsPanel: React.FC<TipDetailsPanelProps> = (props) => {
   const admin = useSelector((state: RootState) => state.auth.admin);
 
   const [videoLoading, setVideoLoading] = useState(true);
+  const [showEditDialog, setShowEditDialog] = useState(false);
 
   const {
     data: tipDetails,
@@ -306,7 +306,6 @@ const TipDetailsPanel: React.FC<TipDetailsPanelProps> = (props) => {
               headline={tipDetails.title}
               subheading={format(new Date(tipDetails.date), "MMMM d, yyyy")}
               sx={{
-                // alignItems: "flex-start",
                 cursor: admin ? "pointer" : "initial",
                 mb: 2,
               }}
@@ -318,13 +317,13 @@ const TipDetailsPanel: React.FC<TipDetailsPanelProps> = (props) => {
                   variant: "caption",
                 },
               }}
-              // onClick={
-              //   admin
-              //     ? (): void => {
-              //         setShowEditDialog(true);
-              //       }
-              //     : undefined
-              // }
+              onClick={
+                admin
+                  ? (): void => {
+                      setShowEditDialog(true);
+                    }
+                  : undefined
+              }
             />
 
             {description.map((par, pInd) => (
@@ -352,17 +351,15 @@ const TipDetailsPanel: React.FC<TipDetailsPanelProps> = (props) => {
           </>
         )}
       </Box>
-      {/* {admin && (
+      {admin && (
         <EditTipDialog
-          isNew={showNewDialog}
-          tip={showNewDialog ? BlankTip : activeTip ? activeTip : BlankTip}
-          open={showNewDialog || showEditDialog}
+          tip={tipDetails ?? BlankTip}
+          open={showEditDialog}
           onClose={(): void => {
-            setShowNewDialog(false);
             setShowEditDialog(false);
           }}
         />
-      )} */}
+      )}
     </>
   );
 };
@@ -408,6 +405,8 @@ export const TipsPage: React.FC = (): JSX.Element => {
         setSelectedTip(tip.id);
         setTipIndex(index);
         setActiveYear(tip.year);
+      } else {
+        navigate(`${ROUTES.TIPS}/${tips[0].id}`, { replace: true });
       }
     } else if (haveTips) {
       setSelectedTip(tips[0].id);
@@ -416,7 +415,6 @@ export const TipsPage: React.FC = (): JSX.Element => {
     }
   }, [tips, id, haveTips]);
 
-  // const [showEditDialog, setShowEditDialog] = useState(false);
   const [showNewDialog, setShowNewDialog] = useState(false);
 
   const isSmall = useMediaQuery((t) => t.breakpoints.down("md"));

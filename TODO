@@ -14,6 +14,11 @@
 
 REWRITE
 
+IMPLEMENT ADMIN FUNCTIONS FOR TIPS
+IMPLEMENT REGISTRATION APIS
+CACHE DATA IN LOCALSTORAGE FOR API SERVICES
+
+Screens
 - [X] Landing Page
 - [X] Privacy
 - [X] Terms
@@ -23,12 +28,31 @@ REWRITE
 - [X] Forgot Password
 - [X] Reset Password
 - [ ] Blogs [2]
-- [ ] Tips [3]
+- [X] Tips [3]
 - [ ] Lessons [3]
 - [X] Profile
 - [ ] Submit [3]
 - [ ] Order [3]
 - [ ] Admin Portal [2]
+
+API SERVICES
+-   [X] AUTH
+-   [ ] REGISTRATION
+-   [X] USER DETAILS
+-   [X] PROS
+-   [X] TIPS
+-   [ ] BLOGS
+-   [X] TESTIMONIALS
+-   [ ] DISCOUNTS
+-   [ ] EMAILS
+-   [ ] FAQ
+-   [ ] LESSONS
+-   [ ] LOGS
+-   [ ] ORDERS
+-   [ ] PACKAGES
+-   [ ] AUTH
+-   [ ] AUTH
+
 
 Total: 30 days (27 remaining)
 
