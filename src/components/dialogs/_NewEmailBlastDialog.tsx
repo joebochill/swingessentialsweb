@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import React, { useState, useCallback, ReactNode } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState, Audience, EmailType } from '../../__types__';

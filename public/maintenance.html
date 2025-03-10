@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
     <head>
         <title>Temporarily Down For Maintenance</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <style>
             @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700');
             a:-webkit-any-link {
@@ -10,14 +10,14 @@
                 cursor: inherit;
                 text-decoration: none;
             }
-            html{
+            html {
                 font-size: 100%;
                 margin: 0rem;
                 padding: 0rem;
             }
-            *{
+            * {
                 -webkit-box-sizing: border-box;
-                        box-sizing: border-box;
+                box-sizing: border-box;
             }
             body {
                 font-family: 'Open Sans', sans-serif;
@@ -26,7 +26,7 @@
                 padding: 0rem;
                 overflow: hidden;
             }
-            .construction_page{
+            .construction_page {
                 position: relative;
                 display: flex;
                 flex-direction: row;
@@ -36,7 +36,7 @@
 
                 padding: 2rem;
             }
-            .construction_page::before{
+            .construction_page::before {
                 content: '';
                 display: block;
                 position: absolute;
@@ -51,14 +51,14 @@
 
                 -webkit-transform: scale(0.5);
 
-                    -ms-transform: scale(0.5);
+                -ms-transform: scale(0.5);
 
-                        transform: scale(0.5);
+                transform: scale(0.5);
                 -webkit-transform-origin: top left;
-                    -ms-transform-origin: top left;
-                        transform-origin: top left;
+                -ms-transform-origin: top left;
+                transform-origin: top left;
             }
-            .construction_row{
+            .construction_row {
                 flex: 1 1 0rem;
                 z-index: 100;
 
@@ -67,61 +67,61 @@
 
                 color: #231f61;
                 -webkit-user-select: none;
-                   -moz-user-select: none;
-                    -ms-user-select: none;
-                        user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
                 text-align: center;
 
-                background: rgba(255,255,255,.55);
-                border: 0.125rem solid rgba(0,0,0,.15);
+                background: rgba(255, 255, 255, 0.55);
+                border: 0.125rem solid rgba(0, 0, 0, 0.15);
                 border-width: 0.125rem 0rem 0.125rem 0rem;
             }
-            .construction_row > .message{
+            .construction_row > .message {
                 display: inline-block;
                 max-width: 40rem;
             }
-            .construction_row > .message > .salutation{
+            .construction_row > .message > .salutation {
                 margin-bottom: 1rem;
-                
+
                 font-size: 4rem;
                 font-weight: 600;
             }
-            .construction_row > .message > .title{
+            .construction_row > .message > .title {
                 font-size: 3rem;
                 line-height: 3.8rem;
             }
 
-            .construction_row > .message > .subtitle{
+            .construction_row > .message > .subtitle {
                 margin-top: 3rem;
                 font-size: 1.5rem;
                 line-height: 1.7rem;
             }
 
-            .construction_row a{
+            .construction_row a {
                 font-weight: 600;
                 cursor: pointer;
             }
-            .construction_row a:hover{
+            .construction_row a:hover {
                 text-decoration: underline;
             }
-            @media only screen and (max-width: 31.25rem){
-                .construction_row > .message > .salutation{
+            @media only screen and (max-width: 31.25rem) {
+                .construction_row > .message > .salutation {
                     font-size: 3rem;
                 }
-                .construction_row > .message > .title{
+                .construction_row > .message > .title {
                     font-size: 2rem;
                     line-height: 2.6rem;
                 }
-                .construction_row > .message > .subtitle{
+                .construction_row > .message > .subtitle {
                     font-size: 1.1rem;
                     line-height: 1.5rem;
                 }
             }
-            @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) { 
-                .construction_page::before{
+            @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+                .construction_page::before {
                     -webkit-transform: none;
-                        -ms-transform: none;
-                            transform: none;
+                    -ms-transform: none;
+                    transform: none;
                 }
             }
         </style>
@@ -130,11 +130,14 @@
         <div class="construction_page">
             <div class="construction_row">
                 <div class="message">
-                <div class="salutation">Oops!</div>
-                <div class="title">We are currently undergoing scheduled maintenance. Please check back soon.</div>
-                <div class="subtitle">Email <b><a href="mailto:info@swingessentials.com">info @ swingessentials.com</a></b> for more information.</div>
+                    <div class="salutation">Oops!</div>
+                    <div class="title">We are currently undergoing scheduled maintenance. Please check back soon.</div>
+                    <div class="subtitle">
+                        Email <b><a href="mailto:info@swingessentials.com">info @ swingessentials.com</a></b> for more
+                        information.
+                    </div>
                 </div>
-            </div> 
+            </div>
         </div>
     </body>
 </html>

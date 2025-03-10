@@ -2,20 +2,18 @@ import React, { useState, useEffect, JSX, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 // import { useGoogleAnalyticsPageView } from "../../src/hooks";
-import { ROUTES } from '../../src/constants/routes';
+import { ROUTES } from '../constants/routes';
 import { splitDatabaseText } from '../utilities/text';
 import { SectionBlurb } from '../components/text/SectionBlurb';
 import { Banner } from '../components/display/Banner';
 import { Section } from '../components/display/Section';
 import { ActionToolbar } from '../components/toolbars/ActionToolbar';
 import { FancyHeadline } from '../components/text/FancyHeadline';
-import YouTube from 'react-youtube';
 import {
     Button,
     Typography,
     Card,
     CardHeader,
-    IconButton,
     useMediaQuery,
     List,
     ListItemButton,
@@ -23,28 +21,33 @@ import {
     ListItemText,
     Box,
     Skeleton,
+    Stack,
 } from '@mui/material';
 import { AddCircle, Today, Edit, ChevronRight, ChevronLeft } from '@mui/icons-material';
-import bg from '../assets/images/banners/tips.jpg';
-import { TipDetails, TipDetailsWithYear, useGetTipByIdQuery, useGetTipsQuery } from '../redux/apiServices/tipsService';
+import bg from '../assets/images/banners/19th.jpg';
+import {
+    BlogDetails,
+    BlogDetailsWithYear,
+    useGetBlogByIdQuery,
+    useGetBlogsQuery,
+} from '../redux/apiServices/blogsService';
 import { RootState } from '../redux/store';
 import { format } from 'date-fns';
-import { EditTipDialog } from '../components/dialogs/EditTipDialog';
+import { EditBlogDialog } from '../components/dialogs/EditBlogDialog';
 
-const BlankTip: TipDetails = {
+const BlankBlog: BlogDetails = {
     id: -1,
     title: '',
     date: '',
-    video: '',
-    comments: '',
+    body: '',
 };
 
-type TipListCardProps = {
-    tips: TipDetailsWithYear[];
+type BlogListCardProps = {
+    blogs: BlogDetailsWithYear[];
     year: number;
 
-    selectedTip?: number;
-    onTipSelected: (id: number) => void;
+    selectedBlog?: number;
+    onBlogSelected: (id: number) => void;
 
     hasNextYear?: boolean;
     hasPreviousYear?: boolean;
@@ -53,12 +56,20 @@ type TipListCardProps = {
 
     loading?: boolean;
 };
-const TipsListCard: React.FC<TipListCardProps> = (props) => {
-    const { tips, year, selectedTip, onTipSelected, hasNextYear, hasPreviousYear, onYearIncrement, onYearDecrement } =
-        props;
+const BlogsListCard: React.FC<BlogListCardProps> = (props) => {
+    const {
+        blogs,
+        year,
+        selectedBlog,
+        onBlogSelected,
+        hasNextYear,
+        hasPreviousYear,
+        onYearIncrement,
+        onYearDecrement,
+    } = props;
 
-    const handleTipSelect = (id: number) => {
-        onTipSelected(id);
+    const handleBlogSelect = (id: number) => {
+        onBlogSelected(id);
     };
     const handleIncrementYear = () => {
         if (hasNextYear) {
@@ -105,10 +116,10 @@ const TipsListCard: React.FC<TipListCardProps> = (props) => {
                 }}
             />
             <List disablePadding sx={{ maxHeight: 670, overflowY: 'auto' }}>
-                {tips.map((tip) => {
+                {blogs.map((blog) => {
                     return (
                         <ListItem
-                            key={`tip_${tip.id}`}
+                            key={`blog_${blog.id}`}
                             dense
                             disablePadding
                             divider
@@ -116,7 +127,7 @@ const TipsListCard: React.FC<TipListCardProps> = (props) => {
                                 {
                                     position: 'relative',
                                 },
-                                selectedTip === tip.id
+                                selectedBlog === blog.id
                                     ? {
                                           backgroundColor: 'action.selected',
                                           '&:after': {
@@ -132,10 +143,10 @@ const TipsListCard: React.FC<TipListCardProps> = (props) => {
                                     : {},
                             ]}
                         >
-                            <ListItemButton onClick={() => handleTipSelect(tip.id)}>
+                            <ListItemButton onClick={() => handleBlogSelect(blog.id)}>
                                 <ListItemText
-                                    primary={tip.title}
-                                    secondary={format(new Date(tip.date), 'MMMM d, yyyy')}
+                                    primary={blog.title}
+                                    secondary={format(new Date(blog.date), 'MMMM d, yyyy')}
                                     slotProps={{
                                         primary: {
                                             variant: 'body1',
@@ -153,7 +164,7 @@ const TipsListCard: React.FC<TipListCardProps> = (props) => {
                         </ListItem>
                     );
                 })}
-                {tips.length === 0 &&
+                {blogs.length === 0 &&
                     Array.from({ length: 8 }).map((_, i) => (
                         <ListItem key={i} dense divider>
                             <Skeleton sx={{ width: '100%', height: 64 }}></Skeleton>{' '}
@@ -164,8 +175,8 @@ const TipsListCard: React.FC<TipListCardProps> = (props) => {
     );
 };
 
-type TipDetailsPanelProps = {
-    tipId?: number;
+type BlogDetailsPanelProps = {
+    blogId?: number;
     hasNext?: boolean;
     hasPrevious?: boolean;
     onNext?: () => void;
@@ -173,118 +184,27 @@ type TipDetailsPanelProps = {
     showNavigation?: boolean;
     loading?: boolean;
 };
-const TipDetailsPanel: React.FC<TipDetailsPanelProps> = (props) => {
-    const { tipId, hasNext, hasPrevious, showNavigation, onNext, onPrevious } = props;
+const BlogDetailsPanel: React.FC<BlogDetailsPanelProps> = (props) => {
+    const { blogId, hasNext, hasPrevious, showNavigation, onNext, onPrevious } = props;
     const admin = useSelector((state: RootState) => state.auth.admin);
 
-    const [videoLoading, setVideoLoading] = useState(true);
     const [showEditDialog, setShowEditDialog] = useState(false);
 
-    const {
-        data: tipDetails,
-        isSuccess: haveDetails,
-        isFetching,
-    } = useGetTipByIdQuery(tipId ?? 0, { skip: tipId === undefined });
+    const { data: blogDetails, isSuccess: haveDetails } = useGetBlogByIdQuery(blogId ?? 0, {
+        skip: blogId === undefined,
+    });
 
-    const description = tipDetails ? splitDatabaseText(tipDetails.comments) : [];
-
-    useEffect(() => {
-        setVideoLoading(true);
-    }, [tipId]);
+    const description = blogDetails ? splitDatabaseText(blogDetails.body) : [];
 
     return (
         <>
             <Box sx={{ flex: '1 1 0px' }}>
-                <Box
-                    sx={{
-                        width: '100%',
-                        paddingTop: '56.25%',
-                        position: 'relative',
-                        mb: 4,
-                    }}
-                >
-                    {haveDetails && !isFetching && (
-                        <Box
-                            component={YouTube}
-                            videoId={tipDetails.video}
-                            onReady={() => {
-                                setVideoLoading(false);
-                            }}
-                            style={{
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                width: '100%',
-                                height: '100%',
-                            }}
-                            opts={{
-                                height: '100%',
-                                width: '100%',
-                                playerVars: {
-                                    showinfo: 0,
-                                    origin: 'www.swingessentials.com',
-                                    playsinline: 1,
-                                    rel: 0,
-                                },
-                            }}
-                        />
-                    )}
-                    {videoLoading && (
-                        <Skeleton
-                            variant="rectangular"
-                            sx={{
-                                position: 'absolute',
-                                inset: 0,
-                                height: '100%',
-                            }}
-                        />
-                    )}
-                    {showNavigation && (
-                        <>
-                            <IconButton
-                                disabled={!hasNext}
-                                sx={{
-                                    position: 'absolute',
-                                    top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    left: -32,
-                                    padding: 0,
-                                    fontSize: 32,
-                                }}
-                                onClick={(): void => {
-                                    onNext?.();
-                                }}
-                            >
-                                <ChevronLeft fontSize={'inherit'} />
-                            </IconButton>
-                            <IconButton
-                                disabled={!hasPrevious}
-                                style={{
-                                    position: 'absolute',
-                                    top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    right: -32,
-                                    padding: 0,
-                                    fontSize: 32,
-                                }}
-                                onClick={(): void => {
-                                    onPrevious?.();
-                                }}
-                            >
-                                <ChevronRight fontSize={'inherit'} />
-                            </IconButton>
-                        </>
-                    )}
-                </Box>
-
                 {haveDetails ? (
                     <>
                         <FancyHeadline
                             icon={admin ? <Edit fontSize={'inherit'} /> : undefined}
-                            headline={tipDetails.title}
-                            subheading={format(new Date(tipDetails.date), 'MMMM d, yyyy')}
+                            headline={blogDetails.title}
+                            subheading={format(new Date(blogDetails.date), 'MMMM d, yyyy')}
                             sx={{
                                 cursor: admin ? 'pointer' : 'initial',
                                 mb: 2,
@@ -330,10 +250,39 @@ const TipDetailsPanel: React.FC<TipDetailsPanelProps> = (props) => {
                         <Skeleton variant="text" sx={{ width: '100%', height: 32 }} />
                     </>
                 )}
+                {haveDetails && showNavigation && (
+                    <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'} mt={4}>
+                        <Button
+                            // disabled={!hasNext}
+                            onClick={(): void => {
+                                onNext?.();
+                                window.scrollTo({ top: 512, behavior: 'smooth' });
+                            }}
+                            color={'inherit'}
+                            startIcon={<ChevronLeft fontSize={'inherit'} />}
+                            sx={{ visibility: !hasNext ? 'hidden' : 'visible' }}
+                        >
+                            Read Previous Post
+                        </Button>
+                        <Button
+                            // disabled={!hasPrevious}
+                            onClick={(): void => {
+                                console.log('scrolling to top');
+                                onPrevious?.();
+                                window.scrollTo({ top: 512, behavior: 'smooth' });
+                            }}
+                            color={'inherit'}
+                            endIcon={<ChevronRight fontSize={'inherit'} />}
+                            sx={{ visibility: !hasPrevious ? 'hidden' : 'visible' }}
+                        >
+                            Read Next Post
+                        </Button>
+                    </Stack>
+                )}
             </Box>
             {admin && (
-                <EditTipDialog
-                    tip={tipDetails ?? BlankTip}
+                <EditBlogDialog
+                    blog={blogDetails ?? BlankBlog}
                     open={showEditDialog}
                     onClose={(): void => {
                         setShowEditDialog(false);
@@ -344,57 +293,57 @@ const TipDetailsPanel: React.FC<TipDetailsPanelProps> = (props) => {
     );
 };
 
-export const TipsPage: React.FC = (): JSX.Element => {
+export const BlogsPage: React.FC = (): JSX.Element => {
     // useGoogleAnalyticsPageView();
     const navigate = useNavigate();
     const admin = useSelector((state: RootState) => state.auth.admin);
 
     const { id } = useParams<{ id: string }>();
 
-    const [selectedTip, setSelectedTip] = useState<number>();
-    const [tipIndex, setTipIndex] = useState<number>(0);
+    const [selectedBlog, setSelectedBlog] = useState<number>();
+    const [blogIndex, setBlogIndex] = useState<number>(0);
     const [activeYear, setActiveYear] = useState<number>(new Date().getFullYear());
-    const { data: tips = [], isSuccess: haveTips } = useGetTipsQuery();
+    const { data: blogs = [], isSuccess: haveBlogs } = useGetBlogsQuery();
 
-    // group the tips by year
-    const tipsByYear = useMemo(() => {
-        return tips.reduce(
-            (acc, tip) => {
-                const year = tip.year;
+    // group the blogs by year
+    const blogsByYear = useMemo(() => {
+        return blogs.reduce(
+            (acc, blog) => {
+                const year = blog.year;
                 if (!acc[year]) {
                     acc[year] = [];
                 }
-                acc[year].push(tip);
+                acc[year].push(blog);
                 return acc;
             },
-            {} as Record<number, TipDetailsWithYear[]>
+            {} as Record<number, BlogDetailsWithYear[]>
         );
-    }, [tips]);
+    }, [blogs]);
 
-    const highestYear = Math.max(...Object.keys(tipsByYear).map(Number));
-    const lowestYear = Math.min(...Object.keys(tipsByYear).map(Number));
+    const highestYear = Math.max(...Object.keys(blogsByYear).map(Number));
+    const lowestYear = Math.min(...Object.keys(blogsByYear).map(Number));
 
     const isHighestYear = activeYear === highestYear;
     const isLowestYear = activeYear === lowestYear;
 
-    // Set the active tip when data is loaded
+    // Set the active blog when data is loaded
     useEffect(() => {
-        if (haveTips && id !== undefined) {
-            const index = tips.findIndex((t) => t.id === Number(id));
-            const tip = tips[index];
-            if (tip) {
-                setSelectedTip(tip.id);
-                setTipIndex(index);
-                setActiveYear(tip.year);
+        if (haveBlogs && id !== undefined) {
+            const index = blogs.findIndex((t) => t.id === Number(id));
+            const blog = blogs[index];
+            if (blog) {
+                setSelectedBlog(blog.id);
+                setBlogIndex(index);
+                setActiveYear(blog.year);
             } else {
-                navigate(`${ROUTES.TIPS}/${tips[0].id}`, { replace: true });
+                navigate(`${ROUTES.BLOG}/${blogs[0].id}`, { replace: true });
             }
-        } else if (haveTips) {
-            setSelectedTip(tips[0].id);
-            setTipIndex(0);
-            setActiveYear(tips[0].year);
+        } else if (haveBlogs) {
+            setSelectedBlog(blogs[0].id);
+            setBlogIndex(0);
+            setActiveYear(blogs[0].year);
         }
-    }, [tips, id, haveTips]);
+    }, [blogs, id, haveBlogs]);
 
     const [showNewDialog, setShowNewDialog] = useState(false);
 
@@ -405,23 +354,23 @@ export const TipsPage: React.FC = (): JSX.Element => {
             <Banner background={{ src: bg, position: 'center right' }}>
                 <SectionBlurb
                     icon={<Today fontSize={'inherit'} />}
-                    headline={'Tip of the Month'}
+                    headline={'Blog of the Month'}
                     subheading={'Keep your game sharp'}
-                    body={`Every month, Swing Essentials brings you new video tips to help you solve common problems in your golf game. If you have an idea for a future tip, let us know!`}
+                    body={`Every month, Swing Essentials brings you new video blogs to help you solve common problems in your golf game. If you have an idea for a future blog, let us know!`}
                     sx={{ color: 'primary.contrastText', zIndex: 100, maxWidth: 900 }}
                 />
             </Banner>
             <ActionToolbar show={admin}>
                 <Button variant={'text'} onClick={(): void => setShowNewDialog(true)}>
                     <AddCircle style={{ marginRight: 4 }} />
-                    New Tip
+                    New Blog
                 </Button>
             </ActionToolbar>
 
             {admin && (
-                <EditTipDialog
+                <EditBlogDialog
                     isNew
-                    tip={BlankTip}
+                    blog={BlankBlog}
                     open={showNewDialog}
                     onClose={(): void => {
                         setShowNewDialog(false);
@@ -436,12 +385,12 @@ export const TipsPage: React.FC = (): JSX.Element => {
                 }}
             >
                 {!isSmall && (
-                    <TipsListCard
-                        tips={tipsByYear[activeYear] ?? []}
+                    <BlogsListCard
+                        blogs={blogsByYear[activeYear] ?? []}
                         year={activeYear}
-                        selectedTip={selectedTip}
-                        onTipSelected={(newId: number) => {
-                            navigate(`${ROUTES.TIPS}/${newId}`, { replace: true });
+                        selectedBlog={selectedBlog}
+                        onBlogSelected={(newId: number) => {
+                            navigate(`${ROUTES.BLOG}/${newId}`, { replace: true });
                         }}
                         hasNextYear={!isHighestYear}
                         hasPreviousYear={!isLowestYear}
@@ -453,17 +402,17 @@ export const TipsPage: React.FC = (): JSX.Element => {
                         }}
                     />
                 )}
-                <TipDetailsPanel
-                    tipId={selectedTip}
-                    hasNext={tipIndex < tips.length - 1}
-                    hasPrevious={tipIndex > 0}
+                <BlogDetailsPanel
+                    blogId={selectedBlog}
+                    hasNext={blogIndex < blogs.length - 1}
+                    hasPrevious={blogIndex > 0}
                     onNext={() => {
-                        navigate(`${ROUTES.TIPS}/${tips[tipIndex + 1].id}`, {
+                        navigate(`${ROUTES.BLOG}/${blogs[blogIndex + 1].id}`, {
                             replace: true,
                         });
                     }}
                     onPrevious={() => {
-                        navigate(`${ROUTES.TIPS}/${tips[tipIndex - 1].id}`, {
+                        navigate(`${ROUTES.BLOG}/${blogs[blogIndex - 1].id}`, {
                             replace: true,
                         });
                     }}

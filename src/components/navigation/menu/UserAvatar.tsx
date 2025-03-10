@@ -1,45 +1,42 @@
-import React from "react";
-import { Avatar, AvatarProps } from "@mui/material";
-import { Person } from "@mui/icons-material";
-import { getInitials } from "../../../utilities/strings";
-import {
-  BLANK_USER,
-  useGetUserDetailsQuery,
-} from "../../../redux/apiServices/userDetailsService";
+import React from 'react';
+import { Avatar, AvatarProps } from '@mui/material';
+import { Person } from '@mui/icons-material';
+import { getInitials } from '../../../utilities/strings';
+import { BLANK_USER, useGetUserDetailsQuery } from '../../../redux/apiServices/userDetailsService';
 
 type UserAvatarProps = AvatarProps;
 export const UserAvatar: React.FC<UserAvatarProps> = (props) => {
-  const { sx, ...other } = props;
+    const { sx, ...other } = props;
 
-  const { data: user = BLANK_USER, isSuccess } = useGetUserDetailsQuery();
-  const initials = getInitials(user.username, user.first, user.last);
+    const { data: user = BLANK_USER, isSuccess } = useGetUserDetailsQuery();
+    const initials = getInitials(user.username, user.first, user.last);
 
-  return !isSuccess ? (
-    <Avatar />
-  ) : (
-    <Avatar
-      src={
-        user.avatar
-          ? `https://www.swingessentials.com/images/profiles/${user.username}/${user.avatar}.png`
-          : undefined
-      }
-      sx={[
-        {
-          cursor: "pointer",
-          backgroundColor: "background.paper",
-          color: "text.primary",
+    return !isSuccess ? (
+        <Avatar />
+    ) : (
+        <Avatar
+            src={
+                user.avatar
+                    ? `https://www.swingessentials.com/images/profiles/${user.username}/${user.avatar}.png`
+                    : undefined
+            }
+            sx={[
+                {
+                    cursor: 'pointer',
+                    backgroundColor: 'background.paper',
+                    color: 'text.primary',
 
-          height: (t) => t.spacing(5),
-          width: (t) => t.spacing(5),
+                    height: (t) => t.spacing(5),
+                    width: (t) => t.spacing(5),
 
-          fontWeight: 600,
-          fontFamily: `Roboto Mono`,
-        },
-        ...(Array.isArray(sx) ? sx : [sx]),
-      ]}
-      {...other}
-    >
-      {initials ? initials : <Person fontSize={"inherit"} />}
-    </Avatar>
-  );
+                    fontWeight: 600,
+                    fontFamily: `Roboto Mono`,
+                },
+                ...(Array.isArray(sx) ? sx : [sx]),
+            ]}
+            {...other}
+        >
+            {initials ? initials : <Person fontSize={'inherit'} />}
+        </Avatar>
+    );
 };

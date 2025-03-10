@@ -6,7 +6,8 @@ const glob = require('glob');
 
 var args = process.argv.slice(2);
 const basePath = './build';
-const destinationPath = args[0] === '--prod' ? process.env.SE_PROD_LOCATION : args[0] === '--dev' ? process.env.SE_STAGING_LOCATION : '';
+const destinationPath =
+    args[0] === '--prod' ? process.env.SE_PROD_LOCATION : args[0] === '--dev' ? process.env.SE_STAGING_LOCATION : '';
 const config = {
     // We store the credentials for
     // our FTP server as environemnt
@@ -14,7 +15,7 @@ const config = {
     host: process.env.SE_FTP_HOST,
     password: process.env.SE_FTP_PASSWORD,
     user: process.env.SE_FTP_USER,
-    isTest: (args[0] === '--test')
+    isTest: args[0] === '--test',
 };
 
 const ftpClient = new FtpClient();

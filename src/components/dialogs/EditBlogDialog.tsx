@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { DATE_REGEX } from '../../constants';
 import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../utilities/text';
+import { DATE_REGEX } from '../../constants';
 import { ConfirmationDialog } from './ConfirmationDialog';
 import {
     DialogProps,
@@ -11,70 +11,58 @@ import {
     DialogActions,
     Button,
     TextField,
-    InputAdornment,
     Stack,
 } from '@mui/material';
-import { useVideoValid } from '../../hooks';
-import { CheckCircle } from '@mui/icons-material';
-import { getYoutubeVideoErrorMessage } from '../../utilities/video';
 import {
-    TipDetails,
-    useAddTipMutation,
-    useRemoveTipMutation,
-    useUpdateTipMutation,
-} from '../../redux/apiServices/tipsService';
-import { YoutubeVideoStatus } from '../../__types__';
+    BlogDetails,
+    useAddBlogMutation,
+    useRemoveBlogMutation,
+    useUpdateBlogMutation,
+} from '../../redux/apiServices/blogsService';
 import { format, isValid, parseISO } from 'date-fns';
 
-type EditTipDialogProps = DialogProps & {
-    tip: TipDetails;
+type EditBlogDialogProps = DialogProps & {
+    blog: BlogDetails;
     isNew?: boolean;
 };
-export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
-    const { isNew, tip, ...dialogProps } = props;
+export const EditBlogDialog: React.FC<EditBlogDialogProps> = (props) => {
+    const { isNew, blog, ...dialogProps } = props;
     const { onClose = (): void => {} } = dialogProps;
 
-    const [addTip] = useAddTipMutation();
-    const [updateTip] = useUpdateTipMutation();
-    const [removeTip] = useRemoveTipMutation();
+    const [addBlog] = useAddBlogMutation();
+    const [updateBlog] = useUpdateBlogMutation();
+    const [removeBlog] = useRemoveBlogMutation();
 
-    const [date, setDate] = useState(tip.date);
-    const [title, setTitle] = useState(tip.title);
-    const [video, setVideo] = useState(tip.video);
-    const [videoStatus, setVideoStatus] = useState<YoutubeVideoStatus>('invalid');
-    const videoValid = videoStatus === 'valid';
-
-    useVideoValid(video, setVideoStatus);
-
-    const [comments, setComments] = useState(convertDatabaseTextToMultiline(tip.comments));
+    const [date, setDate] = useState(blog.date);
+    const [title, setTitle] = useState(blog.title);
+    const [body, setBody] = useState(convertDatabaseTextToMultiline(blog.body));
 
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
-    const resetTip = useCallback(() => {
-        const parsedDate = parseISO(tip.date);
-        setDate(isValid(parsedDate) ? format(new Date(tip.date), 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'));
-        setTitle(tip.title);
-        setVideo(tip.video);
-        setComments(convertDatabaseTextToMultiline(tip.comments));
-    }, [tip]);
+    const resetBlog = useCallback(() => {
+        const parsedDate = parseISO(blog.date);
+        setDate(isValid(parsedDate) ? format(new Date(blog.date), 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'));
+        setTitle(blog.title);
+        setBody(convertDatabaseTextToMultiline(blog.body));
+    }, [blog]);
 
     useEffect(() => {
-        resetTip();
-    }, [tip, resetTip]);
+        resetBlog();
+    }, [blog, resetBlog]);
 
-    if (!tip) return null;
+    if (!blog) return null;
     return (
         <>
             <Dialog
                 {...dialogProps}
                 onClose={(e, r) => {
                     onClose(e, r);
-                    resetTip();
+                    resetBlog();
                 }}
             >
-                <DialogTitle>{`${isNew ? 'New' : 'Edit'} Tip`}</DialogTitle>
+                <DialogTitle>{`${isNew ? 'New' : 'Edit'} 19th Hole Post`}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>{`Enter the tip information below:`}</DialogContentText>
+                    <DialogContentText>{`Enter the blog post information below:`}</DialogContentText>
                     <Stack spacing={2}>
                         <TextField
                             fullWidth
@@ -101,42 +89,19 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                         />
                         <TextField
                             fullWidth
-                            variant={'filled'}
-                            label={'Video ID'}
-                            name={'video'}
-                            value={video}
-                            placeholder={'Youtube ID'}
-                            error={!videoValid || (!!video && video.length !== 11 && video.length > 0)}
-                            helperText={getYoutubeVideoErrorMessage(video, videoStatus)}
-                            slotProps={{
-                                htmlInput: { maxLength: 11 },
-                                input: {
-                                    endAdornment: videoValid ? (
-                                        <InputAdornment position="end">
-                                            <CheckCircle sx={{ color: 'success.main' }} />
-                                        </InputAdornment>
-                                    ) : undefined,
-                                },
-                            }}
-                            onChange={(e): void => {
-                                setVideo(e.target.value);
-                            }}
-                        />
-                        <TextField
-                            fullWidth
                             multiline
                             variant={'filled'}
-                            label={'Description'}
-                            placeholder={'Add a brief description here...'}
-                            name={'comments'}
-                            value={comments}
+                            label={'Post'}
+                            placeholder={'Add the content here...'}
+                            name={'body'}
+                            value={body}
                             onChange={(e): void => {
-                                setComments(e.target.value);
+                                setBody(e.target.value);
                             }}
                             slotProps={{
-                                htmlInput: { maxLength: 500, style: { minHeight: 64 } },
+                                htmlInput: { maxLength: 65000, style: { minHeight: 128 } },
                             }}
-                            helperText={`${500 - comments.length} characters left`}
+                            helperText={`${65000 - body.length} characters left`}
                         />
                     </Stack>
                 </DialogContent>
@@ -152,14 +117,13 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                             Delete
                         </Button>
                     )}
-
                     <Stack direction={'row'} spacing={2}>
                         <Button
                             color="primary"
                             variant={'outlined'}
                             onClick={(e): void => {
                                 onClose(e, 'backdropClick');
-                                resetTip();
+                                resetBlog();
                             }}
                         >
                             Cancel
@@ -167,22 +131,20 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                         <Button
                             color="primary"
                             variant={'contained'}
-                            disabled={!title || !date || !video || !comments || !DATE_REGEX.test(date)}
+                            disabled={!title || !date || !body || !DATE_REGEX.test(date)}
                             onClick={(e): void => {
                                 if (isNew) {
-                                    addTip({
+                                    addBlog({
                                         title: title,
                                         date: date,
-                                        video: video,
-                                        comments: convertMultilineToDatabaseText(comments),
+                                        body: convertMultilineToDatabaseText(body),
                                     });
                                 } else {
-                                    updateTip({
-                                        id: tip.id,
+                                    updateBlog({
+                                        id: blog.id,
                                         title: title,
                                         date: date,
-                                        video: video,
-                                        comments: convertMultilineToDatabaseText(comments),
+                                        body: convertMultilineToDatabaseText(body),
                                     });
                                 }
                                 onClose(e, 'escapeKeyDown');
@@ -195,12 +157,11 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
             </Dialog>
             {showConfirmationDialog && (
                 <ConfirmationDialog
-                    title={'Delete Tip of the Month'}
-                    message={'Are you sure you want to delete this Tip of the Month? This action cannot be undone.'}
+                    title={'Delete Blog Post'}
+                    message={'Are you sure you want to delete this 19th Hole post? This action cannot be undone.'}
                     onOkay={(e): void => {
                         setShowConfirmationDialog(false);
-                        removeTip({ id: tip.id });
-
+                        removeBlog(blog);
                         onClose(e, 'escapeKeyDown');
                     }}
                     onCancel={(): void => {

@@ -13,7 +13,7 @@ export const sortUsers =
         userA[prop].toLowerCase() < userB[prop].toLowerCase()
             ? -1
             : userA[prop].toLowerCase() > userB[prop].toLowerCase()
-            ? 1
-            : userA[secondary].toLowerCase() < userB[secondary].toLowerCase()
-            ? -1
-            : 1;
+              ? 1
+              : userA[secondary].toLowerCase() < userB[secondary].toLowerCase()
+                ? -1
+                : 1;
