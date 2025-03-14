@@ -64,7 +64,7 @@ export const EmptyState: React.FC<EmptyStateProps> = (props) => {
                     {description}
                 </Typography>
             )}
-            {actions && <Box>{actions}</Box>}
+            {actions && <Box sx={{ width: '100%' }}>{actions}</Box>}
         </Stack>
     );
 };

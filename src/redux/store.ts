@@ -8,6 +8,7 @@ import { testimonialsApi } from './apiServices/testimonialsService';
 import { prosApi } from './apiServices/prosService';
 import registrationApi from './apiServices/registrationService';
 import { tipsApi } from './apiServices/tipsService';
+import { lessonsApi } from './apiServices/lessonsService';
 
 export const store = configureStore({
     reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
         [prosApi.reducerPath]: prosApi.reducer,
         [registrationApi.reducerPath]: registrationApi.reducer,
         [tipsApi.reducerPath]: tipsApi.reducer,
+        [lessonsApi.reducerPath]: lessonsApi.reducer,
 
         auth: authReducer,
         navigation: navigationReducer,
@@ -30,7 +32,8 @@ export const store = configureStore({
             testimonialsApi.middleware,
             prosApi.middleware,
             registrationApi.middleware,
-            tipsApi.middleware
+            tipsApi.middleware,
+            lessonsApi.middleware
         ),
 });
 

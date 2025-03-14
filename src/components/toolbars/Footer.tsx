@@ -5,6 +5,7 @@ import { SimpleRouterLink } from '../navigation/SimpleLinks';
 import { AppBar, Toolbar, Typography, IconButton, Box, Stack, SvgIcon } from '@mui/material';
 import { Instagram, Facebook, Email } from '@mui/icons-material';
 import packageJSON from '../../../package.json';
+import { ThemeToggleButton } from './NavigationToolbar';
 
 export const Footer: React.FC = () => {
     return (
@@ -81,6 +82,7 @@ export const Footer: React.FC = () => {
                         fontSize: 10,
                     }}
                 >{`v${packageJSON.version}`}</Typography>
+                <ThemeToggleButton sx={{ mt: 1 }} />
             </Toolbar>
         </AppBar>
     );

@@ -72,7 +72,13 @@ const TipsListCard: React.FC<TipListCardProps> = (props) => {
     };
 
     return (
-        <Card sx={{ flex: '1 1 0px', maxWidth: '40%' }}>
+        <Card
+            sx={{
+                flex: '1 1 0px',
+                maxWidth: '40%',
+                // maxHeight: (t) => `calc(100vh - ${t.spacing(24)})`,
+            }}
+        >
             <CardHeader
                 title={year}
                 slotProps={{
@@ -97,58 +103,17 @@ const TipsListCard: React.FC<TipListCardProps> = (props) => {
                         />
                     </>
                 }
-                sx={{
-                    alignSelf: 'center',
-                    mt: 0,
-                    backgroundColor: 'primary.main',
-                    color: 'primary.contrastText',
-                }}
             />
-            <List disablePadding sx={{ maxHeight: 670, overflowY: 'auto' }}>
+            <List disablePadding sx={{ flex: '1 1 auto', overflowY: 'auto' }}>
                 {tips.map((tip) => {
                     return (
-                        <ListItem
-                            key={`tip_${tip.id}`}
-                            dense
-                            disablePadding
-                            divider
-                            sx={[
-                                {
-                                    position: 'relative',
-                                },
-                                selectedTip === tip.id
-                                    ? {
-                                          backgroundColor: 'action.selected',
-                                          '&:after': {
-                                              content: '""',
-                                              position: 'absolute',
-                                              top: 0,
-                                              left: 0,
-                                              width: 4,
-                                              height: '100%',
-                                              backgroundColor: 'secondary.main',
-                                          },
-                                      }
-                                    : {},
-                            ]}
-                        >
-                            <ListItemButton onClick={() => handleTipSelect(tip.id)}>
+                        <ListItem key={`tip_${tip.id}`} dense disablePadding divider>
+                            <ListItemButton onClick={() => handleTipSelect(tip.id)} selected={selectedTip === tip.id}>
                                 <ListItemText
                                     primary={tip.title}
                                     secondary={format(new Date(tip.date), 'MMMM d, yyyy')}
-                                    slotProps={{
-                                        primary: {
-                                            variant: 'body1',
-                                            color: 'text.primary',
-                                            fontWeight: 600,
-                                        },
-                                        secondary: {
-                                            variant: 'subtitle2',
-                                            color: 'text.primary',
-                                            fontWeight: 400,
-                                        },
-                                    }}
                                 />
+                                <ChevronRight sx={{ mr: -1 }} />
                             </ListItemButton>
                         </ListItem>
                     );
@@ -210,12 +175,9 @@ const TipDetailsPanel: React.FC<TipDetailsPanelProps> = (props) => {
                             onReady={() => {
                                 setVideoLoading(false);
                             }}
-                            style={{
+                            sx={{
                                 position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
+                                inset: 0,
                                 width: '100%',
                                 height: '100%',
                             }}
@@ -412,8 +374,12 @@ export const TipsPage: React.FC = (): JSX.Element => {
                 />
             </Banner>
             <ActionToolbar show={admin}>
-                <Button variant={'text'} onClick={(): void => setShowNewDialog(true)}>
-                    <AddCircle style={{ marginRight: 4 }} />
+                <Button
+                    color={'secondary'}
+                    startIcon={<AddCircle />}
+                    variant={'text'}
+                    onClick={(): void => setShowNewDialog(true)}
+                >
                     New Tip
                 </Button>
             </ActionToolbar>

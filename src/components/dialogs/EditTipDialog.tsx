@@ -10,7 +10,6 @@ import {
     DialogContentText,
     DialogActions,
     Button,
-    TextField,
     InputAdornment,
     Stack,
 } from '@mui/material';
@@ -25,6 +24,7 @@ import {
 } from '../../redux/apiServices/tipsService';
 import { YoutubeVideoStatus } from '../../__types__';
 import { format, isValid, parseISO } from 'date-fns';
+import { StyledTextField } from '../text/StyledInputs';
 
 type EditTipDialogProps = DialogProps & {
     tip: TipDetails;
@@ -76,7 +76,7 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                 <DialogContent>
                     <DialogContentText>{`Enter the tip information below:`}</DialogContentText>
                     <Stack spacing={2}>
-                        <TextField
+                        <StyledTextField
                             fullWidth
                             variant={'filled'}
                             label={'Date'}
@@ -88,7 +88,7 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                                 setDate(e.target.value);
                             }}
                         />
-                        <TextField
+                        <StyledTextField
                             fullWidth
                             variant={'filled'}
                             label={'Title'}
@@ -99,7 +99,7 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                                 setTitle(e.target.value);
                             }}
                         />
-                        <TextField
+                        <StyledTextField
                             fullWidth
                             variant={'filled'}
                             label={'Video ID'}
@@ -122,7 +122,7 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                                 setVideo(e.target.value);
                             }}
                         />
-                        <TextField
+                        <StyledTextField
                             fullWidth
                             multiline
                             variant={'filled'}
@@ -135,6 +135,7 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                             }}
                             slotProps={{
                                 htmlInput: { maxLength: 500, style: { minHeight: 64 } },
+                                formHelperText: { sx: { color: 'text.primary' } },
                             }}
                             helperText={`${500 - comments.length} characters left`}
                         />
@@ -155,7 +156,7 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
 
                     <Stack direction={'row'} spacing={2}>
                         <Button
-                            color="primary"
+                            color="secondary"
                             variant={'outlined'}
                             onClick={(e): void => {
                                 onClose(e, 'backdropClick');

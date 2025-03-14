@@ -4,6 +4,7 @@ import { Credentials, UserRole } from '../../__types__';
 import { clearToken, incrementLoginFailures } from '../slices/authSlice';
 // import { loadUserData } from "../thunks";
 import { storeToken } from './utils/storeToken';
+import { clearProtectedDetails, initializeData } from '../thunks';
 
 const authApi = createApi({
     reducerPath: 'authApi',
@@ -23,6 +24,7 @@ const authApi = createApi({
                 try {
                     const { meta } = await queryFulfilled;
                     storeToken(meta, dispatch);
+                    dispatch(initializeData());
                 } catch (error) {
                     console.error('Login failed:', error);
                     dispatch(incrementLoginFailures());
@@ -45,6 +47,7 @@ const authApi = createApi({
                 } finally {
                     dispatch(clearToken());
                     localStorage.removeItem(`${ASYNC_PREFIX}token`);
+                    dispatch(clearProtectedDetails());
                 }
             },
         }),

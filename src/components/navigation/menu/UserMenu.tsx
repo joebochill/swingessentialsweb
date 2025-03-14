@@ -7,9 +7,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { UserAvatar } from './UserAvatar';
 
-const ForwardMenuContent = React.forwardRef((props: { onClose: () => void }) => <MenuContent {...props} />);
-ForwardMenuContent.displayName = 'ForwardRefMenuContent';
-
 export const UserMenu: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -45,7 +42,7 @@ export const UserMenu: React.FC = () => {
                     },
                 }}
             >
-                <ForwardMenuContent onClose={closeMenu} />
+                <MenuContent onClose={closeMenu} />
             </Menu>
         </>
     ) : (

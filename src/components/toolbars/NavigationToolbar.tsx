@@ -14,28 +14,34 @@ import {
     Box,
     Stack,
     useColorScheme,
-    Typography,
+    Tooltip,
+    IconButtonProps,
 } from '@mui/material';
-import { InvertColors, Menu } from '@mui/icons-material';
+import { DarkMode, InvertColors, LightMode, Menu } from '@mui/icons-material';
 import logo from '../../assets/icons/logo-full-white.svg';
 import { RootState } from '../../redux/store';
 import { openDrawer } from '../../redux/slices/navigationSlice';
+import { useDarkMode } from '../../hooks';
 
-const ThemeToggleButton: React.FC = (): JSX.Element => {
+type ThemeType = 'light' | 'dark' | 'system';
+export const ThemeToggleButton: React.FC<IconButtonProps> = (props): JSX.Element => {
+    const { sx, ...other } = props;
     const { mode, setMode } = useColorScheme();
+    const { isDarkMode } = useDarkMode();
 
+    const handleThemeChange = (theme: ThemeType) => {
+        setMode(theme);
+    };
     return (
-        <>
+        <Tooltip title={'Toggle theme'} placement="right">
             <IconButton
-                sx={{ color: 'inherit' }}
-                onClick={(): void => {
-                    setMode(mode === 'dark' ? 'light' : mode === 'light' ? 'system' : 'dark');
-                }}
+                sx={[{ color: 'inherit' }, ...(Array.isArray(sx) ? sx : [sx])]}
+                onClick={() => handleThemeChange(isDarkMode ? 'light' : 'dark')}
+                {...other}
             >
-                <InvertColors />
+                {mode === 'dark' ? <DarkMode /> : mode === 'light' ? <LightMode /> : <InvertColors />}
             </IconButton>
-            <Typography>{mode}</Typography>
-        </>
+        </Tooltip>
     );
 };
 
@@ -68,7 +74,6 @@ export const NavigationToolbar: React.FC = (): JSX.Element => {
                     }}
                     sx={{ cursor: 'pointer' }}
                 />
-                <ThemeToggleButton />
 
                 {mdUp && (
                     <Stack direction={'row'} spacing={2} alignItems={'center'}>

@@ -178,7 +178,7 @@ export const ProfileForm: React.FC = () => {
                     label="Date of Birth"
                     views={['year', 'month', 'day']}
                     value={birthday}
-                    onChange={(value: Date): void => {
+                    onChange={(value: Date | null): void => {
                         setBirthday(value);
                         setBirthdayString(value ? format(value, 'MM/dd/yyyy') : '');
                     }}

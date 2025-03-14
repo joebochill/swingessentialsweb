@@ -83,7 +83,7 @@ const BlogsListCard: React.FC<BlogListCardProps> = (props) => {
     };
 
     return (
-        <Card sx={{ flex: '1 1 0px', maxWidth: '40%' }}>
+        <Card sx={{ flex: '1 1 0px', maxWidth: '40%', /*maxHeight: (t) => `calc(100vh - ${t.spacing(24)})`*/ }}>
             <CardHeader
                 title={year}
                 slotProps={{
@@ -108,58 +108,20 @@ const BlogsListCard: React.FC<BlogListCardProps> = (props) => {
                         />
                     </>
                 }
-                sx={{
-                    alignSelf: 'center',
-                    mt: 0,
-                    backgroundColor: 'primary.main',
-                    color: 'primary.contrastText',
-                }}
             />
-            <List disablePadding sx={{ maxHeight: 670, overflowY: 'auto' }}>
+            <List disablePadding sx={{ flex: '1 1 auto', overflowY: 'auto' }}>
                 {blogs.map((blog) => {
                     return (
-                        <ListItem
-                            key={`blog_${blog.id}`}
-                            dense
-                            disablePadding
-                            divider
-                            sx={[
-                                {
-                                    position: 'relative',
-                                },
-                                selectedBlog === blog.id
-                                    ? {
-                                          backgroundColor: 'action.selected',
-                                          '&:after': {
-                                              content: '""',
-                                              position: 'absolute',
-                                              top: 0,
-                                              left: 0,
-                                              width: 4,
-                                              height: '100%',
-                                              backgroundColor: 'secondary.main',
-                                          },
-                                      }
-                                    : {},
-                            ]}
-                        >
-                            <ListItemButton onClick={() => handleBlogSelect(blog.id)}>
+                        <ListItem key={`blog_${blog.id}`} dense disablePadding divider>
+                            <ListItemButton
+                                selected={selectedBlog === blog.id}
+                                onClick={() => handleBlogSelect(blog.id)}
+                            >
                                 <ListItemText
                                     primary={blog.title}
                                     secondary={format(new Date(blog.date), 'MMMM d, yyyy')}
-                                    slotProps={{
-                                        primary: {
-                                            variant: 'body1',
-                                            color: 'text.primary',
-                                            fontWeight: 600,
-                                        },
-                                        secondary: {
-                                            variant: 'subtitle2',
-                                            color: 'text.primary',
-                                            fontWeight: 400,
-                                        },
-                                    }}
                                 />
+                                <ChevronRight sx={{ mr: -1 }} />
                             </ListItemButton>
                         </ListItem>
                     );
@@ -267,7 +229,6 @@ const BlogDetailsPanel: React.FC<BlogDetailsPanelProps> = (props) => {
                         <Button
                             // disabled={!hasPrevious}
                             onClick={(): void => {
-                                console.log('scrolling to top');
                                 onPrevious?.();
                                 window.scrollTo({ top: 512, behavior: 'smooth' });
                             }}

@@ -3,19 +3,17 @@
 - Remove unused components / styles
 - Remove commented code
 - Update to Github Actions
-- Add lint and prettier configs
-- Update the logo for PGA
 - Update the deploy scripts
-- Add Theme Switcher
 - Clear out unused dependencies
 - Convert the back-end to Node?
 
-REWRITE
-
 CACHE DATA IN LOCALSTORAGE FOR API SERVICES
+
 EMAIL FUNCTIONALITY IN NODE
 
-LINT AND PRETTIER
+Do a DB Backup/export
+
+STANDARDIZE THE BACKEND ERROR CODES
 
 Screens
 
@@ -29,7 +27,7 @@ Screens
 - [x] Reset Password
 - [x] Blogs [2]
 - [x] Tips [3]
-- [ ] Lessons [3]
+- [x] Lessons
 - [x] Profile
 - [ ] Submit [3]
 - [ ] Order [3]
@@ -42,7 +40,7 @@ API SERVICES
 - [x] USER DETAILS
 - [x] PROS
 - [x] TIPS
-- [X] BLOGS
+- [x] BLOGS
 - [x] TESTIMONIALS
 - [ ] DISCOUNTS
 - [ ] EMAILS
@@ -60,7 +58,3 @@ Clear up / polish console.error / console.logs
 Positive and negative test all major apis (login, register, submit, purchase, etc.) to make sure appropriate error messages are displayed
 
 Dialog background colors in dark theme
-Fix isLoading vs isFetching
-isSuccess (instead of transforming results to boolean)
-
-When you log out, reload data in case what you are loooking at is not accessibkle anymore(Like tips\_)

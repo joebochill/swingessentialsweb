@@ -8,3 +8,4 @@ export * from './ResetPasswordPage';
 export * from './ProfilePage';
 export * from './TipsPage';
 export * from './BlogsPage';
+export * from './LessonsPage';

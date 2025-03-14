@@ -4,20 +4,22 @@ import { prepareHeaders } from './utils/prepareHeaders';
 import { ScoreRange, UserDataState } from '../../__types__';
 
 export type UserDataChange = Omit<Partial<UserDataState>, 'username' | 'email' | 'joined'>;
-type BasicUserDetailsApiResponse = {
+export type BasicUserDetailsApiResponse = {
     username: string;
     first: string;
     last: string;
     email: string;
     avatar: string;
 };
-export type Level2UserDetailsApiResponse = BasicUserDetailsApiResponse & {
+export type Level1UserDetailsApiResponse = BasicUserDetailsApiResponse & {
     location: string;
     phone: string;
     goals: string;
     birthday: string;
     average: ScoreRange;
     joined: number;
+};
+export type Level2UserDetailsApiResponse = Level1UserDetailsApiResponse & {
     notify_new_lesson: 0 | 1;
     notify_marketing: 0 | 1;
     notify_newsletter: 0 | 1;
@@ -59,6 +61,10 @@ export const userDetailsApi = createApi({
                 params: { detailLevel: 2 },
             }),
         }),
+        getUserDetailsById: builder.query<Level1UserDetailsApiResponse, string>({
+            providesTags: ['userDetails'],
+            query: (id) => `user/${id}?detailLevel=1`,
+        }),
         updateUserDetails: builder.mutation<boolean, Partial<Level2UserDetailsApiResponse>>({
             query: (body) => ({
                 url: `user`,
@@ -67,9 +73,17 @@ export const userDetailsApi = createApi({
             }),
             invalidatesTags: ['userDetails'],
         }),
+        searchUsers: builder.mutation<Omit<BasicUserDetailsApiResponse, 'avatar'>[], string>({
+            query: (search) => `user/search?q=${search}`,
+        }),
     }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetUserDetailsQuery, useUpdateUserDetailsMutation } = userDetailsApi;
+export const {
+    useGetUserDetailsQuery,
+    useUpdateUserDetailsMutation,
+    useGetUserDetailsByIdQuery,
+    useSearchUsersMutation,
+} = userDetailsApi;

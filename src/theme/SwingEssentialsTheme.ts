@@ -37,6 +37,61 @@ export const SwingEssentialsTheme = createTheme({
         borderRadius: 0,
     },
     components: {
+        MuiCard: {
+            styleOverrides: {
+                root: ({ theme }) =>
+                    theme.unstable_sx({
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }),
+            },
+        },
+        MuiCardHeader: {
+            styleOverrides: {
+                root: ({ theme }) =>
+                    theme.unstable_sx({
+                        flex: '0 0 auto',
+                        backgroundColor: 'primary.main',
+                        color: 'primary.contrastText',
+                    }),
+            },
+        },
+        MuiListItemButton: {
+            styleOverrides: {
+                root: ({ theme }) =>
+                    theme.unstable_sx({
+                        position: 'relative',
+                        '&.Mui-selected': {
+                            backgroundColor: 'action.selected',
+                            '&:after': {
+                                content: '""',
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: 4,
+                                height: '100%',
+                                backgroundColor: 'secondary.main',
+                            },
+                        },
+                    }),
+            },
+        },
+        MuiListItemText: {
+            defaultProps: {
+                slotProps: {
+                    primary: {
+                        variant: 'body1',
+                        color: 'text.primary',
+                        fontWeight: 600,
+                    },
+                    secondary: {
+                        variant: 'subtitle2',
+                        color: 'text.primary',
+                        fontWeight: 400,
+                    },
+                },
+            },
+        },
         MuiDialog: {
             defaultProps: {
                 fullWidth: true,
@@ -137,6 +192,7 @@ export const SwingEssentialsTheme = createTheme({
                     light: '#fff',
                     main: '#fff',
                     dark: '#fff',
+                    contrastText: purple[500],
                 },
                 error: {
                     light: red[200],
