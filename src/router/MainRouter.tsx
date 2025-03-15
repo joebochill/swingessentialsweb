@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
-import { ROUTES } from '../constants/routes';
-
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { NavigationToolbar } from '../components/toolbars/NavigationToolbar';
-import { Footer } from '../components/toolbars/Footer';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+
+import { ROUTES } from '../constants/routes';
 import {
-    LandingPage,
+    HomePage,
     LoginPage,
     ProsPage,
     TermsPage,
@@ -16,12 +16,12 @@ import {
     TipsPage,
     BlogsPage,
     LessonsPage,
-} from '../pages';
+} from '../components/pages';
+import { PrivateRoute } from './PrivateRoute';
 import { ScrollToTop } from './ScrollToTop';
+import { Footer } from '../components/navigation/Footer';
+import { NavigationToolbar } from '../components/navigation/NavigationToolbar';
 import { NavigationDrawer } from '../components/navigation/NavigationDrawer';
-import { PrivateRoute } from '../components/navigation/PrivateRoute';
-import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
 
 export const MainRouter = (): ReactNode => {
     const { token, admin, initialized } = useSelector((state: RootState) => state.auth);
@@ -34,7 +34,7 @@ export const MainRouter = (): ReactNode => {
             <ScrollToTop />
             <NavigationToolbar />
             <Routes>
-                <Route path={`${ROUTES.HOME}`} element={<LandingPage />} />
+                <Route path={`${ROUTES.HOME}`} element={<HomePage />} />
 
                 <Route element={<PrivateRoute canActivate={!loggedIn} fallbackRoute={ROUTES.PROFILE} />}>
                     <Route path={`${ROUTES.LOGIN}`} element={<LoginPage />} />

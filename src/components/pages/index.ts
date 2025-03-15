@@ -1,0 +1,14 @@
+// export { AdminPortalPage } from './admin/AdminPortalPage';
+export { LoginPage } from './auth/LoginPage';
+export { VerifyEmailPage } from './auth/VerifyEmailPage';
+export { ResetPasswordPage } from './auth/ResetPasswordPage';
+export { BlogsPage } from './blogs/BlogsPage';
+export { HomePage } from './home/HomePage';
+export { LessonsPage } from './lessons/LessonsPage';
+// export { SubmitPage } from './submit/SubmitPage';
+// export { OrderPage } from './order/OrderPage';
+export { PrivacyPage } from './privacy/PrivacyPage';
+export { ProfilePage } from './profile/ProfilePage';
+export { ProsPage } from './pros/ProsPage';
+export { TermsPage } from './terms/TermsPage';
+export { TipsPage } from './tips/TipsPage';

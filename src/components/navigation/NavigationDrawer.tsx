@@ -1,9 +1,9 @@
 import { JSX } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { MenuContent } from './menu/MenuContent';
 import { Drawer } from '@mui/material';
 import { RootState } from '../../redux/store';
 import { closeDrawer } from '../../redux/slices/navigationSlice';
+import { MenuContent } from './MenuContent';
 
 export const NavigationDrawer = (): JSX.Element => {
     const dispatch = useDispatch();

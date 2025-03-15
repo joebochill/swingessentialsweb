@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { MainRouter } from './router/MainRouter';
 import { store } from './redux/store';
 import { initializeData } from './redux/thunks';
-import { TokenModal } from './components/dialogs/TokenModal';
+import { TokenModal } from './components/common/TokenModal';
 
 export const App: React.FC = () => {
     useEffect(() => {

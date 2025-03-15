@@ -58,3 +58,4 @@ Clear up / polish console.error / console.logs
 Positive and negative test all major apis (login, register, submit, purchase, etc.) to make sure appropriate error messages are displayed
 
 Dialog background colors in dark theme
+Dialog button colors wrong in dark mode
