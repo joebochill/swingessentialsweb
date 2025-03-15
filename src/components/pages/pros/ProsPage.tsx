@@ -58,7 +58,7 @@ export const ProsPage: React.FC = (): JSX.Element => {
             <AdminActionToolbar show={admin}>
                 <Button
                     variant={'text'}
-                    color={'inherit'}
+                    color={'secondary'}
                     onClick={(): void => setShowNewDialog(true)}
                     startIcon={<AddCircle />}
                 >

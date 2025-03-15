@@ -154,7 +154,7 @@ export const EditPackageDialog: React.FC<EditPackageDialogProps> = (props) => {
                 <DialogActions>
                     {!isNew && (
                         <Button
-                            color={'secondary'}
+                            color={'error'}
                             variant={'contained'}
                             onClick={(): void => {
                                 setShowConfirmationDialog(true);
@@ -165,7 +165,7 @@ export const EditPackageDialog: React.FC<EditPackageDialogProps> = (props) => {
                     )}
                     <Spacer classes={{}} />
                     <Button
-                        color="primary"
+                        color="inherit"
                         variant={'outlined'}
                         onClick={(e): void => {
                             onClose(e, 'backdropClick');

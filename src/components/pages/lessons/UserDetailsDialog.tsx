@@ -73,7 +73,7 @@ export const UserDetailsDialog: React.FC<UserDetailsDialogProps> = (props) => {
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'flex-end' }}>
                 <Button
-                    color="secondary"
+                    color="inherit"
                     variant={'outlined'}
                     onClick={(e): void => {
                         onClose(e, 'backdropClick');

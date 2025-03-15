@@ -120,7 +120,7 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'space-between', gap: 2 }}>
                 <Button
-                    color="secondary"
+                    color="inherit"
                     variant={'outlined'}
                     onClick={(e): void => {
                         onClose(e, 'backdropClick');

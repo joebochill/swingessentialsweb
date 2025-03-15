@@ -322,7 +322,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                 />
             </Banner>
             <AdminActionToolbar show={admin}>
-                <Button variant={'text'} onClick={(): void => setShowNewDialog(true)}>
+                <Button variant={'text'} color={'secondary'} onClick={(): void => setShowNewDialog(true)}>
                     <AddCircle style={{ marginRight: 4 }} />
                     New Blog
                 </Button>

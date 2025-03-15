@@ -119,7 +119,7 @@ export const EditBlogDialog: React.FC<EditBlogDialogProps> = (props) => {
                     )}
                     <Stack direction={'row'} spacing={2}>
                         <Button
-                            color="primary"
+                            color="inherit"
                             variant={'outlined'}
                             onClick={(e): void => {
                                 onClose(e, 'backdropClick');

@@ -187,7 +187,7 @@ export const NewEmailBlastDialog: React.FC<NewEmailBlastDialogProps> = (props) =
             </DialogContent>
             <DialogActions>
                 <Button
-                    color="primary"
+                    color="inherit"
                     variant={'outlined'}
                     disabled={!subject || !headline || !body}
                     onClick={(e): void => {
@@ -208,7 +208,7 @@ export const NewEmailBlastDialog: React.FC<NewEmailBlastDialogProps> = (props) =
                 </Button>
                 <Spacer classes={{}} />
                 <Button
-                    color="primary"
+                    color="inherit"
                     variant={'outlined'}
                     onClick={(e): void => {
                         onClose(e, 'backdropClick');

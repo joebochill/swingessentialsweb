@@ -156,7 +156,7 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
 
                     <Stack direction={'row'} spacing={2}>
                         <Button
-                            color="secondary"
+                            color="inherit"
                             variant={'outlined'}
                             onClick={(e): void => {
                                 onClose(e, 'backdropClick');
