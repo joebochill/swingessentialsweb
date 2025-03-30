@@ -24,6 +24,7 @@ import { Section } from '../../layout/Section';
 import {
     Discount,
     Level0PackageDetails,
+    useCaptureFreeOrderMutation,
     useGetDiscountMutation,
     useGetPackagesQuery,
 } from '../../../redux/apiServices/packagesService';
@@ -44,6 +45,7 @@ export const OrderPage: React.FC = (): JSX.Element => {
 
     const { data: packages = [], isLoading: loadingPackages } = useGetPackagesQuery();
     const { data: { count: credits = 0 } = {}, isLoading: loadingCredits } = useGetCreditsQuery();
+    const [captureFreeOrder] = useCaptureFreeOrderMutation();
 
     const [selectedPackage, setSelectedPackage] = useState<Level0PackageDetails | null>(null);
     const selectedPrice = parseFloat(selectedPackage?.price ?? '0');
@@ -62,8 +64,6 @@ export const OrderPage: React.FC = (): JSX.Element => {
               : Math.min(discountValue, selectedPrice);
     const calculatedTotal = roundNumber(selectedPrice - discountAmount, 2);
 
-    // console.log('calculatedtotal orders page', calculatedTotal);
-
     useEffect(() => {
         if (purchaseStatus === 'success' || purchaseStatus === 'failed') {
             // if (purchaseStatus === 'success') {
@@ -75,17 +75,6 @@ export const OrderPage: React.FC = (): JSX.Element => {
             setDiscount(null);
         }
     }, [purchaseStatus, setSelectedPackage, setPaypalPending, setDiscountReset, setDiscount]);
-
-    // useEffect(() => {
-    //     setActivePackage(null);
-    //     setDiscountCode('');
-    //     setShowDiscount(false);
-    //     dispatch({ type: CHECK_DISCOUNT.RESET });
-    //     dispatch({ type: PURCHASE_CREDITS.RESET });
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
-
-    // console.log(paypalPending);
 
     return (
         <>
@@ -252,15 +241,18 @@ export const OrderPage: React.FC = (): JSX.Element => {
                                         variant={'contained'}
                                         color={'primary'}
                                         onClick={(): void => {
-                                            console.log('onSuccess, zero');
-                                            // purchaseCredits({
-                                            //     version: 'v2',
-                                            //     id: 'N/A',
-                                            //     payer: 'N/A',
-                                            //     package: activePackage.shortcode,
-                                            //     coupon: discount ? discount.code : '',
-                                            //     total: currentTotal.toFixed(2),
-                                            // });
+                                            captureFreeOrder({
+                                                packageId: selectedPackage.id,
+                                                coupon: discount ? discount.code : '',
+                                                total: 0,
+                                            })
+                                                .unwrap()
+                                                .then(() => {
+                                                    setPurchaseStatus('success');
+                                                })
+                                                .catch(() => {
+                                                    setPurchaseStatus('failed');
+                                                });
                                         }}
                                     >
                                         Complete Purchase

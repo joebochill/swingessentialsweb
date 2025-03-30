@@ -82,6 +82,21 @@ export const packagesApi = createApi({
                 }
             },
         }),
+        captureFreeOrder: builder.mutation<void, { packageId: number; coupon?: string; total: number }>({
+            query: (body) => ({
+                url: `packages/order/capture-free`,
+                method: 'POST',
+                body,
+            }),
+            onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+                try {
+                    await queryFulfilled;
+                    dispatch(creditsApi.util.invalidateTags(['credits']));
+                } catch (error) {
+                    console.error('Error capturing free order:', error);
+                }
+            },
+        }),
     }),
 });
 
@@ -95,4 +110,5 @@ export const {
     useGetDiscountMutation,
     useCreatePayPalOrderMutation,
     useCapturePayPalOrderMutation,
+    useCaptureFreeOrderMutation,
 } = packagesApi;
