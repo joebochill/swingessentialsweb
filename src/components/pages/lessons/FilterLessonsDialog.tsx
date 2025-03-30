@@ -66,33 +66,34 @@ export const FilterLessonsDialog: React.FC<FilterLessonsDialogProps> = (props) =
                 <DialogContentText>Search for a user:</DialogContentText>
                 <UserSelector value={selectedUser} onChange={(e, newValue): void => setSelectedUser(newValue)} />
             </DialogContent>
-            <DialogActions sx={{ justifyContent: 'space-between' }}>
-                <Button
-                    color={'inherit'}
-                    variant={'outlined'}
-                    onClick={(e): void => {
-                        setSelectedUser(null);
-                        onFilterChange('');
-                        onClose(e, 'backdropClick');
-                    }}
-                >
-                    Clear Filter
-                </Button>
+            <DialogActions>
                 <Stack direction={'row'} spacing={2}>
-                    <Button color="inherit" variant={'outlined'} onClick={(e): void => onClose(e, 'backdropClick')}>
-                        Cancel
-                    </Button>
                     <Button
-                        color="primary"
-                        variant={'contained'}
+                        color={'inherit'}
+                        variant={'outlined'}
                         onClick={(e): void => {
-                            onFilterChange(selectedUser?.username ?? '');
+                            setSelectedUser(null);
+                            onFilterChange('');
                             onClose(e, 'backdropClick');
                         }}
                     >
-                        Done
+                        Clear Filter
+                    </Button>
+
+                    <Button color="inherit" variant={'outlined'} onClick={(e): void => onClose(e, 'backdropClick')}>
+                        Cancel
                     </Button>
                 </Stack>
+                <Button
+                    color="primary"
+                    variant={'contained'}
+                    onClick={(e): void => {
+                        onFilterChange(selectedUser?.username ?? '');
+                        onClose(e, 'backdropClick');
+                    }}
+                >
+                    Done
+                </Button>
             </DialogActions>
         </Dialog>
     );

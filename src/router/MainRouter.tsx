@@ -16,6 +16,7 @@ import {
     TipsPage,
     BlogsPage,
     LessonsPage,
+    OrderPage,
 } from '../components/pages';
 import { PrivateRoute } from './PrivateRoute';
 import { ScrollToTop } from './ScrollToTop';
@@ -53,7 +54,7 @@ export const MainRouter = (): ReactNode => {
                 <Route element={<PrivateRoute canActivate={loggedIn} />}>
                     <Route path={`${ROUTES.PROFILE}`} element={<ProfilePage />} />
                     <Route path={`${ROUTES.LESSONS}/:id?`} element={<LessonsPage />} />
-                    {/* <Route path={`${ROUTES.ORDER}`} element={<PackagesPage />} /> */}
+                    <Route path={`${ROUTES.ORDER}`} element={<OrderPage />} />
                     {/* <Route path={`${ROUTES.SUBMIT}`} element={<SubmitPage />} /> */}
                 </Route>
 

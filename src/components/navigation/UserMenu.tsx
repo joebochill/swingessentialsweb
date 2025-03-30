@@ -29,7 +29,6 @@ export const UserMenu: React.FC = () => {
             <Menu
                 open={open}
                 anchorEl={anchorEl}
-                closeAfterTransition={true}
                 onClose={closeMenu}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}

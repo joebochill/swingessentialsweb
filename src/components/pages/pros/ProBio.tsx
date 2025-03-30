@@ -94,7 +94,6 @@ export const ProBio: React.FC<ProBioProps> = (props) => {
                 onClose={(): void => {
                     setShowEditDialog(false);
                 }}
-                closeAfterTransition={true}
             />
         </>
     );

@@ -14,7 +14,7 @@ export const SectionBlurb: React.FC<SectionBlurbProps> = (props) => {
     return (
         <Box
             sx={[
-                { maxWidth: { xs: 'initial', sm: 512 }, color: 'text.primary', mb: 6 },
+                { maxWidth: { xs: 'initial', sm: 512, md: 900 }, color: 'text.primary', mb: 6 },
                 ...(Array.isArray(sx) ? sx : [sx]),
             ]}
             {...other}

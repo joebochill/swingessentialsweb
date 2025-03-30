@@ -96,6 +96,7 @@ export const SwingEssentialsTheme = createTheme({
             defaultProps: {
                 fullWidth: true,
                 maxWidth: 'sm',
+                closeAfterTransition: false,
             },
         },
         MuiFormHelperText: {
@@ -104,7 +105,7 @@ export const SwingEssentialsTheme = createTheme({
                     theme.unstable_sx({
                         ml: 0,
                         mr: 0,
-                        color: 'primary.dark',
+                        color: 'text.primary',
                         '&.Mui-error': {
                             color: 'error.contrastText',
                             m: 0,

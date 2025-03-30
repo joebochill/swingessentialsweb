@@ -22,20 +22,23 @@ type SimpleLinkProps = LinkProps & {
     label: string;
 };
 export const SimpleLink: React.FC<SimpleLinkProps> = (props) => {
-    const { label, ...other } = props;
+    const { label, sx, ...other } = props;
     return (
         <Link
             color={'inherit'}
-            sx={{
-                fontSize: '0.875rem',
-                fontWeight: 400,
-                cursor: 'pointer',
-                textDecoration: 'none',
-                userSelect: 'none',
-                '&:hover': {
-                    textDecoration: 'underline',
+            sx={[
+                {
+                    fontSize: '0.875rem',
+                    fontWeight: 400,
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                    userSelect: 'none',
+                    '&:hover': {
+                        textDecoration: 'underline',
+                    },
                 },
-            }}
+                ...(Array.isArray(sx) ? sx : [sx]),
+            ]}
             {...other}
         >
             {label}

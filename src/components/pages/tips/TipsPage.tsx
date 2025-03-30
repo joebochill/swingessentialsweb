@@ -374,7 +374,7 @@ export const TipsPage: React.FC = (): JSX.Element => {
                     headline={'Tip of the Month'}
                     subheading={'Keep your game sharp'}
                     body={`Every month, Swing Essentials brings you new video tips to help you solve common problems in your golf game. If you have an idea for a future tip, let us know!`}
-                    sx={{ color: 'primary.contrastText', zIndex: 100, maxWidth: 900 }}
+                    sx={{ color: 'primary.contrastText', zIndex: 100 }}
                 />
             </Banner>
             <AdminActionToolbar show={admin}>

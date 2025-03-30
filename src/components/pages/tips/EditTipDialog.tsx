@@ -141,20 +141,20 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                         />
                     </Stack>
                 </DialogContent>
-                <DialogActions sx={{ justifyContent: isNew ? 'flex-end' : 'space-between' }}>
-                    {!isNew && (
-                        <Button
-                            color={'error'}
-                            variant={'contained'}
-                            onClick={(): void => {
-                                setShowConfirmationDialog(true);
-                            }}
-                        >
-                            Delete
-                        </Button>
-                    )}
-
+                <DialogActions>
                     <Stack direction={'row'} spacing={2}>
+                        {!isNew && (
+                            <Button
+                                color={'error'}
+                                variant={'contained'}
+                                onClick={(): void => {
+                                    setShowConfirmationDialog(true);
+                                }}
+                            >
+                                Delete
+                            </Button>
+                        )}
+
                         <Button
                             color="inherit"
                             variant={'outlined'}
@@ -165,33 +165,33 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                         >
                             Cancel
                         </Button>
-                        <Button
-                            color="primary"
-                            variant={'contained'}
-                            disabled={!title || !date || !video || !comments || !DATE_REGEX.test(date)}
-                            onClick={(e): void => {
-                                if (isNew) {
-                                    addTip({
-                                        title: title,
-                                        date: date,
-                                        video: video,
-                                        comments: convertMultilineToDatabaseText(comments),
-                                    });
-                                } else {
-                                    updateTip({
-                                        id: tip.id,
-                                        title: title,
-                                        date: date,
-                                        video: video,
-                                        comments: convertMultilineToDatabaseText(comments),
-                                    });
-                                }
-                                onClose(e, 'escapeKeyDown');
-                            }}
-                        >
-                            {`${isNew ? 'Add' : 'Save'}`}
-                        </Button>
                     </Stack>
+                    <Button
+                        color="primary"
+                        variant={'contained'}
+                        disabled={!title || !date || !video || !comments || !DATE_REGEX.test(date)}
+                        onClick={(e): void => {
+                            if (isNew) {
+                                addTip({
+                                    title: title,
+                                    date: date,
+                                    video: video,
+                                    comments: convertMultilineToDatabaseText(comments),
+                                });
+                            } else {
+                                updateTip({
+                                    id: tip.id,
+                                    title: title,
+                                    date: date,
+                                    video: video,
+                                    comments: convertMultilineToDatabaseText(comments),
+                                });
+                            }
+                            onClose(e, 'escapeKeyDown');
+                        }}
+                    >
+                        {`${isNew ? 'Add' : 'Save'}`}
+                    </Button>
                 </DialogActions>
             </Dialog>
             {showConfirmationDialog && (

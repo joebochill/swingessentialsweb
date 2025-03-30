@@ -118,7 +118,7 @@ export const EditLessonDialog: React.FC<EditLessonDialogProps> = (props) => {
                     </StyledTextField>
                 </Stack>
             </DialogContent>
-            <DialogActions sx={{ justifyContent: 'space-between', gap: 2 }}>
+            <DialogActions>
                 <Button
                     color="inherit"
                     variant={'outlined'}

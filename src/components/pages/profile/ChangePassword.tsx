@@ -61,7 +61,6 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
                         resetDialog();
                     }
                 }}
-                closeAfterTransition={false}
                 slotProps={{
                     paper: {
                         sx: {

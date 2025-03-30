@@ -68,7 +68,7 @@ export const AvatarPickerDialog: React.FC<AvatarDialogProps> = (props) => {
 
     return (
         <>
-            <Dialog closeAfterTransition={false} {...dialogProps}>
+            <Dialog {...dialogProps}>
                 <DialogTitle>Update Your Profile Picture</DialogTitle>
                 <DialogContent style={{ textAlign: 'center' }}>
                     <DialogContentText

@@ -105,19 +105,20 @@ export const EditBlogDialog: React.FC<EditBlogDialogProps> = (props) => {
                         />
                     </Stack>
                 </DialogContent>
-                <DialogActions sx={{ justifyContent: isNew ? 'flex-end' : 'space-between' }}>
-                    {!isNew && (
-                        <Button
-                            color={'error'}
-                            variant={'contained'}
-                            onClick={(): void => {
-                                setShowConfirmationDialog(true);
-                            }}
-                        >
-                            Delete
-                        </Button>
-                    )}
+                <DialogActions>
                     <Stack direction={'row'} spacing={2}>
+                        {!isNew && (
+                            <Button
+                                color={'error'}
+                                variant={'contained'}
+                                onClick={(): void => {
+                                    setShowConfirmationDialog(true);
+                                }}
+                            >
+                                Delete
+                            </Button>
+                        )}
+
                         <Button
                             color="inherit"
                             variant={'outlined'}
@@ -128,31 +129,31 @@ export const EditBlogDialog: React.FC<EditBlogDialogProps> = (props) => {
                         >
                             Cancel
                         </Button>
-                        <Button
-                            color="primary"
-                            variant={'contained'}
-                            disabled={!title || !date || !body || !DATE_REGEX.test(date)}
-                            onClick={(e): void => {
-                                if (isNew) {
-                                    addBlog({
-                                        title: title,
-                                        date: date,
-                                        body: convertMultilineToDatabaseText(body),
-                                    });
-                                } else {
-                                    updateBlog({
-                                        id: blog.id,
-                                        title: title,
-                                        date: date,
-                                        body: convertMultilineToDatabaseText(body),
-                                    });
-                                }
-                                onClose(e, 'escapeKeyDown');
-                            }}
-                        >
-                            {`${isNew ? 'Add' : 'Save'}`}
-                        </Button>
                     </Stack>
+                    <Button
+                        color="primary"
+                        variant={'contained'}
+                        disabled={!title || !date || !body || !DATE_REGEX.test(date)}
+                        onClick={(e): void => {
+                            if (isNew) {
+                                addBlog({
+                                    title: title,
+                                    date: date,
+                                    body: convertMultilineToDatabaseText(body),
+                                });
+                            } else {
+                                updateBlog({
+                                    id: blog.id,
+                                    title: title,
+                                    date: date,
+                                    body: convertMultilineToDatabaseText(body),
+                                });
+                            }
+                            onClose(e, 'escapeKeyDown');
+                        }}
+                    >
+                        {`${isNew ? 'Add' : 'Save'}`}
+                    </Button>
                 </DialogActions>
             </Dialog>
             {showConfirmationDialog && (

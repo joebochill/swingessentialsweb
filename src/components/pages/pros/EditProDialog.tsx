@@ -116,24 +116,20 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
                         />
                     </Stack>
                 </DialogContent>
-                <DialogActions
-                    sx={{
-                        justifyContent: isNew ? 'flex-end' : 'space-between',
-                    }}
-                >
-                    {!isNew && (
-                        <Button
-                            color={'error'}
-                            variant={'contained'}
-                            onClick={(): void => {
-                                setShowConfirmationDialog(true);
-                            }}
-                        >
-                            Delete
-                        </Button>
-                    )}
-
+                <DialogActions>
                     <Stack direction={'row'} spacing={2}>
+                        {!isNew && (
+                            <Button
+                                color={'error'}
+                                variant={'contained'}
+                                onClick={(): void => {
+                                    setShowConfirmationDialog(true);
+                                }}
+                            >
+                                Delete
+                            </Button>
+                        )}
+
                         <Button
                             color="inherit"
                             variant={'outlined'}
@@ -144,33 +140,33 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
                         >
                             Cancel
                         </Button>
-                        <Button
-                            color="primary"
-                            variant={'contained'}
-                            disabled={!name || !title || !image || !bio}
-                            onClick={(e): void => {
-                                if (isNew) {
-                                    addPro({
-                                        name: name,
-                                        title: title ?? '',
-                                        image: image,
-                                        bio: convertMultilineToDatabaseText(bio),
-                                    });
-                                } else {
-                                    updatePro({
-                                        id: pro.id,
-                                        name: name,
-                                        title: title || '',
-                                        image: image,
-                                        bio: convertMultilineToDatabaseText(bio),
-                                    });
-                                }
-                                onClose?.(e, 'escapeKeyDown');
-                            }}
-                        >
-                            {`${isNew ? 'Add' : 'Save'}`}
-                        </Button>
                     </Stack>
+                    <Button
+                        color="primary"
+                        variant={'contained'}
+                        disabled={!name || !title || !image || !bio}
+                        onClick={(e): void => {
+                            if (isNew) {
+                                addPro({
+                                    name: name,
+                                    title: title ?? '',
+                                    image: image,
+                                    bio: convertMultilineToDatabaseText(bio),
+                                });
+                            } else {
+                                updatePro({
+                                    id: pro.id,
+                                    name: name,
+                                    title: title || '',
+                                    image: image,
+                                    bio: convertMultilineToDatabaseText(bio),
+                                });
+                            }
+                            onClose?.(e, 'escapeKeyDown');
+                        }}
+                    >
+                        {`${isNew ? 'Add' : 'Save'}`}
+                    </Button>
                 </DialogActions>
             </Dialog>
             {showConfirmationDialog && (

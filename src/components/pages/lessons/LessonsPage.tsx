@@ -601,7 +601,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                     headline={'Your Lessons'}
                     subheading={`See how far you've come`}
                     body={`Here, you can view all of the lessons that you have taken with Swing Essentials. Each lesson includes a detailed video analysis as well as written comments and tips to try the next time you're on the range. Submit your swing for a new lesson today!`}
-                    sx={{ color: 'primary.contrastText', zIndex: 100, maxWidth: 900 }}
+                    sx={{ color: 'primary.contrastText', zIndex: 100 }}
                 />
             </Banner>
             <AdminActionToolbar show={admin}>

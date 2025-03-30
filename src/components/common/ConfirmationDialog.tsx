@@ -19,7 +19,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = (props) => 
         positiveButtonLabel = 'Continue',
     } = props;
     return (
-        <Dialog open={true} closeAfterTransition={true} maxWidth={'sm'} fullWidth={false}>
+        <Dialog open={true} maxWidth={'sm'} fullWidth={false}>
             <DialogTitle>{title}</DialogTitle>
             <DialogContent>
                 <DialogContentText>{message}</DialogContentText>

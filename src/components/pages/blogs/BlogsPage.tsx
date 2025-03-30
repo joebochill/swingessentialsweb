@@ -318,7 +318,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                     headline={'Blog of the Month'}
                     subheading={'Keep your game sharp'}
                     body={`Every month, Swing Essentials brings you new video blogs to help you solve common problems in your golf game. If you have an idea for a future blog, let us know!`}
-                    sx={{ color: 'primary.contrastText', zIndex: 100, maxWidth: 900 }}
+                    sx={{ color: 'primary.contrastText', zIndex: 100 }}
                 />
             </Banner>
             <AdminActionToolbar show={admin}>

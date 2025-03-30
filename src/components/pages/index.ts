@@ -6,7 +6,7 @@ export { BlogsPage } from './blogs/BlogsPage';
 export { HomePage } from './home/HomePage';
 export { LessonsPage } from './lessons/LessonsPage';
 // export { SubmitPage } from './submit/SubmitPage';
-// export { OrderPage } from './order/OrderPage';
+export { OrderPage } from './order/OrderPage';
 export { PrivacyPage } from './privacy/PrivacyPage';
 export { ProfilePage } from './profile/ProfilePage';
 export { ProsPage } from './pros/ProsPage';
