@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASEURL } from '../../constants';
+import { BASE_API_URL } from '../../constants';
 import { prepareHeaders } from './utils/prepareHeaders';
 import { ScoreRange, UserDataState } from '../../__types__';
 
@@ -48,7 +48,7 @@ export const BLANK_USER: Level2UserDetailsApiResponse = {
 export const userDetailsApi = createApi({
     reducerPath: 'userDetailsApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: BASEURL,
+        baseUrl: BASE_API_URL,
         prepareHeaders,
     }),
     tagTypes: ['userDetails'],

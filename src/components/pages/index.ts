@@ -5,7 +5,7 @@ export { ResetPasswordPage } from './auth/ResetPasswordPage';
 export { BlogsPage } from './blogs/BlogsPage';
 export { HomePage } from './home/HomePage';
 export { LessonsPage } from './lessons/LessonsPage';
-// export { SubmitPage } from './submit/SubmitPage';
+export { SubmitPage } from './lessons/SubmitPage';
 export { OrderPage } from './order/OrderPage';
 export { PrivacyPage } from './privacy/PrivacyPage';
 export { ProfilePage } from './profile/ProfilePage';

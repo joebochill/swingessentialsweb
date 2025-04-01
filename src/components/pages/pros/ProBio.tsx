@@ -5,6 +5,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 import { RootState } from '../../../redux/store';
 import { EditProDialog } from './EditProDialog';
+import { BASE_URL } from '../../../constants';
 
 type ProBioProps = HTMLAttributes<HTMLDivElement> & {
     id: string | number;
@@ -45,9 +46,7 @@ export const ProBio: React.FC<ProBioProps> = (props) => {
                             borderRadius: '200px',
                             backgroundRepeat: 'no-repeat',
                             backgroundImage: `url(${
-                                image.startsWith('http')
-                                    ? image
-                                    : `https://www.swingessentials.com/images/pros/${image}`
+                                image.startsWith('http') ? image : `${BASE_URL}/images/pros/${image}`
                             })`,
                             backgroundPosition: background.position || 'center center',
                             backgroundSize: background.size || '100%',

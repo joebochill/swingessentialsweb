@@ -11,6 +11,10 @@ CACHE DATA IN LOCALSTORAGE FOR API SERVICES
 
 EMAIL FUNCTIONALITY IN NODE
 
+Text overflowing in Banners when screen is narrow (submit)
+
+Check everything on an ultrawide 
+
 Do a DB Backup/export
 
 STANDARDIZE THE BACKEND ERROR CODES
@@ -44,3 +48,5 @@ Dialog button colors wrong in dark mode
 Error input styles in dark mode (lighter red)
 
 Use correct HTTP codes (not all 200 or 400 or 500)
+
+Check all empty states / initial states for new people

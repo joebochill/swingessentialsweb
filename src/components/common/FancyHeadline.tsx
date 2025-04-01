@@ -1,7 +1,7 @@
 import React, { JSX } from 'react';
 import { Box, Stack, StackProps, Typography, TypographyProps } from '@mui/material';
 
-type FancyHeadlineProps = StackProps & {
+export type FancyHeadlineProps = StackProps & {
     headline: string;
     subheading?: string;
     icon?: JSX.Element;

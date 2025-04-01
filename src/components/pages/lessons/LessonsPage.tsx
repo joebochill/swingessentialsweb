@@ -53,6 +53,7 @@ import { FilterLessonsDialog } from './FilterLessonsDialog';
 import { NewLessonDialog } from './NewLessonDialog';
 import { UserDetailsDialog } from './UserDetailsDialog';
 import { AdminActionToolbar } from '../../common/AdminActionToolbar';
+import { BASE_URL } from '../../../constants';
 
 type LessonsCardProps = CardProps & {
     lessons: LessonBasicDetails[];
@@ -306,6 +307,54 @@ const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Eleme
             </Box>
         );
     }
+
+    const submissionStack = (
+        <>
+            {lesson.type !== 'in-person' && (
+                <Stack spacing={2} sx={{ mt: 8 }}>
+                    <Typography variant={'h6'} sx={{ lineHeight: 1.2 }}>
+                        Your Submission
+                    </Typography>
+                    {lesson.fo_swing !== '' && lesson.dtl_swing !== '' && (
+                        <Stack direction={'row'} spacing={2}>
+                            <Box sx={{ flex: '1 1 0px', background: 'black' }}>
+                                <Box
+                                    component={'video'}
+                                    width="100%"
+                                    controls
+                                    sx={{ outline: 'none' }}
+                                    src={`${BASE_URL}/video_links/${lesson.request_url}/${lesson.fo_swing}`}
+                                >
+                                    Your browser does not support the video tag.
+                                </Box>
+                            </Box>
+                            <Box sx={{ flex: '1 1 0px', background: 'black' }}>
+                                <Box
+                                    component={'video'}
+                                    width="100%"
+                                    controls
+                                    sx={{ outline: 'none' }}
+                                    src={`${BASE_URL}/video_links/${lesson.request_url}/${lesson.dtl_swing}`}
+                                >
+                                    Your browser does not support the video tag.
+                                </Box>
+                            </Box>
+                        </Stack>
+                    )}
+                    {lesson.request_notes && (
+                        <Stack spacing={2}>
+                            {splitDatabaseText(lesson.request_notes).map((par, pInd) => (
+                                <Typography key={`par_${pInd}`} sx={{ lineHeight: 1.8 }}>
+                                    {par}
+                                </Typography>
+                            ))}
+                        </Stack>
+                    )}
+                </Stack>
+            )}
+        </>
+    );
+
     // Lesson is still pending
     if (lesson && !lesson.response_video) {
         return (
@@ -346,6 +395,7 @@ const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Eleme
                     }
                 />
                 {adminPanel}
+                {submissionStack}
             </Box>
         );
     }
@@ -488,48 +538,7 @@ const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Eleme
                         ))}
                     </Stack>
                 </Stack>
-                {lesson.type !== 'in-person' && (
-                    <Stack spacing={2} sx={{ mt: 8 }}>
-                        <Typography variant={'h6'} sx={{ lineHeight: 1.2 }}>
-                            Your Submission
-                        </Typography>
-                        {lesson.fo_swing !== '' && lesson.dtl_swing !== '' && (
-                            <Stack direction={'row'} spacing={2}>
-                                <Box sx={{ flex: '1 1 0px', background: 'black' }}>
-                                    <Box
-                                        component={'video'}
-                                        width="100%"
-                                        controls
-                                        sx={{ outline: 'none' }}
-                                        src={`https://www.swingessentials.com/video_links/${lesson.request_url}/${lesson.fo_swing}`}
-                                    >
-                                        Your browser does not support the video tag.
-                                    </Box>
-                                </Box>
-                                <Box sx={{ flex: '1 1 0px', background: 'black' }}>
-                                    <Box
-                                        component={'video'}
-                                        width="100%"
-                                        controls
-                                        sx={{ outline: 'none' }}
-                                        src={`https://www.swingessentials.com/video_links/${lesson.request_url}/${lesson.dtl_swing}`}
-                                    >
-                                        Your browser does not support the video tag.
-                                    </Box>
-                                </Box>
-                            </Stack>
-                        )}
-                        {lesson.request_notes && (
-                            <Stack spacing={2}>
-                                {splitDatabaseText(lesson.request_notes).map((par, pInd) => (
-                                    <Typography key={`par_${pInd}`} sx={{ lineHeight: 1.8 }}>
-                                        {par}
-                                    </Typography>
-                                ))}
-                            </Stack>
-                        )}
-                    </Stack>
-                )}
+                {submissionStack}
             </Box>
             {adminPanel}
         </>

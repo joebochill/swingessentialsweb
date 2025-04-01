@@ -16,6 +16,7 @@ import {
     TipsPage,
     BlogsPage,
     LessonsPage,
+    SubmitPage,
     OrderPage,
 } from '../components/pages';
 import { PrivateRoute } from './PrivateRoute';
@@ -55,7 +56,7 @@ export const MainRouter = (): ReactNode => {
                     <Route path={`${ROUTES.PROFILE}`} element={<ProfilePage />} />
                     <Route path={`${ROUTES.LESSONS}/:id?`} element={<LessonsPage />} />
                     <Route path={`${ROUTES.ORDER}`} element={<OrderPage />} />
-                    {/* <Route path={`${ROUTES.SUBMIT}`} element={<SubmitPage />} /> */}
+                    <Route path={`${ROUTES.SUBMIT}`} element={<SubmitPage />} />
                 </Route>
 
                 <Route element={<PrivateRoute canActivate={admin} />}>

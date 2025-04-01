@@ -2,10 +2,8 @@ export const YOUTUBE_API_KEY = 'AIzaSyBLUJUqz7E3Z5XNcXbMYO9gVmXd0zYAR4U';
 
 export const ASYNC_PREFIX = '@SwingEssentials:';
 
-export const BASEURL_DEV = 'http://localhost:3000';
-export const BASEURL_PROD = 'https://www.swingessentials.com/apis/swingessentials.php';
-
-export const BASEURL = BASEURL_DEV;
+export const BASE_URL = import.meta.env.VITE_BASE_URL;
+export const BASE_API_URL = import.meta.env.VITE_BASE_API;
 export const AUTH = 'Message';
 
 export const EMAIL_REGEX = new RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);

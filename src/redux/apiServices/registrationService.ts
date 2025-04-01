@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASEURL } from '../../constants';
+import { BASE_API_URL } from '../../constants';
 import { prepareHeaders } from './utils/prepareHeaders';
 import { storeToken } from './utils/storeToken';
 
@@ -13,7 +13,7 @@ export type UserRegistrationDetails = {
 const registrationApi = createApi({
     reducerPath: 'registrationApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: BASEURL,
+        baseUrl: BASE_API_URL,
         prepareHeaders,
     }),
     endpoints: (builder) => ({

@@ -3,6 +3,7 @@ import { Avatar, AvatarProps } from '@mui/material';
 import { Person } from '@mui/icons-material';
 import { BLANK_USER, useGetUserDetailsQuery } from '../../redux/apiServices/userDetailsService';
 import { getInitials } from '../../utilities/strings';
+import { BASE_URL } from '../../constants';
 
 type UserAvatarProps = AvatarProps;
 export const UserAvatar: React.FC<UserAvatarProps> = (props) => {
@@ -15,11 +16,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = (props) => {
         <Avatar />
     ) : (
         <Avatar
-            src={
-                user.avatar
-                    ? `https://www.swingessentials.com/images/profiles/${user.username}/${user.avatar}.png`
-                    : undefined
-            }
+            src={user.avatar ? `${BASE_URL}/images/profiles/${user.username}/${user.avatar}.png` : undefined}
             sx={[
                 {
                     cursor: 'pointer',

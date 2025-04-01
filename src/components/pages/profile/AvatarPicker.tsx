@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 import { useGetUserDetailsQuery, useUpdateUserDetailsMutation } from '../../../redux/apiServices/userDetailsService';
+import { BASE_URL } from '../../../constants';
 
 type AvatarDialogProps = DialogProps & {
     src: string;
@@ -132,9 +133,7 @@ export const AvatarChanger: React.FC = () => {
     // reinitialize the avatar when the user settings are loaded
     useEffect(() => {
         if (!avatarInitialized && userDetails?.avatar) {
-            setAvatar(
-                `https://www.swingessentials.com/images/profiles/${userDetails.username}/${userDetails.avatar}.png`
-            );
+            setAvatar(`${BASE_URL}/images/profiles/${userDetails.username}/${userDetails.avatar}.png`);
             setAvatarInitialized(true);
         }
     }, [userDetails, avatarInitialized]);
@@ -156,9 +155,7 @@ export const AvatarChanger: React.FC = () => {
             justifyContent={isLoading ? 'center' : 'flex-end'}
             sx={{
                 backgroundColor: 'primary.light',
-                backgroundImage: !isLoading
-                    ? `url(${avatar || 'https://www.swingessentials.com/images/profiles/blank.png'})`
-                    : undefined,
+                backgroundImage: !isLoading ? `url(${avatar || '${BASE_URL}/images/profiles/blank.png'})` : undefined,
                 backgroundPosition: 'center center',
                 backgroundSize: '100%',
                 backgroundRepeat: 'no-repeat',
@@ -212,7 +209,7 @@ export const AvatarChanger: React.FC = () => {
 
                     <AvatarPickerDialog
                         open={showImagePicker}
-                        src={source || `https://www.swingessentials.com/images/profiles/blank.png`}
+                        src={source || `${BASE_URL}/images/profiles/blank.png`}
                         onClose={(): void => {
                             setShowImagePicker(false);
                         }}

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASEURL } from '../../constants';
+import { BASE_API_URL } from '../../constants';
 import { prepareHeaders } from './utils/prepareHeaders';
 import { creditsApi } from './creditsService';
 
@@ -22,7 +22,7 @@ export type Discount = {
 export const packagesApi = createApi({
     reducerPath: 'packagesApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: BASEURL,
+        baseUrl: BASE_API_URL,
         prepareHeaders,
     }),
     tagTypes: ['packages'],
