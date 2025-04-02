@@ -18,6 +18,7 @@ import {
     LessonsPage,
     SubmitPage,
     OrderPage,
+    AdminPortalPage,
 } from '../components/pages';
 import { PrivateRoute } from './PrivateRoute';
 import { ScrollToTop } from './ScrollToTop';
@@ -60,7 +61,7 @@ export const MainRouter = (): ReactNode => {
                 </Route>
 
                 <Route element={<PrivateRoute canActivate={admin} />}>
-                    {/* <Route path={`${ROUTES.ADMIN}`} element={<AdminPage />} /> */}
+                    <Route path={`${ROUTES.ADMIN}`} element={<AdminPortalPage />} />
                 </Route>
 
                 <Route path="*" element={<Navigate to="/" replace />} />

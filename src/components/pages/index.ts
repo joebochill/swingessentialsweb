@@ -1,4 +1,4 @@
-// export { AdminPortalPage } from './admin/AdminPortalPage';
+export { AdminPortalPage } from './admin-portal/AdminPortalPage';
 export { LoginPage } from './auth/LoginPage';
 export { VerifyEmailPage } from './auth/VerifyEmailPage';
 export { ResetPasswordPage } from './auth/ResetPasswordPage';

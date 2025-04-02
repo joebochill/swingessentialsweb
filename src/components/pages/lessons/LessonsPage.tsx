@@ -640,11 +640,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                 }}
             >
                 {!isSmall && (
-                    <Stack
-                        flex={1}
-                        spacing={4}
-                        sx={{ maxWidth: '40%' /*maxHeight: (t) => `calc(100vh - ${t.spacing(24)})`*/ }}
-                    >
+                    <Stack flex={1} spacing={4} sx={{ maxWidth: '40%' }}>
                         <LessonsCard
                             lessons={pendingLessons}
                             title={'Pending Lessons'}

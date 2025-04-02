@@ -19,20 +19,56 @@ export type Discount = {
     value: string;
     code: string;
 };
+export type FullDiscount = {
+    id: number;
+    code: string;
+    description: string;
+    type: 'percent' | 'amount';
+    value: string;
+    expires: number;
+    quantity: number;
+};
 export const packagesApi = createApi({
     reducerPath: 'packagesApi',
     baseQuery: fetchBaseQuery({
         baseUrl: BASE_API_URL,
         prepareHeaders,
     }),
-    tagTypes: ['packages'],
+    tagTypes: ['packages', 'discounts'],
     endpoints: (builder) => ({
         getPackages: builder.query<Level0PackageDetails[], void>({
             query: () => `packages`,
             providesTags: ['packages'],
         }),
+        getDiscounts: builder.query<FullDiscount[], void>({
+            query: () => `packages/discounts`,
+            providesTags: ['discounts'],
+        }),
         getDiscount: builder.mutation<Discount, string>({
             query: (code) => `packages/discounts/${code}`,
+        }),
+        addDiscount: builder.mutation<void, Omit<FullDiscount, 'id'>>({
+            query: (newDiscount) => ({
+                url: `packages/discounts`,
+                method: 'POST',
+                body: newDiscount,
+            }),
+            invalidatesTags: ['discounts'],
+        }),
+        updateDiscount: builder.mutation<void, FullDiscount>({
+            query: (updatedDiscount) => ({
+                url: `packages/discounts/${updatedDiscount.id}`,
+                method: 'PATCH',
+                body: updatedDiscount,
+            }),
+            invalidatesTags: ['discounts'],
+        }),
+        removeDiscount: builder.mutation<void, { id: string | number }>({
+            query: (deletedDiscount) => ({
+                url: `packages/discounts/${deletedDiscount.id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['discounts'],
         }),
         addPackage: builder.mutation<void, Omit<Level1PackageDetails, 'id'>>({
             query: (newPackage) => ({
@@ -108,7 +144,11 @@ export const {
     useUpdatePackageMutation,
     useRemovePackageMutation,
     useGetDiscountMutation,
+    useGetDiscountsQuery,
     useCreatePayPalOrderMutation,
     useCapturePayPalOrderMutation,
     useCaptureFreeOrderMutation,
+    useAddDiscountMutation,
+    useUpdateDiscountMutation,
+    useRemoveDiscountMutation,
 } = packagesApi;

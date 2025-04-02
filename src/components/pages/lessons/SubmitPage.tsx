@@ -1,6 +1,6 @@
 import React, { useState, useEffect, JSX } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, LinearProgress, Stack } from '@mui/material';
+import { Box, Button, LinearProgress, Skeleton, Stack } from '@mui/material';
 import { Videocam, CheckCircle, CloudUpload, Error, Mail, ShoppingCart, Update } from '@mui/icons-material';
 import bg from '../../../assets/images/banners/swing3.jpg';
 
@@ -21,9 +21,16 @@ export const SubmitPage: React.FC = (): JSX.Element => {
 
     const role = useSelector((state: RootState) => state.auth.role);
 
-    const { data: { count: credits = 0 } = {}, isUninitialized: creditsUninitialized } = useGetCreditsQuery();
-    const { data: { data: pendingLessons = [] } = {}, isUninitialized: lessonsUninitialized } =
-        useGetPendingLessonsQuery('');
+    const {
+        data: { count: credits = 0 } = {},
+        isUninitialized: creditsUninitialized,
+        isFetching: fetchingCredits,
+    } = useGetCreditsQuery();
+    const {
+        data: { data: pendingLessons = [] } = {},
+        isUninitialized: lessonsUninitialized,
+        isFetching: fetchingLessons,
+    } = useGetPendingLessonsQuery('');
 
     const [redeemLesson, { isSuccess, isError, isLoading: redeemLoading }] = useAddLessonRequestMutation();
 
@@ -32,9 +39,10 @@ export const SubmitPage: React.FC = (): JSX.Element => {
     const [description, setDescription] = useState('');
     const [uploadProgress, setUploadProgress] = useState(0);
 
+    const isInitializing = creditsUninitialized || lessonsUninitialized || fetchingCredits || fetchingLessons;
+
     const canShowForm =
-        !creditsUninitialized &&
-        !lessonsUninitialized &&
+        !isInitializing &&
         (role === 'customer' || role === 'administrator') &&
         credits > 0 &&
         pendingLessons.length < 1 &&
@@ -78,6 +86,47 @@ export const SubmitPage: React.FC = (): JSX.Element => {
         setDescription('');
         setUploadProgress(0);
     }, []);
+
+    const redeemForm = (
+        <>
+            <Stack direction={'row'} spacing={2} sx={{ width: '100%', maxWidth: 512 }}>
+                <PlaceHolderVideo
+                    title={'Face-On'}
+                    swingType={'fo'}
+                    sx={{ flex: '1 1 0px' }}
+                    onVideoChange={(video: File | null): void => {
+                        setFoVideo(video);
+                    }}
+                />
+                <PlaceHolderVideo
+                    title={'Down-the-Line'}
+                    swingType={'dtl'}
+                    sx={{ flex: '1 1 0px' }}
+                    onVideoChange={(video: File | null): void => {
+                        setDtlVideo(video);
+                    }}
+                />
+            </Stack>
+            <PlaceholderText
+                sx={{ alignSelf: 'stretch' }}
+                label={'Special Requests / Comments'}
+                onTextChange={(text: string): void => {
+                    setDescription(text);
+                }}
+            />
+            {dtlVideo && foVideo && (
+                <Button
+                    fullWidth
+                    color={'primary'}
+                    variant={'contained'}
+                    onClick={submitLesson}
+                    disabled={redeemLoading}
+                >
+                    Submit
+                </Button>
+            )}
+        </>
+    );
 
     return (
         <>
@@ -137,47 +186,21 @@ export const SubmitPage: React.FC = (): JSX.Element => {
                         gap: 4,
                     }}
                 >
-                    {canShowForm && (
+                    {canShowForm && <>{redeemForm}</>}
+                    {isInitializing ? (
                         <>
-                            <Stack direction={'row'} spacing={2} sx={{ width: '100%', maxWidth: 512 }}>
-                                <PlaceHolderVideo
-                                    title={'Face-On'}
-                                    swingType={'fo'}
-                                    sx={{ flex: '1 1 0px' }}
-                                    onVideoChange={(video: File | null): void => {
-                                        setFoVideo(video);
-                                    }}
-                                />
-                                <PlaceHolderVideo
-                                    title={'Down-the-Line'}
-                                    swingType={'dtl'}
-                                    sx={{ flex: '1 1 0px' }}
-                                    onVideoChange={(video: File | null): void => {
-                                        setDtlVideo(video);
-                                    }}
-                                />
+                            <Stack direction={'row'} spacing={2} sx={{ width: '100%' }}>
+                                <Box sx={{ flex: '1 1 0px' }}>
+                                    <Skeleton variant={'rectangular'} width={'100%'} sx={{ pt: '177.78%' }} />
+                                </Box>
+                                <Box sx={{ flex: '1 1 0px' }}>
+                                    <Skeleton variant={'rectangular'} width={'100%'} sx={{ pt: '177.78%' }} />
+                                </Box>
                             </Stack>
-                            <PlaceholderText
-                                sx={{ alignSelf: 'stretch' }}
-                                label={'Special Requests / Comments'}
-                                onTextChange={(text: string): void => {
-                                    setDescription(text);
-                                }}
-                            />
-                            {dtlVideo && foVideo && (
-                                <Button
-                                    fullWidth
-                                    color={'primary'}
-                                    variant={'contained'}
-                                    onClick={submitLesson}
-                                    disabled={redeemLoading}
-                                >
-                                    Submit
-                                </Button>
-                            )}
+                            <Skeleton variant={'rectangular'} height={64} sx={{ alignSelf: 'stretch' }} />
+                            <Skeleton variant={'rectangular'} height={48} sx={{ alignSelf: 'stretch' }} />
                         </>
-                    )}
-                    {redeemLoading && (
+                    ) : redeemLoading ? (
                         <EmptyState
                             icon={<CloudUpload fontSize={'inherit'} />}
                             title={'Uploading Videos'}
@@ -192,8 +215,7 @@ export const SubmitPage: React.FC = (): JSX.Element => {
                                 />
                             }
                         />
-                    )}
-                    {!redeemLoading && isSuccess && (
+                    ) : isSuccess ? (
                         <EmptyState
                             icon={<CheckCircle fontSize={'inherit'} sx={{ color: 'success.main' }} />}
                             title={'Lesson Submitted'}
@@ -210,29 +232,25 @@ export const SubmitPage: React.FC = (): JSX.Element => {
                                 </Button>
                             }
                         />
-                    )}
-                    {!redeemLoading && isError && (
+                    ) : isError ? (
                         <EmptyState
                             icon={<Error fontSize={'inherit'} sx={{ color: 'error.main' }} />}
                             title={'Submission Failed'}
                             description={`There was a problem completing your submission. If this problem persists, please contact us.`}
                         />
-                    )}
-                    {(role === 'pending' || role === 'anonymous') && (
+                    ) : role === 'pending' || role === 'anonymous' ? (
                         <EmptyState
                             icon={<Mail fontSize={'inherit'} color={'inherit'} />}
                             title={'Verify Account'}
                             description={`You must create an account and confirm your email address before you can order lessons.`}
                         />
-                    )}
-                    {pendingLessons.length > 0 && !isSuccess && !redeemLoading && (
+                    ) : pendingLessons.length > 0 ? (
                         <EmptyState
                             icon={<Update fontSize={'inherit'} color={'inherit'} />}
                             title={'In Progress'}
                             description={`You already have a swing analysis in progress. Please wait for that analysis to finish before submitting a new swing. We guarantee a 48-hour turnaround on all lessons.`}
                         />
-                    )}
-                    {!creditsUninitialized && credits < 1 && pendingLessons.length < 1 && !redeemLoading && (
+                    ) : credits < 1 && pendingLessons.length < 1 ? (
                         <EmptyState
                             icon={<ShoppingCart fontSize={'inherit'} color={'inherit'} />}
                             title={'Out of Credits'}
@@ -249,7 +267,7 @@ export const SubmitPage: React.FC = (): JSX.Element => {
                                 </Button>
                             }
                         />
-                    )}
+                    ) : null}
                 </Stack>
             </Section>
         </>

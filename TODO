@@ -1,52 +1,28 @@
-- Update page / component implementations
-- Reorganize components / files
-- Remove unused components / styles
-- Remove commented code
-- Update to Github Actions
-- Update the deploy scripts
-- Clear out unused dependencies
-- Convert the back-end to Node?
+Remaining Functionality
+- Email communications in API
+- Set up deployments in GH Actions (API and UI)
 
-CACHE DATA IN LOCALSTORAGE FOR API SERVICES
+Remaining Cleanup
+- Text overflowing in banners (submit on mobile size)
+- Verify sizing, margins on ultrawide monitor
+- Back-up the database
+- Standardize the error codes in the API (not all 400, 500, 200)
+- Log back-end errors to database
+- Remove commented code blocks
+- Remove any unused dependencies
+- Clean up console logs and errors in UI
+- Check dialog background color in dark theme
+- Check dialog button colors in dark theme
+- Fix the error style for inputs in dark mode (should use error.light)
+- Address all TODO comments
 
-EMAIL FUNCTIONALITY IN NODE
+Future Functionality
+- Cache data in localstorage to initialize api services
+- Enhance coupons to restrict to a package/user (start, end, minimum order, maximum order, user, quantity, applicable package)
+- Set up cron job to back-up the database
 
-Text overflowing in Banners when screen is narrow (submit)
-
-Check everything on an ultrawide 
-
-Do a DB Backup/export
-
-STANDARDIZE THE BACKEND ERROR CODES
-LOG ALL ERROR IN BACK-END TO DB
-
-Screens
-
-- [x] Landing Page
-- [x] Privacy
-- [x] Terms
-- [x] Meet Pros
-- [x] Login
-- [x] Register
-- [x] Forgot Password
-- [x] Reset Password
-- [x] Blogs [2]
-- [x] Tips [3]
-- [x] Lessons
-- [x] Profile
-- [ ] Submit [3]
-- [X] Order [3]
-- [ ] Admin Portal [2]
-
-Clear up / polish console.error / console.logs
-
-Positive and negative test all major apis (login, register, submit, purchase, etc.) to make sure appropriate error messages are displayed
-
-Dialog background colors in dark theme
-Dialog button colors wrong in dark mode
-
-Error input styles in dark mode (lighter red)
-
-Use correct HTTP codes (not all 200 or 400 or 500)
-
-Check all empty states / initial states for new people
+Final testing
+- Verify functionality /error messages in staging environment
+- Verify functionality / error messages in production environment
+- Positive and negative test all major apis (registration, login, purchase, submit, respond)
+- Check all empty states / initial states for new people
