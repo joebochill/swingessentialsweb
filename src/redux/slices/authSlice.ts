@@ -1,7 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { AuthState } from '../../__types__';
 import { getUserRole } from '../../utilities/user';
+import { UserRole } from '../../__types__';
+
+type AuthState = {
+    initialized: boolean;
+    token: string | null;
+    admin: boolean;
+    role: UserRole;
+    loginFailures: number;
+};
 
 const initialState: AuthState = {
     initialized: false,

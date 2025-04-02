@@ -11,6 +11,7 @@ import { tipsApi } from './apiServices/tipsService';
 import { lessonsApi } from './apiServices/lessonsService';
 import { packagesApi } from './apiServices/packagesService';
 import { creditsApi } from './apiServices/creditsService';
+import { configurationApi } from './apiServices/configurationService';
 
 export const store = configureStore({
     reducer: {
@@ -24,6 +25,7 @@ export const store = configureStore({
         [lessonsApi.reducerPath]: lessonsApi.reducer,
         [packagesApi.reducerPath]: packagesApi.reducer,
         [creditsApi.reducerPath]: creditsApi.reducer,
+        [configurationApi.reducerPath]: configurationApi.reducer,
 
         auth: authReducer,
         navigation: navigationReducer,
@@ -39,7 +41,8 @@ export const store = configureStore({
             tipsApi.middleware,
             lessonsApi.middleware,
             packagesApi.middleware,
-            creditsApi.middleware
+            creditsApi.middleware,
+            configurationApi.middleware
         ),
 });
 

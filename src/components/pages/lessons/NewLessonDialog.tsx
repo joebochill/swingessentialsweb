@@ -20,7 +20,7 @@ import { BasicUserDetailsApiResponse } from '../../../redux/apiServices/userDeta
 import { convertMultilineToDatabaseText } from '../../../utilities/text';
 import { getYoutubeVideoErrorMessage } from '../../../utilities/video';
 import { StyledTextField } from '../../common/StyledInputs';
-import { UserSelector } from './FilterLessonsDialog';
+import { UserSelector } from './UserSelector';
 
 type NewLessonDialogProps = DialogProps;
 export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
@@ -75,7 +75,6 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                         value={selectedUser}
                         onChange={(e, newValue): void => setSelectedUser(newValue)}
                     />
-                    {/* TODO Switch for a data picker */}
                     <StyledTextField
                         fullWidth
                         label={'Date'}

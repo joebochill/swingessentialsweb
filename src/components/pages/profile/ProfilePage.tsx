@@ -33,9 +33,8 @@ import { Section } from '../../layout/Section';
 import { InfoCard } from '../../navigation/InfoCard';
 import { AvatarChanger } from './AvatarPicker';
 import { ChangePassword } from './ChangePassword';
-import { ScoreRange } from '../../../__types__/data';
+import { ScoreRange } from '../../../__types__';
 
-// TODO: simplify settings logic to be locally scoped and use skeletons on first load
 export const ProfileForm: React.FC = () => {
     const auth = useSelector((state: RootState) => state.auth);
 

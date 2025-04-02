@@ -45,7 +45,6 @@ export type InPersonLesson = {
     username: string;
 };
 
-// Define a service using a base URL and expected endpoints
 export const lessonsApi = createApi({
     reducerPath: 'lessonsApi',
     baseQuery: fetchBaseQuery({
@@ -119,55 +118,12 @@ export const lessonsApi = createApi({
                     xhr.onerror = () => reject({ error: xhr.statusText });
                     xhr.send(data);
                 });
-                // try{
-                //     const result = await axios.post()
-                // }
-                // catch(error){
-                //     console.error('Error in addLessonRequest:', error);
-                //     return { error: 'Failed to upload lesson request' };
-                // }
-                // return new Promise((resolve, reject) => {
-                //     const xhr = new XMLHttpRequest();
-                //     xhr.open('POST', url);
-
-                //     xhr.upload.onprogress = (event) => {
-                //         if (event.lengthComputable) {
-                //             const progress = Math.round((event.loaded * 100) / event.total);
-                //             api.dispatch(setUploadProgress(progress)); // Update Redux store with progress
-                //         }
-                //     };
-
-                //     xhr.onload = () => {
-                //         if (xhr.status >= 200 && xhr.status < 300) {
-                //             resolve({ data: JSON.parse(xhr.responseText) });
-                //         } else {
-                //             reject({ error: xhr.statusText });
-                //         }
-                //     };
-
-                //     xhr.onerror = () => reject({ error: xhr.statusText });
-                //     xhr.send(file);
-                // });
             },
-            // query: ({ data, progressCalback }) => ({
-            //     url: `lessons/redeem`,
-            //     method: 'POST',
-            //     body: data,
-            // }),
             invalidatesTags: ['lessons'],
         }),
-        // removeLesson: builder.mutation<void, { id: string | number }>({
-        //     query: (deletedLesson) => ({
-        //         url: `lessons/${deletedLesson.id}`,
-        //         method: 'DELETE',
-        //     }),
-        //     invalidatesTags: ['lessons', 'lesson'],
-        // }),
     }),
 });
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
 export const {
     useGetCompletedLessonsQuery,
     useGetPendingLessonsQuery,

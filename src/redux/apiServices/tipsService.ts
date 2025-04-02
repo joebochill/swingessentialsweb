@@ -1,4 +1,3 @@
-// Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_API_URL } from '../../constants';
 import { prepareHeaders } from './utils/prepareHeaders';
@@ -14,7 +13,6 @@ export type TipDetailsWithYear = TipDetails & {
     year: number;
 };
 
-// Define a service using a base URL and expected endpoints
 export const tipsApi = createApi({
     reducerPath: 'tipsApi',
     baseQuery: fetchBaseQuery({
@@ -65,7 +63,5 @@ export const tipsApi = createApi({
     }),
 });
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
 export const { useGetTipsQuery, useGetTipByIdQuery, useAddTipMutation, useUpdateTipMutation, useRemoveTipMutation } =
     tipsApi;

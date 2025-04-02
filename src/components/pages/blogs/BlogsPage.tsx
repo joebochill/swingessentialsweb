@@ -15,8 +15,10 @@ import {
     Box,
     Skeleton,
     Stack,
+    BoxProps,
+    CardProps,
 } from '@mui/material';
-import { AddCircle, Today, Edit, ChevronRight, ChevronLeft } from '@mui/icons-material';
+import { AddCircle, Edit, ChevronRight, ChevronLeft, LocalBar } from '@mui/icons-material';
 import bg from '../../../assets/images/banners/19th.jpg';
 import { format } from 'date-fns';
 import { ROUTES } from '../../../constants/routes';
@@ -42,7 +44,7 @@ const BlankBlog: BlogDetails = {
     body: '',
 };
 
-type BlogListCardProps = {
+type BlogListCardProps = CardProps & {
     blogs: BlogDetailsWithYear[];
     year: number;
 
@@ -66,6 +68,7 @@ const BlogsListCard: React.FC<BlogListCardProps> = (props) => {
         hasPreviousYear,
         onYearIncrement,
         onYearDecrement,
+        ...cardProps
     } = props;
 
     const handleBlogSelect = (id: number) => {
@@ -83,7 +86,7 @@ const BlogsListCard: React.FC<BlogListCardProps> = (props) => {
     };
 
     return (
-        <Card sx={{ flex: '1 1 0px', maxWidth: '40%' /*maxHeight: (t) => `calc(100vh - ${t.spacing(24)})`*/ }}>
+        <Card {...cardProps}>
             <CardHeader
                 title={year}
                 slotProps={{
@@ -137,7 +140,7 @@ const BlogsListCard: React.FC<BlogListCardProps> = (props) => {
     );
 };
 
-type BlogDetailsPanelProps = {
+type BlogDetailsPanelProps = BoxProps & {
     blogId?: number;
     hasNext?: boolean;
     hasPrevious?: boolean;
@@ -147,7 +150,7 @@ type BlogDetailsPanelProps = {
     loading?: boolean;
 };
 const BlogDetailsPanel: React.FC<BlogDetailsPanelProps> = (props) => {
-    const { blogId, hasNext, hasPrevious, showNavigation, onNext, onPrevious } = props;
+    const { blogId, hasNext, hasPrevious, showNavigation, onNext, onPrevious, ...boxProps } = props;
     const admin = useSelector((state: RootState) => state.auth.admin);
 
     const [showEditDialog, setShowEditDialog] = useState(false);
@@ -160,7 +163,7 @@ const BlogDetailsPanel: React.FC<BlogDetailsPanelProps> = (props) => {
 
     return (
         <>
-            <Box sx={{ flex: '1 1 0px' }}>
+            <Box {...boxProps}>
                 {haveDetails ? (
                     <>
                         <FancyHeadline
@@ -314,10 +317,10 @@ export const BlogsPage: React.FC = (): JSX.Element => {
         <>
             <Banner background={{ src: bg, position: 'center right' }}>
                 <SectionBlurb
-                    icon={<Today fontSize={'inherit'} />}
-                    headline={'Blog of the Month'}
-                    subheading={'Keep your game sharp'}
-                    body={`Every month, Swing Essentials brings you new video blogs to help you solve common problems in your golf game. If you have an idea for a future blog, let us know!`}
+                    icon={<LocalBar fontSize={'inherit'} />}
+                    headline={'The 19th Hole'}
+                    subheading={'Stories from the field'}
+                    body={`The 19th Hole is where we talk shop about all things golf. We talk about stories from our adventures on the golf course, tips and tricks for maximizing your performance, and opportunities for you to get more involved in the golfing community. We’d love to hear from you as well! If you have ideas for a post, send us an email. Or better yet, if you'd like to be featured here, send a post!`}
                     sx={{ color: 'primary.contrastText', zIndex: 100 }}
                 />
             </Banner>
@@ -361,6 +364,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                         onYearDecrement={() => {
                             setActiveYear(activeYear - 1);
                         }}
+                        sx={{ flex: '1 1 0px', maxWidth: 512 }}
                     />
                 )}
                 <BlogDetailsPanel
@@ -378,6 +382,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                         });
                     }}
                     showNavigation={isSmall}
+                    sx={{ flex: '2 2 0px', maxWidth: 1080 }}
                 />
             </Section>
         </>

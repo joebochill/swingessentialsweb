@@ -5,16 +5,16 @@ import { initialize, setToken } from '../slices/authSlice';
 import { tipsApi } from '../apiServices/tipsService';
 import { lessonsApi } from '../apiServices/lessonsService';
 import { blogsApi } from '../apiServices/blogsService';
+import { creditsApi } from '../apiServices/creditsService';
+import { packagesApi } from '../apiServices/packagesService';
 
 export const loadUserData = createAsyncThunk('auth/loadUserData', async (_, { dispatch }) => {
     try {
         dispatch(userDetailsApi.endpoints.getUserDetails.initiate());
-        // dispatch(lessonsApi.endpoints.getCompletedLessons.initiate(0));
-        // dispatch(loadLessons());
-        // dispatch(loadCredits());
+        dispatch(lessonsApi.endpoints.getCompletedLessons.initiate({ page: 1, users: '' }));
+        dispatch(creditsApi.endpoints.getCredits.initiate());
     } catch (error) {
-        // TODO
-        console.log('Error loading data after login:', error);
+        console.error('Error loading data after login:', error);
     }
 });
 
@@ -32,10 +32,8 @@ export const initializeData = createAsyncThunk('app/initializeData', async (_, {
         dispatch(tipsApi.endpoints.getTips.initiate());
         dispatch(blogsApi.util.invalidateTags(['blogs', 'blog']));
         dispatch(blogsApi.endpoints.getBlogs.initiate());
-        // dispatch(loadDiscounts()); // TODO should we be loading these or only for admin on the admin portal
     } catch (error) {
-        // TODO
-        console.log('Error loading user data:', error);
+        console.error('Error loading user data:', error);
     }
 });
 
@@ -45,10 +43,9 @@ export const clearProtectedDetails = createAsyncThunk('app/clearProtectedDetails
         dispatch(lessonsApi.util.resetApiState());
         dispatch(tipsApi.util.resetApiState());
         dispatch(blogsApi.util.resetApiState());
-        // credits
-        // discounts
+        dispatch(creditsApi.util.resetApiState());
+        dispatch(packagesApi.util.resetApiState());
     } catch (error) {
-        // TODO
-        console.log('Error clearing protected details:', error);
+        console.error('Error clearing protected details:', error);
     }
 });

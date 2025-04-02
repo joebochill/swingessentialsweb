@@ -6,7 +6,7 @@ import { AddCircle } from '@mui/icons-material';
 import bg from '../../../assets/images/banners/pros.jpg';
 import pga from '../../../assets/images/logos/pga-member.svg';
 import pgaWhite from '../../../assets/images/logos/pga-member-white.svg';
-import { Pro } from '../../../__types__/data';
+import { Pro } from '../../../__types__';
 import { useDarkMode } from '../../../hooks';
 import { useGetProsQuery } from '../../../redux/apiServices/prosService';
 import { LoadingIndicator } from '../../common/LoadingIndicator';

@@ -146,7 +146,7 @@ export const SubmitPage: React.FC = (): JSX.Element => {
                     flexDirection: { xs: 'column-reverse', md: 'row' },
                 }}
             >
-                <Stack spacing={8} sx={{ maxWidth: { xs: 'unset', md: '40%' } }}>
+                <Stack spacing={8} sx={{ flex: '1 1 0px', maxWidth: 1080 }}>
                     <SectionBlurb
                         headline={'Pro Tip #1'}
                         subheading={'How to submit your swing'}

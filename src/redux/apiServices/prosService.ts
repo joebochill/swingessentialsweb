@@ -1,4 +1,3 @@
-// Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_API_URL } from '../../constants';
 import { prepareHeaders } from './utils/prepareHeaders';
@@ -14,7 +13,6 @@ type ProBio = {
 };
 type ProBiosAPIResponse = ProBio[];
 
-// Define a service using a base URL and expected endpoints
 export const prosApi = createApi({
     reducerPath: 'prosApi',
     baseQuery: fetchBaseQuery({
@@ -53,6 +51,4 @@ export const prosApi = createApi({
     }),
 });
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
 export const { useGetProsQuery, useAddProMutation, useUpdateProMutation, useRemoveProMutation } = prosApi;

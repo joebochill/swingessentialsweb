@@ -26,7 +26,6 @@ import { App } from './App';
 
 createRoot(document.getElementById('root')!).render(
     // <StrictMode>
-    // TODO Add a theme toggle
     <ThemeProvider defaultMode="light" theme={SwingEssentialsTheme}>
         <CssBaseline />
         <LocalizationProvider dateAdapter={AdapterDateFns}>

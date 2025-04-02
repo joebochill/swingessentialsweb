@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { Policy } from '@mui/icons-material';
 import { SectionBlurb } from '../../common/SectionBlurb';
 import { Banner } from '../../layout/Banner';
@@ -162,18 +162,20 @@ export const PrivacyPage: React.FC = () => {
                     sx={{
                         color: 'primary.contrastText',
                         zIndex: 100,
-                        maxWidth: { xs: 900, md: 900 },
+                        maxWidth: { xs: 'unset', sm: 1920, md: 1920 },
                     }}
                 />
             </Banner>
             {privacyData.map((section, index) => (
-                <Section key={`privacy_section_${index}`} sx={{ display: 'block' }}>
-                    {section.title ? <Typography variant={'h6'}>{section.title}</Typography> : null}
-                    {section.contents.map((par, pInd) => (
-                        <Typography key={`p_${pInd}`} sx={{ mb: pInd < section.contents.length - 1 ? 2 : 0 }}>
-                            {par}
-                        </Typography>
-                    ))}
+                <Section key={`privacy_section_${index}`}>
+                    <Stack sx={{ width: '100%', maxWidth: 1080 }} spacing={2}>
+                        {section.title ? <Typography variant={'h6'}>{section.title}</Typography> : null}
+                        {section.contents.map((par, pInd) => (
+                            <Typography key={`p_${pInd}`} sx={{ mb: pInd < section.contents.length - 1 ? 2 : 0 }}>
+                                {par}
+                            </Typography>
+                        ))}
+                    </Stack>
                 </Section>
             ))}
         </>

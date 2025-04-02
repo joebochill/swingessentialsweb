@@ -1,5 +1,5 @@
 import React, { JSX } from 'react';
-import { Box, BoxProps, Typography, TypographyProps } from '@mui/material';
+import { Box, BoxProps, Theme, Typography, TypographyProps, useMediaQuery } from '@mui/material';
 import { FancyHeadline, FancyHeadlineProps } from './FancyHeadline';
 
 type SectionBlurbProps = BoxProps & {
@@ -14,6 +14,8 @@ type SectionBlurbProps = BoxProps & {
 export const SectionBlurb: React.FC<SectionBlurbProps> = (props) => {
     const { headline, sx, subheading, body, icon, slotProps = {}, ...other } = props;
     const { body: bodySlotProps, ...headlineSlotProps } = slotProps;
+    const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+
     return (
         <Box
             sx={[
@@ -24,7 +26,7 @@ export const SectionBlurb: React.FC<SectionBlurbProps> = (props) => {
         >
             <FancyHeadline icon={icon} headline={headline} subheading={subheading} slotProps={headlineSlotProps} />
             <Typography
-                variant={'h5'}
+                variant={isSmall ? 'subtitle2' : 'h5'}
                 fontWeight={400}
                 lineHeight={1.6}
                 {...bodySlotProps}

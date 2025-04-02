@@ -19,7 +19,6 @@ export const App: React.FC = () => {
             }}
         >
             <MainRouter />
-            {/* TODO */}
             <TokenModal />
         </PayPalScriptProvider>
     );

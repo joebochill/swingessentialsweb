@@ -15,6 +15,8 @@ import {
     ListItemText,
     Box,
     Skeleton,
+    CardProps,
+    BoxProps,
 } from '@mui/material';
 import { AddCircle, Today, Edit, ChevronRight, ChevronLeft } from '@mui/icons-material';
 import bg from '../../../assets/images/banners/tips.jpg';
@@ -43,7 +45,7 @@ const BlankTip: TipDetails = {
     comments: '',
 };
 
-type TipListCardProps = {
+type TipListCardProps = CardProps & {
     tips: TipDetailsWithYear[];
     year: number;
 
@@ -58,8 +60,17 @@ type TipListCardProps = {
     loading?: boolean;
 };
 const TipsListCard: React.FC<TipListCardProps> = (props) => {
-    const { tips, year, selectedTip, onTipSelected, hasNextYear, hasPreviousYear, onYearIncrement, onYearDecrement } =
-        props;
+    const {
+        tips,
+        year,
+        selectedTip,
+        onTipSelected,
+        hasNextYear,
+        hasPreviousYear,
+        onYearIncrement,
+        onYearDecrement,
+        ...cardProps
+    } = props;
 
     const handleTipSelect = (id: number) => {
         onTipSelected(id);
@@ -76,13 +87,7 @@ const TipsListCard: React.FC<TipListCardProps> = (props) => {
     };
 
     return (
-        <Card
-            sx={{
-                flex: '1 1 0px',
-                maxWidth: '40%',
-                // maxHeight: (t) => `calc(100vh - ${t.spacing(24)})`,
-            }}
-        >
+        <Card {...cardProps}>
             <CardHeader
                 title={year}
                 slotProps={{
@@ -133,7 +138,7 @@ const TipsListCard: React.FC<TipListCardProps> = (props) => {
     );
 };
 
-type TipDetailsPanelProps = {
+type TipDetailsPanelProps = BoxProps & {
     tipId?: number;
     hasNext?: boolean;
     hasPrevious?: boolean;
@@ -143,7 +148,7 @@ type TipDetailsPanelProps = {
     loading?: boolean;
 };
 const TipDetailsPanel: React.FC<TipDetailsPanelProps> = (props) => {
-    const { tipId, hasNext, hasPrevious, showNavigation, onNext, onPrevious } = props;
+    const { tipId, hasNext, hasPrevious, showNavigation, onNext, onPrevious, ...boxProps } = props;
     const admin = useSelector((state: RootState) => state.auth.admin);
 
     const [videoLoading, setVideoLoading] = useState(true);
@@ -163,7 +168,7 @@ const TipDetailsPanel: React.FC<TipDetailsPanelProps> = (props) => {
 
     return (
         <>
-            <Box sx={{ flex: '1 1 0px' }}>
+            <Box {...boxProps}>
                 <Box
                     sx={{
                         width: '100%',
@@ -421,6 +426,7 @@ export const TipsPage: React.FC = (): JSX.Element => {
                         onYearDecrement={() => {
                             setActiveYear(activeYear - 1);
                         }}
+                        sx={{ flex: '1 1 0px', maxWidth: 512 }}
                     />
                 )}
                 <TipDetailsPanel
@@ -438,6 +444,7 @@ export const TipsPage: React.FC = (): JSX.Element => {
                         });
                     }}
                     showNavigation={isSmall}
+                    sx={{ flex: '2 2 0px', maxWidth: 1080 }}
                 />
             </Section>
         </>

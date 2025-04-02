@@ -10,7 +10,7 @@ import {
     TextField,
     Stack,
 } from '@mui/material';
-import { Pro } from '../../../__types__/data';
+import { Pro } from '../../../__types__';
 import { useAddProMutation, useRemoveProMutation, useUpdateProMutation } from '../../../redux/apiServices/prosService';
 import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../../utilities/text';
 import { ConfirmationDialog } from '../../common/ConfirmationDialog';

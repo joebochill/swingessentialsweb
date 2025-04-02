@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { Gavel } from '@mui/icons-material';
 import { SectionBlurb } from '../../common/SectionBlurb';
 import { Banner } from '../../layout/Banner';
@@ -107,18 +107,20 @@ export const TermsPage: React.FC = () => {
                     sx={{
                         color: 'primary.contrastText',
                         zIndex: 100,
-                        maxWidth: { xs: 900, md: 900 },
+                        maxWidth: { xs: 'unset', sm: 1920, md: 1920 },
                     }}
                 />
             </Banner>
             {termsData.map((section, index) => (
-                <Section key={`terms_section_${index}`} style={{ display: 'block' }} textAlign={'left'}>
-                    <Typography variant={'h6'}>{section.title}</Typography>
-                    {section.contents.map((par, pInd) => (
-                        <Typography key={`p_${pInd}`} paragraph={pInd < section.contents.length - 1}>
-                            {par}
-                        </Typography>
-                    ))}
+                <Section key={`terms_section_${index}`}>
+                    <Stack sx={{ width: '100%', maxWidth: 1080 }} spacing={2}>
+                        <Typography variant={'h6'}>{section.title}</Typography>
+                        {section.contents.map((par, pInd) => (
+                            <Typography key={`p_${pInd}`} sx={{ mb: pInd < section.contents.length - 1 ? 2 : 0 }}>
+                                {par}
+                            </Typography>
+                        ))}
+                    </Stack>
                 </Section>
             ))}
         </>

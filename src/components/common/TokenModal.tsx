@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { formatTimer } from '../../utilities/date';
+import { formatTimer } from '../../utilities/numbers';
 import {
     DialogProps,
     Dialog,

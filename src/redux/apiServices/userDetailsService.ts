@@ -1,9 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_API_URL } from '../../constants';
 import { prepareHeaders } from './utils/prepareHeaders';
-import { ScoreRange, UserDataState } from '../../__types__';
+import { ScoreRange } from '../../__types__';
 
-export type UserDataChange = Omit<Partial<UserDataState>, 'username' | 'email' | 'joined'>;
 export type BasicUserDetailsApiResponse = {
     username: string;
     first: string;

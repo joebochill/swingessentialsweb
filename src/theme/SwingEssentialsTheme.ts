@@ -116,8 +116,24 @@ export const SwingEssentialsTheme = createTheme({
                     }),
             },
         },
+        MuiFilledInput: {
+            styleOverrides: {
+                root: ({ theme }) =>
+                    theme.unstable_sx({
+                        '&.Mui-error:after, &.Mui-error:before': {
+                            borderBottomColor: 'error.light',
+                        },
+                    }),
+            },
+        },
         MuiInputLabel: {
             styleOverrides: {
+                root: ({ theme }) =>
+                    theme.unstable_sx({
+                        '&.Mui-error': {
+                            color: 'error.light',
+                        },
+                    }),
                 shrink: ({ theme }) =>
                     theme.applyStyles(
                         'dark',
@@ -217,5 +233,3 @@ export const SwingEssentialsTheme = createTheme({
         },
     },
 });
-
-// TODO add responsive typography styles

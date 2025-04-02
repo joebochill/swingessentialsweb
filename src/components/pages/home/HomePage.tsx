@@ -135,11 +135,11 @@ const RegisterFab: React.FC<Omit<FabProps, 'children'>> = (props) => {
 export const HomePage: React.FC = (): JSX.Element => {
     const navigate = useNavigate();
 
-    const smDown = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+    const smDown = useMediaQuery((theme) => theme.breakpoints.down('md'));
+    const lgDown = useMediaQuery((theme) => theme.breakpoints.down('xl'));
     const { isDarkMode } = useDarkMode();
     //   useGoogleAnalyticsPageView();
 
-    // TODO
     const token = useSelector((state: RootState) => state.auth.token);
 
     const { data: testimonials = [] } = useGetTestimonialsQuery();
@@ -349,7 +349,7 @@ export const HomePage: React.FC = (): JSX.Element => {
                             gap: 8,
                         }}
                     >
-                        {testimonials.slice(0, 3).map((testimonial, ind) => (
+                        {testimonials.slice(0, lgDown ? 3 : 5).map((testimonial, ind) => (
                             <Testimonial
                                 key={`testimonial_${ind}`}
                                 name={getAbbreviatedName(testimonial.username, testimonial.first, testimonial.last)}
@@ -361,7 +361,7 @@ export const HomePage: React.FC = (): JSX.Element => {
                                         : ''
                                 }
                                 testimonial={testimonial.review}
-                                sx={{ flex: { xs: '1 1 auto', md: '1 1 0' }, margin: '0 auto' }}
+                                sx={{ flex: { xs: '1 1 auto', md: '1 1 0' }, margin: '0 auto', width: '100%' }}
                             />
                         ))}
                     </Stack>

@@ -89,7 +89,7 @@ export const OrderPage: React.FC = (): JSX.Element => {
             </Banner>
 
             <Section sx={{ alignItems: { xs: 'stretch', md: 'flex-start' }, gap: 8 }}>
-                <Stack sx={{ flex: '1 1 0px', maxWidth: { xs: 'unset', md: '40%' }, gap: 8 }}>
+                <Stack sx={{ flex: '1 1 0px', maxWidth: { xs: 'unset', md: 512 }, width: '100%', gap: 8 }}>
                     <Card>
                         <CardHeader title={'Available Packages'} slotProps={{ title: { variant: 'subtitle2' } }} />
                         <List disablePadding>
@@ -138,10 +138,11 @@ export const OrderPage: React.FC = (): JSX.Element => {
                         icon={<Mail fontSize={'inherit'} color={'inherit'} />}
                         title={'Verify Account'}
                         description={`You must confirm your email address before you can order lessons.`}
+                        sx={{ flex: '1 1 0px', maxWidth: { xs: 'unset', md: 512 } }}
                     />
                 )}
                 {canOrder && (
-                    <Stack sx={{ flex: { xs: '0 0 auto', md: '1 1 0px' } }}>
+                    <Stack sx={{ flex: '1 1 0px', maxWidth: { xs: 'unset', md: 512 } }}>
                         {!selectedPackage && purchaseStatus === 'initial' && (
                             <EmptyState
                                 icon={<AddShoppingCart fontSize={'inherit'} />}

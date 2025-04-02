@@ -1,28 +1,26 @@
 Remaining Functionality
+
 - Email communications in API
 - Set up deployments in GH Actions (API and UI)
+- Log back-end errors in the DB
 
 Remaining Cleanup
-- Text overflowing in banners (submit on mobile size)
-- Verify sizing, margins on ultrawide monitor
+
 - Back-up the database
 - Standardize the error codes in the API (not all 400, 500, 200)
-- Log back-end errors to database
-- Remove commented code blocks
-- Remove any unused dependencies
-- Clean up console logs and errors in UI
-- Check dialog background color in dark theme
-- Check dialog button colors in dark theme
-- Fix the error style for inputs in dark mode (should use error.light)
-- Address all TODO comments
-
-Future Functionality
-- Cache data in localstorage to initialize api services
-- Enhance coupons to restrict to a package/user (start, end, minimum order, maximum order, user, quantity, applicable package)
-- Set up cron job to back-up the database
 
 Final testing
+
 - Verify functionality /error messages in staging environment
 - Verify functionality / error messages in production environment
 - Positive and negative test all major apis (registration, login, purchase, submit, respond)
 - Check all empty states / initial states for new people
+
+LOG ISSUES FOR:
+
+- Make banners transition to display block at mobile size (allow to grow in height)
+- Responsive typography styles in the themes (instead of variant switching)
+- Use datePicker control instead of plain text fields in admin dialogs
+- Cache data in localstorage to initialize api services
+- Enhance coupons to restrict to a package/user (start, end, minimum order, maximum order, user, quantity, applicable package)
+- Set up cron job to back-up the database

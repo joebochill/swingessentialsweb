@@ -18,6 +18,7 @@ import {
     CardProps,
     Box,
     Tooltip,
+    BoxProps,
 } from '@mui/material';
 import {
     AddCircle,
@@ -54,6 +55,7 @@ import { NewLessonDialog } from './NewLessonDialog';
 import { UserDetailsDialog } from './UserDetailsDialog';
 import { AdminActionToolbar } from '../../common/AdminActionToolbar';
 import { BASE_URL } from '../../../constants';
+import { useGetWelcomeVideoQuery } from '../../../redux/apiServices/configurationService';
 
 type LessonsCardProps = CardProps & {
     lessons: LessonBasicDetails[];
@@ -218,7 +220,7 @@ const LessonsCard: React.FC<LessonsCardProps> = (props): JSX.Element => {
     );
 };
 
-type LessonDetailsPanelProps = {
+type LessonDetailsPanelProps = BoxProps & {
     lesson?: FullLessonDetails;
     hasNext?: boolean;
     hasPrevious?: boolean;
@@ -228,7 +230,7 @@ type LessonDetailsPanelProps = {
     loading?: boolean;
 };
 const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Element => {
-    const { lesson, hasNext, hasPrevious, onNext, onPrevious, showNavigation, loading } = props;
+    const { lesson, hasNext, hasPrevious, onNext, onPrevious, showNavigation, loading, ...boxProps } = props;
     const isAdmin = useSelector((state: RootState) => state.auth.admin);
     const [videoLoading, setVideoLoading] = useState(true);
 
@@ -257,10 +259,11 @@ const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Eleme
             />
         </>
     ) : null;
+    console.log(lesson);
 
     if (!lesson && loading) {
         return (
-            <Box sx={{ flex: '1 1 0px' }}>
+            <Box {...boxProps}>
                 <Box
                     sx={{
                         width: '100%',
@@ -298,7 +301,7 @@ const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Eleme
         );
     } else if (!lesson) {
         return (
-            <Box sx={{ flex: '1 1 0px' }}>
+            <Box {...boxProps}>
                 <EmptyState
                     icon={<Update fontSize={'inherit'} />}
                     title={'No Lesson Selected'}
@@ -358,7 +361,7 @@ const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Eleme
     // Lesson is still pending
     if (lesson && !lesson.response_video) {
         return (
-            <Box sx={{ flex: '1 1 0px' }}>
+            <Box {...boxProps}>
                 <EmptyState
                     icon={<Update fontSize={'inherit'} />}
                     title={'Swing Analysis In Progress'}
@@ -401,7 +404,7 @@ const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Eleme
     }
     return (
         <>
-            <Box sx={{ flex: '1 1 0px' }}>
+            <Box {...boxProps}>
                 {/* Response Video */}
                 <Box
                     sx={{
@@ -545,6 +548,95 @@ const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Eleme
     );
 };
 
+const PlaceholderLessonPanel: React.FC<BoxProps> = (props): JSX.Element => {
+    const { ...boxProps } = props;
+    const [videoLoading, setVideoLoading] = useState(true);
+
+    const { data: lesson, isLoading } = useGetWelcomeVideoQuery();
+
+    return (
+        <>
+            <Box {...boxProps}>
+                {/* Response Video */}
+                <Box
+                    sx={{
+                        width: '100%',
+                        paddingTop: '56.25%',
+                        position: 'relative',
+                        mb: 4,
+                    }}
+                >
+                    {lesson && (
+                        <Box
+                            component={YouTube}
+                            videoId={lesson.video}
+                            onReady={() => {
+                                setVideoLoading(false);
+                            }}
+                            sx={{
+                                position: 'absolute',
+                                inset: 0,
+                                width: '100%',
+                                height: '100%',
+                            }}
+                            opts={{
+                                height: '100%',
+                                width: '100%',
+                                playerVars: {
+                                    showinfo: 0,
+                                    origin: 'www.swingessentials.com',
+                                    playsinline: 1,
+                                    rel: 0,
+                                },
+                            }}
+                        />
+                    )}
+                    {(isLoading || videoLoading) && (
+                        <Skeleton
+                            variant="rectangular"
+                            sx={{
+                                position: 'absolute',
+                                inset: 0,
+                                height: '100%',
+                            }}
+                        />
+                    )}
+                </Box>
+
+                {/* Response Details */}
+                <Stack spacing={2}>
+                    <Stack
+                        sx={{ flexDirection: { xs: 'column', md: 'row' }, gap: { xs: 0, md: 2 }, alignItems: 'center' }}
+                    >
+                        <FancyHeadline
+                            headline={format(new Date(), 'MMMM d, yyyy')}
+                            subheading={'Getting started with Swing Essentials'}
+                            sx={{ flex: '1 1 0px' }}
+                            slotProps={{
+                                headline: {
+                                    variant: 'h6',
+                                },
+                                subheading: {
+                                    variant: 'caption',
+                                },
+                            }}
+                        />
+                    </Stack>
+                    {lesson && (
+                        <Stack spacing={2}>
+                            {splitDatabaseText(lesson.description).map((par, pInd) => (
+                                <Typography key={`par_${pInd}`} sx={{ lineHeight: 1.8 }}>
+                                    {par}
+                                </Typography>
+                            ))}
+                        </Stack>
+                    )}
+                </Stack>
+            </Box>
+        </>
+    );
+};
+
 export const LessonsPage: React.FC = (): JSX.Element => {
     const { id } = useParams<{ id: string }>();
     const admin = useSelector((state: RootState) => state.auth.admin);
@@ -553,14 +645,18 @@ export const LessonsPage: React.FC = (): JSX.Element => {
     const [userFilter, setUserFilter] = useState('');
     const [showFilterDialog, setShowFilterDialog] = useState(false);
     const [showNewDialog, setShowNewDialog] = useState(false);
+    // const [showWelcome, setShowWelcome] = false;
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     // useGoogleAnalyticsPageView();
 
     // Lesson Data
-    const { data: { data: completedLessons = [], totalPages = 0 } = {}, isFetching: loadingCompleted } =
-        useGetCompletedLessonsQuery({ page, users: userFilter });
+    const {
+        data: { data: completedLessons = [], totalPages = 0 } = {},
+        isFetching: loadingCompleted,
+        isUninitialized,
+    } = useGetCompletedLessonsQuery({ page, users: userFilter });
     const { data: { data: nextLessons = [] } = {} } = useGetCompletedLessonsQuery({
         page: page + 1,
         users: userFilter,
@@ -602,6 +698,14 @@ export const LessonsPage: React.FC = (): JSX.Element => {
         }
     }, [id, completedLessons]);
 
+    const showWelcomeLesson =
+        !isUninitialized &&
+        !loadingCompleted &&
+        !loadingPending &&
+        completedLessons.length === 0 &&
+        pendingLessons.length === 0 &&
+        selectedLessonId === '';
+
     return (
         <>
             <Banner background={{ src: bg, position: 'right center' }}>
@@ -640,7 +744,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                 }}
             >
                 {!isSmall && (
-                    <Stack flex={1} spacing={4} sx={{ maxWidth: '40%' }}>
+                    <Stack spacing={4} sx={{ flex: '1 1 0px', maxWidth: 512 }}>
                         <LessonsCard
                             lessons={pendingLessons}
                             title={'Pending Lessons'}
@@ -695,15 +799,23 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                 emptyPlaceholder: (
                                     <ListItem dense disablePadding>
                                         <ListItemButton
-                                            onClick={() => {
-                                                /**TODO — load the placeholder lesson */
-                                            }}
+                                            onClick={
+                                                pendingLessons.length < 1
+                                                    ? () => {
+                                                          navigate(`${ROUTES.SUBMIT}`);
+                                                      }
+                                                    : undefined
+                                            }
                                         >
                                             <ListItemText
-                                                primary={'Welcome to Swing Essentials!'}
-                                                secondary={`Introduction`}
+                                                primary={'No completed lessons'}
+                                                secondary={
+                                                    pendingLessons.length < 1
+                                                        ? `What are you waiting for?`
+                                                        : `We're working on it!`
+                                                }
                                             />
-                                            <ChevronRight sx={{ mr: -1 }} />
+                                            {pendingLessons.length < 1 && <ChevronRight sx={{ mr: -1 }} />}
                                         </ListItemButton>
                                     </ListItem>
                                 ),
@@ -720,29 +832,35 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                     </Stack>
                 )}
                 {/* Show the selected lesson details */}
-                <LessonDetailsPanel
-                    lesson={isError || completedLessons.length < 1 ? undefined : selectedLessonDetails}
-                    showNavigation={isSmall}
-                    hasNext={
-                        (selectedLessonIndex >= 0 && selectedLessonIndex < completedLessons.length - 1) ||
-                        (selectedLessonIndex === completedLessons.length - 1 && page < totalPages)
-                    }
-                    hasPrevious={selectedLessonIndex > 0 || (selectedLessonIndex === 0 && page > 1)}
-                    onNext={() => {
-                        if (selectedLessonIndex >= 0 && selectedLessonIndex < completedLessons.length - 1) {
-                            navigate(`${ROUTES.LESSONS}/${completedLessons[selectedLessonIndex + 1].request_url}`);
-                        } else if (selectedLessonIndex === completedLessons.length - 1 && page < totalPages) {
-                            navigate(`${ROUTES.LESSONS}/${nextLessons[0].request_url}`);
+                {!showWelcomeLesson && (
+                    <LessonDetailsPanel
+                        lesson={isError ? undefined : selectedLessonDetails}
+                        showNavigation={isSmall}
+                        hasNext={
+                            (selectedLessonIndex >= 0 && selectedLessonIndex < completedLessons.length - 1) ||
+                            (selectedLessonIndex === completedLessons.length - 1 && page < totalPages)
                         }
-                    }}
-                    onPrevious={() => {
-                        if (selectedLessonIndex > 0) {
-                            navigate(`${ROUTES.LESSONS}/${completedLessons[selectedLessonIndex - 1].request_url}`);
-                        } else if (selectedLessonIndex === 0 && page > 1) {
-                            navigate(`${ROUTES.LESSONS}/${previousLessons[previousLessons.length - 1].request_url}`);
-                        }
-                    }}
-                />
+                        hasPrevious={selectedLessonIndex > 0 || (selectedLessonIndex === 0 && page > 1)}
+                        onNext={() => {
+                            if (selectedLessonIndex >= 0 && selectedLessonIndex < completedLessons.length - 1) {
+                                navigate(`${ROUTES.LESSONS}/${completedLessons[selectedLessonIndex + 1].request_url}`);
+                            } else if (selectedLessonIndex === completedLessons.length - 1 && page < totalPages) {
+                                navigate(`${ROUTES.LESSONS}/${nextLessons[0].request_url}`);
+                            }
+                        }}
+                        onPrevious={() => {
+                            if (selectedLessonIndex > 0) {
+                                navigate(`${ROUTES.LESSONS}/${completedLessons[selectedLessonIndex - 1].request_url}`);
+                            } else if (selectedLessonIndex === 0 && page > 1) {
+                                navigate(
+                                    `${ROUTES.LESSONS}/${previousLessons[previousLessons.length - 1].request_url}`
+                                );
+                            }
+                        }}
+                        sx={{ flex: '2 2 0px', maxWidth: 1080 }}
+                    />
+                )}
+                {showWelcomeLesson && <PlaceholderLessonPanel sx={{ flex: '2 2 0px', maxWidth: 1080 }} />}
             </Section>
 
             {admin && (
@@ -767,7 +885,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                     navigate(`${ROUTES.LESSONS}/${firstLesson.request_url}`, { replace: true });
                                 }
                             } catch (error) {
-                                console.log('Error filtering lessons:', error);
+                                console.error('Error filtering lessons:', error);
                             }
                         }}
                         onClose={(): void => setShowFilterDialog(false)}

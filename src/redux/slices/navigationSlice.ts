@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { GeneralState } from '../../__types__';
 
-const initialState: GeneralState = {
+const initialState = {
     drawerOpen: false,
 };
 

@@ -18,8 +18,3 @@ export const convertMultilineToDatabaseText = (string: string): string => {
     const array = string.split(/[\r\n]+/);
     return array.join('|:::|');
 };
-
-export const capitalize = (str: string): string => {
-    if (str.length < 1) return str;
-    return `${str.charAt(0).toUpperCase()}${str.substr(1)}`;
-};

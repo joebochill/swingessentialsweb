@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ASYNC_PREFIX, AUTH, BASE_API_URL } from '../../constants';
 import { Credentials, UserRole } from '../../__types__';
 import { clearToken, incrementLoginFailures } from '../slices/authSlice';
-// import { loadUserData } from "../thunks";
 import { storeToken } from './utils/storeToken';
 import { clearProtectedDetails, initializeData } from '../thunks';
 
@@ -165,9 +164,7 @@ export const {
     useRefreshTokenMutation,
     useLogoutMutation,
     useGetRoleMutation,
-
     useSendResetPasswordEmailMutation,
-    // useCheckRegistrationTokenMutation,
     useVerifyResetPasswordCodeMutation,
     useResetPasswordMutation,
     useChangePasswordMutation,

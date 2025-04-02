@@ -17,10 +17,6 @@ export const useDarkMode = () => {
         isDarkMode: mode === 'dark' || (mode === 'system' && systemMode === 'dark'),
     };
 };
-// export const useCompare = (val: any): boolean => {
-//     const prevVal = usePrevious(val);
-//     return prevVal !== val;
-// };
 
 // export const useGoogleAnalyticsPageView = (): void => {
 //     useEffect(() => {
