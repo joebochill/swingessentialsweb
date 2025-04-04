@@ -22,16 +22,5 @@
         "noFallthroughCasesInSwitch": true,
         "noUncheckedSideEffectImports": true
     },
-    "include": [
-        "src",
-        "holding/api",
-        "holding/components",
-        "src/constants",
-        "src/hooks",
-        "holding/pages",
-        "holding/redux",
-        "src/router",
-        "holding/themes",
-        "holding/utilities"
-    ]
+    "include": ["src"]
 }

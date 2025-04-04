@@ -15,7 +15,7 @@ import {
     Tooltip,
     IconButtonProps,
 } from '@mui/material';
-import { DarkMode, InvertColors, LightMode, Menu } from '@mui/icons-material';
+import { DarkMode, LightMode, Menu } from '@mui/icons-material';
 import logo from '../../assets/icons/logo-full-white.svg';
 import { RootState } from '../../redux/store';
 import { openDrawer } from '../../redux/slices/navigationSlice';
@@ -26,7 +26,7 @@ import { UserMenu } from './UserMenu';
 type ThemeType = 'light' | 'dark' | 'system';
 export const ThemeToggleButton: React.FC<IconButtonProps> = (props): JSX.Element => {
     const { sx, ...other } = props;
-    const { mode, setMode } = useColorScheme();
+    const { setMode } = useColorScheme();
     const { isDarkMode } = useDarkMode();
 
     const handleThemeChange = (theme: ThemeType) => {
@@ -39,7 +39,7 @@ export const ThemeToggleButton: React.FC<IconButtonProps> = (props): JSX.Element
                 onClick={() => handleThemeChange(isDarkMode ? 'light' : 'dark')}
                 {...other}
             >
-                {mode === 'dark' ? <DarkMode /> : mode === 'light' ? <LightMode /> : <InvertColors />}
+                {isDarkMode ? <DarkMode /> : <LightMode />}
             </IconButton>
         </Tooltip>
     );
@@ -91,9 +91,14 @@ export const NavigationToolbar: React.FC = (): JSX.Element => {
                                 variant={'outlined'}
                                 color={'inherit'}
                                 onClick={(): void => {
-                                    navigate(ROUTES.LOGIN, {
-                                        state: { from: { pathname: location.pathname } },
-                                    });
+                                    console.log(location);
+                                    // check if the current route is not the login page
+                                    if (location.pathname !== ROUTES.LOGIN) {
+                                        console.log('not on the login route');
+                                        navigate(ROUTES.LOGIN, {
+                                            state: { from: { pathname: location.pathname } },
+                                        });
+                                    }
                                 }}
                             >
                                 SIGN IN
@@ -102,7 +107,7 @@ export const NavigationToolbar: React.FC = (): JSX.Element => {
                         <IconButton
                             sx={{
                                 color: 'inherit',
-                                mr: (t) => `${t.spacing(-2)} !important`,
+                                mr: (t) => `${t.spacing(-1)} !important`,
                             }}
                             onClick={(): void => {
                                 dispatch(openDrawer());

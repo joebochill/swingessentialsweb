@@ -241,7 +241,7 @@ export const HomePage: React.FC = (): JSX.Element => {
             </Section>
 
             <Section>
-                <Grid2 container justifyContent={'center'} alignContent={'stretch'} sx={{ m: -6 }}>
+                <Grid2 container justifyContent={'center'} alignContent={'stretch'} /*sx={{ m: -6 }}*/>
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <InfoCard
                             src={tips}
@@ -328,13 +328,13 @@ export const HomePage: React.FC = (): JSX.Element => {
                         }
                         sx={{ color: 'primary.contrastText', mb: 0 }}
                     />
-                    <Box sx={{ display: 'inline-flex', mt: 2 }}>
+                    <Stack sx={{ display: 'inline-flex', flexDirection: { xs: 'column', sm: 'row' }, mt: 2, gap: 2 }}>
                         <AppleStoreIcon sx={{ cursor: 'pointer' }} />
-                        <GoogleStoreIcon sx={{ cursor: 'pointer', ml: 2 }} />
-                    </Box>
+                        <GoogleStoreIcon sx={{ cursor: 'pointer' }} />
+                    </Stack>
                 </Box>
 
-                <ScreenShot src={screenshot} alt={'Swing Essentials app screenshot'} />
+                <ScreenShot src={screenshot} alt={'Swing Essentials app screenshot'} sx={{ flex: '0 0 auto' }} />
             </Section>
 
             {testimonials.length > 0 && (

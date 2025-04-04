@@ -69,11 +69,11 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
                         // @ts-expect-error label does exist on Autocomplete component
                         label={'Hello'}
                         inputValue={user}
-                        onInputChange={(e, newValue): void => {
+                        onInputChange={(_e, newValue): void => {
                             setUser(newValue);
                         }}
                         value={selectedUser}
-                        onChange={(e, newValue): void => setSelectedUser(newValue)}
+                        onChange={(_e, newValue): void => setSelectedUser(newValue)}
                     />
                     <StyledTextField
                         fullWidth

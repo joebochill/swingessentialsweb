@@ -39,7 +39,7 @@ export const InfoCard: React.FC<InfoCardProps> = (props): JSX.Element => {
                               backgroundColor: 'rgba(0,0,0,0.05)',
                           }
                         : {},
-                    p: 6,
+                    p: 4,
                 },
                 (theme) =>
                     theme.applyStyles('dark', {

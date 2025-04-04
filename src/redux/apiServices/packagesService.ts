@@ -109,7 +109,7 @@ export const packagesApi = createApi({
                 method: 'POST',
                 body,
             }),
-            onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+            onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
                 try {
                     await queryFulfilled;
                     dispatch(creditsApi.util.invalidateTags(['credits']));
@@ -124,7 +124,7 @@ export const packagesApi = createApi({
                 method: 'POST',
                 body,
             }),
-            onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+            onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
                 try {
                     await queryFulfilled;
                     dispatch(creditsApi.util.invalidateTags(['credits']));

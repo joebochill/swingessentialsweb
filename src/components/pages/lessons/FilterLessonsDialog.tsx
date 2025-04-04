@@ -26,7 +26,7 @@ export const FilterLessonsDialog: React.FC<FilterLessonsDialogProps> = (props) =
             <DialogTitle>Filter Lessons By User</DialogTitle>
             <DialogContent>
                 <DialogContentText>Search for a user:</DialogContentText>
-                <UserSelector value={selectedUser} onChange={(e, newValue): void => setSelectedUser(newValue)} />
+                <UserSelector value={selectedUser} onChange={(_e, newValue): void => setSelectedUser(newValue)} />
             </DialogContent>
             <DialogActions>
                 <Stack direction={'row'} spacing={2}>

@@ -26,7 +26,7 @@ import { App } from './App';
 
 createRoot(document.getElementById('root')!).render(
     // <StrictMode>
-    <ThemeProvider defaultMode="light" theme={SwingEssentialsTheme}>
+    <ThemeProvider theme={SwingEssentialsTheme}>
         <CssBaseline />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Provider store={store}>

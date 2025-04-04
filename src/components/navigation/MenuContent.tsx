@@ -149,9 +149,12 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
                     icon={<Person />}
                     divider
                     onClick={(): void => {
-                        navigate(ROUTES.LOGIN, {
-                            state: { from: { pathname: location.pathname } },
-                        });
+                        // check if the current route is not the login page
+                        if (location.pathname !== ROUTES.LOGIN) {
+                            navigate(ROUTES.LOGIN, {
+                                state: { from: { pathname: location.pathname } },
+                            });
+                        }
                         onClose();
                     }}
                 />

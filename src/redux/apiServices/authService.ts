@@ -19,7 +19,7 @@ const authApi = createApi({
                     [AUTH]: `Basic ${btoa(credentials.username)}.${btoa(credentials.password)}`,
                 },
             }),
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
                 try {
                     const { meta } = await queryFulfilled;
                     storeToken(meta, dispatch);
@@ -38,7 +38,7 @@ const authApi = createApi({
                     [AUTH]: `Bearer ${localStorage.getItem(`${ASYNC_PREFIX}token`)}`,
                 },
             }),
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
                 try {
                     await queryFulfilled;
                 } catch (error) {
@@ -70,7 +70,7 @@ const authApi = createApi({
                     [AUTH]: `Bearer ${localStorage.getItem(`${ASYNC_PREFIX}token`)}`,
                 },
             }),
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
                 try {
                     const { meta } = await queryFulfilled;
                     storeToken(meta, dispatch, false);
@@ -125,7 +125,7 @@ const authApi = createApi({
                     password,
                 },
             }),
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
                 try {
                     const { meta } = await queryFulfilled;
                     storeToken(meta, dispatch);
@@ -147,7 +147,7 @@ const authApi = createApi({
                     [AUTH]: `Bearer ${localStorage.getItem(`${ASYNC_PREFIX}token`)}`,
                 },
             }),
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
                 try {
                     const { meta } = await queryFulfilled;
                     storeToken(meta, dispatch);

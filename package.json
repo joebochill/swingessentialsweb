@@ -11,8 +11,10 @@
         "lint": "eslint \"./**/**.{ts,tsx}\"",
         "lint:fix": "eslint \"./**/**.{ts,tsx}\" --fix",
         "prettier": "prettier \"./**/**.{ts,tsx,js,jsx,json,css,scss,html}\" --write",
+        "prettier:check": "prettier \"./**/**.{ts,tsx,js,jsx,json,css,scss,html}\" --check",
         "ga:prod": "cp -r ./src/__analytics__/prod.js ./src/__analytics__/ga.js",
-        "deploy": "node ./deploy.js"
+        "deploy": "node ./deploy.js",
+        "prepare": "husky"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
@@ -51,6 +53,7 @@
         "ftp": "^0.3.10",
         "glob": "^11.0.0",
         "globals": "^15.14.0",
+        "husky": "^9.1.7",
         "prettier": "3.5.3",
         "typescript": "~5.7.2",
         "typescript-eslint": "^8.22.0",

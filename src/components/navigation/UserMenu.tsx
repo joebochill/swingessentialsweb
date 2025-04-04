@@ -49,9 +49,12 @@ export const UserMenu: React.FC = () => {
             variant={'outlined'}
             color={'inherit'}
             onClick={(): void => {
-                navigate(ROUTES.LOGIN, {
-                    state: { from: { pathname: location.pathname } },
-                });
+                // check if the current route is not the login page
+                if (location.pathname !== ROUTES.LOGIN) {
+                    navigate(ROUTES.LOGIN, {
+                        state: { from: { pathname: location.pathname } },
+                    });
+                }
             }}
         >
             SIGN IN

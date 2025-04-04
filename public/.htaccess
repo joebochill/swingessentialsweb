@@ -19,9 +19,38 @@ RewriteCond %{SCRIPT_FILENAME} !maintenance.html
 RewriteCond %{SCRIPT_FILENAME} !maintenance.png
 RewriteRule ^.*$ /maintenance.html [R=503,L]
 ErrorDocument 503 /maintenance.html
-Header Set Cache-Control "max-age=0, no-store"
+
+# Cache-Control for API responses (no caching)
+<IfModule mod_headers.c>
+    <FilesMatch "^/api">
+        Header Set Cache-Control "max-age=0, no-store"
+    </FilesMatch>
+</IfModule>
+
+# Cache-Control for static assets (enable caching)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|css|js)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+</IfModule>
+
+# Proxy /api to the Node.js app running on port 3000
+RewriteRule ^api/v2/(.*)$ http://localhost:9988/$1 [P,L]
 
 # Redirect non-existent files to the application
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.html [QSA]
+

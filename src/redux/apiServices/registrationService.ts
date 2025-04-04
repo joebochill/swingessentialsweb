@@ -43,7 +43,7 @@ const registrationApi = createApi({
                 method: 'POST',
                 body: details,
             }),
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
                 try {
                     const { meta } = await queryFulfilled;
                     storeToken(meta, dispatch);

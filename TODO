@@ -2,12 +2,24 @@ Remaining Functionality
 
 - Email communications in API
 - Set up deployments in GH Actions (API and UI)
-- Log back-end errors in the DB
+    - [x] API
+    - UI
 
 Remaining Cleanup
 
-- Back-up the database
+- Implement the email sending functionality in API
+- Set up staging deployments for UI
+- Fix file location where the logger is logging (_logs)
+- API is uploading files in a relative folder — needs fixed
+- Move API secrets to ENV
 - Standardize the error codes in the API (not all 400, 500, 200)
+- Move ThemeToggleButton to separate file
+- Extract the SIGN IN button to shared
+- Set up husky to enforce prettier before commit
+- Need to duplicate the swing videos and video_links in staging environment (no, just populate with some fake data)
+- Back-up the database
+- Set up prod deployments / pipelines
+
 
 Final testing
 

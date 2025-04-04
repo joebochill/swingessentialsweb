@@ -53,9 +53,6 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
-      react-ga:
-        specifier: ^3.0.0
-        version: 3.3.1(prop-types@15.8.1)(react@19.0.0)
       react-redux:
         specifier: ^9.2.0
         version: 9.2.0(@types/react@19.0.10)(react@19.0.0)(redux@5.0.1)
@@ -114,6 +111,9 @@ importers:
       globals:
         specifier: ^15.14.0
         version: 15.15.0
+      husky:
+        specifier: ^9.1.7
+        version: 9.1.7
       prettier:
         specifier: 3.5.3
         version: 3.5.3
@@ -1337,6 +1337,11 @@ packages:
   hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha1-7OCsr3HWLClpwuxZ/v9CpLGoW0U=}
 
+  husky@9.1.7:
+    resolution: {integrity: sha1-1Go4A10QG0anBFaoUP9CATRMCy0=}
+    engines: {node: '>=18'}
+    hasBin: true
+
   ignore@5.3.2:
     resolution: {integrity: sha1-PNQOcp82Q/2HywTlC/DrcivFlvU=}
     engines: {node: '>= 4'}
@@ -1590,12 +1595,6 @@ packages:
     resolution: {integrity: sha1-Q0RvHwHGWkzX91iAg+aGpnJs+1c=}
     peerDependencies:
       react: ^19.0.0
-
-  react-ga@3.3.1:
-    resolution: {integrity: sha1-2OH04F7FXtb/lE3LFLmQEd+vlQQ=}
-    peerDependencies:
-      prop-types: ^15.6.0
-      react: ^15.6.2 || ^16.0 || ^17 || ^18
 
   react-is@16.13.1:
     resolution: {integrity: sha1-eJcppNw23imZ3BVt1sHZwYzqVqQ=}
@@ -3094,6 +3093,8 @@ snapshots:
     dependencies:
       react-is: 16.13.1
 
+  husky@9.1.7: {}
+
   ignore@5.3.2: {}
 
   immer@10.1.1: {}
@@ -3308,11 +3309,6 @@ snapshots:
     dependencies:
       react: 19.0.0
       scheduler: 0.25.0
-
-  react-ga@3.3.1(prop-types@15.8.1)(react@19.0.0):
-    dependencies:
-      prop-types: 15.8.1
-      react: 19.0.0
 
   react-is@16.13.1: {}
 

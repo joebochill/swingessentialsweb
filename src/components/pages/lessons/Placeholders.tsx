@@ -133,7 +133,7 @@ export const PlaceHolderVideo: React.FC<PlaceholderVideoProps> = (props) => {
             </Box>
             <Dialog
                 open={showError}
-                onClose={(e, r): void => {
+                onClose={(_e, r): void => {
                     if (r !== 'backdropClick') setShowError(false);
                 }}
             >
