@@ -259,7 +259,6 @@ const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Eleme
             />
         </>
     ) : null;
-    console.log(lesson);
 
     if (!lesson && loading) {
         return (

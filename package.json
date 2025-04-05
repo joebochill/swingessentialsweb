@@ -13,7 +13,6 @@
         "prettier": "prettier \"./**/**.{ts,tsx,js,jsx,json,css,scss,html}\" --write",
         "prettier:check": "prettier \"./**/**.{ts,tsx,js,jsx,json,css,scss,html}\" --check",
         "ga:prod": "cp -r ./src/__analytics__/prod.js ./src/__analytics__/ga.js",
-        "deploy": "node ./deploy.js",
         "prepare": "husky"
     },
     "dependencies": {
