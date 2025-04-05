@@ -5,7 +5,7 @@ import { SimpleRouterLink } from './SimpleLinks';
 import { AppBar, Toolbar, Typography, IconButton, Box, Stack, SvgIcon } from '@mui/material';
 import { Instagram, Facebook, Email } from '@mui/icons-material';
 import packageJSON from '../../../package.json';
-import { ThemeToggleButton } from './NavigationToolbar';
+import { ThemeToggleButton } from '../common/ThemeToggleButton';
 
 export const Footer: React.FC = () => {
     return (

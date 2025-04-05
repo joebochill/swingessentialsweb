@@ -10,10 +10,16 @@ export const App: React.FC = () => {
         store.dispatch(initializeData());
     }, []);
 
+    const PP_MODE = import.meta.env.VITE_PAYPAL_MODE;
+    const PP_CLIENT_ID =
+        PP_MODE === 'production'
+            ? import.meta.env.VITE_PAYPAL_CLIENT_ID_PROD
+            : import.meta.env.VITE_PAYPAL_CLIENT_ID_SANDBOX;
+
     return (
         <PayPalScriptProvider
             options={{
-                clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID,
+                clientId: PP_CLIENT_ID,
                 currency: 'USD',
                 disableFunding: 'card,credit',
             }}

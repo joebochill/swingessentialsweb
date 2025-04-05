@@ -1,53 +1,18 @@
 import React, { JSX } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROUTES } from '../../constants/routes';
-import {
-    AppBar,
-    Button,
-    Toolbar,
-    Theme,
-    IconButton,
-    useMediaQuery,
-    Box,
-    Stack,
-    useColorScheme,
-    Tooltip,
-    IconButtonProps,
-} from '@mui/material';
-import { DarkMode, LightMode, Menu } from '@mui/icons-material';
+import { AppBar, Toolbar, Theme, IconButton, useMediaQuery, Box, Stack } from '@mui/material';
+import { Menu } from '@mui/icons-material';
 import logo from '../../assets/icons/logo-full-white.svg';
 import { RootState } from '../../redux/store';
 import { openDrawer } from '../../redux/slices/navigationSlice';
-import { useDarkMode } from '../../hooks';
 import { SimpleRouterLink } from './SimpleLinks';
 import { UserMenu } from './UserMenu';
-
-type ThemeType = 'light' | 'dark' | 'system';
-export const ThemeToggleButton: React.FC<IconButtonProps> = (props): JSX.Element => {
-    const { sx, ...other } = props;
-    const { setMode } = useColorScheme();
-    const { isDarkMode } = useDarkMode();
-
-    const handleThemeChange = (theme: ThemeType) => {
-        setMode(theme);
-    };
-    return (
-        <Tooltip title={'Toggle theme'} placement="right">
-            <IconButton
-                sx={[{ color: 'inherit' }, ...(Array.isArray(sx) ? sx : [sx])]}
-                onClick={() => handleThemeChange(isDarkMode ? 'light' : 'dark')}
-                {...other}
-            >
-                {isDarkMode ? <DarkMode /> : <LightMode />}
-            </IconButton>
-        </Tooltip>
-    );
-};
+import { SignInButton } from './SignInButton';
 
 export const NavigationToolbar: React.FC = (): JSX.Element => {
     const navigate = useNavigate();
-    const location = useLocation();
     const dispatch = useDispatch();
 
     const smDown = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
@@ -86,24 +51,7 @@ export const NavigationToolbar: React.FC = (): JSX.Element => {
 
                 {!mdUp && (
                     <Stack direction={'row'} spacing={0.5} alignItems={'center'}>
-                        {!token && !smDown && (
-                            <Button
-                                variant={'outlined'}
-                                color={'inherit'}
-                                onClick={(): void => {
-                                    console.log(location);
-                                    // check if the current route is not the login page
-                                    if (location.pathname !== ROUTES.LOGIN) {
-                                        console.log('not on the login route');
-                                        navigate(ROUTES.LOGIN, {
-                                            state: { from: { pathname: location.pathname } },
-                                        });
-                                    }
-                                }}
-                            >
-                                SIGN IN
-                            </Button>
-                        )}
+                        {!token && !smDown && <SignInButton />}
                         <IconButton
                             sx={{
                                 color: 'inherit',

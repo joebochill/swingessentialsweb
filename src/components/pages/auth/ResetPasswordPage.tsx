@@ -87,6 +87,7 @@ export const ResetPasswordPage: React.FC = () => {
                                 <ErrorBox
                                     show={confirm !== '' && password !== '' && password !== confirm}
                                     message={'Passwords do not match.'}
+                                    sx={{ alignSelf: 'stretch' }}
                                 />
                                 <Button
                                     fullWidth

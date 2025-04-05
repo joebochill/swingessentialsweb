@@ -1,0 +1,57 @@
+name: Pipeline
+
+on:
+    push:
+        branches: ['dev', 'master', 'feature/upgrade-mui-6']
+    pull_request:
+        branches: ['dev', 'master']
+
+jobs:
+    check-and-deploy:
+        name: Run Code Checks and Deploy to Environment
+        runs-on: ubuntu-latest
+        environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Set up PNPM
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 10.x
+
+            - name: Set up NodeJS
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22.x
+                  cache: 'pnpm'
+                  cache-dependency-path: ./pnpm-lock.yaml
+
+            - name: Install Dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Run Prettier
+              run: pnpm run prettier:check
+
+            - name: Run ESLint
+              run: pnpm run lint
+
+            - name: Run Build
+              env:
+                  VITE_PAYPAL_MODE: '${{ vars.PAYPAL_MODE }}'
+                  VITE_PAYPAL_CLIENT_ID_SANDBOX: '${{ secrets.PAYPAL_CLIENT_ID_SANDBOX }}'
+                  VITE_PAYPAL_CLIENT_ID_PROD: '${{ secrets.PAYPAL_CLIENT_ID_PROD }}'
+                  VITE_BASE_URL: '${{ vars.BASE_URL }}'
+                  VITE_BASE_API: '${{ vars.BASE_API }}'
+              run: pnpm run build
+
+            - name: Deploy via FTP
+              if: ${{ github.event_name == 'push' }}
+              uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+              with:
+                  server: ${{ secrets.FTP_HOST }}
+                  username: ${{ secrets.FTP_USER }}
+                  password: ${{ secrets.FTP_PASSWORD }}
+                  local-dir: ./dist/
+                  server-dir: ${{ vars.DEPLOY_LOCATION }}

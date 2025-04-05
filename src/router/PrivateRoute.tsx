@@ -14,7 +14,9 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
     if (typeof canActivate === 'function') active = canActivate();
     else active = canActivate;
 
-    const from = location.state?.from?.pathname || fallbackRoute;
+    const fromPath = location.state?.from?.pathname;
+
+    const from = fromPath && ![ROUTES.FORGOT, ROUTES.LOGIN, ROUTES.RESET].includes(fromPath) ? fromPath : fallbackRoute;
 
     return active ? <Outlet /> : <Navigate to={from} state={{ from: location }} />;
 };
