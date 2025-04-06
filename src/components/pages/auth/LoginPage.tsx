@@ -250,6 +250,7 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
                 }}
                 onChange={(e): void => {
                     setUsername(e.target.value.replace(/[^A-Z0-9-_.$#@!+]/gi, '').substring(0, 32));
+                    resetUsernameCheck();
                 }}
                 onBlur={(): void => {
                     if (username) checkUsernameAvailability(username);
@@ -262,7 +263,8 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
                 error={emailTaken}
                 helperText={emailTaken ? 'Email address is already registered.' : undefined}
                 onChange={(e): void => {
-                    setEmail(e.target.value.substr(0, 128));
+                    setEmail(e.target.value.substring(0, 128));
+                    resetEmailCheck();
                 }}
                 onBlur={(): void => {
                     if (email) checkEmailAvailability(email);

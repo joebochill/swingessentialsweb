@@ -10,7 +10,7 @@ import { packagesApi } from '../apiServices/packagesService';
 
 export const loadUserData = createAsyncThunk('auth/loadUserData', async (_, { dispatch }) => {
     try {
-        dispatch(userDetailsApi.endpoints.getUserDetails.initiate());
+        dispatch(userDetailsApi.util.invalidateTags(['userDetails']));
         dispatch(lessonsApi.endpoints.getCompletedLessons.initiate({ page: 1, users: '' }));
         dispatch(creditsApi.endpoints.getCredits.initiate());
     } catch (error) {

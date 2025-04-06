@@ -31,7 +31,7 @@ export const UserSelector: React.FC<
                 onInputChange?.(e, newValue, reason);
                 debouncedSearch(newValue);
             }}
-            renderInput={(params) => <StyledTextField {...params} label="Search" />}
+            renderInput={(params) => <StyledTextField {...params} label="Select a User" />}
             {...other}
         />
     );

@@ -4,6 +4,7 @@ Remaining Cleanup
 - Set up prod deployments / pipelines
 - Remove feature branches from deploy workflows
 - Create a dev branch for api
+- Turn on admin email for testing with AJ
 
 Final testing
 
@@ -12,7 +13,7 @@ Final testing
 - Positive and negative test all major apis (registration, login, purchase, submit, respond)
 - Check all empty states / initial states for new people
 
-TEST SCENARIOS:
+TEST SCENARIOS (LIGHT AND DARK THEME):
 - New User
     Register Account
         Existing username error
@@ -58,7 +59,6 @@ Admin
     Edit Discount
     Remove Discount
 
-    
 
 LOG ISSUES FOR:
 

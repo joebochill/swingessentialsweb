@@ -45,7 +45,7 @@ export const OrderPage: React.FC = (): JSX.Element => {
 
     const { data: packages = [], isLoading: loadingPackages } = useGetPackagesQuery();
     const { data: { count: credits = 0 } = {}, isLoading: loadingCredits } = useGetCreditsQuery();
-    const [captureFreeOrder] = useCaptureFreeOrderMutation();
+    const [captureFreeOrder, { isLoading: loadingFree }] = useCaptureFreeOrderMutation();
 
     const [selectedPackage, setSelectedPackage] = useState<Level0PackageDetails | null>(null);
     const selectedPrice = parseFloat(selectedPackage?.price ?? '0');
@@ -75,6 +75,12 @@ export const OrderPage: React.FC = (): JSX.Element => {
             setDiscount(null);
         }
     }, [purchaseStatus, setSelectedPackage, setPaypalPending, setDiscountReset, setDiscount]);
+
+    useEffect(() => {
+        if (selectedPackage) {
+            setPurchaseStatus('initial');
+        }
+    }, [selectedPackage, setPurchaseStatus]);
 
     return (
         <>
@@ -138,7 +144,7 @@ export const OrderPage: React.FC = (): JSX.Element => {
                         icon={<Mail fontSize={'inherit'} color={'inherit'} />}
                         title={'Verify Account'}
                         description={`You must confirm your email address before you can order lessons.`}
-                        sx={{ flex: '1 1 0px', maxWidth: { xs: 'unset', md: 512 } }}
+                        sx={{ flex: { xs: '0 0 auto', md: '1 1 0px' }, maxWidth: { xs: 'unset', md: 512 } }}
                     />
                 )}
                 {canOrder && (
@@ -236,6 +242,8 @@ export const OrderPage: React.FC = (): JSX.Element => {
                                             setPurchaseStatus('failed');
                                         }}
                                     />
+                                ) : loadingFree ? (
+                                    <CircularProgress sx={{ alignSelf: 'center' }} />
                                 ) : (
                                     <Button
                                         fullWidth

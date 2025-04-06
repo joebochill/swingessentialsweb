@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextFieldProps, TextField, InputAdornment, IconButton, Theme, Tooltip } from '@mui/material';
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useDarkMode } from '../../hooks';
 
 const styles = {
     input: {
@@ -30,7 +31,8 @@ const styles = {
 
 type StyledTextFieldProps = TextFieldProps & { darkStyle?: boolean };
 export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
-    const { slotProps = {}, InputProps, darkStyle = true, variant = 'filled', color = 'secondary', ...other } = props;
+    const { isDarkMode } = useDarkMode();
+    const { slotProps = {}, darkStyle = isDarkMode, variant = 'filled', color = 'secondary', ...other } = props;
 
     const { input: inputSlotProps, ...otherSlotProps } = slotProps;
 
@@ -42,10 +44,8 @@ export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
             slotProps={{
                 input: {
                     ...inputSlotProps,
-                    ...InputProps,
                     sx: darkStyle
                         ? (theme: Theme) => ({
-                              // ...(InputProps?.sx ?? {}),
                               textAlign: 'left',
                               '--inputBackgroundColor': '255,255,255',
                               ...styles.input,

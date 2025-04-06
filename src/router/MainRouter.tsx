@@ -60,7 +60,7 @@ export const MainRouter = (): ReactNode => {
                     <Route path={`${ROUTES.SUBMIT}`} element={<SubmitPage />} />
                 </Route>
 
-                <Route element={<PrivateRoute canActivate={admin} />}>
+                <Route element={<PrivateRoute canActivate={admin} fallbackRoute={ROUTES.HOME} />}>
                     <Route path={`${ROUTES.ADMIN}`} element={<AdminPortalPage />} />
                 </Route>
 

@@ -19,7 +19,6 @@ import { useAddInPersonLessonMutation } from '../../../redux/apiServices/lessons
 import { BasicUserDetailsApiResponse } from '../../../redux/apiServices/userDetailsService';
 import { convertMultilineToDatabaseText } from '../../../utilities/text';
 import { getYoutubeVideoErrorMessage } from '../../../utilities/video';
-import { StyledTextField } from '../../common/StyledInputs';
 import { UserSelector } from './UserSelector';
 
 type NewLessonDialogProps = DialogProps;
@@ -64,10 +63,8 @@ export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
             <DialogTitle>New In-Person Lesson</DialogTitle>
             <DialogContent>
                 <DialogContentText>{`Enter the new lesson information below:`}</DialogContentText>
-                <Stack spacing={2}>
+                <Stack spacing={2} sx={{ mt: 2 }}>
                     <UserSelector
-                        // @ts-expect-error label does exist on Autocomplete component
-                        label={'Hello'}
                         inputValue={user}
                         onInputChange={(_e, newValue): void => {
                             setUser(newValue);

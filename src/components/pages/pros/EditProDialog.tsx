@@ -7,13 +7,13 @@ import {
     DialogContentText,
     DialogActions,
     Button,
-    TextField,
     Stack,
 } from '@mui/material';
 import { Pro } from '../../../__types__';
 import { useAddProMutation, useRemoveProMutation, useUpdateProMutation } from '../../../redux/apiServices/prosService';
 import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../../utilities/text';
 import { ConfirmationDialog } from '../../common/ConfirmationDialog';
+import { StyledTextField } from '../../common/StyledInputs';
 
 type EditProDialogProps = DialogProps & {
     pro: Pro;
@@ -57,8 +57,8 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
                 <DialogTitle>{`${isNew ? 'New' : 'Edit'} Pro Bio`}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>{`Enter the instructor information below:`}</DialogContentText>
-                    <Stack spacing={2}>
-                        <TextField
+                    <Stack spacing={2} sx={{ mt: 2 }}>
+                        <StyledTextField
                             fullWidth
                             variant={'filled'}
                             label={'Name'}
@@ -70,7 +70,7 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
                             }}
                             color="secondary"
                         />
-                        <TextField
+                        <StyledTextField
                             fullWidth
                             variant={'filled'}
                             label={'Title'}
@@ -82,7 +82,7 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
                             }}
                             color="secondary"
                         />
-                        <TextField
+                        <StyledTextField
                             fullWidth
                             variant={'filled'}
                             label={'Headshot Filename'}
@@ -94,7 +94,7 @@ export const EditProDialog: React.FC<EditProDialogProps> = (props) => {
                             }}
                             color="secondary"
                         />
-                        <TextField
+                        <StyledTextField
                             fullWidth
                             multiline
                             variant={'filled'}

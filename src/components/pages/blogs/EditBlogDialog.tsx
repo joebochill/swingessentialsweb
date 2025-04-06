@@ -7,7 +7,6 @@ import {
     DialogContentText,
     DialogActions,
     Button,
-    TextField,
     Stack,
 } from '@mui/material';
 import { format, isValid, parseISO } from 'date-fns';
@@ -20,6 +19,7 @@ import {
 } from '../../../redux/apiServices/blogsService';
 import { convertDatabaseTextToMultiline, convertMultilineToDatabaseText } from '../../../utilities/text';
 import { ConfirmationDialog } from '../../common/ConfirmationDialog';
+import { StyledTextField } from '../../common/StyledInputs';
 
 type EditBlogDialogProps = DialogProps & {
     blog: BlogDetails;
@@ -63,8 +63,8 @@ export const EditBlogDialog: React.FC<EditBlogDialogProps> = (props) => {
                 <DialogTitle>{`${isNew ? 'New' : 'Edit'} 19th Hole Post`}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>{`Enter the blog post information below:`}</DialogContentText>
-                    <Stack spacing={2}>
-                        <TextField
+                    <Stack spacing={2} sx={{ mt: 2 }}>
+                        <StyledTextField
                             fullWidth
                             variant={'filled'}
                             label={'Date'}
@@ -75,8 +75,9 @@ export const EditBlogDialog: React.FC<EditBlogDialogProps> = (props) => {
                             onChange={(e): void => {
                                 setDate(e.target.value);
                             }}
+                            color={'secondary'}
                         />
-                        <TextField
+                        <StyledTextField
                             fullWidth
                             variant={'filled'}
                             label={'Title'}
@@ -86,8 +87,9 @@ export const EditBlogDialog: React.FC<EditBlogDialogProps> = (props) => {
                             onChange={(e): void => {
                                 setTitle(e.target.value);
                             }}
+                            color={'secondary'}
                         />
-                        <TextField
+                        <StyledTextField
                             fullWidth
                             multiline
                             variant={'filled'}
@@ -102,6 +104,7 @@ export const EditBlogDialog: React.FC<EditBlogDialogProps> = (props) => {
                                 htmlInput: { maxLength: 65000, style: { minHeight: 128 } },
                             }}
                             helperText={`${65000 - body.length} characters left`}
+                            color={'secondary'}
                         />
                     </Stack>
                 </DialogContent>

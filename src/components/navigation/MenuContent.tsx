@@ -48,7 +48,7 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
 
     return (
         <>
-            {token && (
+            {token && user && (
                 <ListItem divider>
                     <ListItemAvatar>
                         <UserAvatar />

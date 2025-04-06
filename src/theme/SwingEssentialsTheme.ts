@@ -131,8 +131,16 @@ export const SwingEssentialsTheme = createTheme({
                 root: ({ theme }) =>
                     theme.unstable_sx({
                         '&.Mui-error': {
-                            color: 'error.light',
+                            color: 'error.main',
                         },
+                        ...theme.applyStyles(
+                            'dark',
+                            theme.unstable_sx({
+                                '&.Mui-error': {
+                                    color: 'error.light',
+                                },
+                            })
+                        ),
                     }),
                 shrink: ({ theme }) =>
                     theme.applyStyles(

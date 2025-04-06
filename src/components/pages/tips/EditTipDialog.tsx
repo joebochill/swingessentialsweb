@@ -75,7 +75,7 @@ export const EditTipDialog: React.FC<EditTipDialogProps> = (props) => {
                 <DialogTitle>{`${isNew ? 'New' : 'Edit'} Tip`}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>{`Enter the tip information below:`}</DialogContentText>
-                    <Stack spacing={2}>
+                    <Stack spacing={2} sx={{ mt: 2 }}>
                         <StyledTextField
                             fullWidth
                             variant={'filled'}

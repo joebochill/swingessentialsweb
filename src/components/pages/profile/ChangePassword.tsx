@@ -13,7 +13,6 @@ import {
     Box,
 } from '@mui/material';
 import { CheckCircle, Error } from '@mui/icons-material';
-import { useDarkMode } from '../../../hooks';
 import { useChangePasswordMutation } from '../../../redux/apiServices/authService';
 import { EmptyState } from '../../common/EmptyState';
 import { StyledPassword } from '../../common/StyledInputs';
@@ -38,8 +37,6 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
     }, [resetChange]);
 
     const incorrectPassword = (changeError as { data: { code: number } })?.data?.code === 400150;
-
-    const { isDarkMode } = useDarkMode();
 
     return (
         <>
@@ -74,9 +71,10 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
                 <DialogContent>
                     {!isLoading && (!changeError || incorrectPassword) && !changed && (
                         <Stack spacing={2}>
-                            <DialogContentText>{`To change your password, enter your current password and new password below.`}</DialogContentText>
+                            <DialogContentText
+                                sx={{ mb: 2 }}
+                            >{`To change your password, enter your current password and new password below.`}</DialogContentText>
                             <StyledPassword
-                                darkStyle={isDarkMode}
                                 label={'Current Password'}
                                 name={'current'}
                                 error={incorrectPassword}
@@ -87,7 +85,6 @@ export const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
                                 }}
                             />
                             <StyledPassword
-                                darkStyle={isDarkMode}
                                 label={'New Password'}
                                 name={'new'}
                                 value={newPassword}
