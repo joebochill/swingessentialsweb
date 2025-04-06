@@ -20,6 +20,7 @@ import { BasicUserDetailsApiResponse } from '../../../redux/apiServices/userDeta
 import { convertMultilineToDatabaseText } from '../../../utilities/text';
 import { getYoutubeVideoErrorMessage } from '../../../utilities/video';
 import { UserSelector } from './UserSelector';
+import { StyledTextField } from '../../common/StyledInputs';
 
 type NewLessonDialogProps = DialogProps;
 export const NewLessonDialog: React.FC<NewLessonDialogProps> = (props) => {
