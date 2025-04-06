@@ -66,6 +66,7 @@ export const ResetPasswordPage: React.FC = () => {
                                     Enter your new password below:
                                 </Typography>
                                 <StyledPassword
+                                    darkStyle
                                     label={'New Password'}
                                     placeholder={'Choose a new password'}
                                     name={'password'}
@@ -76,6 +77,7 @@ export const ResetPasswordPage: React.FC = () => {
                                     color="secondary"
                                 />
                                 <StyledPassword
+                                    darkStyle
                                     label={'Confirm Password'}
                                     name={'confirm'}
                                     value={confirm}

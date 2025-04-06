@@ -109,6 +109,7 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref
     return (
         <Stack sx={formStyle} spacing={2} ref={ref} {...other}>
             <StyledTextField
+                darkStyle
                 label={'Username'}
                 placeholder={'Username or Email'}
                 name={'username'}
@@ -118,6 +119,7 @@ const SignInForm = React.forwardRef<HTMLDivElement, SignInFormProps>((props, ref
                 }}
             />
             <StyledPassword
+                darkStyle
                 label={'Password'}
                 name={'password'}
                 value={password}
@@ -230,6 +232,7 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
     return (
         <Stack sx={formStyle} spacing={2} {...other} ref={ref}>
             <StyledTextField
+                darkStyle
                 label={'Username'}
                 name={'new-username'}
                 value={username}
@@ -257,6 +260,7 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
                 }}
             />
             <StyledTextField
+                darkStyle
                 label={'Email Address'}
                 name={'email'}
                 value={email}
@@ -271,6 +275,7 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
                 }}
             />
             <StyledTextField
+                darkStyle
                 type={showPassword ? 'text' : 'password'}
                 label={'Password'}
                 name={'password'}
@@ -296,6 +301,7 @@ const RegisterForm = React.forwardRef<HTMLDivElement, RegisterFormProps>((props,
             />
             <StyledTextField
                 select
+                darkStyle
                 label={`How'd you find us?`}
                 name={'acquisition'}
                 value={acquisition}
@@ -364,6 +370,7 @@ const ForgotForm = React.forwardRef<HTMLDivElement, ForgotFormProps>((props, ref
                 <>
                     <StyledTextField
                         fullWidth
+                        darkStyle
                         label={'Email Address'}
                         placeholder={'Enter your email address'}
                         name={'email'}

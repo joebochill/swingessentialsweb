@@ -32,7 +32,14 @@ const styles = {
 type StyledTextFieldProps = TextFieldProps & { darkStyle?: boolean };
 export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
     const { isDarkMode } = useDarkMode();
-    const { slotProps = {}, darkStyle = isDarkMode, variant = 'filled', color = 'secondary', ...other } = props;
+    const {
+        slotProps = {},
+        InputProps,
+        darkStyle = isDarkMode,
+        variant = 'filled',
+        color = 'secondary',
+        ...other
+    } = props;
 
     const { input: inputSlotProps, ...otherSlotProps } = slotProps;
 
@@ -44,8 +51,10 @@ export const StyledTextField: React.FC<StyledTextFieldProps> = (props) => {
             slotProps={{
                 input: {
                     ...inputSlotProps,
+                    ...InputProps,
                     sx: darkStyle
                         ? (theme: Theme) => ({
+                              // ...(InputProps?.sx ?? {}),
                               textAlign: 'left',
                               '--inputBackgroundColor': '255,255,255',
                               ...styles.input,
@@ -93,12 +102,21 @@ export const StyledPassword: React.FC<StyledTextFieldProps> = (props) => {
     );
 };
 
-type StyledDatePickerProps<TDate extends Date> = DatePickerProps<TDate>;
+type StyledDatePickerProps<TDate extends Date> = DatePickerProps<TDate> & {
+    darkStyle?: boolean;
+};
 export const StyledDatePicker: React.FC<StyledDatePickerProps<Date>> = (props) => {
+    const { darkStyle } = props;
     return (
         <DatePicker
             slots={{
                 textField: StyledTextField,
+            }}
+            slotProps={{
+                textField: {
+                    // @ts-expect-error darkStyle is on StyledTextField
+                    darkStyle,
+                },
             }}
             {...props}
         />

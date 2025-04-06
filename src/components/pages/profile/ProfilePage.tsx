@@ -135,6 +135,7 @@ export const ProfileForm: React.FC = () => {
                 }}
             >
                 <StyledTextField
+                    darkStyle
                     label={'First Name'}
                     name={'first-name'}
                     value={first}
@@ -144,6 +145,7 @@ export const ProfileForm: React.FC = () => {
                     sx={{ flex: '1 1 0px' }}
                 />
                 <StyledTextField
+                    darkStyle
                     label={'Last Name'}
                     name={'last-name'}
                     value={last}
@@ -160,6 +162,7 @@ export const ProfileForm: React.FC = () => {
                 }}
             >
                 <StyledTextField
+                    darkStyle
                     label={'Location'}
                     name={'location'}
                     placeholder={'e.g. Portland, OR'}
@@ -170,6 +173,7 @@ export const ProfileForm: React.FC = () => {
                     sx={{ flex: '1 1 0px' }}
                 />
                 <StyledDatePicker
+                    darkStyle
                     disableFuture
                     openTo="year"
                     format="MM/dd/yyyy"
@@ -190,6 +194,7 @@ export const ProfileForm: React.FC = () => {
                 }}
             >
                 <StyledTextField
+                    darkStyle
                     disabled
                     label={`Email Address ${
                         auth.role !== 'customer' && auth.role !== 'administrator' ? '(unverified)' : ''
@@ -202,6 +207,7 @@ export const ProfileForm: React.FC = () => {
                     sx={{ flex: '1 1 0px' }}
                 />
                 <StyledTextField
+                    darkStyle
                     select
                     variant={'filled'}
                     label={`Average Score (18 holes)`}
@@ -219,6 +225,7 @@ export const ProfileForm: React.FC = () => {
                 </StyledTextField>
             </Stack>
             <StyledTextField
+                darkStyle
                 multiline
                 rows={4}
                 slotProps={{ htmlInput: { maxLength: 255 } }}
