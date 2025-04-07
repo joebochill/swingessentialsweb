@@ -93,16 +93,16 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
                         onClick={(): void => clickMenuItem(ROUTES.LESSONS)}
                     />
                     <MenuListItem
-                        title={'Submit Your Swing'}
-                        icon={<Videocam />}
-                        divider
-                        onClick={(): void => clickMenuItem(ROUTES.SUBMIT)}
-                    />
-                    <MenuListItem
                         title={'Order More'}
                         icon={<ShoppingCart />}
                         divider
                         onClick={(): void => clickMenuItem(ROUTES.ORDER)}
+                    />
+                    <MenuListItem
+                        title={'Submit Your Swing'}
+                        icon={<Videocam />}
+                        divider
+                        onClick={(): void => clickMenuItem(ROUTES.SUBMIT)}
                     />
                 </>
             )}

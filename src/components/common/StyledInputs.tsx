@@ -89,6 +89,7 @@ export const StyledPassword: React.FC<StyledTextFieldProps> = (props) => {
                                     aria-label="toggle password visibility"
                                     onClick={(): void => setShowPassword(!showPassword)}
                                     onMouseDown={(e): void => e.preventDefault()}
+                                    tabIndex={1}
                                 >
                                     {showPassword ? <Visibility /> : <VisibilityOff />}
                                 </IconButton>

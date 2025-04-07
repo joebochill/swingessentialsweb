@@ -85,6 +85,18 @@ export const ResetPasswordPage: React.FC = () => {
                                         setConfirm(e.target.value);
                                     }}
                                     color="secondary"
+                                    onKeyDown={
+                                        confirm !== '' && password !== '' && password === confirm
+                                            ? (e): void => {
+                                                  if (e.key === 'Enter') {
+                                                      resetPassword({
+                                                          password: btoa(password),
+                                                          token: auth,
+                                                      });
+                                                  }
+                                              }
+                                            : undefined
+                                    }
                                 />
                                 <ErrorBox
                                     show={confirm !== '' && password !== '' && password !== confirm}

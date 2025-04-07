@@ -244,6 +244,20 @@ export const HomePage: React.FC = (): JSX.Element => {
                 <Grid2 container justifyContent={'center'} alignContent={'stretch'} /*sx={{ m: -6 }}*/>
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <InfoCard
+                            src={pros}
+                            title={'Meet Our Pros'}
+                            aspectRatio={'16x9'}
+                            backgroundPosition={'center 25%'}
+                            description={
+                                'Get to know the folks behind the lessons and the experience they bring to the table.'
+                            }
+                            onClick={(): void => {
+                                navigate(ROUTES.PROS);
+                            }}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
+                        <InfoCard
                             src={tips}
                             title={'Tip of the Month'}
                             aspectRatio={'16x9'}
@@ -265,20 +279,6 @@ export const HomePage: React.FC = (): JSX.Element => {
                             }
                             onClick={(): void => {
                                 navigate(ROUTES.BLOG);
-                            }}
-                        />
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 4 }}>
-                        <InfoCard
-                            src={pros}
-                            title={'Meet the Pros'}
-                            aspectRatio={'16x9'}
-                            backgroundPosition={'center 25%'}
-                            description={
-                                'Get to know the folks behind the lessons and the experience they bring to the table.'
-                            }
-                            onClick={(): void => {
-                                navigate(ROUTES.PROS);
                             }}
                         />
                     </Grid2>

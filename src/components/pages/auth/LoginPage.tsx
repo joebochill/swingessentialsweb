@@ -377,7 +377,22 @@ const ForgotForm = React.forwardRef<HTMLDivElement, ForgotFormProps>((props, ref
                         value={email}
                         onChange={(e): void => {
                             setEmail(e.target.value);
+                            setErrorMessage('');
                         }}
+                        onKeyDown={
+                            !complete && email && EMAIL_REGEX.test(email)
+                                ? (e): void => {
+                                      if (e.key === 'Enter') {
+                                          sendResetPasswordEmail(email);
+                                          setComplete(true);
+                                      }
+                                  }
+                                : (e): void => {
+                                      if (e.key === 'Enter') {
+                                          setErrorMessage('You need to enter a valid email address.');
+                                      }
+                                  }
+                        }
                     />
                     <ErrorBox message={errorMessage} />
                 </>
