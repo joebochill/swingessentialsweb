@@ -11,7 +11,7 @@ import {
     Stack,
     Skeleton,
 } from '@mui/material';
-import { AddCircle, Security, Edit } from '@mui/icons-material';
+import { AddCircle, Security, Edit, Download } from '@mui/icons-material';
 
 import bg from '../../../assets/images/banners/pros2.jpg';
 import { FullDiscount, useGetDiscountsQuery } from '../../../redux/apiServices/packagesService';
@@ -20,6 +20,7 @@ import { SectionBlurb } from '../../common/SectionBlurb';
 import { AdminActionToolbar } from '../../common/AdminActionToolbar';
 import { Section } from '../../layout/Section';
 import { EditDiscountDialog } from './EditDiscountDialog';
+import { useGetLogsMutation } from '../../../redux/apiServices/logsService';
 
 const BlankDiscount: FullDiscount = {
     id: -1,
@@ -39,6 +40,7 @@ type DialogOpen = {
 export const AdminPortalPage: React.FC = (): JSX.Element => {
     // useGoogleAnalyticsPageView();
     const { data: discounts = [], isFetching } = useGetDiscountsQuery();
+    const [downloadLogs] = useGetLogsMutation();
 
     const [activeDiscount, setActiveDiscount] = useState<FullDiscount | null>(null);
     const [showDiscountDialog, setShowDiscountDialog] = useState<DialogOpen>({ open: false, isNew: true });
@@ -63,6 +65,33 @@ export const AdminPortalPage: React.FC = (): JSX.Element => {
                 >
                     New Discount
                 </Button>
+                <Button
+                    variant={'text'}
+                    color={'secondary'}
+                    sx={{ ml: 2 }}
+                    onClick={async (): Promise<void> => {
+                        try {
+                            const result = await downloadLogs().unwrap();
+                            console.log(result);
+                            if (result.url) {
+                                const link = document.createElement('a');
+                                link.href = result.url;
+                                link.download = 'logs.zip'; // Name of the downloaded file
+                                document.body.appendChild(link);
+                                link.click();
+                                link.remove();
+                                window.URL.revokeObjectURL(result.url);
+                            } else {
+                                console.error('Error downloading logs: No URL returned');
+                            }
+                        } catch (error) {
+                            console.error('Error downloading logs:', error);
+                        }
+                    }}
+                    startIcon={<Download />}
+                >
+                    Get Logs
+                </Button>
             </AdminActionToolbar>
 
             <EditDiscountDialog
@@ -74,7 +103,7 @@ export const AdminPortalPage: React.FC = (): JSX.Element => {
                 }}
             />
 
-            <Section>
+            <Section sx={{ alignItems: 'center' }}>
                 <Card sx={{ width: '100%', maxWidth: 512 }}>
                     <CardHeader
                         title={'Available Discounts'}

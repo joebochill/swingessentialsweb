@@ -37,6 +37,10 @@ jobs:
             - name: Run ESLint
               run: pnpm run lint
 
+            - name: Replace Port in .htaccess
+              run: |
+                  sed -i 's/{{PORT}}/${{ vars.API_PORT }}/g' ./public/.htaccess
+
             - name: Run Build
               env:
                   VITE_PAYPAL_MODE: '${{ vars.PAYPAL_MODE }}'

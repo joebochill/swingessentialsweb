@@ -12,6 +12,7 @@ import { lessonsApi } from './apiServices/lessonsService';
 import { packagesApi } from './apiServices/packagesService';
 import { creditsApi } from './apiServices/creditsService';
 import { configurationApi } from './apiServices/configurationService';
+import { logsApi } from './apiServices/logsService';
 
 export const store = configureStore({
     reducer: {
@@ -26,12 +27,17 @@ export const store = configureStore({
         [packagesApi.reducerPath]: packagesApi.reducer,
         [creditsApi.reducerPath]: creditsApi.reducer,
         [configurationApi.reducerPath]: configurationApi.reducer,
+        [logsApi.reducerPath]: logsApi.reducer,
 
         auth: authReducer,
         navigation: navigationReducer,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [`logsApi/executeMutation/fulfilled`],
+            },
+        }).concat(
             blogsApi.middleware,
             authApi.middleware,
             userDetailsApi.middleware,
@@ -42,7 +48,8 @@ export const store = configureStore({
             lessonsApi.middleware,
             packagesApi.middleware,
             creditsApi.middleware,
-            configurationApi.middleware
+            configurationApi.middleware,
+            logsApi.middleware
         ),
 });
 

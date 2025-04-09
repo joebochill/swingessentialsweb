@@ -36,7 +36,7 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>
 
 # Proxy /api to the Node.js app running on the correct port
-RewriteRule ^api/v2/(.*)$ http://localhost:9988/$1 [P,L]
+RewriteRule ^api/v2/(.*)$ http://localhost:{{PORT}}/$1 [P,L]
 
 # Redirect non-existent files to the application
 RewriteCond %{REQUEST_FILENAME} !-f
