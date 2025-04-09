@@ -72,7 +72,6 @@ export const AdminPortalPage: React.FC = (): JSX.Element => {
                     onClick={async (): Promise<void> => {
                         try {
                             const result = await downloadLogs().unwrap();
-                            console.log(result);
                             if (result.url) {
                                 const link = document.createElement('a');
                                 link.href = result.url;
