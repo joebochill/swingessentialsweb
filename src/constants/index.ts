@@ -2,16 +2,15 @@ export const YOUTUBE_API_KEY = 'AIzaSyBLUJUqz7E3Z5XNcXbMYO9gVmXd0zYAR4U';
 
 export const ASYNC_PREFIX = '@SwingEssentials:';
 
-export const BASEURL_DEV = 'https://www.swingessentials.com/dev_apis/swingessentials.php';
-export const BASEURL_PROD = 'https://www.swingessentials.com/apis/swingessentials.php';
-
-export const BASEURL = BASEURL_PROD;
+export const BASE_URL = import.meta.env.VITE_BASE_URL;
+export const BASE_API_URL = import.meta.env.VITE_BASE_API;
 export const AUTH = 'Message';
 
 export const EMAIL_REGEX = new RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 export const DATE_REGEX = new RegExp(/^[0-9]{4}-[0-9]{2}-[0-9]{2}/);
 
-export const TWITTER_URL = 'https://twitter.com/SwingEssentials';
+export const TWITTER_URL = 'https://x.com/swingessentials';
+export const THREADS_URL = 'https://www.threads.net/@swingessentials';
 export const FACEBOOK_URL = 'https://www.facebook.com/swingessentials/';
 export const INSTAGRAM_URL = 'https://www.instagram.com/swingessentials/';
 export const CONTACT_EMAIL = 'info@swingessentials.com';

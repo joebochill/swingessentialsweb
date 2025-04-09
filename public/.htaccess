@@ -9,19 +9,37 @@ SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# Redirect for maintenance updates
-RewriteCond %{REMOTE_ADDR} !^173\.75\.41\.239
-RewriteCond %{REMOTE_ADDR} !^96\.255\.14\.93
-RewriteCond %{REMOTE_ADDR} !^108\.17\.70\.81
-RewriteCond %{DOCUMENT_ROOT}/maintenance.html -f
-RewriteCond %{DOCUMENT_ROOT}/maintenance.on -f
-RewriteCond %{SCRIPT_FILENAME} !maintenance.html
-RewriteCond %{SCRIPT_FILENAME} !maintenance.png
-RewriteRule ^.*$ /maintenance.html [R=503,L]
-ErrorDocument 503 /maintenance.html
-Header Set Cache-Control "max-age=0, no-store"
+# Cache-Control for API responses (no caching)
+<IfModule mod_headers.c>
+    <FilesMatch "^/api">
+        Header Set Cache-Control "max-age=0, no-store"
+    </FilesMatch>
+</IfModule>
+
+# Cache-Control for static assets (enable caching)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(jpg|JPG|jpeg|png|gif|webp|svg|css|js)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+</IfModule>
+
+# Proxy /api to the Node.js app running on the correct port
+RewriteRule ^api/v2/(.*)$ http://localhost:{{PORT}}/$1 [P,L]
 
 # Redirect non-existent files to the application
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.html [QSA]
+

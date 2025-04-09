@@ -1,42 +1,16 @@
 import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { AppState } from '../../__types__';
-import { ROUTES } from '../../constants/routes';
 import { MenuContent } from './MenuContent';
-import { Menu, Avatar, Button, createStyles, makeStyles, Theme } from '@material-ui/core';
-import { Person } from '@material-ui/icons';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        avatar: {
-            cursor: 'pointer',
-            color: theme.palette.primary.main,
-            height: theme.spacing(5),
-            width: theme.spacing(5),
-            backgroundColor: 'white',
-            fontWeight: 600,
-            fontFamily: 'Roboto Mono',
-        },
-        paper: {
-            color: theme.palette.primary.main,
-        },
-    })
-);
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ForwardMenuContent = React.forwardRef((props: { onClose: () => void }, ref) => <MenuContent {...props} />);
-ForwardMenuContent.displayName = 'ForwardRefMenuContent';
+import { Menu } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { UserAvatar } from './UserAvatar';
+import { RootState } from '../../redux/store';
+import { SignInButton } from './SignInButton';
 
 export const UserMenu: React.FC = () => {
-    const history = useHistory();
-    const classes = useStyles();
-
-    const token = useSelector((state: AppState) => state.auth.token);
-    const user = useSelector((state: AppState) => state.user);
-    const avatar = useSelector((state: AppState) => state.settings.avatar);
+    const token = useSelector((state: RootState) => state.auth.token);
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+    const open = Boolean(anchorEl);
 
     const closeMenu = useCallback(() => {
         setAnchorEl(null);
@@ -45,42 +19,29 @@ export const UserMenu: React.FC = () => {
         setAnchorEl(event.currentTarget);
     }, []);
 
-    const initials = `${user.firstName.charAt(0).toUpperCase()}${user.lastName.charAt(0).toUpperCase()}`;
-
     return token ? (
         <>
-            <Avatar
-                src={
-                    avatar
-                        ? `https://www.swingessentials.com/images/profiles/${user.username}/${avatar}.png`
-                        : undefined
-                }
-                className={classes.avatar}
-                onClick={openMenu}
-            >
-                {initials ? initials : <Person fontSize={'inherit'} />}
-            </Avatar>
+            <UserAvatar onClick={openMenu} />
             <Menu
-                open={Boolean(anchorEl)}
+                open={open}
                 anchorEl={anchorEl}
                 onClose={closeMenu}
-                getContentAnchorEl={null}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                MenuListProps={{ style: { padding: 0, minWidth: 200 } }}
-                classes={{ paper: classes.paper }}
+                MenuListProps={{ sx: { p: 0, minWidth: 200 } }}
+                slotProps={{
+                    paper: {
+                        sx: {
+                            color: 'text.primary',
+                        },
+                    },
+                }}
             >
-                <ForwardMenuContent onClose={closeMenu} />
+                <MenuContent onClose={closeMenu} />
             </Menu>
         </>
     ) : (
-        <Button
-            variant={'outlined'}
-            color={'inherit'}
-            onClick={(): void => history.push(ROUTES.LOGIN, { from: { pathname: history.location.pathname } })}
-        >
-            SIGN IN
-        </Button>
+        <SignInButton />
     );
 };
 
