@@ -1,14 +1,13 @@
-name: Pipeline
+name: Code Checks & Build
 
 on:
-    push:
-        branches: ['dev', 'master', 'feature/upgrade-mui-6']
+    workflow_call:
     pull_request:
         branches: ['dev', 'master']
 
 jobs:
-    check-and-deploy:
-        name: Run Code Checks and Deploy to Environment
+    check-and-build:
+        name: Run Code Checks and Build
         runs-on: ubuntu-latest
         environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
 
@@ -50,12 +49,9 @@ jobs:
                   VITE_BASE_API: '${{ vars.BASE_API }}'
               run: pnpm run build
 
-            - name: Deploy via FTP
-              if: ${{ github.event_name == 'push' }}
-              uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+            - name: Store Build Artifact
+              uses: actions/upload-artifact@v4
               with:
-                  server: ${{ secrets.FTP_HOST }}
-                  username: ${{ secrets.FTP_USER }}
-                  password: ${{ secrets.FTP_PASSWORD }}
-                  local-dir: ./dist/
-                  server-dir: ${{ vars.DEPLOY_LOCATION }}
+                  name: ui-build
+                  path: ./dist
+                  retention-days: 1
