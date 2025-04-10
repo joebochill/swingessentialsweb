@@ -10,6 +10,7 @@ jobs:
 
     deploy:
         name: Deploy to Environment
+        needs: check-and-build
         runs-on: ubuntu-latest
         environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
 
