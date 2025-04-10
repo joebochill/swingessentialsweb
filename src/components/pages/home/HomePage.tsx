@@ -153,7 +153,9 @@ export const HomePage: React.FC = (): JSX.Element => {
                 }}
                 noPadding
                 justifyContent={'center'}
+                alignItems={'center'}
                 lockAspectRatio
+                contentPosition={'absolute'}
             >
                 <Box
                     component={'img'}
