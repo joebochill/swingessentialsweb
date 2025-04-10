@@ -42,6 +42,7 @@ const LoaderSkeleton: React.FC<SkeletonProps> = ({ sx, ...other }) => {
             sx={[
                 {
                     height: '100%',
+                    backgroundColor: 'rgba(255,255,255,0.15)',
                     '&::after': {
                         background: 'linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent)',
                     },
@@ -78,7 +79,13 @@ export const MainRouter = (): ReactNode => {
                             </Stack>
                         </Section>
                         <Section>
-                            <LoaderSkeleton sx={{ height: 400, flex: '1 1 auto' }} />
+                            <LoaderSkeleton
+                                sx={{
+                                    height: 400,
+                                    flex: '1 1 auto',
+                                    backgroundColor: 'var(--mui-palette-Skeleton-bg)',
+                                }}
+                            />
                         </Section>
                     </>
                 }
