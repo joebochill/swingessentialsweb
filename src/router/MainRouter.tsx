@@ -64,59 +64,63 @@ export const MainRouter = (): ReactNode => {
         <BrowserRouter>
             <ScrollToTop />
             <NavigationToolbar />
-            {/* <Suspense
+            <Suspense
                 fallback={
-                    <> */}
-            <Section sx={{ backgroundColor: 'primary.main', height: 506 }}>
-                <Stack sx={{ flex: '1 1 0px', justifyContent: 'center', gap: 4 }}>
-                    <LoaderSkeleton sx={{ height: 64, maxWidth: 340 }} />
-                    <Stack gap={2}>
-                        <LoaderSkeleton sx={{ height: 24, maxWidth: 900 }} />
-                        <LoaderSkeleton sx={{ height: 24, maxWidth: 900 }} />
-                        <LoaderSkeleton sx={{ height: 24, maxWidth: 900 }} />
-                        <LoaderSkeleton sx={{ height: 24, maxWidth: 900 }} />
-                    </Stack>
-                </Stack>
-            </Section>
-            <Section>
-                <LoaderSkeleton
-                    sx={{ height: 400, flex: '1 1 auto', backgroundColor: 'var(--mui-palette-Skeleton-bg)' }}
-                />
-            </Section>
-            {/* </>
+                    <>
+                        <Section sx={{ backgroundColor: 'primary.main', height: 506 }}>
+                            <Stack sx={{ flex: '1 1 0px', justifyContent: 'center', gap: 4 }}>
+                                <LoaderSkeleton sx={{ height: 64, maxWidth: 340 }} />
+                                <Stack gap={2}>
+                                    <LoaderSkeleton sx={{ height: 24, maxWidth: 900 }} />
+                                    <LoaderSkeleton sx={{ height: 24, maxWidth: 900 }} />
+                                    <LoaderSkeleton sx={{ height: 24, maxWidth: 900 }} />
+                                    <LoaderSkeleton sx={{ height: 24, maxWidth: 900 }} />
+                                </Stack>
+                            </Stack>
+                        </Section>
+                        <Section>
+                            <LoaderSkeleton
+                                sx={{
+                                    height: 400,
+                                    flex: '1 1 auto',
+                                    backgroundColor: 'var(--mui-palette-Skeleton-bg)',
+                                }}
+                            />
+                        </Section>
+                    </>
                 }
-            > */}
-            <Routes>
-                <Route path={`${ROUTES.HOME}`} element={<HomePage />} />
+            >
+                <Routes>
+                    <Route path={`${ROUTES.HOME}`} element={<HomePage />} />
 
-                <Route element={<PrivateRoute canActivate={!loggedIn} fallbackRoute={ROUTES.PROFILE} />}>
-                    <Route path={`${ROUTES.LOGIN}`} element={<LoginPage />} />
-                </Route>
+                    <Route element={<PrivateRoute canActivate={!loggedIn} fallbackRoute={ROUTES.PROFILE} />}>
+                        <Route path={`${ROUTES.LOGIN}`} element={<LoginPage />} />
+                    </Route>
 
-                <Route path={`${ROUTES.REGISTER}/:key`} element={<VerifyEmailPage />} />
-                <Route path={`${ROUTES.RESET}/:key`} element={<ResetPasswordPage />} />
+                    <Route path={`${ROUTES.REGISTER}/:key`} element={<VerifyEmailPage />} />
+                    <Route path={`${ROUTES.RESET}/:key`} element={<ResetPasswordPage />} />
 
-                <Route path={`${ROUTES.PROS}`} element={<ProsPage />} />
-                <Route path={`${ROUTES.BLOG}/:id?`} element={<BlogsPage />} />
-                <Route path={`${ROUTES.TIPS}/:id?`} element={<TipsPage />} />
+                    <Route path={`${ROUTES.PROS}`} element={<ProsPage />} />
+                    <Route path={`${ROUTES.BLOG}/:id?`} element={<BlogsPage />} />
+                    <Route path={`${ROUTES.TIPS}/:id?`} element={<TipsPage />} />
 
-                <Route path={`${ROUTES.TERMS}`} element={<TermsPage />} />
-                <Route path={`${ROUTES.PRIVACY}`} element={<PrivacyPage />} />
+                    <Route path={`${ROUTES.TERMS}`} element={<TermsPage />} />
+                    <Route path={`${ROUTES.PRIVACY}`} element={<PrivacyPage />} />
 
-                <Route element={<PrivateRoute canActivate={loggedIn} />}>
-                    <Route path={`${ROUTES.PROFILE}`} element={<ProfilePage />} />
-                    <Route path={`${ROUTES.LESSONS}/:id?`} element={<LessonsPage />} />
-                    <Route path={`${ROUTES.ORDER}`} element={<OrderPage />} />
-                    <Route path={`${ROUTES.SUBMIT}`} element={<SubmitPage />} />
-                </Route>
+                    <Route element={<PrivateRoute canActivate={loggedIn} />}>
+                        <Route path={`${ROUTES.PROFILE}`} element={<ProfilePage />} />
+                        <Route path={`${ROUTES.LESSONS}/:id?`} element={<LessonsPage />} />
+                        <Route path={`${ROUTES.ORDER}`} element={<OrderPage />} />
+                        <Route path={`${ROUTES.SUBMIT}`} element={<SubmitPage />} />
+                    </Route>
 
-                <Route element={<PrivateRoute canActivate={admin} fallbackRoute={ROUTES.HOME} />}>
-                    <Route path={`${ROUTES.ADMIN}`} element={<AdminPortalPage />} />
-                </Route>
+                    <Route element={<PrivateRoute canActivate={admin} fallbackRoute={ROUTES.HOME} />}>
+                        <Route path={`${ROUTES.ADMIN}`} element={<AdminPortalPage />} />
+                    </Route>
 
-                <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-            {/* </Suspense> */}
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+            </Suspense>
             <Footer />
             <NavigationDrawer />
         </BrowserRouter>
