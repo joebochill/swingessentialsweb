@@ -7,7 +7,7 @@ import {
     ButtonProps,
     Fab,
     FabProps,
-    Grid2,
+    Grid,
     Stack,
     Typography,
     useMediaQuery,
@@ -204,6 +204,7 @@ export const HomePage: React.FC = (): JSX.Element => {
                             home.
                         </span>
                     }
+                    sx={{ mb: 6 }}
                 />
                 <Stack sx={{ maxWidth: 512, gap: 4 }}>
                     {[
@@ -243,8 +244,8 @@ export const HomePage: React.FC = (): JSX.Element => {
             </Section>
 
             <Section>
-                <Grid2 container justifyContent={'center'} alignContent={'stretch'} /*sx={{ m: -6 }}*/>
-                    <Grid2 size={{ xs: 12, md: 4 }}>
+                <Grid container justifyContent={'center'} alignContent={'stretch'} /*sx={{ m: -6 }}*/>
+                    <Grid size={{ xs: 12, md: 4 }}>
                         <InfoCard
                             src={pros}
                             title={'Meet Our Pros'}
@@ -257,8 +258,8 @@ export const HomePage: React.FC = (): JSX.Element => {
                                 navigate(ROUTES.PROS);
                             }}
                         />
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 4 }}>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 4 }}>
                         <InfoCard
                             src={tips}
                             title={'Tip of the Month'}
@@ -270,8 +271,8 @@ export const HomePage: React.FC = (): JSX.Element => {
                                 navigate(ROUTES.TIPS);
                             }}
                         />
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 4 }}>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 4 }}>
                         <InfoCard
                             src={nineteen}
                             title={'The 19th Hole'}
@@ -283,8 +284,8 @@ export const HomePage: React.FC = (): JSX.Element => {
                                 navigate(ROUTES.BLOG);
                             }}
                         />
-                    </Grid2>
-                </Grid2>
+                    </Grid>
+                </Grid>
             </Section>
 
             <Section
@@ -328,7 +329,7 @@ export const HomePage: React.FC = (): JSX.Element => {
                                 <span>Sign up and get your first lesson free!</span>
                             </>
                         }
-                        sx={{ color: 'primary.contrastText', mb: 0 }}
+                        sx={{ color: 'primary.contrastText' }}
                     />
                     <Stack sx={{ display: 'inline-flex', flexDirection: { xs: 'column', sm: 'row' }, mt: 2, gap: 2 }}>
                         <AppleStoreIcon sx={{ cursor: 'pointer' }} />

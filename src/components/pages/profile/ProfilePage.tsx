@@ -12,7 +12,7 @@ import {
     Tooltip,
     Stack,
     Box,
-    Grid2,
+    Grid,
 } from '@mui/material';
 import bg from '../../../assets/images/banners/landing.jpg';
 import swing from '../../../assets/images/banners/swing3.jpg';
@@ -419,8 +419,8 @@ export const ProfilePage: React.FC = () => {
             </Banner>
 
             <Section>
-                <Grid2 container justifyContent={'center'} alignContent={'stretch'} sx={{ m: -6 }}>
-                    <Grid2 size={{ xs: 12, md: 4 }}>
+                <Grid container justifyContent={'center'} alignContent={'stretch'} sx={{ m: -6 }}>
+                    <Grid size={{ xs: 12, md: 4 }}>
                         <InfoCard
                             src={lessonsImg}
                             title={'Your Lessons'}
@@ -431,8 +431,8 @@ export const ProfilePage: React.FC = () => {
                                 navigate(ROUTES.LESSONS);
                             }}
                         />
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 4 }}>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 4 }}>
                         <InfoCard
                             src={order}
                             title={'Order More'}
@@ -443,8 +443,8 @@ export const ProfilePage: React.FC = () => {
                                 navigate(ROUTES.ORDER);
                             }}
                         />
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 4 }}>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 4 }}>
                         <InfoCard
                             src={swing}
                             title={'Submit Your Swing'}
@@ -455,8 +455,8 @@ export const ProfilePage: React.FC = () => {
                                 navigate(ROUTES.SUBMIT);
                             }}
                         />
-                    </Grid2>
-                </Grid2>
+                    </Grid>
+                </Grid>
             </Section>
         </>
     );
