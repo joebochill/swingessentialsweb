@@ -17,6 +17,7 @@ type BannerProps = StackProps & {
 
 export const Banner: React.FC<PropsWithChildren<BannerProps>> = (props): JSX.Element => {
     const { isDarkMode: dark } = useDarkMode();
+    const mdDown = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
     const {
         background: { src = '', position = 'center center', size = 'cover' } = {},
         sx,
@@ -25,12 +26,10 @@ export const Banner: React.FC<PropsWithChildren<BannerProps>> = (props): JSX.Ele
         lockAspectRatio,
         noPadding,
         alignItems = 'center',
-        justifyContent = 'flex-start',
-        contentPosition = 'absolute',
+        justifyContent = mdDown ? 'center' : 'flex-start',
+        contentPosition = mdDown ? 'static' : 'absolute',
         ...other
     } = props;
-
-    const mdDown = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
 
     return (
         <Stack
@@ -40,6 +39,7 @@ export const Banner: React.FC<PropsWithChildren<BannerProps>> = (props): JSX.Ele
                     width: '100%',
                     position: 'relative',
                     backgroundColor: overlayColor,
+                    justifyContent: { xs: 'center', md: 'flex-start' },
                 },
                 lockAspectRatio && mdDown ? { minHeight: 'initial', pt: '56.25%' } : {},
                 ...(Array.isArray(sx) ? sx : [sx]),

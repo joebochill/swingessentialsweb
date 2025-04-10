@@ -26,12 +26,12 @@ export const SectionBlurb: React.FC<SectionBlurbProps> = (props) => {
         >
             <FancyHeadline icon={icon} headline={headline} subheading={subheading} slotProps={headlineSlotProps} />
             <Typography
-                variant={isSmall ? 'subtitle2' : 'h5'}
+                variant={isSmall ? 'h6' : 'h5'}
                 fontWeight={400}
                 lineHeight={1.6}
                 {...bodySlotProps}
                 sx={[
-                    { textAlign: { xs: 'center', md: 'left' } },
+                    { textAlign: { xs: 'center', md: 'left' }, wordBreak: 'break-word' },
                     ...(Array.isArray(bodySlotProps?.sx) ? bodySlotProps.sx : [bodySlotProps?.sx]),
                 ]}
             >

@@ -200,8 +200,8 @@ export const OrderPage: React.FC = (): JSX.Element => {
                                                 primary={'Discount'}
                                                 secondary={`${
                                                     discount.type === 'amount'
-                                                        ? `$${parseInt(discount.value, 10).toFixed(2)}`
-                                                        : `${parseInt(discount.value, 10)}%`
+                                                        ? `$${parseFloat(discount.value).toFixed(2)}`
+                                                        : `${parseFloat(discount.value).toFixed(2)}%`
                                                 } Off`}
                                             />
                                             <Typography
@@ -215,7 +215,9 @@ export const OrderPage: React.FC = (): JSX.Element => {
                                     </ListItem>
                                     <ListItem dense divider>
                                         <ListItemText primary={'Total'} />
-                                        <Typography sx={{ fontWeight: 600 }}>{`$${calculatedTotal}`}</Typography>
+                                        <Typography
+                                            sx={{ fontWeight: 600 }}
+                                        >{`$${calculatedTotal.toFixed(2)}`}</Typography>
                                     </ListItem>
                                 </Card>
 
@@ -311,7 +313,7 @@ const DiscountControl: React.FC<DiscountControlProps> = (props): JSX.Element => 
                     </Typography>
                     <Typography variant={'subtitle2'}>{discount.code}</Typography>
                     <Typography variant={'body2'}>{`${
-                        discount.type === 'amount' ? `$${parseInt(discount.value).toFixed(2)}` : `${discount.value}%`
+                        discount.type === 'amount' ? `$${parseFloat(discount.value).toFixed(2)}` : `${discount.value}%`
                     } Off`}</Typography>
                 </Stack>
             )}
