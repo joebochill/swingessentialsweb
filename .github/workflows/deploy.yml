@@ -25,7 +25,6 @@ jobs:
                   path: ./dist
 
             - name: Deploy via FTP
-              if: ${{ github.event_name == 'push' }}
               uses: SamKirkland/FTP-Deploy-Action@v4.3.5
               with:
                   server: ${{ secrets.FTP_HOST }}
