@@ -16,6 +16,10 @@ export const App: React.FC = () => {
             ? import.meta.env.VITE_PAYPAL_CLIENT_ID_PROD
             : import.meta.env.VITE_PAYPAL_CLIENT_ID_SANDBOX;
 
+    console.log(PP_MODE);
+    console.log(PP_CLIENT_ID);
+    console.log(import.meta.env.VITE_PAYPAL_CLIENT_ID_PROD);
+
     return (
         <PayPalScriptProvider
             options={{
