@@ -23,6 +23,9 @@ jobs:
               with:
                   name: ui-build
                   path: ./dist
+                  
+            - name: Print directory listing
+              run: ls -la ./dist
 
             - name: Deploy via FTP
               uses: SamKirkland/FTP-Deploy-Action@v4.3.5
