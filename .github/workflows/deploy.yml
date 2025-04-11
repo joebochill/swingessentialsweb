@@ -7,8 +7,6 @@ jobs:
     check-and-build:
         name: Run Code Checks and Build
         uses: ./.github/workflows/code-checks.yml
-        with:
-            secrets: inherit
 
     deploy:
         name: Deploy to Environment
@@ -25,6 +23,14 @@ jobs:
               with:
                   name: ui-build
                   path: ./dist
+
+            - name: Debug Environment Variables
+              run: |
+                  echo "VITE_PAYPAL_MODE=${{ vars.PAYPAL_MODE }}"
+                  echo "VITE_PAYPAL_CLIENT_ID_SANDBOX=${{ secrets.PAYPAL_CLIENT_ID_SANDBOX }}"
+                  echo "VITE_PAYPAL_CLIENT_ID_PROD=${{ secrets.PAYPAL_CLIENT_ID_PROD }}"
+                  echo "VITE_BASE_URL=${{ vars.BASE_URL }}"
+                  echo "VITE_BASE_API=${{ vars.BASE_API }}"
 
             - name: Deploy via FTP
               uses: SamKirkland/FTP-Deploy-Action@v4.3.5
