@@ -43,19 +43,11 @@ jobs:
             - name: Run Build
               env:
                   VITE_PAYPAL_MODE: '${{ vars.PAYPAL_MODE }}'
-                  VITE_PAYPAL_CLIENT_ID_SANDBOX: '${{ secrets.PAYPAL_CLIENT_ID_SANDBOX }}'
-                  VITE_PAYPAL_CLIENT_ID_PROD: '${{ secrets.PAYPAL_CLIENT_ID_PROD }}'
+                  VITE_PAYPAL_CLIENT_ID_SANDBOX: '${{ vars.PAYPAL_CLIENT_ID_SANDBOX }}'
+                  VITE_PAYPAL_CLIENT_ID_PROD: '${{ vars.PAYPAL_CLIENT_ID_PROD }}'
                   VITE_BASE_URL: '${{ vars.BASE_URL }}'
                   VITE_BASE_API: '${{ vars.BASE_API }}'
               run: pnpm run build
-
-            - name: Debug Environment Variables
-              run: |
-                  echo "VITE_PAYPAL_MODE=${{ vars.PAYPAL_MODE }}"
-                  echo "VITE_PAYPAL_CLIENT_ID_SANDBOX=${{ secrets.PAYPAL_CLIENT_ID_SANDBOX }}"
-                  echo "VITE_PAYPAL_CLIENT_ID_PROD=${{ secrets.PAYPAL_CLIENT_ID_PROD }}"
-                  echo "VITE_BASE_URL=${{ vars.BASE_URL }}"
-                  echo "VITE_BASE_API=${{ vars.BASE_API }}"
 
             - name: Store Build Artifact
               uses: actions/upload-artifact@v4
