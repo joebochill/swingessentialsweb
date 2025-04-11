@@ -9,7 +9,7 @@ jobs:
     check-and-build:
         name: Run Code Checks and Build
         runs-on: ubuntu-latest
-        environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+        environment: ${{ github.ref_name == 'master' && 'production' || 'staging' }}
 
         steps:
             - name: Checkout Code
