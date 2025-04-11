@@ -1,0 +1,35 @@
+name: Deploy
+
+on:
+    workflow_dispatch:
+
+jobs:
+    check-and-build:
+        name: Run Code Checks and Build
+        uses: ./.github/workflows/code-checks.yml
+
+    deploy:
+        name: Deploy to Environment
+        needs: check-and-build
+        runs-on: ubuntu-latest
+        environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Retrieve Build Artifact
+              uses: actions/download-artifact@v4
+              with:
+                  name: ui-build
+                  path: ./dist
+
+            - name: Deploy via FTP
+              if: ${{ github.event_name == 'push' }}
+              uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+              with:
+                  server: ${{ secrets.FTP_HOST }}
+                  username: ${{ secrets.FTP_USER }}
+                  password: ${{ secrets.FTP_PASSWORD }}
+                  local-dir: ./dist/
+                  server-dir: ${{ vars.DEPLOY_LOCATION }}

@@ -1,11 +1,7 @@
 import React, { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { AppState } from '../../__types__';
-import { requestLogout } from '../../redux/actions/auth-actions';
-import { ROUTES } from '../../constants/routes';
-import { Spacer } from '@pxblue/react-components';
-import { Avatar, Typography, Divider, Hidden, createStyles, makeStyles, Theme, useTheme } from '@material-ui/core';
+import { useSelector } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useMediaQuery, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import {
     ShoppingCart,
     Subscriptions,
@@ -17,59 +13,13 @@ import {
     Today,
     LocalBar,
     Security,
-} from '@material-ui/icons';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        menuHeader: {
-            display: 'flex',
-            padding: theme.spacing(2),
-            color: theme.palette.text.primary,
-        },
-        avatarInside: {
-            color: theme.palette.common.white,
-            height: theme.spacing(5),
-            width: theme.spacing(5),
-            backgroundColor: theme.palette.primary.main,
-            fontWeight: 600,
-            fontFamily: 'Roboto Mono',
-        },
-        row: {
-            display: 'flex',
-            alignItems: 'center',
-            paddingLeft: theme.spacing(2),
-            paddingRight: theme.spacing(2),
-            height: theme.spacing(6),
-            cursor: 'pointer',
-            userSelect: 'none',
-            '&:hover': {
-                backgroundColor: theme.palette.primary.light,
-            },
-        },
-    })
-);
-
-type MenuListItemProps = {
-    icon?: JSX.Element;
-    title: string;
-    onClick: () => void;
-    divider?: boolean;
-};
-export const MenuListItem: React.FC<MenuListItemProps> = (props) => {
-    const classes = useStyles();
-    const theme = useTheme();
-
-    return (
-        <>
-            <div className={classes.row} onClick={(): void => props.onClick()}>
-                {props.icon}
-                {props.icon && <Spacer flex={0} width={theme.spacing(2)} />}
-                <Typography>{props.title}</Typography>
-            </div>
-            {props.divider && <Divider />}
-        </>
-    );
-};
+} from '@mui/icons-material';
+import { MenuListItem } from './MenuListItem';
+import { UserAvatar } from './UserAvatar';
+import { BLANK_USER, useGetUserDetailsQuery } from '../../redux/apiServices/userDetailsService';
+import { ROUTES } from '../../constants/routes';
+import { useLogoutMutation } from '../../redux/apiServices/authService';
+import { RootState } from '../../redux/store';
 
 type MenuContentProps = {
     onClose: () => void;
@@ -77,55 +27,47 @@ type MenuContentProps = {
 export const MenuContent: React.FC<MenuContentProps> = (props) => {
     const { onClose } = props;
 
-    const history = useHistory();
-    const classes = useStyles();
-    const dispatch = useDispatch();
+    const { data: user = BLANK_USER } = useGetUserDetailsQuery();
 
-    const user = useSelector((state: AppState) => state.user);
-    const token = useSelector((state: AppState) => state.auth.token);
-    const isAdmin = useSelector((state: AppState) => state.auth.admin);
-    const avatar = useSelector((state: AppState) => state.settings.avatar);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const mdDown = useMediaQuery((theme) => theme.breakpoints.down('md'));
+
+    const [logout] = useLogoutMutation();
+
+    const token = useSelector((state: RootState) => state.auth.token);
+    const isAdmin = useSelector((state: RootState) => state.auth.admin);
 
     const clickMenuItem = useCallback(
-        (route) => {
-            history.push(route);
+        (route: string) => {
+            navigate(route);
             onClose();
         },
-        [history, onClose]
+        [navigate, onClose]
     );
-
-    const initials = `${user.firstName.charAt(0).toUpperCase()}${user.lastName.charAt(0).toUpperCase()}`;
 
     return (
         <>
-            {token && (
-                <>
-                    <div className={classes.menuHeader}>
-                        <Avatar
-                            src={
-                                avatar
-                                    ? `https://www.swingessentials.com/images/profiles/${user.username}/${avatar}.png`
-                                    : undefined
-                            }
-                            className={classes.avatarInside}
-                        >
-                            {initials ? initials : <Person fontSize={'inherit'} />}
-                        </Avatar>
-                        <div style={{ marginLeft: 16 }}>
-                            <Typography variant={'h6'} style={{ lineHeight: 1.2 }}>
-                                {user.username}
-                            </Typography>
-                            <Typography
-                                variant={'subtitle1'}
-                                style={{ lineHeight: 1, fontSize: '0.875rem', fontWeight: 300 }}
-                            >
-                                {`${user.firstName} ${user.lastName}`}
-                                {!user.firstName && !user.lastName ? 'Welcome User' : ''}
-                            </Typography>
-                        </div>
-                    </div>
-                    <Divider />
-                </>
+            {token && user && (
+                <ListItem divider>
+                    <ListItemAvatar>
+                        <UserAvatar />
+                    </ListItemAvatar>
+                    <ListItemText
+                        primary={user.username}
+                        secondary={!user.first && !user.last ? 'Welcome User' : `${user.first} ${user.last}`}
+                        slotProps={{
+                            primary: {
+                                variant: 'h6',
+                                sx: { lineHeight: 1.2 },
+                            },
+                            secondary: {
+                                variant: 'subtitle1',
+                                sx: { lineHeight: 1, fontSize: '0.875rem', fontWeight: 300 },
+                            },
+                        }}
+                    />
+                </ListItem>
             )}
             <MenuListItem title={'Home'} icon={<Home />} divider onClick={(): void => clickMenuItem(ROUTES.HOME)} />
             {isAdmin && (
@@ -151,51 +93,53 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
                         onClick={(): void => clickMenuItem(ROUTES.LESSONS)}
                     />
                     <MenuListItem
-                        title={'Submit Your Swing'}
-                        icon={<Videocam />}
-                        divider
-                        onClick={(): void => clickMenuItem(ROUTES.SUBMIT)}
-                    />
-                    <MenuListItem
                         title={'Order More'}
                         icon={<ShoppingCart />}
                         divider
                         onClick={(): void => clickMenuItem(ROUTES.ORDER)}
                     />
+                    <MenuListItem
+                        title={'Submit Your Swing'}
+                        icon={<Videocam />}
+                        divider
+                        onClick={(): void => clickMenuItem(ROUTES.SUBMIT)}
+                    />
                 </>
             )}
-            <Hidden mdUp>
-                <MenuListItem
-                    title={'Meet Our Pros'}
-                    icon={<Face />}
-                    divider
-                    onClick={(): void => {
-                        clickMenuItem(ROUTES.PROS);
-                    }}
-                />
-                <MenuListItem
-                    title={'Tip of the Month'}
-                    icon={<Today />}
-                    divider
-                    onClick={(): void => {
-                        clickMenuItem(ROUTES.TIPS);
-                    }}
-                />
-                <MenuListItem
-                    title={'The 19th Hole'}
-                    icon={<LocalBar />}
-                    divider
-                    onClick={(): void => {
-                        clickMenuItem(ROUTES.BLOG);
-                    }}
-                />
-            </Hidden>
+            {mdDown && (
+                <>
+                    <MenuListItem
+                        title={'Meet Our Pros'}
+                        icon={<Face />}
+                        divider
+                        onClick={(): void => {
+                            clickMenuItem(ROUTES.PROS);
+                        }}
+                    />
+                    <MenuListItem
+                        title={'Tip of the Month'}
+                        icon={<Today />}
+                        divider
+                        onClick={(): void => {
+                            clickMenuItem(ROUTES.TIPS);
+                        }}
+                    />
+                    <MenuListItem
+                        title={'The 19th Hole'}
+                        icon={<LocalBar />}
+                        divider
+                        onClick={(): void => {
+                            clickMenuItem(ROUTES.BLOG);
+                        }}
+                    />
+                </>
+            )}
             {token ? (
                 <MenuListItem
                     title={'Sign Out'}
                     icon={<ExitToApp />}
                     onClick={(): void => {
-                        dispatch(requestLogout());
+                        logout();
                         onClose();
                     }}
                 />
@@ -205,7 +149,12 @@ export const MenuContent: React.FC<MenuContentProps> = (props) => {
                     icon={<Person />}
                     divider
                     onClick={(): void => {
-                        history.push(ROUTES.LOGIN, { from: { pathname: history.location.pathname } });
+                        // check if the current route is not the login page
+                        if (location.pathname !== ROUTES.LOGIN) {
+                            navigate(ROUTES.LOGIN, {
+                                state: { from: { pathname: location.pathname } },
+                            });
+                        }
                         onClose();
                     }}
                 />

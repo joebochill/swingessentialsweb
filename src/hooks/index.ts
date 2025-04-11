@@ -1,29 +1,32 @@
+import { useColorScheme } from '@mui/material/styles';
 import { useEffect, useRef } from 'react';
-import ReactGA from 'react-ga';
+// import ReactGA from 'react-ga';
 import { YoutubeVideoStatus } from '../__types__';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const usePrevious = <T extends {}>(value: T): T | undefined => {
-    const ref = useRef<T>();
+export const usePrevious = <T>(value: T): T | undefined => {
+    const ref = useRef<T>(null);
     useEffect(() => {
         ref.current = value;
     });
-    return ref.current;
-};
-export const useCompare = (val: any): boolean => {
-    const prevVal = usePrevious(val);
-    return prevVal !== val;
+    return ref.current || undefined;
 };
 
-export const useGoogleAnalyticsPageView = (): void => {
-    useEffect(() => {
-        ReactGA.pageview(window.location.pathname);
-    }, []);
+export const useDarkMode = () => {
+    const { mode, systemMode } = useColorScheme();
+    return {
+        isDarkMode: mode === 'dark' || (mode === 'system' && systemMode === 'dark'),
+    };
 };
 
-export const googleAnalyticsConversion = (conversionRoute: string = window.location.pathname): void => {
-    ReactGA.pageview(conversionRoute);
-};
+// export const useGoogleAnalyticsPageView = (): void => {
+//     useEffect(() => {
+//         ReactGA.pageview(window.location.pathname);
+//     }, []);
+// };
+
+// export const googleAnalyticsConversion = (conversionRoute: string = window.location.pathname): void => {
+//     ReactGA.pageview(conversionRoute);
+// };
 
 export const useVideoValid = (video = '', setVideoStatus: (status: YoutubeVideoStatus) => void): void => {
     useEffect((): void => {

@@ -1,4 +1,4 @@
-import { YoutubeVideoStatus } from '../__types__';
+import { YoutubeVideoStatus } from '../../src/__types__';
 
 export const getYoutubeVideoErrorMessage = (video: string, status: YoutubeVideoStatus): string => {
     if (!video || video.length === 0) return '';
