@@ -7,6 +7,8 @@ jobs:
     check-and-build:
         name: Run Code Checks and Build
         uses: ./.github/workflows/code-checks.yml
+        with:
+            secrets: inherit
 
     deploy:
         name: Deploy to Environment
