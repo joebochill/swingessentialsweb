@@ -55,3 +55,4 @@ jobs:
                   name: ui-build
                   path: ./dist
                   retention-days: 1
+                  include-hidden-files: true
