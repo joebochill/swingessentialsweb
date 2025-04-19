@@ -429,12 +429,6 @@ const ForgotForm = React.forwardRef<HTMLDivElement, ForgotFormProps>((props, ref
                     <SimpleLink label={'Back to Sign In'} onClick={(): void => onChangeForm('login' as Form)} />
                 </Stack>
             )}
-            {/* {!complete && (
-          <div
-            className={classes.linkContainer}
-            style={{ justifyContent: "flex-end" }}
-          ></div>
-        )} */}
         </Stack>
     );
 });
@@ -442,14 +436,7 @@ ForgotForm.displayName = 'ForgotForm';
 
 export const LoginPage: React.FC = () => {
     const location = useLocation();
-    // const navigate = useNavigate();
     // useGoogleAnalyticsPageView();
-
-    // const token = useSelector((state: RootState) => state.auth.token);
-    // const [
-    //   createNewUserAccount,
-    //   { data: registeredSuccessfully, isLoading: registering },
-    // ] = useCreateNewUserAccountMutation();
 
     const { initialPage } = location && location.state ? location.state : { initialPage: 'login' };
 
