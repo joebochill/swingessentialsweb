@@ -74,7 +74,6 @@ export const ProfileForm: React.FC = () => {
     const [last, setLast] = useState('');
     const [location, setLocation] = useState('');
     const [birthday, setBirthday] = useState<Date | null>(null);
-    const [birthdayString, setBirthdayString] = useState('');
     const [average, setAverage] = useState<ScoreRange | ''>('');
     const [email, setEmail] = useState('');
 
@@ -93,7 +92,7 @@ export const ProfileForm: React.FC = () => {
         location !== user.location ||
         email !== user.email ||
         goals !== user.goals ||
-        birthdayString !== user.birthday ||
+        birthday?.getTime() !== new Date(user.birthday).getTime() ||
         average !== user.average ||
         sendLessons !== lessons ||
         sendMarketing !== marketing ||
@@ -109,7 +108,6 @@ export const ProfileForm: React.FC = () => {
             setGoals(user.goals || '');
             setAverage(user.average || '');
             setBirthday(user.birthday ? new Date(user.birthday) : null);
-            setBirthdayString(user.birthday ? format(new Date(user.birthday), 'MM/dd/yyyy') : '');
             setSendLessons(lessons ?? false);
             setSendMarketing(marketing ?? false);
             setSendNewsletter(newsletter ?? false);
@@ -182,7 +180,6 @@ export const ProfileForm: React.FC = () => {
                     value={birthday}
                     onChange={(value: Date | null): void => {
                         setBirthday(value);
-                        setBirthdayString(value ? format(value, 'MM/dd/yyyy') : '');
                     }}
                     sx={{ flex: '1 1 0px' }}
                 />
@@ -336,7 +333,8 @@ export const ProfileForm: React.FC = () => {
                                       if (location !== user.location) newChanges.location = location;
                                       if (goals !== user.goals) newChanges.goals = goals;
                                       if (average !== user.average) newChanges.average = average as ScoreRange;
-                                      if (birthdayString !== user.birthday) newChanges.birthday = birthdayString;
+                                      if (birthday && birthday?.getTime() !== new Date(user.birthday).getTime())
+                                          newChanges.birthday = format(new Date(birthday), 'yyyy-MM-dd');
                                       if (email !== user.email) newChanges.email = email;
                                       if (sendLessons !== lessons) newChanges.notify_new_lesson = sendLessons;
                                       if (sendMarketing !== marketing) newChanges.notify_marketing = sendMarketing;
