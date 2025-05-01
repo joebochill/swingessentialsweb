@@ -17,6 +17,8 @@ import {
     Skeleton,
     CardProps,
     BoxProps,
+    Divider,
+    Stack,
 } from '@mui/material';
 import { AddCircle, Today, Edit, ChevronRight, ChevronLeft } from '@mui/icons-material';
 import bg from '../../../assets/images/banners/tips.jpg';
@@ -259,6 +261,7 @@ const TipDetailsPanel: React.FC<TipDetailsPanelProps> = (props) => {
                             sx={{
                                 cursor: admin ? 'pointer' : 'initial',
                                 mb: 2,
+                                flexDirection: { xs: 'row', md: 'row' },
                             }}
                             slotProps={{
                                 headline: {
@@ -266,6 +269,7 @@ const TipDetailsPanel: React.FC<TipDetailsPanelProps> = (props) => {
                                 },
                                 subheading: {
                                     variant: 'caption',
+                                    textAlign: 'left',
                                 },
                             }}
                             onClick={
@@ -406,17 +410,24 @@ export const TipsPage: React.FC = (): JSX.Element => {
 
             <Section
                 sx={{
-                    alignItems: 'flex-start',
+                    alignItems: { xs: 'center', md: 'flex-start' },
+                    flexDirection: { xs: 'column-reverse', md: 'row' },
                     gap: 8,
                 }}
             >
-                {!isSmall && (
+                <Stack spacing={4} sx={{ flex: '1 1 0px', maxWidth: 512, width: '100%' }}>
+                    {isSmall && (
+                        <Typography variant={'h6'} sx={{ textAlign: 'center' }}>
+                            All Tips
+                        </Typography>
+                    )}
                     <TipsListCard
                         tips={tipsByYear[activeYear] ?? []}
                         year={activeYear}
                         selectedTip={selectedTip}
                         onTipSelected={(newId: number) => {
                             navigate(`${ROUTES.TIPS}/${newId}`, { replace: true });
+                            window.scrollTo({ top: 512, behavior: 'smooth' });
                         }}
                         hasNextYear={!isHighestYear}
                         hasPreviousYear={!isLowestYear}
@@ -426,9 +437,11 @@ export const TipsPage: React.FC = (): JSX.Element => {
                         onYearDecrement={() => {
                             setActiveYear(activeYear - 1);
                         }}
-                        sx={{ flex: '1 1 0px', maxWidth: 512 }}
                     />
-                )}
+                </Stack>
+
+                {isSmall && <Divider sx={{ alignSelf: 'stretch' }} />}
+
                 <TipDetailsPanel
                     tipId={selectedTip}
                     hasNext={tipIndex < tips.length - 1}
@@ -444,7 +457,7 @@ export const TipsPage: React.FC = (): JSX.Element => {
                         });
                     }}
                     showNavigation={isSmall}
-                    sx={{ flex: '2 2 0px', maxWidth: 1080 }}
+                    sx={{ flex: { xs: '0 0 auto', md: '2 2 0px' }, maxWidth: 1080 }}
                 />
             </Section>
         </>
