@@ -888,7 +888,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                 );
                             }
                         }}
-                        sx={{ flex: { xs: '0 0 auto', md: '2 2 0px' }, maxWidth: 1080 }}
+                        sx={{ flex: { xs: '0 0 auto', md: '2 2 0px', alignSelf: 'stretch' }, maxWidth: 1080 }}
                     />
                 )}
                 {showWelcomeLesson && <PlaceholderLessonPanel sx={{ flex: '2 2 0px', maxWidth: 1080 }} />}
