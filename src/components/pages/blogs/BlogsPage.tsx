@@ -17,6 +17,7 @@ import {
     Stack,
     BoxProps,
     CardProps,
+    Divider,
 } from '@mui/material';
 import { AddCircle, Edit, ChevronRight, ChevronLeft, LocalBar } from '@mui/icons-material';
 import bg from '../../../assets/images/banners/19th.jpg';
@@ -173,6 +174,7 @@ const BlogDetailsPanel: React.FC<BlogDetailsPanelProps> = (props) => {
                             sx={{
                                 cursor: admin ? 'pointer' : 'initial',
                                 mb: 2,
+                                flexDirection: { xs: 'row', md: 'row' },
                             }}
                             slotProps={{
                                 headline: {
@@ -180,6 +182,7 @@ const BlogDetailsPanel: React.FC<BlogDetailsPanelProps> = (props) => {
                                 },
                                 subheading: {
                                     variant: 'caption',
+                                    textAlign: 'left',
                                 },
                             }}
                             onClick={
@@ -344,17 +347,24 @@ export const BlogsPage: React.FC = (): JSX.Element => {
 
             <Section
                 sx={{
-                    alignItems: 'flex-start',
+                    alignItems: { xs: 'center', md: 'flex-start' },
+                    flexDirection: { xs: 'column-reverse', md: 'row' },
                     gap: 8,
                 }}
             >
-                {!isSmall && (
+                <Stack spacing={4} sx={{ flex: '1 1 0px', maxWidth: 512, width: '100%' }}>
+                    {isSmall && (
+                        <Typography variant={'h6'} sx={{ textAlign: 'center' }}>
+                            All Posts
+                        </Typography>
+                    )}
                     <BlogsListCard
                         blogs={blogsByYear[activeYear] ?? []}
                         year={activeYear}
                         selectedBlog={selectedBlog}
                         onBlogSelected={(newId: number) => {
                             navigate(`${ROUTES.BLOG}/${newId}`, { replace: true });
+                            window.scrollTo({ top: 512, behavior: 'smooth' });
                         }}
                         hasNextYear={!isHighestYear}
                         hasPreviousYear={!isLowestYear}
@@ -364,9 +374,11 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                         onYearDecrement={() => {
                             setActiveYear(activeYear - 1);
                         }}
-                        sx={{ flex: '1 1 0px', maxWidth: 512 }}
                     />
-                )}
+                </Stack>
+
+                {isSmall && <Divider sx={{ alignSelf: 'stretch' }} />}
+
                 <BlogDetailsPanel
                     blogId={selectedBlog}
                     hasNext={blogIndex < blogs.length - 1}
@@ -382,7 +394,7 @@ export const BlogsPage: React.FC = (): JSX.Element => {
                         });
                     }}
                     showNavigation={isSmall}
-                    sx={{ flex: '2 2 0px', maxWidth: 1080 }}
+                    sx={{ flex: { xs: '0 0 auto', md: '2 2 0px' }, maxWidth: 1080 }}
                 />
             </Section>
         </>

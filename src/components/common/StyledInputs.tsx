@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
-import { TextFieldProps, TextField, InputAdornment, IconButton, Theme, Tooltip } from '@mui/material';
-import { DatePicker, DatePickerProps } from '@mui/x-date-pickers';
+import {
+    TextFieldProps,
+    TextField,
+    InputAdornment,
+    IconButton,
+    Theme,
+    Tooltip,
+    Button,
+    DialogActions,
+    useMediaQuery,
+} from '@mui/material';
+import { DatePicker, DatePickerProps, MobileDatePicker } from '@mui/x-date-pickers';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useDarkMode } from '../../hooks';
 
@@ -108,8 +118,35 @@ type StyledDatePickerProps<TDate extends Date> = DatePickerProps<TDate> & {
 };
 export const StyledDatePicker: React.FC<StyledDatePickerProps<Date>> = (props) => {
     const { darkStyle } = props;
-    return (
+    const isTouchDevice = useMediaQuery('(pointer: coarse)'); // Detect coarse pointer devices
+
+    return isTouchDevice ? (
+        <MobileDatePicker
+            color="secondary"
+            slots={{
+                textField: StyledTextField,
+                actionBar: ({ onCancel, onAccept }) => (
+                    <DialogActions style={{ gridColumn: '1 / 4', gridRow: 3 }}>
+                        <Button color="secondary" variant="outlined" onClick={onCancel}>
+                            Cancel
+                        </Button>
+                        <Button color="primary" variant="contained" onClick={onAccept}>
+                            OK
+                        </Button>
+                    </DialogActions>
+                ),
+            }}
+            slotProps={{
+                textField: {
+                    // @ts-expect-error darkStyle is on StyledTextField
+                    darkStyle,
+                },
+            }}
+            {...props}
+        />
+    ) : (
         <DatePicker
+            color="secondary"
             slots={{
                 textField: StyledTextField,
             }}

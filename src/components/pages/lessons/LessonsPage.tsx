@@ -19,6 +19,7 @@ import {
     Box,
     Tooltip,
     BoxProps,
+    Divider,
 } from '@mui/material';
 import {
     AddCircle,
@@ -168,6 +169,13 @@ const LessonsCard: React.FC<LessonsCardProps> = (props): JSX.Element => {
                                               ? 'In-Person Lesson'
                                               : 'Remote Lesson'
                                     }
+                                    slotProps={{
+                                        primary: {
+                                            sx: {
+                                                wordBreak: 'break-word',
+                                            },
+                                        },
+                                    }}
                                 />
                                 <Stack direction={'row'} spacing={1} alignItems={'center'}>
                                     {!lesson.viewed && showBadges && (
@@ -368,10 +376,14 @@ const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Eleme
                     actions={
                         isAdmin ? (
                             <Stack
-                                sx={{ flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'center', gap: 2 }}
+                                sx={{
+                                    flexDirection: { xs: 'column', md: 'row', alignItems: 'center' },
+                                    justifyContent: 'center',
+                                    gap: 2,
+                                }}
                             >
                                 <Button
-                                    style={{ flex: '1 1 0px', maxWidth: 200 }}
+                                    style={{ flex: '1 1 0px', width: '100%', maxWidth: 200 }}
                                     variant={'outlined'}
                                     color={'secondary'}
                                     onClick={(): void => {
@@ -382,7 +394,7 @@ const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Eleme
                                     View Profile
                                 </Button>
                                 <Button
-                                    style={{ flex: '1 1 0px', maxWidth: 200 }}
+                                    style={{ flex: '1 1 0px', width: '100%', maxWidth: 200 }}
                                     variant={'contained'}
                                     color={'primary'}
                                     onClick={(): void => {
@@ -488,7 +500,11 @@ const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Eleme
                 {/* Response Details */}
                 <Stack spacing={2}>
                     <Stack
-                        sx={{ flexDirection: { xs: 'column', md: 'row' }, gap: { xs: 0, md: 2 }, alignItems: 'center' }}
+                        sx={{
+                            flexDirection: 'row',
+                            gap: { xs: 0, md: 2 },
+                            alignItems: 'flex-start',
+                        }}
                     >
                         <FancyHeadline
                             icon={isAdmin ? <Edit fontSize={'inherit'} /> : undefined}
@@ -502,7 +518,11 @@ const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Eleme
                                       ? 'In-Person Lesson'
                                       : 'Remote Lesson'
                             }
-                            sx={{ flex: '1 1 0px', cursor: isAdmin ? 'pointer' : 'initial' }}
+                            sx={{
+                                flex: '1 1 0px',
+                                cursor: isAdmin ? 'pointer' : 'initial',
+                                flexDirection: { xs: 'row', md: 'row' },
+                            }}
                             onClick={
                                 isAdmin
                                     ? (): void => {
@@ -516,6 +536,7 @@ const LessonDetailsPanel: React.FC<LessonDetailsPanelProps> = (props): JSX.Eleme
                                 },
                                 subheading: {
                                     variant: 'caption',
+                                    textAlign: 'left',
                                 },
                             }}
                         />
@@ -723,7 +744,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                     variant={'text'}
                     onClick={(): void => setShowNewDialog(true)}
                 >
-                    New In-Person Lesson
+                    New In-Person
                 </Button>
                 <Button
                     color={'secondary'}
@@ -738,12 +759,18 @@ export const LessonsPage: React.FC = (): JSX.Element => {
 
             <Section
                 sx={{
-                    alignItems: { xs: 'stretch', md: 'flex-start' },
+                    alignItems: { xs: 'center', md: 'flex-start' },
+                    flexDirection: { xs: 'column-reverse', md: 'row' },
                     gap: 8,
                 }}
             >
-                {!isSmall && (
-                    <Stack spacing={4} sx={{ flex: '1 1 0px', maxWidth: 512 }}>
+                {
+                    <Stack spacing={4} sx={{ flex: '1 1 0px', maxWidth: 512, width: '100%' }}>
+                        {isSmall && (
+                            <Typography variant={'h6'} sx={{ textAlign: 'center' }}>
+                                All Lessons
+                            </Typography>
+                        )}
                         <LessonsCard
                             lessons={pendingLessons}
                             title={'Pending Lessons'}
@@ -751,6 +778,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                             selectedLesson={selectedLessonId}
                             onLessonSelected={(newId) => {
                                 navigate(`${ROUTES.LESSONS}/${newId}`, { replace: true });
+                                window.scrollTo({ top: 512, behavior: 'smooth' });
                             }}
                             placeholderCount={1}
                             sx={{ flex: ' 0 0 auto' }}
@@ -789,6 +817,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                             selectedLesson={isError ? undefined : selectedLessonId}
                             onLessonSelected={(newId) => {
                                 navigate(`${ROUTES.LESSONS}/${newId}`, { replace: true });
+                                window.scrollTo({ top: 512, behavior: 'smooth' });
                             }}
                             page={page}
                             totalPages={totalPages}
@@ -829,7 +858,10 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                             }}
                         />
                     </Stack>
-                )}
+                }
+
+                {isSmall && <Divider sx={{ alignSelf: 'stretch' }} />}
+
                 {/* Show the selected lesson details */}
                 {!showWelcomeLesson && (
                     <LessonDetailsPanel
@@ -856,7 +888,7 @@ export const LessonsPage: React.FC = (): JSX.Element => {
                                 );
                             }
                         }}
-                        sx={{ flex: '2 2 0px', maxWidth: 1080 }}
+                        sx={{ flex: { xs: '0 0 auto', md: '2 2 0px', alignSelf: 'stretch' }, maxWidth: 1080 }}
                     />
                 )}
                 {showWelcomeLesson && <PlaceholderLessonPanel sx={{ flex: '2 2 0px', maxWidth: 1080 }} />}
